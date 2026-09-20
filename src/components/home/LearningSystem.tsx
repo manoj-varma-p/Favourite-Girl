@@ -323,19 +323,16 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
     setTimeout(checkScrollButtons, 200);
   };
 
-  const liveCount = courseList.filter((p) => !p.isLocked).length;
-  const comingSoonCount = courseList.length - liveCount;
-
   return (
     <section id="courses" className="bg-[#FDFAF6] pt-14 sm:pt-18 lg:pt-20 pb-4 sm:pb-6 lg:pb-8 scroll-mt-20 overflow-hidden text-[#1A0A1A]">
       <Container>
         {/* Section Heading */}
         <div className="flex flex-col items-start max-w-2xl">
           <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black leading-[1.12] tracking-tight text-[#1A0A1A]">
-            {liveCount} are live. {comingSoonCount > 0 ? `${comingSoonCount} are coming soon.` : "All programs open."}
+            Seven Programs.
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
-            Seven programs. Pick the one that matches your career stage.
+            Choose the course that matches your vision.
           </p>
         </div>
 

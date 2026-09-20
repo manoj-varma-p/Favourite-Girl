@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, CheckCircle2, Trophy, ShieldCheck, Download, Rocket, Clock } from "lucide-react";
+import { ArrowRight, Clock, Star, Sparkles } from "lucide-react";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
@@ -15,9 +15,10 @@ import CareerOutcomesSection from "@/components/category/CareerOutcomesSection";
 import CategorySidebar from "@/components/category/CategorySidebar";
 import CategoryFaqAccordion from "@/components/category/CategoryFaqAccordion";
 import MobileEnrollBar from "@/components/category/MobileEnrollBar";
-import ProgramHeroCard from "@/components/category/ProgramHeroCard";
+import CourseHeroForm from "@/components/category/CourseHeroForm";
 import { learningSystemCourses } from "@/data/home";
 import { megaMenuData } from "@/data/navigation";
+import { getCoursesFromDb, type CourseItem } from "@/lib/content-db";
 
 const categoryLinks = megaMenuData.columns.find((column) => column.title === "Learn by Category")?.links ?? [];
 
@@ -25,11 +26,27 @@ function getCourse(slug: string) {
   return learningSystemCourses.find((course) => course.href === `/categories/${slug}`);
 }
 
-function getCategoryMeta(slug: string) {
+async function resolveCategoryMeta(slug: string, preloadedCourses?: CourseItem[]) {
+  const dbCourses = preloadedCourses || (await getCoursesFromDb());
+  const dbCourse = dbCourses.find(
+    (c) =>
+      c.id === slug ||
+      c.href?.endsWith(`/${slug}`) ||
+      (slug === "digital-marketing" && (c.id === "digital-marketing" || c.id === "new-age-dm"))
+  );
+  if (dbCourse) {
+    return {
+      label: dbCourse.title,
+      href: dbCourse.href || `/categories/${slug}`,
+      icon: undefined as any,
+      dbCourse,
+    };
+  }
+
   const link = categoryLinks.find((link) => link.href === `/categories/${slug}`);
-  if (link) return link;
+  if (link) return { label: link.label, href: link.href, icon: (link as any).icon, dbCourse: undefined };
   const course = getCourse(slug);
-  if (course) return { label: course.title, href: course.href };
+  if (course) return { label: course.title, href: course.href, icon: undefined as any, dbCourse: undefined };
   return null;
 }
 
@@ -50,7 +67,7 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const meta = getCategoryMeta(slug);
+  const meta = await resolveCategoryMeta(slug);
   if (!meta) return {};
 
   return {
@@ -61,17 +78,20 @@ export async function generateMetadata({
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const meta = getCategoryMeta(slug);
-  if (!meta) notFound();
+  const dbCourses = await getCoursesFromDb();
+  const metaInfo = await resolveCategoryMeta(slug, dbCourses);
+  if (!metaInfo) notFound();
 
+  const meta = { label: metaInfo.label, href: metaInfo.href, icon: metaInfo.icon };
+  const dbCourse = metaInfo.dbCourse;
   const masterDetail = learningSystemCourses[0].detail!;
   const matchedCourse = getCourse(slug);
 
-  const UNLOCKED_SLUGS = ["digital-marketing", "4m-program"];
-  const isLocked = !UNLOCKED_SLUGS.includes(slug);
+  const isLocked = dbCourse !== undefined ? Boolean(dbCourse.isLocked) : !["digital-marketing", "4m-program"].includes(slug);
 
-  const activeTitle = matchedCourse?.title || meta.label;
+  const activeTitle = dbCourse?.title || matchedCourse?.title || meta.label;
   const activeDescription =
+    dbCourse?.description ||
     matchedCourse?.detail?.description ||
     matchedCourse?.description ||
     masterDetail.description;
@@ -80,7 +100,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     id: slug,
     title: activeTitle,
     description: activeDescription,
-    href: matchedCourse?.href || `/categories/${slug}`,
+    href: dbCourse?.href || matchedCourse?.href || `/categories/${slug}`,
   };
 
   const isOnline = slug === "digital-marketing" || (!slug.includes("4m") && !slug.includes("offline"));
@@ -90,117 +110,225 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     ...activeDetail,
     badge: isLocked
       ? "COMING SOON"
-      : activeDetail.badge || "Flagship · Now Enrolling",
+      : dbCourse?.badge || activeDetail.badge || "Flagship · Now Enrolling",
     batch: isLocked
       ? "Launching Soon · Get Notified"
-      : activeDetail.batch || "Batch 2 · Sep 2026",
+      : dbCourse?.batch || activeDetail.batch || "Batch 2 · Sep 2026",
     description: activeDescription,
-    stats: activeDetail.stats || masterDetail.stats,
-    phases: activeDetail.phases || masterDetail.phases,
+    stats: [
+      { label: "Duration", value: dbCourse?.duration || (dbCourse?.meta ? dbCourse.meta.split("·")[0].trim() : activeDetail.stats[0]?.value || "4 months") },
+      { label: "Format", value: dbCourse?.meta && dbCourse.meta.includes("·") ? dbCourse.meta.split("·")[1].trim() : (activeDetail.stats[1]?.value || "Online, live") },
+      { label: "Phases", value: dbCourse?.phases?.groups ? `${dbCourse.phases.groups.length} phases` : (activeDetail.stats[2]?.value || "12 phases") },
+      { label: "Projects", value: activeDetail.stats[3]?.value || "30+ real brands" },
+    ],
+    phases: dbCourse?.phases?.groups ? { ...masterDetail.phases, ...dbCourse.phases } : (activeDetail.phases || masterDetail.phases),
     phasesNavLabel: activeDetail.phasesNavLabel || masterDetail.phasesNavLabel,
     challengeNavLabel: activeDetail.challengeNavLabel || masterDetail.challengeNavLabel,
-    challenge: activeDetail.challenge || masterDetail.challenge,
+    challenge: dbCourse?.challenge ? { ...masterDetail.challenge, ...dbCourse.challenge } : (activeDetail.challenge || masterDetail.challenge),
     proof: activeDetail.proof || masterDetail.proof,
-    fees: activeDetail.fees || masterDetail.fees,
+    fees: {
+      ...activeDetail.fees,
+      plans: activeDetail.fees.plans.map((p, idx) => {
+        if (idx === 0 && dbCourse?.feeTotal) {
+          return { ...p, amount: dbCourse.feeTotal };
+        }
+        if (idx === 1 && dbCourse?.feeEmi) {
+          return { ...p, amount: dbCourse.feeEmi };
+        }
+        return p;
+      }),
+    },
     faqs: activeDetail.faqs || masterDetail.faqs,
     overview: activeDetail.overview || masterDetail.overview,
+    applyCtaLabel: isLocked ? "Notify Me When Open" : (dbCourse?.applyCta && dbCourse.applyCta !== "Notify Me When Open" ? dbCourse.applyCta : "Apply for Batch 2"),
+    breakdownCtaLabel: dbCourse?.syllabusCta || activeDetail.breakdownCtaLabel || "Download Curriculum",
     sidebar: {
       ...masterDetail.sidebar,
       ...(activeDetail.sidebar || {}),
       batchLabel: isLocked
         ? `${activeTitle}: Coming Soon`
-        : activeDetail.sidebar?.batchLabel || `${activeTitle}: Batch 2`,
-      format: slug === "4m-program" ? "On Campus, 4 months" : (activeDetail.sidebar?.format || masterDetail.sidebar.format),
-      applyLabel: isLocked ? "Get Notified" : (activeDetail.sidebar?.applyLabel || masterDetail.sidebar.applyLabel),
+        : (dbCourse?.batch ? `${activeTitle}: ${dbCourse.batch}` : (activeDetail.sidebar?.batchLabel || `${activeTitle}: Batch 2`)),
+      format: dbCourse?.duration || (slug === "4m-program" ? "On Campus, 4 months" : (activeDetail.sidebar?.format || masterDetail.sidebar.format)),
+      applyLabel: isLocked ? "Get Notified" : (dbCourse?.applyCta && dbCourse.applyCta !== "Get Notified" ? dbCourse.applyCta : "Apply for Batch 2"),
+      downloadLabel: dbCourse?.syllabusCta || activeDetail.sidebar?.downloadLabel || masterDetail.sidebar.downloadLabel,
     },
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-[#1A0A1A]">
       <Header variant="standard" />
 
       <main className="flex-1 pb-16 lg:pb-0">
 
       {detail && course ? (
-        <section className="relative overflow-hidden border-b border-border-subtle bg-surface pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pt-14 lg:pb-20">
-          {/* Subtle atmospheric gradient in background */}
-          <div
-            aria-hidden="true"
-            className="pointer-events-none absolute -top-24 right-0 -z-10 h-96 w-96 rounded-full bg-brand-primary/5 blur-3xl"
-          />
+        <section className="relative overflow-hidden border-b border-[#F5EDE0] bg-[#FDFAF6] pt-6 pb-12 sm:pt-10 sm:pb-16 lg:pt-14 lg:pb-20 text-[#1A0A1A]">
+          {/* Decorative Background Design */}
+          <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+            {/* 1. Subtle Precision Architectural Grid with Radial Vignette */}
+            <div
+              className="absolute inset-0 opacity-[0.55]"
+              style={{
+                backgroundImage: `
+                  linear-gradient(to right, rgba(59, 13, 59, 0.05) 1px, transparent 1px),
+                  linear-gradient(to bottom, rgba(59, 13, 59, 0.05) 1px, transparent 1px)
+                `,
+                backgroundSize: "44px 44px",
+                maskImage: "radial-gradient(ellipse 80% 75% at 50% 30%, black 25%, transparent 75%)",
+                WebkitMaskImage: "radial-gradient(ellipse 80% 75% at 50% 30%, black 25%, transparent 75%)",
+              }}
+            />
+
+            {/* 2. Concentric Orbital Accent Rings (Top Right quadrant) */}
+            <svg
+              className="absolute -right-20 -top-20 h-[560px] w-[560px] stroke-[#3B0D3B]/[0.08]"
+              fill="none"
+              viewBox="0 0 560 560"
+              style={{
+                maskImage: "radial-gradient(circle at center, black 30%, transparent 75%)",
+                WebkitMaskImage: "radial-gradient(circle at center, black 30%, transparent 75%)",
+              }}
+            >
+              <circle cx="280" cy="280" r="110" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx="280" cy="280" r="170" strokeWidth="1" />
+              <circle cx="280" cy="280" r="230" strokeWidth="1" strokeDasharray="8 6" />
+              <circle cx="280" cy="280" r="275" strokeWidth="1" />
+            </svg>
+
+            {/* 3. Concentric Orbital Accent Rings (Bottom Left quadrant) */}
+            <svg
+              className="absolute -left-36 -bottom-36 h-[440px] w-[440px] stroke-[#3B0D3B]/[0.06] hidden sm:block"
+              fill="none"
+              viewBox="0 0 440 440"
+              style={{
+                maskImage: "radial-gradient(circle at center, black 25%, transparent 75%)",
+                WebkitMaskImage: "radial-gradient(circle at center, black 25%, transparent 75%)",
+              }}
+            >
+              <circle cx="220" cy="220" r="90" strokeWidth="1" strokeDasharray="6 4" />
+              <circle cx="220" cy="220" r="150" strokeWidth="1" />
+              <circle cx="220" cy="220" r="210" strokeWidth="1" strokeDasharray="4 4" />
+            </svg>
+
+            {/* 4. Layered Atmospheric Gradient Blooms */}
+            <div className="absolute -top-28 right-1/4 h-[450px] w-[450px] rounded-full bg-[#3B0D3B]/[0.06] blur-3xl" />
+            <div className="absolute top-1/3 -left-20 h-80 w-80 rounded-full bg-[#C084FC]/[0.08] blur-3xl" />
+            <div className="absolute -bottom-20 right-10 h-72 w-72 rounded-full bg-[#F5EDE0] blur-2xl" />
+
+            {/* 5. Minimalist Editorial Grid Coordinates */}
+            <div className="absolute top-7 left-8 sm:left-12 text-[#3B0D3B]/25 font-mono text-[10px] tracking-widest uppercase hidden md:block select-none">
+              + 01 / EXECUTIVE TRACK
+            </div>
+            <div className="absolute top-7 right-8 sm:right-12 text-[#3B0D3B]/25 font-mono text-[10px] tracking-widest uppercase hidden lg:block select-none">
+              BATCH 02 · HYBRID +
+            </div>
+          </div>
 
           <Container>
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2 lg:gap-14">
-              <div>
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-12">
+              <div className="lg:col-span-7">
                 {/* Cohort Badges */}
                 <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                   {isLocked ? (
                     <>
-                      <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 border border-purple-500/40 px-3 py-1 text-[11px] font-black tracking-wide text-purple-200 uppercase shadow-xs">
+                      <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 border border-slate-700 px-3 py-1 text-[11px] font-bold tracking-wide text-slate-200 uppercase shadow-xs">
                         <Clock className="h-3 w-3" />
                         <span>COMING SOON</span>
                       </span>
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-100 px-3 py-1 text-[11px] font-bold text-slate-700">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/70 px-3 py-1 text-[11px] font-bold text-slate-700">
                         Launching Soon · Get Notified
                       </span>
                     </>
                   ) : (
                     <>
-                      <span className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1 text-[11px] font-bold tracking-wide text-white uppercase shadow-xs">
+                      <span className="inline-flex items-center gap-2 rounded-full bg-[#3B0D3B] px-3.5 py-1 text-[11px] font-bold tracking-wide text-[#FDFAF6] uppercase shadow-xs">
+                        <span className="relative flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                        </span>
                         {detail.badge}
                       </span>
-                      <span className="inline-flex items-center rounded-full border border-border-subtle bg-surface-alt px-3 py-1 text-[11px] font-semibold text-text-secondary">
+                      <span className="inline-flex items-center rounded-full border border-[#E2D8CC] bg-white/90 px-3 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs">
                         {detail.batch}
+                      </span>
+                      <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-[#5A4A5A]">
+                        <Sparkles className="h-3 w-3 text-[#3B0D3B]" />
+                        <span>Live Agency Residency</span>
                       </span>
                     </>
                   )}
                 </div>
 
                 {/* Course Title & Headline */}
-                <h1 className="mt-4 text-3xl font-black tracking-tight text-text-primary sm:text-4xl lg:text-5xl">
+                <h1 className="mt-4 text-3xl font-black tracking-tight text-[#1A0A1A] sm:text-4xl lg:text-5xl lg:leading-[1.12]">
                   {course.title}
                 </h1>
-                <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-text-secondary sm:text-base">
+                <p className="mt-3.5 max-w-xl text-sm leading-relaxed text-[#5A4A5A] font-medium sm:text-base">
                   {detail.description}
                 </p>
 
-                {/* Stat Grid (Fast Scanning) */}
-                <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3 sm:max-w-xl">
+                {/* Stat Grid (Fast Scanning with Rich Cards) */}
+                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-3.5">
                   {detail.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="rounded-xl border border-border-subtle/80 bg-surface-alt/40 p-3 sm:px-4 sm:py-3.5 transition-colors"
+                      className="group rounded-2xl border border-[#EBDDC8] bg-white p-3.5 sm:p-4 transition-all duration-200 shadow-2xs hover:shadow-md hover:border-[#3B0D3B]/30 hover:-translate-y-0.5"
                     >
-                      <p className="text-[10px] font-bold tracking-wider text-text-secondary uppercase sm:text-[11px]">
+                      <p className="text-[10px] font-bold tracking-wider text-[#8C6A8C] uppercase sm:text-[11px]">
                         {stat.label}
                       </p>
-                      <p className="mt-0.5 text-sm font-black text-text-primary sm:text-base">{stat.value}</p>
+                      <p className="mt-1 text-sm font-black text-[#1A0A1A] sm:text-base group-hover:text-[#3B0D3B] transition-colors">
+                        {stat.value}
+                      </p>
                     </div>
                   ))}
                 </div>
 
                 {/* Call to Actions on Mobile & Desktop */}
-                <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+                <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
                   <ApplyButton
                     courseName={course.title}
                     size="lg"
-                    className="font-bold shadow-md w-full sm:w-auto"
+                    className="font-bold shadow-lg shadow-[#3B0D3B]/20 w-full sm:w-auto hover:shadow-xl hover:shadow-[#3B0D3B]/30 transition-all"
                   >
                     {isLocked ? "Notify Me When Open" : detail.applyCtaLabel}
                   </ApplyButton>
                   <DownloadCurriculumButton
                     courseName={course.title}
                     size="lg"
-                    className="font-semibold w-full sm:w-auto"
+                    className="font-semibold w-full sm:w-auto shadow-xs hover:shadow-md"
                   >
                     {detail.breakdownCtaLabel}
                   </DownloadCurriculumButton>
                 </div>
+
+                {/* Social Proof Bar */}
+                <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-5 border-t border-[#F5EDE0] pt-4 text-xs text-[#5A4A5A]">
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-1.5 overflow-hidden">
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#3B0D3B] text-[10px] font-bold text-white ring-2 ring-white">RK</span>
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#5A2A5A] text-[10px] font-bold text-white ring-2 ring-white">SP</span>
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#C084FC] text-[10px] font-bold text-[#1A0A1A] ring-2 ring-white">AM</span>
+                      <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-800 text-[10px] font-bold text-white ring-2 ring-white">+</span>
+                    </div>
+                    <div className="flex items-center gap-1 text-[11px] font-bold text-[#1A0A1A]">
+                      <div className="flex text-amber-500">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} className="h-3 w-3 fill-amber-400 text-amber-400" />
+                        ))}
+                      </div>
+                      <span className="ml-1 font-bold">4.9/5</span>
+                    </div>
+                  </div>
+                  <span className="h-3.5 w-px bg-slate-300 hidden sm:inline-block" aria-hidden="true" />
+                  <span className="text-[11px] font-medium text-[#5A4A5A]">
+                    <span className="font-semibold text-[#1A0A1A]">450+ fellows</span> placed at partner brands & agencies
+                  </span>
+                </div>
               </div>
 
-              {/* Program Visual Showcase Card (Interactive) */}
-              <div className="flex">
-                <ProgramHeroCard slug={slug} isLocked={isLocked} />
+              {/* Right Side Application Form */}
+              <div className="lg:col-span-5 w-full">
+                <CourseHeroForm courseTitle={course.title} isLocked={isLocked} />
               </div>
             </div>
           </Container>
@@ -262,7 +390,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
           <CategorySubNav
             applyHref="/start-learning"
             tabs={[
-              { id: "overview", label: "Overview" },
               { id: "phases", label: detail.phasesNavLabel },
               { id: "challenge", label: detail.challengeNavLabel },
               ...(!isOnline ? [{ id: "industries", label: "Industry Coverage" }] : []),
@@ -276,73 +403,53 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
             <Container>
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] lg:gap-14">
                 <div className="flex flex-col gap-12 sm:gap-16 lg:order-1 lg:col-start-1">
-                  {/* 1. Overview */}
-                  <section id="overview" className="scroll-mt-36 sm:scroll-mt-40">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-brand-primary">
-                        Overview
-                      </span>
-                    </div>
-                    <h2 className="mt-2 text-2xl sm:text-3xl font-black tracking-tight text-text-primary">
-                      {detail.overview.whoForHeading}
-                    </h2>
-                    <ul className="mt-4 flex flex-col gap-2.5">
-                      {detail.overview.whoFor.map((item, i) => (
-                        <li key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-text-secondary">
-                          <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-brand-primary shrink-0" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-
-                  {/* 2. Phases */}
-                  <section id="phases" className="scroll-mt-36 sm:scroll-mt-40">
+                  {/* 1. Phases */}
+                  <section id="phases" className="scroll-mt-28 sm:scroll-mt-32">
                     <PhaseAccordion groups={detail.phases.groups} />
                   </section>
 
                   {/* 3. The CEO Challenge */}
-                  <section id="challenge" className="scroll-mt-36 sm:scroll-mt-40">
+                  <section id="challenge" className="scroll-mt-28 sm:scroll-mt-32">
                     <CeoChallengeCard />
                   </section>
 
                   {/* 4. Industry Coverage (Only on Campus / Offline) */}
                   {!isOnline && (
-                    <section id="industries" className="scroll-mt-36 sm:scroll-mt-40">
+                    <section id="industries" className="scroll-mt-28 sm:scroll-mt-32">
                       <IndustryCoverageSection />
                     </section>
                   )}
 
                   {/* 5. Career Outcomes (Roles You Can Crack) */}
-                  <section id="outcomes" className="scroll-mt-36 sm:scroll-mt-40">
+                  <section id="outcomes" className="scroll-mt-28 sm:scroll-mt-32">
                     <CareerOutcomesSection />
                   </section>
 
                   {/* 6. Proof */}
-                  <section id="proof" className="scroll-mt-36 sm:scroll-mt-40">
+                  <section id="proof" className="scroll-mt-28 sm:scroll-mt-32">
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-brand-primary">
+                      <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5A2A5A]">
                         Proof & Results
                       </span>
                     </div>
-                    <h2 className="mt-2 text-xl sm:text-2xl font-black text-text-primary">
+                    <h2 className="mt-2 text-xl sm:text-2xl font-black text-[#1A0A1A]">
                       {detail.proof.heading}
                     </h2>
-                    <p className="mt-1.5 text-xs sm:text-sm text-text-secondary">
+                    <p className="mt-1.5 text-xs sm:text-sm text-[#5A4A5A]">
                       {detail.proof.description}
                     </p>
                     <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
                       {detail.proof.stats.map((st, i) => (
-                        <div key={i} className="rounded-xl border border-border-subtle bg-white p-3.5 sm:p-4 text-center">
-                          <p className="text-xl sm:text-2xl font-black text-brand-primary">{st.value}</p>
-                          <p className="mt-1 text-[11px] sm:text-xs text-text-secondary font-medium">{st.label}</p>
+                        <div key={i} className="rounded-xl border border-[#F5EDE0] bg-white p-3.5 sm:p-4 text-center">
+                          <p className="text-xl sm:text-2xl font-black text-[#3B0D3B]">{st.value}</p>
+                          <p className="mt-1 text-[11px] sm:text-xs text-[#5A4A5A] font-medium">{st.label}</p>
                         </div>
                       ))}
                     </div>
                   </section>
 
                   {/* 7. FAQs */}
-                  <section id="faqs" className="scroll-mt-36 sm:scroll-mt-40">
+                  <section id="faqs" className="scroll-mt-28 sm:scroll-mt-32">
                     <CategoryFaqAccordion faqs={detail.faqs} />
                   </section>
                 </div>
@@ -367,133 +474,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         </>
       ) : null}
 
-      {/* Bottom CTA Card */}
-      {course ? (
-        <section className="pb-16 sm:pb-24">
-          <Container>
-            <div className="overflow-hidden rounded-3xl bg-gradient-to-br from-[#1b0849] via-[#2c0e78] to-[#3A1494] p-6 sm:p-10 lg:p-12 text-white shadow-2xl border border-white/10">
-              <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12 items-center">
-                {/* Left 6 cols: Core Offer & CTAs */}
-                <div className="flex flex-col items-start text-left lg:col-span-6">
-                  <span className="inline-flex items-center rounded-full bg-white/15 px-3 py-1 text-[11px] font-bold tracking-wider uppercase text-purple-200 backdrop-blur-xs">
-                    Applications Open · Batch 2
-                  </span>
-
-                  <h3 className="mt-4 text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white leading-[1.15]">
-                    Ready to master {meta.label} with real market budgets?
-                  </h3>
-
-                  <p className="mt-3.5 text-xs sm:text-sm leading-relaxed text-white/80 max-w-lg">
-                    Graduate with an industry-grade portfolio of real client campaigns, verified credentials, and live mentorship with active marketing leaders.
-                  </p>
-
-                  {/* CTAs */}
-                  <div className="mt-7 flex flex-wrap items-center gap-3 w-full sm:w-auto">
-                    <ApplyButton
-                      courseName={course.title}
-                      variant="secondary"
-                      size="lg"
-                      className="border-transparent bg-white text-[#3A1494] hover:bg-white/90 font-black shadow-lg"
-                      icon={<ArrowRight className="h-4 w-4" aria-hidden="true" />}
-                    >
-                      Enroll for Batch 2
-                    </ApplyButton>
-
-                    <DownloadCurriculumButton
-                      courseName={course.title}
-                      variant="secondary"
-                      size="lg"
-                      className="border-white/20 bg-white/10 text-white hover:bg-white/20 font-bold backdrop-blur-xs"
-                      icon={<Download className="h-4 w-4 text-white" aria-hidden="true" />}
-                    >
-                      Download Syllabus
-                    </DownloadCurriculumButton>
-                  </div>
-
-                  <p className="mt-3 text-[11px] text-white/60 font-medium">
-                    Small cohort size to guarantee 1-on-1 mentor reviews for every phase.
-                  </p>
-                </div>
-
-                {/* Right 6 cols: 4 Key Pillars Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 lg:col-span-6">
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-400/20 text-emerald-300">
-                        <CheckCircle2 className="h-4 w-4" />
-                      </span>
-                      <h4 className="text-xs sm:text-sm font-bold text-white">Live Agency Sprints</h4>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/70">
-                      Work on real ₹5L+ brand budgets and live ad accounts, not simulated case studies.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-400/20 text-purple-300">
-                        <Trophy className="h-4 w-4" />
-                      </span>
-                      <h4 className="text-xs sm:text-sm font-bold text-white">CEO Challenge</h4>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/70">
-                      Defend your strategic campaign live in front of agency founders and brand CEOs.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-purple-400/20 text-purple-300">
-                        <ShieldCheck className="h-4 w-4" />
-                      </span>
-                      <h4 className="text-xs sm:text-sm font-bold text-white">Modern AI Stack</h4>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/70">
-                      AI workflows, Meta Ads Manager, GA4 attribution, SEO & growth loops from week 1.
-                    </p>
-                  </div>
-
-                  <div className="rounded-2xl border border-white/10 bg-white/5 p-4 sm:p-5 backdrop-blur-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-blue-400/20 text-blue-300">
-                        <Rocket className="h-4 w-4" />
-                      </span>
-                      <h4 className="text-xs sm:text-sm font-bold text-white">Direct Placements</h4>
-                    </div>
-                    <p className="mt-2 text-xs leading-relaxed text-white/70">
-                      Access to our hiring network of 40+ partner brands and portfolio review sprints.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Metrics Bar */}
-              <div className="mt-8 pt-6 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
-                <div>
-                  <p className="text-xl sm:text-2xl font-black text-white">4 Months</p>
-                  <p className="text-[11px] text-white/70 font-medium">
-                    {slug === "4m-program"
-                      ? "Full Stack Marketing On Campus Edition"
-                      : "Full Stack Marketing Online"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-xl sm:text-2xl font-black text-sky-400">30+</p>
-                  <p className="text-[11px] text-white/70 font-medium">Real Client Briefs</p>
-                </div>
-                <div>
-                  <p className="text-xl sm:text-2xl font-black text-emerald-400">₹8.5 LPA</p>
-                  <p className="text-[11px] text-white/70 font-medium">Avg Batch 1 Package</p>
-                </div>
-                <div>
-                  <p className="text-xl sm:text-2xl font-black text-white">100%</p>
-                  <p className="text-[11px] text-white/70 font-medium">Portfolio Graded</p>
-                </div>
-              </div>
-            </div>
-          </Container>
-        </section>
-      ) : null}
       </main>
 
       <Footer />

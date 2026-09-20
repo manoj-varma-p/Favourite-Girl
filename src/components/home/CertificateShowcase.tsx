@@ -9,16 +9,18 @@ export default function CertificateShowcase() {
     <section className="relative overflow-hidden bg-surface-muted pt-10 pb-14 sm:pt-10 sm:pb-16 lg:pt-15 lg:pb-20">
       <Container>
         <div className="grid grid-cols-1 gap-8 lg:min-h-[480px] lg:grid-cols-2 lg:gap-10">
-          {/* Certificate visual */}
-          <div className="relative aspect-538/380 overflow-hidden rounded-2xl border border-border-subtle bg-white">
-            <Image
-              src="/images/certificate.png"
-              alt="Sample TREQO certificate of completion"
-              fill
-              sizes="(min-width: 1024px) 620px, 90vw"
-              className="object-contain"
-              priority
-            />
+          {/* Certificate visual - placed directly without an enclosing block */}
+          <div className="flex items-center justify-center">
+            <div className="relative transition-all duration-300 hover:scale-[1.02]">
+              <Image
+                src="/images/treqo-official-certificate.png"
+                alt="Sample TREQO certificate of completion"
+                width={721}
+                height={1024}
+                className="h-[470px] sm:h-[530px] lg:h-[560px] w-auto max-w-full rounded-xl border border-slate-300/90 bg-white shadow-xl shadow-black/12 object-contain block"
+                priority
+              />
+            </div>
           </div>
 
           {/* Content panel */}

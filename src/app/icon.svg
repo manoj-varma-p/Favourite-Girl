@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
     <linearGradient id="treqoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#5522d4" />
-      <stop offset="100%" stop-color="#3A1494" />
+      <stop offset="0%" stop-color="#5A2A5A" />
+      <stop offset="100%" stop-color="#3B0D3B" />
     </linearGradient>
   </defs>
   <!-- Rounded Squircle Badge - high contrast on both dark & light browser tabs -->
@@ -10,8 +10,8 @@
   <rect x="1" y="1" width="62" height="62" rx="13" fill="none" stroke="rgba(255,255,255,0.25)" stroke-width="2" />
   
   <!-- Bold, highly legible white 'T' for TREQO -->
-  <path d="M16 16 H48 V25 H37 V48 H27 V25 H16 Z" fill="#FFFFFF" />
+  <path d="M16 16 H48 V25 H37 V48 H27 V25 H16 Z" fill="#FDFAF6" />
   
-  <!-- Sky Blue Accent Dot -->
-  <circle cx="48" cy="16" r="4.5" fill="#38BDF8" />
+  <!-- Champagne Accent Dot -->
+  <circle cx="48" cy="16" r="4.5" fill="#FDFAF6" />
 </svg>

@@ -24,19 +24,30 @@ export default function AlumniShowcase() {
               key={alumnus.name}
               className="group relative aspect-[7/10] overflow-hidden rounded-2xl bg-gradient-to-br from-brand-primary-deep via-brand-primary to-brand-primary-dark"
             >
-              {/* Photo placeholder, swap for the real alumni video thumbnail */}
-              <div
-                aria-hidden="true"
-                className="absolute inset-0 opacity-[0.12]"
-                style={{
-                  backgroundImage:
-                    "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                  backgroundSize: "20px 20px",
-                }}
-              />
-              <div className="absolute inset-0 flex items-end justify-center pb-16">
-                <User className="h-20 w-20 text-white/15 sm:h-24 sm:w-24" aria-hidden="true" />
-              </div>
+              {/* Photo or placeholder */}
+              {alumnus.image ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={alumnus.image}
+                  alt={alumnus.name}
+                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <>
+                  <div
+                    aria-hidden="true"
+                    className="absolute inset-0 opacity-[0.12]"
+                    style={{
+                      backgroundImage:
+                        "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
+                      backgroundSize: "20px 20px",
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-end justify-center pb-16">
+                    <User className="h-20 w-20 text-white/15 sm:h-24 sm:w-24" aria-hidden="true" />
+                  </div>
+                </>
+              )}
 
               <div className="absolute inset-x-3 top-3 rounded-xl bg-surface/95 px-3 py-2.5 shadow-sm backdrop-blur-sm sm:inset-x-4 sm:top-4 sm:px-4 sm:py-3">
                 <p className="text-sm font-bold text-text-primary sm:text-base">{alumnus.name}</p>

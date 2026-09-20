@@ -1,0 +1,34 @@
+[
+  {
+    "id": "riya-sharma",
+    "name": "Riya Sharma",
+    "role": "Assistant Brand Manager",
+    "company": "Leading FMCG Brand",
+    "quote": "Running live campaigns gave me real confidence. I landed my role within 3 weeks of graduating.",
+    "image": ""
+  },
+  {
+    "id": "karan-mehta",
+    "name": "Karan Mehta",
+    "role": "Content Marketing Lead",
+    "company": "D2C Consumer Brand",
+    "quote": "The 1:1 mentorship and practical feedback was 100x better than theoretical courses.",
+    "image": ""
+  },
+  {
+    "id": "ananya-verma",
+    "name": "Ananya Verma",
+    "role": "Performance Marketing Specialist",
+    "company": "Global E-commerce Brand",
+    "quote": "Managed real Meta & Google ad budgets during the cohort. That portfolio was my ticket.",
+    "image": ""
+  },
+  {
+    "id": "yash-kapoor",
+    "name": "Yash Kapoor",
+    "role": "Social Media Strategist",
+    "company": "Fortune 500 Retailer",
+    "quote": "Learning how to build actual acquisition funnels changed how I approach my career.",
+    "image": ""
+  }
+]

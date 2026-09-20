@@ -13,7 +13,7 @@ export default function WhyTreqqoWave() {
       className="pointer-events-none absolute inset-x-0 -scale-y-100  top-0 -z-10 h-5 w-full sm:h-5 lg:h-5"
     >
      <path
-  fill="#faf9fd"
+  fill="#F8FAF9"
   d="M0,30 C240,90 480,120 720,100 C960,80 1200,20 1440,60 L1440,200 L0,200 Z"
 />
     </svg>

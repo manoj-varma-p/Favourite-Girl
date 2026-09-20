@@ -1,133 +1,337 @@
 "use client";
 
-import { useRef } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
+import { CheckCircle2, ShieldCheck, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import Container from "@/components/ui/Container";
-import IconButton from "@/components/ui/IconButton";
 import { cn } from "@/lib/utils";
-import { tutors } from "@/data/home";
+import { tutors as staticTutors } from "@/data/home";
+import type { TutorItem } from "@/lib/content-db";
 
-const AVATAR_GRADIENTS = [
-  "from-[#16213e] via-[#1a3ba8] to-[#2563eb]",
-  "from-[#1e3a8a] via-[#3b82f6] to-[#1d4ed8]",
-  "from-[#0f172a] via-[#1e293b] to-[#334155]",
-];
+const DEFAULT_TUTOR_PHOTOS: Record<string, string> = {
+  "Mohit Goel": "/uploads/tutors/mohit-goel.jpg",
+  "Deeptika Bajaj": "/uploads/tutors/deeptika-bajaj.jpg",
+  "Megha Punjabi": "/uploads/tutors/megha-punjabi.jpg",
+  "Akshat Aggarwal": "/uploads/tutors/akshat-aggarwal.jpg",
+  "Prateek Narang": "/uploads/tutors/prateek-narang.jpg",
+  "Ritika Sharma": "/uploads/tutors/ritika-sharma.jpg",
+};
+
+const TUTOR_INSIGHTS: Record<
+  string,
+  {
+    specialty: string;
+    focus: string;
+    badge: string;
+    brandMetric: string;
+  }
+> = {
+  "Mohit Goel": {
+    specialty: "Funnel Economics & Scaling",
+    focus: "Direct-response unit economics and turning raw campaign data into profitable spend.",
+    badge: "Lead Practitioner",
+    brandMetric: "₹10Cr+ Ad Spend Managed",
+  },
+  "Deeptika Bajaj": {
+    specialty: "Growth & Performance Marketing",
+    focus: "Scaling paid acquisition on Meta & Google Ads without burning client margins.",
+    badge: "Paid Acquisition",
+    brandMetric: "3.8x Avg ROAS Across Clients",
+  },
+  "Megha Punjabi": {
+    specialty: "Enterprise Marketing & Brand",
+    focus: "Enterprise positioning, high-LTV customer journeys, and retention architectures.",
+    badge: "Enterprise Strategy",
+    brandMetric: "Ex-Amex Growth Lead",
+  },
+  "Akshat Aggarwal": {
+    specialty: "Attribution & Data-Driven Growth",
+    focus: "Full-funnel attribution models, clean tracking setups, and defensible ROI reporting.",
+    badge: "Analytics & Attribution",
+    brandMetric: "Enterprise Analytics",
+  },
+  "Prateek Narang": {
+    specialty: "Portfolio & Interview Defense",
+    focus: "Defending campaign numbers out loud so hiring panels can't poke holes in your work.",
+    badge: "Placement Mentor",
+    brandMetric: "IIT Alum & Top Tech Mentor",
+  },
+  "Ritika Sharma": {
+    specialty: "Brand Strategy & Conversion",
+    focus: "High-growth brand positioning, conversion rate optimization, and organic distribution.",
+    badge: "Brand Strategy",
+    brandMetric: "500+ Funnels Audited",
+  },
+};
 
 function initials(name: string) {
   return name
     .split(" ")
-    .map((part) => part[0])
+    .map((n) => n[0])
     .slice(0, 2)
     .join("")
     .toUpperCase();
 }
 
-export default function TaughtBy() {
-  const scrollerRef = useRef<HTMLDivElement>(null);
+interface TaughtByProps {
+  tutors?: TutorItem[];
+}
 
-  function scrollByCard(direction: 1 | -1) {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
+export default function TaughtBy({ tutors: dynamicTutors }: TaughtByProps) {
+  const displayTutors =
+    dynamicTutors && dynamicTutors.length > 0 ? dynamicTutors : staticTutors;
 
-    const card = scroller.querySelector<HTMLElement>("[data-slide]");
-    const styles = card ? window.getComputedStyle(scroller) : null;
-    const gap = styles ? parseFloat(styles.columnGap || styles.gap || "0") : 0;
-    const amount = card ? card.offsetWidth + gap : scroller.clientWidth * 0.85;
+  const sliderRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
 
-    const maxScroll = scroller.scrollWidth - scroller.clientWidth;
-    const atEnd = scroller.scrollLeft >= maxScroll - 4;
-    const atStart = scroller.scrollLeft <= 4;
+  function updateScrollState() {
+    if (!sliderRef.current) return;
+    const { scrollLeft, scrollWidth, clientWidth } = sliderRef.current;
+    setCanScrollLeft(scrollLeft > 10);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
 
-    if (direction === 1 && atEnd) {
-      scroller.scrollTo({ left: 0, behavior: "smooth" });
-      return;
+    const cards = sliderRef.current.children;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+    for (let i = 0; i < cards.length; i++) {
+      const card = cards[i] as HTMLElement;
+      const distance = Math.abs(card.offsetLeft - sliderRef.current.offsetLeft - scrollLeft);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = i;
+      }
     }
-    if (direction === -1 && atStart) {
-      scroller.scrollTo({ left: maxScroll, behavior: "smooth" });
-      return;
-    }
+    setActiveIndex(closestIndex);
+  }
 
-    scroller.scrollBy({ left: amount * direction, behavior: "smooth" });
+  useEffect(() => {
+    const el = sliderRef.current;
+    if (!el) return;
+
+    updateScrollState();
+    el.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      el.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, []);
+
+  function scrollPrev() {
+    if (!sliderRef.current) return;
+    const firstCard = sliderRef.current.firstElementChild as HTMLElement;
+    const step = firstCard ? firstCard.clientWidth + 24 : 320;
+    sliderRef.current.scrollBy({ left: -step, behavior: "smooth" });
+  }
+
+  function scrollNext() {
+    if (!sliderRef.current) return;
+    const firstCard = sliderRef.current.firstElementChild as HTMLElement;
+    const step = firstCard ? firstCard.clientWidth + 24 : 320;
+    sliderRef.current.scrollBy({ left: step, behavior: "smooth" });
+  }
+
+  function scrollToCard(index: number) {
+    if (!sliderRef.current) return;
+    const card = sliderRef.current.children[index] as HTMLElement;
+    if (card) {
+      const offset = card.offsetLeft - sliderRef.current.offsetLeft;
+      sliderRef.current.scrollTo({ left: offset, behavior: "smooth" });
+    }
   }
 
   return (
-    <section id="tutors" className="relative overflow-hidden bg-[#fafbfe] py-16 sm:py-20 lg:py-24 scroll-mt-16 sm:scroll-mt-20">
-      <Container>
+    <section
+      id="tutors"
+      className="relative overflow-hidden bg-[#FDFAF6] pt-10 sm:pt-12 lg:pt-14 pb-6 sm:pb-8 lg:pb-10 scroll-mt-16 sm:scroll-mt-20 text-[#1A0A1A] border-b border-[#F5EDE0]"
+    >
+      <Container className="relative z-10">
         {/* Section Header */}
-        <div className="flex flex-col items-start max-w-3xl">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-700">
-            PRACTITIONER MENTORSHIP
-          </span>
-          <h2 className="mt-2 text-3xl sm:text-4xl lg:text-[2.75rem] font-black leading-[1.12] tracking-tight text-slate-950">
-            Taught by people still doing the work.
-          </h2>
-          <p className="mt-3 text-base sm:text-lg text-slate-600 leading-relaxed">
-            Not retired professors or theoretical instructors. Active founders, growth leads, and marketing strategists.
-          </p>
-        </div>
-
-        {/* Tutors Carousel / Grid */}
-        <div className="relative mt-10 lg:mt-12">
-          <div
-            ref={scrollerRef}
-            className="scrollbar-hide flex snap-x snap-mandatory gap-4 sm:gap-5 overflow-x-auto scroll-smooth px-12 sm:px-16 lg:px-0 pb-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-          >
-            {tutors.map((tutor, index) => (
-              <div
-                key={tutor.name}
-                data-slide
-                className="group relative aspect-[3/4] w-[230px] xs:w-[250px] sm:w-[280px] md:w-[30%] lg:w-[calc((100%-4*1.25rem)/4.5)] shrink-0 snap-center overflow-hidden rounded-2xl shadow-xs transition-transform duration-300 hover:shadow-md"
-              >
-                {/* Photo placeholder */}
-                <div
-                  className={cn(
-                    "absolute inset-0 bg-gradient-to-br transition-transform duration-300 group-hover:scale-105",
-                    AVATAR_GRADIENTS[index % AVATAR_GRADIENTS.length]
-                  )}
-                />
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 opacity-[0.12]"
-                  style={{
-                    backgroundImage:
-                      "linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)",
-                    backgroundSize: "20px 20px",
-                  }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="flex h-16 w-16 items-center justify-center rounded-full border border-white/25 bg-white/10 text-lg font-bold text-white backdrop-blur-sm sm:h-20 sm:w-20 sm:text-xl">
-                    {initials(tutor.name)}
-                  </span>
-                </div>
-
-                <span className="absolute top-3 right-3 rounded-full bg-black/40 px-2.5 py-1 text-[10px] font-semibold text-white backdrop-blur-sm">
-                  {tutor.mentored}
-                </span>
-
-                <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent p-4 pt-10">
-                  <p className="text-sm sm:text-base font-bold text-white leading-tight">
-                    {tutor.name}
-                  </p>
-                  <p className="text-xs text-white/75 mt-1">
-                    {tutor.role}
-                  </p>
-                </div>
-              </div>
-            ))}
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-12 lg:items-end">
+          <div className="flex flex-col items-start lg:col-span-7">
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-[#3B0D3B]">
+              PRACTITIONER MENTORSHIP
+            </span>
+            <h2 className="mt-2 text-3xl sm:text-4xl lg:text-[2.85rem] font-black leading-[1.1] tracking-tight text-[#1A0A1A]">
+              Taught by people still doing the work.
+            </h2>
           </div>
 
-          <IconButton
-            aria-label="Previous tutors"
-            icon={<ChevronLeft className="h-4 w-4" aria-hidden="true" />}
-            onClick={() => scrollByCard(-1)}
-            className="absolute top-1/2 left-0.5 sm:left-1 lg:-left-5 z-20 -translate-y-1/2 bg-white/95 border border-slate-200/90 shadow-md hover:bg-white hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          />
-          <IconButton
-            aria-label="Next tutors"
-            icon={<ChevronRight className="h-4 w-4" aria-hidden="true" />}
-            onClick={() => scrollByCard(1)}
-            className="absolute top-1/2 right-0.5 sm:right-1 lg:-right-5 z-20 -translate-y-1/2 bg-white/95 border border-slate-200/90 shadow-md hover:bg-white hover:scale-105 active:scale-95 transition-all cursor-pointer"
-          />
+          <div className="lg:col-span-5">
+            <p className="text-sm sm:text-base leading-relaxed text-[#5A4A5A] font-medium">
+              Every tutor runs active accounts and active brands. When algorithms change on a Tuesday, your Wednesday session reflects it.
+            </p>
+          </div>
+        </div>
+
+        {/* Feature Highlights Chips & Slider Navigation Controls */}
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2.5 sm:gap-3">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white/80 px-3.5 py-1 text-xs font-bold text-[#1A0A1A] shadow-2xs backdrop-blur-xs">
+              <span className="h-2 w-2 rounded-full bg-[#0CA30C] animate-pulse" />
+              100% Active Account Operators
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white/80 px-3.5 py-1 text-xs font-bold text-[#1A0A1A] shadow-2xs backdrop-blur-xs">
+              <CheckCircle2 className="h-3.5 w-3.5 text-[#0CA30C]" />
+              1:1 Real Budget Defenses
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white/80 px-3.5 py-1 text-xs font-bold text-[#1A0A1A] shadow-2xs backdrop-blur-xs">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#3B0D3B]" />
+              Verified Career Outcomes
+            </span>
+          </div>
+
+          {/* Slider Prev/Next Controls */}
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              aria-label="Previous mentors"
+              onClick={scrollPrev}
+              disabled={!canScrollLeft}
+              className={cn(
+                "flex h-9 w-9 items-center justify-center rounded-full border border-[#3B0D3B]/20 bg-white shadow-xs transition-all cursor-pointer",
+                canScrollLeft
+                  ? "hover:border-[#3B0D3B] hover:bg-[#FAF5EE] text-[#1A0A1A] active:scale-95"
+                  : "opacity-35 cursor-not-allowed text-[#1A0A1A]/40"
+              )}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              aria-label="Next mentors"
+              onClick={scrollNext}
+              disabled={!canScrollRight}
+              className={cn(
+                "flex h-9 w-9 items-center justify-center rounded-full border border-[#3B0D3B]/20 bg-white shadow-xs transition-all cursor-pointer",
+                canScrollRight
+                  ? "hover:border-[#3B0D3B] hover:bg-[#FAF5EE] text-[#1A0A1A] active:scale-95"
+                  : "opacity-35 cursor-not-allowed text-[#1A0A1A]/40"
+              )}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        {/* ────────────────────────────────────────────────────────────────
+            SLIDER: 4 CARDS PER VIEW ON DESKTOP, 2 ON TABLET, 1 ON MOBILE
+           ──────────────────────────────────────────────────────────────── */}
+        <div
+          ref={sliderRef}
+          className="mt-10 flex gap-6 overflow-x-auto pb-4 pt-1 scroll-smooth snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {displayTutors.map((tutor) => {
+            const photo =
+              tutor.image?.trim() || DEFAULT_TUTOR_PHOTOS[tutor.name] || "";
+            const insights = TUTOR_INSIGHTS[tutor.name] || {
+              specialty: "Marketing Practitioner",
+              focus: "Real-world brand projects, campaign budget defenses, and live performance auditing.",
+              badge: "Practitioner Mentor",
+              brandMetric: `${tutor.mentored} Mentored`,
+            };
+
+            return (
+              <div
+                key={tutor.name}
+                className="w-[85%] sm:w-[calc((100%-24px)/2)] lg:w-[calc((100%-72px)/4)] shrink-0 snap-start group relative flex flex-col justify-between rounded-2xl border border-[#3B0D3B]/15 bg-white/90 p-5 sm:p-5.5 shadow-xs transition-all duration-300 hover:shadow-xl hover:border-[#3B0D3B]/35 hover:-translate-y-1"
+              >
+                <div>
+                  {/* Top: Portrait & Floating Badges */}
+                  <div className="relative w-full aspect-[4/3.5] overflow-hidden rounded-xl border border-[#3B0D3B]/10 bg-[#F5EDE0]/50 shadow-inner">
+                    {photo ? (
+                      <Image
+                        src={photo}
+                        alt={tutor.name}
+                        fill
+                        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
+                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#3B0D3B] to-[#1A1A1E] text-white text-3xl font-black">
+                        {initials(tutor.name)}
+                      </div>
+                    )}
+
+                    {/* Floating Specialty Tag */}
+                    <div className="absolute top-2.5 left-2.5 z-10">
+                      <span className="inline-flex items-center rounded-md bg-[#3B0D3B]/90 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-xs">
+                        {insights.badge}
+                      </span>
+                    </div>
+
+                    {/* Mentored Count Badge */}
+                    <div className="absolute bottom-2.5 right-2.5 z-10">
+                      <span className="inline-flex items-center gap-1 rounded-md bg-black/75 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur-xs">
+                        <Users className="w-2.5 h-2.5 text-white/80" />
+                        {tutor.mentored}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Details */}
+                  <div className="mt-4">
+                    <div>
+                      <h3 className="text-lg font-black text-[#1A0A1A] tracking-tight group-hover:text-[#3B0D3B] transition-colors">
+                        {tutor.name}
+                      </h3>
+                      <p className="text-xs font-semibold text-[#5A4A5A] mt-0.5 truncate">
+                        {tutor.role}
+                      </p>
+                    </div>
+
+                    {/* Verified Credential Tag */}
+                    <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-[#3B0D3B]/15 bg-[#FAF5EE] px-2.5 py-1 text-[11px] font-black text-[#3B0D3B]">
+                      <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
+                      {insights.brandMetric}
+                    </div>
+
+                    {/* Bio Focus Quote */}
+                    <p className="mt-3 text-xs leading-relaxed text-[#5A4A5A] italic font-medium line-clamp-3">
+                      &ldquo;{insights.focus}&rdquo;
+                    </p>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="mt-4 pt-3 border-t border-[#3B0D3B]/10 flex items-center justify-between text-xs text-[#5A4A5A] font-semibold">
+                  <span className="truncate max-w-[140px] font-bold text-[#3B0D3B]/80 text-[11px]">
+                    {insights.specialty}
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[#0CA30C] shrink-0 font-bold text-[11px]">
+                    <CheckCircle2 className="w-3.5 h-3.5" />
+                    Verified
+                  </span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Dot Indicators */}
+        <div className="mt-4 flex items-center justify-center gap-1.5">
+          {displayTutors.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => scrollToCard(i)}
+              className={cn(
+                "h-1.5 rounded-full transition-all duration-300 cursor-pointer",
+                activeIndex === i ? "w-6 bg-[#3B0D3B]" : "w-1.5 bg-[#3B0D3B]/25 hover:bg-[#3B0D3B]/50"
+              )}
+            />
+          ))}
+        </div>
+
+        {/* Bottom Guarantee Strip */}
+        <div className="mt-7 sm:mt-8 rounded-2xl border border-white/15 bg-[#3B0D3B] p-3.5 sm:p-4 text-center shadow-md text-white">
+          <p className="text-xs sm:text-sm font-medium text-[#F5EDE0]">
+            <strong className="text-white font-black">Zero Academic Theory:</strong> Every mentor actively manages enterprise budgets, live client acquisition accounts, and direct-response campaigns.
+          </p>
         </div>
       </Container>
     </section>

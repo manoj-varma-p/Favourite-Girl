@@ -43,8 +43,8 @@ export default function HeroNavbar() {
         className={cn(
           "w-full transition-all duration-300 ease-out",
           isSticky
-            ? "fixed inset-x-0 top-0 z-[100] bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
-            : "absolute inset-x-0 top-0 bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-xs"
+            ? "fixed inset-x-0 top-0 z-[1000] bg-[#FDFAF6]/95 backdrop-blur-md border-b border-[#F5EDE0] shadow-md shadow-[#3B0D3B]/5"
+            : "absolute inset-x-0 top-0 bg-[#FDFAF6]/90 backdrop-blur-md border-y border-[#F5EDE0] shadow-xs"
         )}
       >
         <Container>

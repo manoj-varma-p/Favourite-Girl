@@ -51,9 +51,9 @@ export default function CareerOutcomesSection() {
         </p>
         <h2 className="mt-2 text-2xl sm:text-3xl md:text-4xl font-black tracking-tight text-slate-950 leading-tight">
           Roles You Can Crack{" "}
-          <span className="text-[#3A1494]">at Top Companies</span>
+          <span className="text-[#5A2A5A]">at Top Companies</span>
         </h2>
-        <div className="mt-3.5 h-1.5 w-16 rounded-full bg-[#1e1338]" />
+        <div className="mt-3.5 h-1.5 w-16 rounded-full bg-[#3B0D3B]" />
       </div>
 
       {/* 2-Column Grid */}

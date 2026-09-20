@@ -5,7 +5,7 @@ import { X, CheckCircle2, Download, ArrowRight, FileText } from "lucide-react";
 import { useApplyModal } from "@/context/ApplyModalContext";
 
 export default function CurriculumModal() {
-  const { isCurriculumOpen, curriculumCourse, curriculumPdfUrl, closeCurriculumModal } = useApplyModal();
+  const { isCurriculumOpen, curriculumCourse, curriculumPdfUrl, closeCurriculumModal, forms } = useApplyModal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+91 ");
@@ -115,7 +115,7 @@ export default function CurriculumModal() {
         className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl animate-in zoom-in-95 duration-200 my-auto"
       >
         {/* Top Header */}
-        <div className="relative bg-[#3A1494] px-6 py-6 sm:px-8 sm:py-7 text-white">
+        <div className="relative bg-[#3B0D3B] px-6 py-6 sm:px-8 sm:py-7 text-white">
           <button
             type="button"
             onClick={handleClose}
@@ -125,23 +125,23 @@ export default function CurriculumModal() {
             <X className="h-5 w-5" aria-hidden="true" />
           </button>
 
-          <div className="inline-flex items-center gap-1.5 rounded-md bg-white/15 px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-purple-200 backdrop-blur-xs mb-2">
+          <div className="inline-flex items-center gap-1.5 rounded-md bg-white/15 px-2.5 py-1 text-[10px] font-bold tracking-wider uppercase text-[#FDFAF6] backdrop-blur-xs mb-2">
             <FileText className="h-3 w-3" />
             <span>Curriculum Breakdown</span>
           </div>
 
           <h2 id="curriculum-modal-title" className="text-2xl sm:text-3xl font-black tracking-tight text-white pr-10">
-            Download Curriculum
+            {forms?.curriculumModalTitle || "Download Curriculum"}
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-white/85">
-            Get the full week-by-week phase roadmap, deliverables & toolstack.
+          <p className="mt-1 text-xs sm:text-sm text-[#FDFAF6]/85">
+            {forms?.curriculumModalSubtitle || "Get the full week-by-week phase roadmap, deliverables & toolstack."}
           </p>
         </div>
 
         {/* Modal Body */}
         {submitted ? (
           <div className="flex flex-col items-center justify-center p-8 text-center sm:p-12 animate-in fade-in duration-300">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-[#0CA30C] mb-4">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
@@ -157,7 +157,7 @@ export default function CurriculumModal() {
               download={`${curriculumCourse.replace(/\s+/g, "_")}_Curriculum.pdf`}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-5 inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#3A1494] hover:underline"
+              className="mt-5 inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-[#3B0D3B] hover:underline"
             >
               <Download className="h-4 w-4" />
               <span>Click here if the download didn&apos;t begin</span>
@@ -166,7 +166,7 @@ export default function CurriculumModal() {
             <button
               type="button"
               onClick={handleClose}
-              className="mt-8 rounded-full bg-slate-900 px-7 py-3 text-xs sm:text-sm font-bold text-white hover:bg-slate-800 active:scale-95 transition-all cursor-pointer"
+              className="mt-8 rounded-full bg-[#0B0B0F] px-7 py-3 text-xs sm:text-sm font-bold text-white hover:bg-[#2A2A2D] active:scale-95 transition-all cursor-pointer shadow-md"
             >
               Done
             </button>
@@ -183,11 +183,11 @@ export default function CurriculumModal() {
               <label className="text-xs sm:text-sm font-bold text-slate-800">
                 Program
               </label>
-              <div className="flex items-center justify-between rounded-xl border border-[#3A1494]/20 bg-purple-50/70 px-4 py-3 shadow-2xs">
-                <span className="text-sm font-bold text-[#3A1494]">
+              <div className="flex items-center justify-between rounded-xl border border-[#5A2A5A]/20 bg-[#FAF5EE] px-4 py-3 shadow-2xs">
+                <span className="text-sm font-bold text-[#3B0D3B]">
                   {curriculumCourse}
                 </span>
-                <span className="rounded-md bg-[#3A1494] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                <span className="rounded-md bg-[#3B0D3B] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#FDFAF6]">
                   Syllabus PDF
                 </span>
               </div>
@@ -206,7 +206,7 @@ export default function CurriculumModal() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Rahul Sharma"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -223,7 +223,7 @@ export default function CurriculumModal() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="rahul@example.com"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -240,7 +240,7 @@ export default function CurriculumModal() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -249,14 +249,14 @@ export default function CurriculumModal() {
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3A1494] px-5 py-3.5 text-sm font-bold text-white shadow-md hover:bg-[#2c0e78] hover:shadow-lg active:scale-[0.99] transition-all disabled:opacity-50 cursor-pointer"
+                className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3B0D3B] px-5 py-3.5 text-sm font-bold text-[#FDFAF6] shadow-md hover:bg-[#5A2A5A] hover:shadow-lg active:scale-[0.99] transition-all disabled:opacity-50 cursor-pointer"
               >
                 {submitting ? (
                   <span>Processing...</span>
                 ) : (
                   <>
-                    <Download className="h-4 w-4 text-white" />
-                    <span>Download Curriculum</span>
+                    <Download className="h-4 w-4 text-[#FDFAF6]" />
+                    <span>{forms?.curriculumModalButtonText || "Download Curriculum"}</span>
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}

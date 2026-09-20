@@ -33,19 +33,19 @@ const parts = [
 
 export default function TermsAndConditionsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#fafbfe]">
+    <div className="flex min-h-screen flex-col bg-[#FDFAF6]">
       <Header variant="standard" />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden bg-[#0A0F24] py-16 sm:py-20 text-white">
+      <section className="relative overflow-hidden bg-[#0B0B0F] py-16 sm:py-20 text-white">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[350px] w-[600px] rounded-full bg-[#3A1494]/30 blur-[100px]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[350px] w-[600px] rounded-full bg-[#3B0D3B]/40 blur-[100px]" />
         </div>
 
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-400/30 bg-purple-500/10 px-3.5 py-1 text-xs font-bold tracking-widest uppercase text-purple-300 backdrop-blur-xs">
-              <Scale className="h-3.5 w-3.5 text-purple-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5A2A5A]/40 bg-[#5A2A5A]/20 px-3.5 py-1 text-xs font-bold tracking-widest uppercase text-[#FDFAF6] backdrop-blur-xs">
+              <Scale className="h-3.5 w-3.5 text-[#0CA30C]" />
               Legal Document
             </span>
 
@@ -59,15 +59,15 @@ export default function TermsAndConditionsPage() {
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-400">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#5A2A5A]" />
                 Treqo School of Modern Learning Pvt. Ltd.
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
                 IT Act 2000 &amp; Consumer Protection Act 2019
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#3987E5]" />
                 Hyderabad, Telangana, India
               </span>
             </div>
@@ -89,7 +89,7 @@ export default function TermsAndConditionsPage() {
                   <a
                     key={part.id}
                     href={`#${part.id}`}
-                    className="text-slate-600 hover:text-[#3A1494] hover:font-bold py-1 px-2 rounded-lg transition-colors hover:bg-purple-50/70 truncate"
+                    className="text-slate-600 hover:text-[#012A22] hover:font-bold py-1 px-2 rounded-lg transition-colors hover:bg-[#F2F6F4] truncate"
                   >
                     {part.title}
                   </a>
@@ -102,7 +102,7 @@ export default function TermsAndConditionsPage() {
               {/* PART I */}
               <div id="part-1" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART I
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -113,7 +113,7 @@ export default function TermsAndConditionsPage() {
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-6">
                   <div>
-                    <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                       Section 01
                     </span>
                     <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -121,22 +121,22 @@ export default function TermsAndConditionsPage() {
                     </h2>
 
                     <div className="mt-4 space-y-4 text-sm leading-relaxed text-slate-600">
-                      <div className="pl-4 border-l-2 border-purple-200">
-                        <p className="font-bold text-xs text-[#3A1494] mb-1">1.1</p>
+                      <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                        <p className="font-bold text-xs text-[#012A22] mb-1">1.1</p>
                         <p>
                           These Terms and Conditions (&ldquo;Agreement&rdquo; or &ldquo;Terms&rdquo;) constitute a legally enforceable agreement between Treqo School of Modern Learning Private Limited, incorporated under the Companies Act, 2013, having its registered office and studio at Madhapur, Hyderabad 500081, Telangana, India, operating under the trade name &ldquo;Treqo&rdquo; (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;), and any individual, fellow, student, or corporate entity accessing or enrolling in our programs (&ldquo;Fellow&rdquo;, &ldquo;User&rdquo;, or &ldquo;You&rdquo;).
                         </p>
                       </div>
 
-                      <div className="pl-4 border-l-2 border-purple-200">
-                        <p className="font-bold text-xs text-[#3A1494] mb-1">1.2. Electronic Record</p>
+                      <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                        <p className="font-bold text-xs text-[#012A22] mb-1">1.2. Electronic Record</p>
                         <p>
                           This Agreement is an electronic contract under Section 2(1)(t) of the Information Technology Act, 2000 and the IT (Intermediary Guidelines) Rules, 2021. It does not require physical signatures to be legally valid and binding.
                         </p>
                       </div>
 
-                      <div className="pl-4 border-l-2 border-purple-200">
-                        <p className="font-bold text-xs text-[#3A1494] mb-1">1.3. Acceptance by Conduct</p>
+                      <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                        <p className="font-bold text-xs text-[#012A22] mb-1">1.3. Acceptance by Conduct</p>
                         <p>
                           By submitting an application form, paying tuition fees, accessing online phase materials, or attending studio floor sprints at our Madhapur campus, you unconditionally accept and agree to all provisions of this Agreement.
                         </p>
@@ -145,7 +145,7 @@ export default function TermsAndConditionsPage() {
                   </div>
 
                   <div>
-                    <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                    <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                       Section 02
                     </span>
                     <h2 className="mt-1 text-lg sm:text-xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -187,7 +187,7 @@ export default function TermsAndConditionsPage() {
               {/* PART II */}
               <div id="part-2" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART II
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -197,7 +197,7 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4 text-sm leading-relaxed text-slate-600">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                     Section 03
                   </span>
                   <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -223,7 +223,7 @@ export default function TermsAndConditionsPage() {
               {/* PART III */}
               <div id="part-3" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART III
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -233,7 +233,7 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4 text-sm leading-relaxed text-slate-600">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                     Section 04
                   </span>
                   <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -257,7 +257,7 @@ export default function TermsAndConditionsPage() {
               {/* PART IV */}
               <div id="part-4" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART IV
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -267,7 +267,7 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4 text-sm leading-relaxed text-slate-600">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                     Section 05
                   </span>
                   <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -291,7 +291,7 @@ export default function TermsAndConditionsPage() {
               {/* PART V */}
               <div id="part-5" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART V
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -301,7 +301,7 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4 text-sm leading-relaxed text-slate-600">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                     Section 06
                   </span>
                   <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -325,7 +325,7 @@ export default function TermsAndConditionsPage() {
               {/* PART VI */}
               <div id="part-6" className="scroll-mt-28">
                 <div className="flex items-center gap-3 mb-4">
-                  <span className="rounded-md bg-[#3A1494] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="rounded-md bg-[#012A22] px-2.5 py-1 text-[10px] font-black uppercase tracking-wider text-white">
                     PART VI
                   </span>
                   <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
@@ -335,7 +335,7 @@ export default function TermsAndConditionsPage() {
                 </div>
 
                 <div className="rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs space-y-4 text-sm leading-relaxed text-slate-600">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                     Section 07
                   </span>
                   <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -360,12 +360,12 @@ export default function TermsAndConditionsPage() {
                       href="mailto:legal@treqo.org"
                       className="inline-flex items-center gap-2 rounded-xl bg-[#0A0F24] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
                     >
-                      <Mail className="h-4 w-4 text-purple-300" />
+                      <Mail className="h-4 w-4 text-[#ABCAC2]" />
                       <span>legal@treqo.org</span>
                     </a>
                     <a
                       href="tel:+919948000491"
-                      className="inline-flex items-center gap-2 rounded-xl bg-purple-50 border border-[#3A1494]/20 px-4 py-2.5 text-xs font-bold text-[#3A1494] shadow-2xs hover:bg-purple-100/60 transition-colors"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#F2F6F4] border border-[#012A22]/20 px-4 py-2.5 text-xs font-bold text-[#012A22] shadow-2xs hover:bg-[#E2E7E5] transition-colors"
                     >
                       <span>+91 99480 00491</span>
                     </a>

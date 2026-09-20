@@ -1,0 +1,44 @@
+[
+  {
+    "id": "mohit-goel",
+    "name": "Mohit Goel",
+    "role": "Founder & Marketing Head",
+    "mentored": "1.3k+",
+    "image": "/uploads/tutors/mohit-goel.jpg"
+  },
+  {
+    "id": "deeptika-bajaj",
+    "name": "Deeptika Bajaj",
+    "role": "Growth Marketing Lead",
+    "mentored": "423+",
+    "image": "/uploads/tutors/deeptika-bajaj.jpg"
+  },
+  {
+    "id": "megha-punjabi",
+    "name": "Megha Punjabi",
+    "role": "American Express",
+    "mentored": "236+",
+    "image": "/uploads/tutors/megha-punjabi.jpg"
+  },
+  {
+    "id": "akshat-aggarwal",
+    "name": "Akshat Aggarwal",
+    "role": "American Express",
+    "mentored": "184+",
+    "image": "/uploads/tutors/akshat-aggarwal.jpg"
+  },
+  {
+    "id": "prateek-narang",
+    "name": "Prateek Narang",
+    "role": "IIT Placement Mentor",
+    "mentored": "912+",
+    "image": "/uploads/tutors/prateek-narang.jpg"
+  },
+  {
+    "id": "ritika-sharma",
+    "name": "Ritika Sharma",
+    "role": "Growth Strategy Partner",
+    "mentored": "567+",
+    "image": "/uploads/tutors/ritika-sharma.jpg"
+  }
+]

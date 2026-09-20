@@ -18,12 +18,13 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
     ? {
         heading: "Best Fit For Your Ambition",
         description:
-          "Engineered for aspiring graduates and entrepreneurs looking to build high-converting acquisition channels and scale modern ventures.",
+          "Engineered for aspiring graduates, career switchers, and professionals looking to upskill to build high-converting acquisition channels and scale modern ventures.",
         tags: [
           "Aspiring Graduates",
           "Entrepreneurs",
           "Career Switchers",
           "Growth Marketers",
+          "People Who Are Looking for Upskilling",
         ],
       }
     : {
@@ -35,6 +36,7 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
           "3-1, 4-1 & Final Year Students",
           "Career Switchers",
           "Aspiring Marketers",
+          "People Who Are Looking for Upskilling",
         ],
       };
 
@@ -43,30 +45,30 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
       {/* Ambient shadow glow background */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-1.5 sm:-inset-2 rounded-3xl sm:rounded-[28px] bg-gradient-to-tr from-[#3A1494]/25 via-purple-600/15 to-indigo-500/10 blur-xl sm:blur-2xl opacity-80"
+        className="pointer-events-none absolute -inset-1.5 sm:-inset-2 rounded-3xl sm:rounded-[28px] bg-gradient-to-tr from-[#3B0D3B]/20 via-[#5A2A5A]/15 to-[#8C6A8C]/10 blur-xl sm:blur-2xl opacity-80"
       />
 
       {/* Main Card with elevated shadow */}
-      <div className="relative flex w-full flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-white/95 backdrop-blur-md p-5 sm:p-7 shadow-[0_20px_50px_-12px_rgba(58,20,148,0.18),0_10px_25px_-5px_rgba(0,0,0,0.06)] transition-all">
+      <div className="relative flex w-full flex-col overflow-hidden rounded-2xl sm:rounded-3xl border border-[#F5EDE0] bg-white/95 backdrop-blur-md p-5 sm:p-7 shadow-[0_20px_50px_-12px_rgba(59,13,59,0.15),0_10px_25px_-5px_rgba(0,0,0,0.06)] transition-all">
         {/* Top subtle brand accent line */}
         <div
           aria-hidden="true"
-          className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#3A1494] via-[#8b5cf6] to-[#38bdf8]"
+          className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-[#3B0D3B] via-[#5A2A5A] to-[#8C6A8C]"
         />
 
         {/* Header: Badge & Status */}
         <div className="flex items-center justify-between gap-2 border-b border-slate-100 pb-3 sm:pb-4">
-          <span className="inline-flex items-center rounded-full border border-purple-200 bg-purple-50 px-3 py-1 text-[11px] font-bold text-[#3A1494]">
+          <span className="inline-flex items-center rounded-full border border-[#5A2A5A]/25 bg-[#FAF5EE] px-3 py-1 text-[11px] font-bold text-[#3B0D3B]">
             12-Phase Curriculum
           </span>
           {isLocked ? (
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-purple-600">
-              <Clock className="h-3 w-3 text-purple-500" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#8C6A8C]">
+              <Clock className="h-3 w-3 text-[#8C6A8C]" />
               Upcoming Cohort
             </span>
           ) : (
-            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-emerald-600">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-[#0CA30C]">
+              <span className="h-2 w-2 rounded-full bg-[#0CA30C] animate-pulse" />
               Batch 2 Enrolling
             </span>
           )}
@@ -80,7 +82,7 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
             className={cn(
               "flex-1 rounded-lg py-2 text-xs font-bold transition-all text-center select-none cursor-pointer",
               activeTab === "master"
-                ? "bg-[#3A1494] text-white shadow-md shadow-purple-950/20"
+                ? "bg-[#3B0D3B] text-[#FDFAF6] shadow-md shadow-slate-950/20"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
@@ -92,7 +94,7 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
             className={cn(
               "flex-1 rounded-lg py-2 text-xs font-bold transition-all text-center select-none cursor-pointer",
               activeTab === "fit"
-                ? "bg-[#3A1494] text-white shadow-md shadow-purple-950/20"
+                ? "bg-[#3B0D3B] text-[#FDFAF6] shadow-md shadow-slate-950/20"
                 : "text-slate-600 hover:text-slate-900"
             )}
           >
@@ -111,7 +113,13 @@ export default function ProgramHeroCard({ slug, isLocked = false }: ProgramHeroC
                 No multiple choice exams or theoretical essays. You run real ad accounts, set up tracking pipelines, and optimize actual acquisition funnels.
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
-                {["Meta Ads Manager", "GA4 Attribution", "Claude & AI", "SEO Systems"].map((t) => (
+                {[
+                  "Meta Ads Manager",
+                  "GA4 Attribution",
+                  "Claude & AI",
+                  "SEO Systems",
+                  "Google Ads & PMax",
+                ].map((t) => (
                   <span
                     key={t}
                     className="rounded-lg border border-slate-200/90 bg-slate-50 px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs"

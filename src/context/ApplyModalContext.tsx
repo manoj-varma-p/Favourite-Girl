@@ -1,6 +1,8 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import type { FormSettings } from "@/types/forms";
+import { defaultFormSettings } from "@/types/forms";
 
 interface ApplyModalContextType {
   isOpen: boolean;
@@ -14,6 +16,9 @@ interface ApplyModalContextType {
   curriculumPdfUrl: string;
   openCurriculumModal: (course?: string, pdfUrl?: string) => void;
   closeCurriculumModal: () => void;
+
+  // Form Titles & Labels
+  forms: FormSettings;
 }
 
 const ApplyModalContext = createContext<ApplyModalContextType | undefined>(undefined);
@@ -25,6 +30,19 @@ export function ApplyModalProvider({ children }: { children: ReactNode }) {
   const [isCurriculumOpen, setIsCurriculumOpen] = useState(false);
   const [curriculumCourse, setCurriculumCourse] = useState("New Age Digital Marketing");
   const [curriculumPdfUrl, setCurriculumPdfUrl] = useState("/curriculum/new-age-digital-marketing-curriculum.pdf");
+
+  const [forms, setForms] = useState<FormSettings>(defaultFormSettings);
+
+  useEffect(() => {
+    fetch("/api/forms")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.forms) {
+          setForms(data.forms);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   function openApplyModal(course?: string) {
     if (course) {
@@ -77,6 +95,7 @@ export function ApplyModalProvider({ children }: { children: ReactNode }) {
         curriculumPdfUrl,
         openCurriculumModal,
         closeCurriculumModal,
+        forms,
       }}
     >
       {children}

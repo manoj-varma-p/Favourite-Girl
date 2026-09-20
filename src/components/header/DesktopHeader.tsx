@@ -82,10 +82,10 @@ export default function DesktopHeader({ variant = "standard", isAtTop = true }: 
               : "max-w-[160px] opacity-100 translate-x-0 scale-100 mr-4"
           )}
         >
-          <Logo />
+          <Logo variant="dark" />
           <div
             className={cn(
-              "ml-4 h-6 w-px bg-slate-300 shrink-0 transition-opacity duration-300",
+              "ml-4 h-6 w-px bg-slate-200 shrink-0 transition-opacity duration-300",
               variant === "hero" && !isAtTop ? "opacity-0" : "opacity-100"
             )}
             aria-hidden="true"
@@ -96,12 +96,12 @@ export default function DesktopHeader({ variant = "standard", isAtTop = true }: 
           <button
             type="button"
             onClick={handleCoursesToggle}
-            className="inline-flex items-center gap-1.5 rounded-full border border-slate-300/90 bg-slate-50/80 px-4 py-1.5 text-xs font-bold text-slate-800 shadow-2xs transition-all hover:border-[#3A1494]/40 hover:bg-slate-100 hover:text-[#3A1494] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A1494] cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-full border border-[#F5EDE0] bg-[#FAF5EE] px-4 py-1.5 text-xs font-bold text-[#1A0A1A] shadow-2xs transition-all hover:border-[#8C6A8C] hover:bg-[#F5EDE0] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B0D3B] cursor-pointer"
           >
             <span>Courses</span>
             <ChevronDown
               className={cn(
-                "h-3.5 w-3.5 text-slate-600 transition-transform duration-200",
+                "h-3.5 w-3.5 text-slate-500 transition-transform duration-200",
                 isMenuOpen && "rotate-180"
               )}
               aria-hidden="true"
@@ -120,15 +120,15 @@ export default function DesktopHeader({ variant = "standard", isAtTop = true }: 
                   key={item.key}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className="group relative inline-flex items-center gap-1.5 rounded-full border border-purple-200/90 bg-purple-50/80 px-3 py-1 text-sm font-bold text-[#3A1494] shadow-2xs transition-all hover:bg-purple-100 hover:border-purple-300 hover:shadow-xs active:scale-95"
+                  className="group relative inline-flex items-center gap-1.5 rounded-full border border-[#F5EDE0] bg-[#FAF5EE] px-3 py-1 text-sm font-bold text-[#1A0A1A] shadow-2xs transition-all hover:bg-[#F5EDE0] hover:border-[#8C6A8C] active:scale-95"
                 >
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#3A1494] opacity-50" />
-                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#3A1494]" />
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0CA30C] opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
                   </span>
                   <span>{item.label}</span>
                   {item.badge && (
-                    <span className="rounded-full bg-[#3A1494] px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white">
+                    <span className="rounded-full bg-[#3B0D3B] px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#FDFAF6]">
                       {item.badge}
                     </span>
                   )}
@@ -141,7 +141,7 @@ export default function DesktopHeader({ variant = "standard", isAtTop = true }: 
                 key={item.key}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className="text-sm font-semibold text-slate-800 transition-colors hover:text-[#3A1494]"
+                className="text-sm font-semibold text-[#5A4A5A] transition-colors hover:text-[#3B0D3B]"
               >
                 {item.label}
               </Link>
@@ -152,7 +152,7 @@ export default function DesktopHeader({ variant = "standard", isAtTop = true }: 
         <button
           type="button"
           onClick={() => openApplyModal()}
-          className="inline-flex items-center justify-center rounded-xl bg-[#3A1494] px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:bg-[#2c0e78] hover:shadow-md active:scale-[0.98] cursor-pointer"
+          className="glossy-shine inline-flex items-center justify-center rounded-xl bg-[#3B0D3B] px-5 py-2.5 text-sm font-bold text-[#FDFAF6] shadow-md shadow-[#3B0D3B]/20 transition-all hover:bg-[#2B052B] active:scale-[0.98] cursor-pointer"
         >
           {navExtras.ctaLabel}
         </button>

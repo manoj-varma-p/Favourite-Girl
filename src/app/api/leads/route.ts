@@ -3,7 +3,11 @@ import { getLeads, deleteLead } from "@/lib/leads-db";
 export { POST } from "@/app/api/apply/route";
 
 function isAuthorized(request: Request, searchParams: URLSearchParams): boolean {
-  const adminPin = process.env.ADMIN_PIN || process.env.NEXT_PUBLIC_ADMIN_PIN || "treqo2026";
+  const adminPin =
+    process.env.ADMIN_SECRET_KEY ||
+    process.env.ADMIN_PIN ||
+    process.env.NEXT_PUBLIC_ADMIN_PIN ||
+    "treqo2026";
   const authHeader = request.headers.get("authorization");
   const pinHeader = request.headers.get("x-admin-pin");
   const pinParam = searchParams.get("pin");

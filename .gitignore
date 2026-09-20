@@ -42,3 +42,7 @@ next-env.d.ts
 
 # local data
 /data/
+
+# scratch and test artifacts
+/scratch/
+qa-test-results.json

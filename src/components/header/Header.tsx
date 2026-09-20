@@ -54,14 +54,14 @@ export default function Header({ variant = "standard" }: HeaderProps) {
     return (
       <>
         <AnnouncementBanner />
-        <header role="banner" className="sticky top-0 z-50 w-full bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
+        <header role="banner" className="sticky top-0 z-50 w-full bg-[#FDFAF6]/95 backdrop-blur-md border-b border-[#F5EDE0] shadow-xs">
           <div className="w-full">
             <Container>
               <div className="hidden lg:block">
                 <DesktopHeader variant="standard" isAtTop={true} />
               </div>
               <div className="lg:hidden">
-                <MobileHeader variant="standard" />
+                <MobileHeader variant="standard" theme="light" />
               </div>
             </Container>
           </div>
@@ -79,8 +79,8 @@ export default function Header({ variant = "standard" }: HeaderProps) {
       className={cn(
         "hidden lg:block w-full transition-all duration-200",
         pastHero
-          ? "fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm"
-          : "absolute inset-x-0 bottom-0 z-40 bg-white/95 backdrop-blur-md border-y border-slate-200/90 shadow-xs"
+          ? "fixed inset-x-0 top-0 z-50 bg-[#D5E4E0]/95 backdrop-blur-md border-b border-[#C4D7D2] shadow-sm"
+          : "absolute inset-x-0 bottom-0 z-40 bg-[#D5E4E0]/95 backdrop-blur-md border-y border-[#C4D7D2] shadow-xs"
       )}
     >
       <Container>

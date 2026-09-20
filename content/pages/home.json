@@ -1,0 +1,208 @@
+{
+  "hero": {
+    "eyebrow": "COHORT ADMISSIONS OPEN · 2026",
+    "headlineLines": [
+      "Leave with Skills",
+      "you can implement.",
+      "Not just a certificate"
+    ],
+    "description": "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview."
+  },
+  "stats": [
+    {
+      "value": "100%",
+      "label": "Live Brand Work",
+      "detail": "Real ad spends, not simulations"
+    },
+    {
+      "value": "12",
+      "label": "Structured Phases",
+      "detail": "Zero to full-stack marketer"
+    },
+    {
+      "value": "1:1",
+      "label": "Direct Mentorship",
+      "detail": "Every student assigned a coach"
+    },
+    {
+      "value": "30+",
+      "label": "Verified Tools",
+      "detail": "Hands-on mastery guaranteed"
+    }
+  ],
+  "faqs": [
+    {
+      "category": "General",
+      "question": "What is Treqo's New Age Digital Marketing Program?",
+      "answer": "A 4-month intensive, practitioner-led program where you build real campaigns using live marketing budgets for actual brands, graduating with an execution-backed portfolio."
+    },
+    {
+      "category": "General",
+      "question": "Who is this program best suited for?",
+      "answer": "Aspiring performance marketers, agency founders, growth leads, and creative strategists who want real execution skills instead of theoretical lecture slides."
+    },
+    {
+      "category": "Curriculum",
+      "question": "Do we get hands-on experience with real budgets?",
+      "answer": "Yes. Every student manages real ad spend across Meta Ads, Google Ads, and automation workflows with direct practitioner supervision."
+    },
+    {
+      "category": "Fees & Admissions",
+      "question": "How do I apply for the upcoming cohort?",
+      "answer": "Click the 'Apply Now' button on our website, fill in your background and goals, and our admissions team will schedule a 1-on-1 interview call."
+    }
+  ],
+  "whyTreqqo": {
+    "eyebrow": "THE CEO CHALLENGE",
+    "titleLines": [
+      "Every phase ends",
+      "with a problem",
+      "someone actually has."
+    ],
+    "description": "70% doing, 30% theory enforced, not aspirational. A right answer with no evidence behind it does not pass. You submit four things and defend them out loud.",
+    "submissions": [
+      {
+        "tag": "SUBMIT 01",
+        "title": "The problem",
+        "description": "One sentence. If it takes three, you haven't found the problem yet."
+      },
+      {
+        "tag": "SUBMIT 02",
+        "title": "The market logic",
+        "description": "Why this market behaves the way you claim. Assertion is not logic."
+      },
+      {
+        "tag": "SUBMIT 03",
+        "title": "The experiment",
+        "description": "Something small, live and measurable. Report it even when it flopped."
+      },
+      {
+        "tag": "SUBMIT 04",
+        "title": "The revenue plan",
+        "description": "Where the money comes from, how much, and by when."
+      }
+    ],
+    "methodCard": {
+      "tag": "METHOD · 4:5 PORTRAIT",
+      "title": "STUDENT DEFENDING NUMBERS TO A PANEL",
+      "image": ""
+    },
+    "banner": {
+      "title": "Phase 4 is a wall, not a checkpoint.",
+      "description": "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry."
+    }
+  },
+  "executionProof": {
+    "eyebrow": "BATCH 1 · ALREADY HAPPENED",
+    "title": "Four names. All checkable.",
+    "description": "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
+    "outcomes": [
+      {
+        "tag": "FOUNDER",
+        "name": "Somu Shekar",
+        "description": "Never went job-hunting. Co-founded Gesture Co while still in the course.",
+        "photoUrl": "/uploads/alumni/somu-shekar.jpg"
+      },
+      {
+        "tag": "FOUNDER",
+        "name": "Subhani",
+        "description": "Turned his capstone into a company. Founded JASS Media.",
+        "photoUrl": "/uploads/alumni/subhani.jpg"
+      },
+      {
+        "tag": "PLACED IN 30 DAYS",
+        "name": "Dikshtha",
+        "description": "At Bristle Tech within a month of finishing.",
+        "photoUrl": "/uploads/alumni/dikshtha.jpg"
+      },
+      {
+        "tag": "HIRED ON PORTFOLIO",
+        "name": "Harshit",
+        "description": "Placed at TCS on the strength of the work, not the résumé.",
+        "photoUrl": "/uploads/alumni/harshit.jpg"
+      }
+    ],
+    "metrics": [
+      {
+        "value": "100%",
+        "label": "of Batch 1 placed or founding"
+      },
+      {
+        "value": "₹5L+",
+        "label": "earned for a client, mid-course"
+      }
+    ],
+    "companies": [
+      {
+        "name": "Gesture Co",
+        "logo": "/images/gesture.png"
+      },
+      {
+        "name": "JASS Media",
+        "logo": "/images/jass-media.png"
+      },
+      {
+        "name": "Bristle Tech",
+        "logo": "/images/bristletech.png"
+      }
+    ]
+  },
+  "govCerts": {
+    "eyebrow": "Officially Recognised",
+    "title": "Government Certified",
+    "titleHighlight": "Institution",
+    "subtitle": "Recognised by official government initiatives & accredited ministries",
+    "certs": [
+      {
+        "src": "/msme.png",
+        "label": "MSME Registered",
+        "sub": "Ministry of MSME, Govt. of India"
+      },
+      {
+        "src": "/001.png",
+        "label": "Recognized by DPIIT",
+        "sub": "Department for Promotion of Industry and Internal Trade"
+      },
+      {
+        "src": "/dpiit.png",
+        "label": "DPIIT Recognised",
+        "sub": "Startup India, Govt. of India"
+      }
+    ]
+  },
+  "sixDecisions": {
+    "title": "Six decisions that make Treqo different.",
+    "decisions": [
+      {
+        "num": "01",
+        "title": "70% doing",
+        "description": "The ratio is enforced, not aspirational. Every phase closes on a live problem, and theory alone doesn't clear it."
+      },
+      {
+        "num": "02",
+        "title": "Clients with something to lose",
+        "description": "You work on brands with real customers to disappoint. Fictional case studies teach confidence about risk you never carried."
+      },
+      {
+        "num": "03",
+        "title": "A fixed sequence",
+        "description": "You can't position a brand you haven't understood. No à-la-carte modules the order is the curriculum."
+      },
+      {
+        "num": "04",
+        "title": "AI from phase one",
+        "description": "In the workflow from the start, not bolted on as a final module nobody remembers."
+      },
+      {
+        "num": "05",
+        "title": "Defended out loud",
+        "description": "Your numbers, your logic, your revenue plan pushed on in front of people. That's the interview rehearsal."
+      },
+      {
+        "num": "06",
+        "title": "50 seats, capped",
+        "description": "Small enough that there's nowhere to hide, and small enough that we know what you're bad at by week three."
+      }
+    ]
+  }
+}

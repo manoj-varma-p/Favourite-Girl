@@ -2,31 +2,56 @@
 
 :root {
   /* ---------------------------------------------------------------------
-   * Brand tokens. --brand-primary is Treqqo's official color (#3a1693).
-   * --brand-primary-dark is a ~20% darkened shade for hover states.
-   * --brand-secondary is a lighter violet chosen to pair with the primary
-   * for gradients (headline emphasis, glows) without jumping hue to blue.
-   * --brand-accent is still a placeholder warm accent, swap if needed.
-   * Every component reads color through these variables (via the @theme
-   * block below), so the whole site restyles from this one place.
+   * Brand tokens - Deep Plum, Champagne, Near Black palette
+   * Core:
+   * --brand-primary: Deep Plum (#3B0D3B) - main dark brand color
+   * --brand-primary-dark: Hover shade (#2B052B)
+   * --brand-primary-deep: Near Black (#0B0B0F)
+   * --brand-secondary: Plum Tint (#5A2A5A)
+   * --brand-accent: Soft Plum (#8C6A8C)
+   *
+   * Surfaces:
+   * --surface: Soft Champagne (#FDFAF6) - main page background
+   * --surface-alt: Champagne Tint (#FAF5EE) - cards / secondary containers
+   * --surface-muted: Champagne Mid (#F5EDE0) - borders / subtle fills
+   *
+   * Text:
+   * --text-primary: Ink (#1A0A1A) - dark primary text
+   * --text-secondary: Ink 2 (#5A4A5A) - mid text
+   * --text-inverse: Soft Champagne (#FDFAF6)
    * ------------------------------------------------------------------- */
-  --brand-primary: #3A1494;
-  --brand-primary-dark: #2c0e78;
-  --brand-primary-deep: #16073d;
-  --brand-secondary: #8b5cf6;
-  --brand-accent: #f97316;
+  --brand-primary: #3B0D3B;
+  --brand-primary-dark: #2B052B;
+  --brand-primary-deep: #0B0B0F;
+  --brand-secondary: #5A2A5A;
+  --brand-accent: #8C6A8C;
 
-  --surface: #ffffff;
-  --surface-alt: #f4f2ff;
-  --surface-muted: #faf9fd;
+  --surface: #FDFAF6;
+  --surface-alt: #FAF5EE;
+  --surface-muted: #F5EDE0;
 
-  --text-primary: #14121f;
-  --text-secondary: #5b5770;
-  --text-inverse: #ffffff;
+  --text-primary: #1A0A1A;
+  --text-secondary: #5A4A5A;
+  --text-inverse: #FDFAF6;
 
-  --border-subtle: #e8e5f5;
-  --background: var(--surface-muted);
-  --foreground: var(--text-primary);
+  --border-subtle: rgba(59, 13, 59, 0.12);
+  --background: #FDFAF6;
+  --foreground: #1A0A1A;
+
+  /* Extended brand palette */
+  --plum-deep: #3B0D3B;
+  --plum-tint: #5A2A5A;
+  --plum-soft: #8C6A8C;
+  --champagne-soft: #FDFAF6;
+  --champagne-mid: #F5EDE0;
+  --champagne-tint: #FAF5EE;
+  --near-black: #0B0B0F;
+  --charcoal: #2A2A2D;
+  --deep-charcoal: #1A1A1E;
+  --ink: #1A0A1A;
+  --ink-2: #5A4A5A;
+  --accent-green: #0CA30C;
+  --accent-blue: #3987E5;
 }
 
 @theme inline {
@@ -49,6 +74,20 @@
 
   --color-border-subtle: var(--border-subtle);
 
+  --color-plum-deep: var(--plum-deep);
+  --color-plum-tint: var(--plum-tint);
+  --color-plum-soft: var(--plum-soft);
+  --color-champagne-soft: var(--champagne-soft);
+  --color-champagne-mid: var(--champagne-mid);
+  --color-champagne-tint: var(--champagne-tint);
+  --color-near-black: var(--near-black);
+  --color-charcoal: var(--charcoal);
+  --color-deep-charcoal: var(--deep-charcoal);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-accent-green: var(--accent-green);
+  --color-accent-blue: var(--accent-blue);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -67,58 +106,72 @@
       opacity: 0;
       transform: translateY(16px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
   @keyframes fade-in {
     from {
       opacity: 0;
     }
+
     to {
       opacity: 1;
     }
   }
+
   @keyframes float {
+
     0%,
     100% {
       transform: translateY(0);
     }
+
     50% {
       transform: translateY(-10px);
     }
   }
+
   @keyframes scale-in {
     from {
       opacity: 0;
       transform: scale(0.94);
     }
+
     to {
       opacity: 1;
       transform: scale(1);
     }
   }
+
   @keyframes slide-up {
     from {
       transform: translateY(100%);
     }
+
     to {
       transform: translateY(0);
     }
   }
+
   @keyframes spin-slow {
     from {
       transform: rotate(0deg);
     }
+
     to {
       transform: rotate(360deg);
     }
   }
+
   @keyframes marquee {
     from {
       transform: translateX(0);
     }
+
     to {
       transform: translateX(-50%);
     }
@@ -129,6 +182,7 @@
   0% {
     transform: translateY(-33.333%);
   }
+
   100% {
     transform: translateY(0%);
   }
@@ -138,6 +192,7 @@
   0% {
     transform: translateY(0%);
   }
+
   100% {
     transform: translateY(-33.333%);
   }
@@ -164,6 +219,7 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -194,4 +250,47 @@ button:disabled,
 input:disabled,
 select:disabled {
   cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------------
+ * Glossy shine sweep effect on CTA buttons when cursor is placed on them
+ * ------------------------------------------------------------------- */
+.glossy-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.glossy-shine::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -140%;
+  width: 65%;
+  height: 200%;
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 20%,
+      rgba(255, 255, 255, 0.5) 50%,
+      rgba(255, 255, 255, 0.08) 80%,
+      transparent 100%);
+  transform: skewX(-24deg);
+  pointer-events: none;
+  z-index: 20;
+}
+
+.glossy-shine:hover::after {
+  left: 240%;
+  transition: left 1.35s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Enhanced pearlescent sheen for white / light CTA buttons */
+.glossy-shine.bg-white::after,
+.glossy-shine[class*="bg-white"]::after {
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(1, 42, 34, 0.03) 20%,
+      rgba(255, 255, 255, 0.9) 50%,
+      rgba(1, 42, 34, 0.03) 80%,
+      transparent 100%);
 }

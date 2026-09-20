@@ -6,12 +6,12 @@ import Container from "@/components/ui/Container";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen flex flex-col bg-[#faf9fd] text-slate-900">
+    <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-slate-900">
       <Header variant="standard" />
 
       <main className="flex-1 flex items-center justify-center py-16 sm:py-24">
         <Container className="max-w-2xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-200 bg-purple-50 px-3.5 py-1 text-xs font-bold text-[#3A1494] shadow-2xs mb-4">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#5A2A5A]/20 bg-[#FAF5EE] px-3.5 py-1 text-xs font-bold text-[#3B0D3B] shadow-2xs mb-4">
             <span>ERROR 404</span>
           </div>
 
@@ -26,7 +26,7 @@ export default function NotFound() {
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 rounded-xl bg-[#3A1494] px-5 py-3 text-sm font-bold text-white shadow-md hover:bg-[#2c0e78] active:scale-95 transition-all"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] px-5 py-3 text-sm font-bold text-[#FDFAF6] shadow-md hover:bg-[#5A2A5A] active:scale-95 transition-all"
             >
               <Home className="h-4 w-4" />
               <span>Back to Home</span>
@@ -36,13 +36,13 @@ export default function NotFound() {
               href="/#courses"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-3 text-sm font-semibold text-slate-800 shadow-2xs hover:border-slate-300 hover:bg-slate-50 active:scale-95 transition-all"
             >
-              <Compass className="h-4 w-4 text-[#3A1494]" />
+              <Compass className="h-4 w-4 text-[#3B0D3B]" />
               <span>Explore Programs</span>
             </Link>
 
             <Link
               href="/blog"
-              className="inline-flex items-center gap-2 rounded-xl border border-purple-200 bg-purple-50/80 px-5 py-3 text-sm font-semibold text-[#3A1494] shadow-2xs hover:bg-purple-100 active:scale-95 transition-all"
+              className="inline-flex items-center gap-2 rounded-xl border border-[#F5EDE0] bg-[#FAF5EE] px-5 py-3 text-sm font-semibold text-[#3B0D3B] shadow-2xs hover:bg-[#F5EDE0] active:scale-95 transition-all"
             >
               <BookOpen className="h-4 w-4" />
               <span>Read Field Notes</span>

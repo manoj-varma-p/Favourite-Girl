@@ -20,7 +20,7 @@ export default function BlogCard({
   onToggleBookmark,
 }: BlogCardProps) {
   return (
-    <article className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-purple-300 hover:shadow-xl hover:shadow-purple-950/8 hover:-translate-y-1">
+    <article className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-xs transition-all duration-300 hover:border-[#5A2A5A]/40 hover:shadow-xl hover:shadow-[#3B0D3B]/8 hover:-translate-y-1">
       <div>
         {/* Cover Image Container */}
         <Link href={`/blog/${post.slug}`} className="block relative aspect-[16/10] w-full overflow-hidden bg-slate-100">
@@ -35,7 +35,7 @@ export default function BlogCard({
 
           {/* Category Badge */}
           <div className="absolute top-3 left-3">
-            <span className="inline-flex items-center rounded-full bg-white/95 backdrop-blur-xs border border-white/50 px-2.5 py-1 text-[11px] font-bold text-[#3A1494] shadow-xs">
+            <span className="inline-flex items-center rounded-full bg-white/95 backdrop-blur-xs border border-white/50 px-2.5 py-1 text-[11px] font-bold text-[#3B0D3B] shadow-xs">
               {post.category}
             </span>
           </div>
@@ -62,8 +62,8 @@ export default function BlogCard({
                 }}
                 className={`rounded-md px-2 py-0.5 text-[10px] font-bold transition-colors cursor-pointer ${
                   isBookmarked
-                    ? "bg-[#3A1494] text-white"
-                    : "bg-slate-100 text-slate-600 hover:bg-purple-100 hover:text-[#3A1494]"
+                    ? "bg-[#3B0D3B] text-white"
+                    : "bg-slate-100 text-slate-600 hover:bg-[#FAF5EE] hover:text-[#3B0D3B]"
                 }`}
               >
                 {isBookmarked ? "Saved" : "Save"}
@@ -71,7 +71,7 @@ export default function BlogCard({
             )}
           </div>
 
-          <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-slate-950 leading-snug transition-colors group-hover:text-[#3A1494]">
+          <h3 className="mt-2 text-base sm:text-lg font-bold tracking-tight text-slate-950 leading-snug transition-colors group-hover:text-[#3B0D3B]">
             <Link href={`/blog/${post.slug}`}>
               {post.title}
             </Link>
@@ -92,7 +92,7 @@ export default function BlogCard({
                   e.stopPropagation();
                   if (onTagClick) onTagClick(tag);
                 }}
-                className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-700 transition-colors hover:border-[#3A1494] hover:bg-purple-50 hover:text-[#3A1494] active:bg-slate-100 cursor-pointer"
+                className="rounded-md border border-slate-200 bg-slate-50 px-2 py-0.5 text-[10px] font-medium text-slate-700 transition-colors hover:border-[#3B0D3B] hover:bg-[#FAF5EE] hover:text-[#3B0D3B] active:bg-slate-100 cursor-pointer"
               >
                 {tag}
               </button>
@@ -128,14 +128,14 @@ export default function BlogCard({
             <button
               type="button"
               onClick={() => onQuickPreview(post)}
-              className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:border-purple-300 hover:bg-purple-50 hover:text-[#3A1494] active:bg-slate-100 transition-colors cursor-pointer"
+              className="rounded-lg border border-slate-200 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:border-[#5A2A5A] hover:bg-[#FAF5EE] hover:text-[#3B0D3B] active:bg-slate-100 transition-colors cursor-pointer"
             >
               Summary
             </button>
           )}
           <Link
             href={`/blog/${post.slug}`}
-            className="rounded-lg bg-purple-50 px-3 py-1 text-xs font-bold text-[#3A1494] hover:bg-[#3A1494] hover:text-white active:scale-95 transition-all"
+            className="rounded-lg bg-[#FAF5EE] px-3 py-1 text-xs font-bold text-[#3B0D3B] hover:bg-[#3B0D3B] hover:text-[#FDFAF6] active:scale-95 transition-all"
           >
             Read
           </Link>

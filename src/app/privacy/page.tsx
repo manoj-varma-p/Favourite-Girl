@@ -43,19 +43,19 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-[#fafbfe]">
+    <div className="flex min-h-screen flex-col bg-[#FDFAF6]">
       <Header variant="standard" />
 
       {/* Hero Header */}
-      <section className="relative overflow-hidden bg-[#0A0F24] py-16 sm:py-20 text-white">
+      <section className="relative overflow-hidden bg-[#0B0B0F] py-16 sm:py-20 text-white">
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[350px] w-[600px] rounded-full bg-[#3A1494]/30 blur-[100px]" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 h-[350px] w-[600px] rounded-full bg-[#3B0D3B]/40 blur-[100px]" />
         </div>
 
         <Container>
           <div className="mx-auto max-w-3xl text-center">
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-purple-400/30 bg-purple-500/10 px-3.5 py-1 text-xs font-bold tracking-widest uppercase text-purple-300 backdrop-blur-xs">
-              <ShieldCheck className="h-3.5 w-3.5 text-purple-400" />
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-[#5A2A5A]/40 bg-[#5A2A5A]/20 px-3.5 py-1 text-xs font-bold tracking-widest uppercase text-[#FDFAF6] backdrop-blur-xs">
+              <ShieldCheck className="h-3.5 w-3.5 text-[#0CA30C]" />
               Legal Document
             </span>
 
@@ -69,15 +69,15 @@ export default function PrivacyPolicyPage() {
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs text-slate-400">
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
                 Treqo School of Modern Learning Pvt. Ltd.
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-purple-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#5A2A5A]" />
                 Madhapur, Hyderabad, India
               </span>
               <span className="flex items-center gap-1.5">
-                <span className="h-1.5 w-1.5 rounded-full bg-cyan-400" />
+                <span className="h-1.5 w-1.5 rounded-full bg-[#3987E5]" />
                 DPDPA 2023 Compliant
               </span>
             </div>
@@ -99,7 +99,7 @@ export default function PrivacyPolicyPage() {
                   <a
                     key={sec.id}
                     href={`#${sec.id}`}
-                    className="text-slate-600 hover:text-[#3A1494] hover:font-bold py-1 px-2 rounded-lg transition-colors hover:bg-purple-50/70 truncate"
+                    className="text-slate-600 hover:text-[#012A22] hover:font-bold py-1 px-2 rounded-lg transition-colors hover:bg-[#F2F6F4] truncate"
                   >
                     {sec.title}
                   </a>
@@ -111,7 +111,7 @@ export default function PrivacyPolicyPage() {
             <div className="flex flex-col gap-8 max-w-3xl">
               {/* Section 1 */}
               <section id="s1" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 01
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -119,15 +119,15 @@ export default function PrivacyPolicyPage() {
                 </h2>
 
                 <div className="mt-5 space-y-4 text-sm leading-relaxed text-slate-600">
-                  <div className="pl-4 border-l-2 border-purple-200">
-                    <p className="font-bold text-xs text-[#3A1494] mb-1">1.1</p>
+                  <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                    <p className="font-bold text-xs text-[#012A22] mb-1">1.1</p>
                     <p>
                       This Privacy Policy (&ldquo;Policy&rdquo;) describes how Treqo School of Modern Learning Private Limited, operating under the trade name &ldquo;Treqo&rdquo; (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;), collects, uses, stores, discloses, transfers, and protects your personal data in connection with your use of the Treqo Platform, on-campus studio programs in Madhapur, online flagship cohorts, and all related educational services.
                     </p>
                   </div>
 
-                  <div className="pl-4 border-l-2 border-purple-200">
-                    <p className="font-bold text-xs text-[#3A1494] mb-1">1.2. Compliance Framework</p>
+                  <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                    <p className="font-bold text-xs text-[#012A22] mb-1">1.2. Compliance Framework</p>
                     <p>This Policy is issued in strict compliance with:</p>
                     <ul className="mt-2 space-y-1.5 list-disc pl-5 text-slate-700">
                       <li>Section 43A and Section 72A of the Information Technology Act, 2000;</li>
@@ -137,15 +137,15 @@ export default function PrivacyPolicyPage() {
                     </ul>
                   </div>
 
-                  <div className="pl-4 border-l-2 border-purple-200">
-                    <p className="font-bold text-xs text-[#3A1494] mb-1">1.3</p>
+                  <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                    <p className="font-bold text-xs text-[#012A22] mb-1">1.3</p>
                     <p>
                       This Policy applies to all personal data processed by Treqo through our website (www.treqo.org), admissions portal, webinar registrations, offline studio admissions, capstone portfolios, and institutional campus partnerships.
                     </p>
                   </div>
 
-                  <div className="pl-4 border-l-2 border-purple-200">
-                    <p className="font-bold text-xs text-[#3A1494] mb-1">1.4. User Consent</p>
+                  <div className="pl-4 border-l-2 border-[#3B796A]/30">
+                    <p className="font-bold text-xs text-[#012A22] mb-1">1.4. User Consent</p>
                     <p>
                       By using any Treqo Service or submitting your details through our admission or curriculum download forms, you signify your consent to the collection and processing of your personal data as outlined in this Policy. For individuals under eighteen (18) years of age, parental or guardian consent is mandatory.
                     </p>
@@ -155,7 +155,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 2 */}
               <section id="s2" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 02
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -185,11 +185,11 @@ export default function PrivacyPolicyPage() {
                       </tr>
                       <tr>
                         <td className="py-3 px-4 font-bold text-slate-900">Data Privacy Email</td>
-                        <td className="py-3 px-4"><a href="mailto:legal@treqo.org" className="text-[#3A1494] font-bold hover:underline">legal@treqo.org</a></td>
+                        <td className="py-3 px-4"><a href="mailto:legal@treqo.org" className="text-[#012A22] font-bold hover:underline">legal@treqo.org</a></td>
                       </tr>
                       <tr className="bg-slate-50/60">
                         <td className="py-3 px-4 font-bold text-slate-900">Admissions & Support</td>
-                        <td className="py-3 px-4"><a href="mailto:admission@treqo.org" className="text-[#3A1494] font-bold hover:underline">admission@treqo.org</a> / <a href="mailto:support@treqo.org" className="text-[#3A1494] font-bold hover:underline">support@treqo.org</a></td>
+                        <td className="py-3 px-4"><a href="mailto:admissions@treqo.org" className="text-[#012A22] font-bold hover:underline">admissions@treqo.org</a> / <a href="mailto:support@treqo.org" className="text-[#012A22] font-bold hover:underline">support@treqo.org</a></td>
                       </tr>
                     </tbody>
                   </table>
@@ -198,7 +198,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 3 */}
               <section id="s3" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 03
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -210,19 +210,19 @@ export default function PrivacyPolicyPage() {
                     <h3 className="font-bold text-slate-900 mb-2">3.1. Data Provided Directly by You</h3>
                     <ul className="space-y-2">
                       <li className="flex gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[10px] font-black text-[#3A1494]">a</span>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F2F6F4] text-[10px] font-black text-[#012A22]">a</span>
                         <span><strong>Application & Lead Data:</strong> Full legal name, email address, WhatsApp/mobile telephone number, current career background, educational status, and target program selection.</span>
                       </li>
                       <li className="flex gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[10px] font-black text-[#3A1494]">b</span>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F2F6F4] text-[10px] font-black text-[#012A22]">b</span>
                         <span><strong>Academic & Professional Data:</strong> Résumé, portfolio links, GitHub/Figma repositories, prior marketing experience, and capstone project submissions.</span>
                       </li>
                       <li className="flex gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[10px] font-black text-[#3A1494]">c</span>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F2F6F4] text-[10px] font-black text-[#012A22]">c</span>
                         <span><strong>Financial & Invoicing Data:</strong> Billing address, GSTIN (for corporate/B2B invoicing), and payment confirmation tokens. Treqo does not store full credit card numbers, CVVs, or UPI PINs.</span>
                       </li>
                       <li className="flex gap-2.5">
-                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-purple-100 text-[10px] font-black text-[#3A1494]">d</span>
+                        <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#F2F6F4] text-[10px] font-black text-[#012A22]">d</span>
                         <span><strong>Communications:</strong> Notes, transcripts, and records of admissions advisory discussions, counseling calls, and mentor feedback sessions.</span>
                       </li>
                     </ul>
@@ -246,7 +246,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 4 */}
               <section id="s4" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 04
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -295,7 +295,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 5 */}
               <section id="s5" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 05
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -322,7 +322,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 6 */}
               <section id="s6" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 06
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -336,7 +336,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 7 */}
               <section id="s7" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 07
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -380,7 +380,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 8 */}
               <section id="s8" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 08
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -408,7 +408,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 9 */}
               <section id="s9" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 09
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -447,7 +447,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 10 */}
               <section id="s10" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 10
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -460,7 +460,7 @@ export default function PrivacyPolicyPage() {
 
                 <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <Search className="h-4 w-4" />
                       <span>Right to Access</span>
                     </div>
@@ -470,7 +470,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <CheckCircle2 className="h-4 w-4" />
                       <span>Right to Correction</span>
                     </div>
@@ -480,7 +480,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <Trash2 className="h-4 w-4" />
                       <span>Right to Erasure</span>
                     </div>
@@ -490,7 +490,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <RotateCcw className="h-4 w-4" />
                       <span>Right to Withdraw Consent</span>
                     </div>
@@ -500,7 +500,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <Scale className="h-4 w-4" />
                       <span>Right to Grievance Redressal</span>
                     </div>
@@ -510,7 +510,7 @@ export default function PrivacyPolicyPage() {
                   </div>
 
                   <div className="rounded-xl border border-slate-200 bg-slate-50/60 p-4">
-                    <div className="flex items-center gap-2 text-[#3A1494] font-bold text-xs">
+                    <div className="flex items-center gap-2 text-[#012A22] font-bold text-xs">
                       <UserCheck className="h-4 w-4" />
                       <span>Right to Nominate</span>
                     </div>
@@ -520,16 +520,16 @@ export default function PrivacyPolicyPage() {
                   </div>
                 </div>
 
-                <div className="mt-5 rounded-xl border border-purple-200 bg-purple-50/50 p-4 text-xs sm:text-sm text-slate-700">
+                <div className="mt-5 rounded-xl border border-[#3B796A]/30 bg-[#F2F6F4] p-4 text-xs sm:text-sm text-slate-700">
                   <p>
-                    <strong>10.2 How to Exercise Your Rights:</strong> Email <a href="mailto:legal@treqo.org" className="text-[#3A1494] font-bold underline">legal@treqo.org</a> with the subject line <em>&ldquo;Data Rights Request, [Your Name]&rdquo;</em>. We acknowledge requests within 3 working days and respond substantively within 15 working days.
+                    <strong>10.2 How to Exercise Your Rights:</strong> Email <a href="mailto:legal@treqo.org" className="text-[#012A22] font-bold underline">legal@treqo.org</a> with the subject line <em>&ldquo;Data Rights Request, [Your Name]&rdquo;</em>. We acknowledge requests within 3 working days and respond substantively within 15 working days.
                   </p>
                 </div>
               </section>
 
               {/* Section 11 */}
               <section id="s11" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 11
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -543,7 +543,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 12 */}
               <section id="s12" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 12
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -557,7 +557,7 @@ export default function PrivacyPolicyPage() {
 
               {/* Section 13 */}
               <section id="s13" className="scroll-mt-28 rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-8 shadow-xs">
-                <span className="text-[11px] font-black uppercase tracking-wider text-[#3A1494]">
+                <span className="text-[11px] font-black uppercase tracking-wider text-[#012A22]">
                   Section 13
                 </span>
                 <h2 className="mt-1 text-xl sm:text-2xl font-black text-slate-900 border-b border-slate-100 pb-3">
@@ -573,15 +573,15 @@ export default function PrivacyPolicyPage() {
                     href="mailto:legal@treqo.org"
                     className="inline-flex items-center gap-2 rounded-xl bg-[#0A0F24] px-4 py-2.5 text-xs font-bold text-white shadow-xs hover:bg-slate-800 transition-colors"
                   >
-                    <Mail className="h-4 w-4 text-purple-300" />
+                    <Mail className="h-4 w-4 text-[#ABCAC2]" />
                     <span>legal@treqo.org</span>
                   </a>
                   <a
-                    href="mailto:admission@treqo.org"
-                    className="inline-flex items-center gap-2 rounded-xl bg-purple-50 border border-[#3A1494]/20 px-4 py-2.5 text-xs font-bold text-[#3A1494] shadow-2xs hover:bg-purple-100/60 transition-colors"
+                    href="mailto:admissions@treqo.org"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#F2F6F4] border border-[#012A22]/20 px-4 py-2.5 text-xs font-bold text-[#012A22] shadow-2xs hover:bg-[#F2F6F4]/60 transition-colors"
                   >
-                    <MessageSquare className="h-4 w-4 text-[#3A1494]" />
-                    <span>admission@treqo.org</span>
+                    <MessageSquare className="h-4 w-4 text-[#012A22]" />
+                    <span>admissions@treqo.org</span>
                   </a>
                 </div>
               </section>

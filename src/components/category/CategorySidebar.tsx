@@ -34,8 +34,8 @@ export default function CategorySidebar({
             {sidebar.batchLabel.replace(/\s*\(.*?\)/, "").trim()} Details
           </span>
           {isLocked ? (
-            <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-purple-200">
-              <span className="h-1.5 w-1.5 rounded-full bg-purple-300" />
+            <span className="inline-flex items-center gap-1 rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-semibold text-[#ABCAC2]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#ABCAC2]" />
               Upcoming
             </span>
           ) : (

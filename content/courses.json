@@ -1,0 +1,149 @@
+[
+  {
+    "id": "digital-marketing",
+    "title": "New Age Digital Marketing",
+    "href": "/categories/digital-marketing",
+    "badge": "BATCH 2 · OPEN",
+    "badgeVariant": "blue",
+    "duration": "4 months · Online",
+    "meta": "4 months · Online",
+    "description": "The flagship. 12 phases, 30+ real brand projects, AI in the workflow.",
+    "isFlagship": true,
+    "isLocked": false,
+    "applyCta": "Apply for Batch 2",
+    "image": "/images/course1.png",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "View course →",
+    "actionHref": "/categories/digital-marketing",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "fundamentals",
+    "title": "Fundamentals of Digital Marketing",
+    "href": "/categories/fundamentals",
+    "badge": "COMING SOON",
+    "badgeVariant": "gray",
+    "duration": "6 modules · Self-paced",
+    "meta": "6 modules · Self-paced",
+    "description": "The door in. Learn what digital marketing is & how funnels work.",
+    "isFlagship": false,
+    "isLocked": true,
+    "applyCta": "Notify Me When Open",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "Get notified →",
+    "actionHref": "/categories/fundamentals",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "4m-program",
+    "title": "New Age Digital Marketing ",
+    "href": "/categories/4m-program",
+    "badge": "OPEN · ON-CAMPUS",
+    "badgeVariant": "blue",
+    "duration": "4 months · On campus",
+    "meta": "4 months · On campus",
+    "description": "Full Stack Marketing On Campus Edition at our Madhapur studio floor.",
+    "isFlagship": false,
+    "isLocked": false,
+    "applyCta": "Apply for Batch 2",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "View course →",
+    "actionHref": "/categories/4m-program",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "pgdm",
+    "title": "Treqo PGDM",
+    "href": "/categories/pgdm",
+    "badge": "COMING SOON",
+    "badgeVariant": "gray",
+    "duration": "12 months · Hybrid",
+    "meta": "12 months · Hybrid",
+    "description": "Post Graduate Diploma built for graduates targeting senior roles.",
+    "isFlagship": false,
+    "isLocked": true,
+    "applyCta": "Notify Me When Open",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "Get notified →",
+    "actionHref": "/categories/pgdm",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "campus-edition",
+    "title": "Campus Edition",
+    "href": "/categories/campus-edition",
+    "badge": "COMING SOON",
+    "badgeVariant": "gray",
+    "duration": "4 months · Online",
+    "meta": "4 months · Online",
+    "description": "Runs alongside your BBA/MBA without colliding with exams.",
+    "isFlagship": false,
+    "isLocked": true,
+    "applyCta": "Notify Me When Open",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "Get notified →",
+    "actionHref": "/categories/campus-edition",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "founder-semester",
+    "title": "The Founder Semester",
+    "href": "/categories/founder-semester",
+    "badge": "COMING SOON",
+    "badgeVariant": "gray",
+    "duration": "4 months · Online",
+    "meta": "4 months · Online",
+    "description": "Marketing & growth for founders launching or scaling ventures.",
+    "isFlagship": false,
+    "isLocked": true,
+    "applyCta": "Notify Me When Open",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "Get notified →",
+    "actionHref": "/categories/founder-semester",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  },
+  {
+    "id": "performance-growth",
+    "title": "Performance & Growth Specialist",
+    "href": "/categories/performance-growth",
+    "badge": "COMING SOON",
+    "badgeVariant": "gray",
+    "duration": "3 months · Online",
+    "meta": "3 months · Online",
+    "description": "Deep dive into Meta, Google Ads & full-funnel attribution.",
+    "isFlagship": false,
+    "isLocked": true,
+    "applyCta": "Notify Me When Open",
+    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "CAMPUS MODULE REVIEW",
+    "actionText": "Get notified →",
+    "actionHref": "/categories/performance-growth",
+    "tags": [
+      "All"
+    ],
+    "order": 999
+  }
+]

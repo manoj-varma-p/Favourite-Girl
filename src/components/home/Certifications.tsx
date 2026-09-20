@@ -62,10 +62,8 @@ const providerBadge = {
    COMPACT VERTICAL CARD (LIGHT THEME)
 ───────────────────────────────────────────── */
 function CertCard({ cert }: { cert: CertItem }) {
-  const badge = providerBadge[cert.provider] || { bg: "#f5f3ff", text: "#7c3aed", border: "#ede9fe" };
-
   return (
-    <div className="group relative flex w-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-3.5 sm:p-4 shadow-xs transition-all duration-200 hover:border-slate-300 hover:shadow-md mb-3.5 cursor-pointer">
+    <div className="group relative flex w-full flex-col justify-between overflow-hidden rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 shadow-xs transition-all duration-200 hover:border-[#AAAAAA] hover:shadow-md mb-3.5 cursor-pointer">
       {/* Subtle top accent gradient */}
       <div
         className="absolute top-0 left-0 right-0 h-[2px]"
@@ -77,9 +75,9 @@ function CertCard({ cert }: { cert: CertItem }) {
         <div
           className="rounded-full px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider"
           style={{
-            background: badge.bg,
-            color: badge.text,
-            border: `1px solid ${badge.border}`,
+            background: `${cert.color}15`,
+            color: cert.color,
+            border: `1px solid ${cert.color}30`,
           }}
         >
           {cert.provider}
@@ -87,7 +85,7 @@ function CertCard({ cert }: { cert: CertItem }) {
       </div>
 
       {/* Certification name */}
-      <p className="m-0 mb-2.5 text-xs font-bold text-slate-900 leading-snug line-clamp-1 group-hover:text-[#3A1494] transition-colors">
+      <p className="m-0 mb-2.5 text-xs font-bold text-[#1A0A1A] leading-snug line-clamp-1 group-hover:text-[#5A2A5A] transition-colors">
         {cert.name}
       </p>
 
@@ -98,13 +96,13 @@ function CertCard({ cert }: { cert: CertItem }) {
             className="rounded px-1.5 py-0.5 text-[9px] font-bold"
             style={{
               color: cert.color,
-              background: cert.color + "14",
+              background: cert.color + "18",
             }}
           >
             {cert.price} exam
           </span>
         ) : (
-          <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-emerald-700">
+          <span className="rounded bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 px-1.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-[#3B0D3B]">
             Included
           </span>
         )}
@@ -154,122 +152,121 @@ export default function CertificationSection() {
     <section
       id="certs"
       data-stage="CERTS"
-      className="relative bg-[#fafbfe] py-12 sm:py-16 lg:py-0 lg:min-h-screen lg:flex lg:items-center overflow-hidden scroll-mt-16 sm:scroll-mt-20"
+      className="relative bg-[#FDFAF6] py-10 sm:py-12 lg:py-14 overflow-hidden scroll-mt-16 sm:scroll-mt-20 text-[#1A0A1A] border-b border-[#F5EDE0]"
     >
-      {/* Subtle ambient light glow */}
-      <div
-        className="pointer-events-none absolute top-1/4 left-1/3 h-96 w-96 rounded-full bg-radial from-[#3A1494]/5 via-[#7C3AED]/3 to-transparent blur-3xl"
-        aria-hidden="true"
-      />
-
-      <Container className="w-full py-6 lg:py-8 relative z-10">
+      <Container className="w-full relative z-10">
         {/* ── MAIN SECTION HEADER ── */}
-        <div className="text-center mb-8 sm:mb-10">
-          <div className="inline-flex items-center gap-2 rounded-full border border-purple-200 bg-purple-50/80 px-4 py-1 mb-3.5 shadow-2xs">
-            <ShieldCheck size={12} className="text-[#3A1494]" />
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#3A1494]">
+        <div className="text-center mb-6 sm:mb-8">
+          <div className="inline-flex items-center gap-2 rounded-full border border-[#3B0D3B]/15 bg-white px-3.5 py-1 mb-2.5 shadow-2xs">
+            <ShieldCheck size={12} className="text-[#3B0D3B]" />
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#3B0D3B]">
               Proof That Travels
             </span>
           </div>
 
-          <h2 className="m-0 mb-3 leading-tight tracking-tight text-slate-950">
-            <span className="block text-3xl sm:text-4xl lg:text-[2.85rem] font-black">
+          <h2 className="m-0 mb-2 leading-tight tracking-tight text-[#1A0A1A]">
+            <span className="block text-2xl sm:text-3xl lg:text-[2.65rem] font-black">
               Credentials Built For The{" "}
-              <span className="italic font-serif font-black bg-gradient-to-r from-[#3A1494] to-[#7C3AED] bg-clip-text text-transparent">
+              <span className="italic font-serif font-black text-[#5A2A5A]">
                 Real Market
               </span>
             </span>
           </h2>
 
-          <p className="text-xs sm:text-sm text-slate-600 max-w-xl mx-auto leading-relaxed font-medium">
+          <p className="text-xs sm:text-sm text-[#5A4A5A] max-w-xl mx-auto leading-relaxed font-medium">
             Graduate with official revenue capstone validation, plus 30+ industry credentials recruiters actively search for.
           </p>
         </div>
 
         {/* ── 2-COLUMN GRID (50% / 50%) ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
           {/* ── LEFT SIDE (50%): TREQO CERTIFICATION ── */}
-          <div className="flex flex-col items-start w-full lg:col-span-6">
+          <div className="flex flex-col justify-between w-full lg:col-span-6">
             {/* Header Info Left */}
             <div className="mb-4">
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50/80 px-3 py-0.5 mb-2 shadow-2xs">
-                <ShieldCheck size={12} className="text-[#3A1494]" />
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3A1494]">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white px-3 py-0.5 mb-2 shadow-2xs">
+                <ShieldCheck size={12} className="text-[#3B0D3B]" />
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3B0D3B]">
                   CAPSTONE REVENUE PROOF
                 </span>
               </div>
 
-              <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-slate-950 leading-tight">
+              <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-[#1A0A1A] leading-tight">
                 TREQO Certification
               </h3>
 
-              <p className="text-xs sm:text-sm text-slate-600 m-0 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5A4A5A] m-0 leading-relaxed font-medium">
                 Awarded on completion of your capstone project: a real campaign, built &amp; launched with real numbers attached.
               </p>
+
+              {/* Provider Badges Row to match height & alignment with right side */}
+              <div className="flex items-center gap-2 mt-3 flex-wrap">
+                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
+                  <span className="text-[10px] font-extrabold text-[#3B0D3B]">Live Spend Defense</span>
+                </div>
+                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
+                  <span className="text-[10px] font-extrabold text-[#3B0D3B]">Verified ROAS</span>
+                </div>
+                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
+                  <span className="text-[10px] font-extrabold text-[#5A4A5A]">Agency Capstone</span>
+                </div>
+              </div>
             </div>
 
-            {/* Certificate Display Card (Light Theme) */}
-            <div className="relative w-full overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-4 sm:p-5 shadow-md shadow-purple-950/5">
-              {/* Top decorative accent line */}
-              <div
-                className="absolute top-0 left-0 right-0 h-[3px]"
-                style={{ background: "linear-gradient(90deg, #3A1494 0%, #7C3AED 50%, #4285F4 100%)" }}
-              />
-
-              {/* REAL CERTIFICATE DISPLAY / EMBED CONTAINER */}
-              <div className="relative overflow-hidden rounded-xl border border-slate-200/90 bg-[#fffdfa] p-2.5 shadow-xs">
+            {/* Certificate Container: Matching height with Right Marquee */}
+            <div className="relative flex h-[460px] sm:h-[500px] lg:h-[520px] w-full flex-col items-center justify-center rounded-2xl border border-[#3B0D3B]/15 bg-white/70 p-4 shadow-sm backdrop-blur-xs">
+              <div className="relative h-full w-full transition-transform duration-300 hover:scale-[1.01]">
                 <Image
-                  src="/treqo-certificate.jpg"
+                  src="/images/treqo-official-certificate.png"
                   alt="TREQO Official Certificate of Completion"
-                  width={800}
-                  height={560}
-                  className="w-full h-auto rounded-lg block shadow-2xs"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 550px"
+                  className="object-contain drop-shadow-md"
+                  priority
                 />
               </div>
-
-              {/* Sub-caption below certificate */}
-              <p className="text-[11px] text-slate-500 text-center mt-3 m-0 leading-relaxed font-medium">
-                Verifiable credential directly reviewed by placement hiring managers.
-              </p>
             </div>
+
+            {/* Sub-caption below certificate */}
+            <p className="text-[11px] text-[#5A4A5A] text-center mt-2.5 m-0 leading-relaxed font-medium">
+              Verifiable credential directly reviewed by placement hiring managers.
+            </p>
           </div>
 
           {/* ── RIGHT SIDE (50%): OTHER INDUSTRY CERTIFICATION ── */}
-          <div className="flex flex-col gap-4 w-full lg:col-span-6">
+          <div className="flex flex-col justify-between w-full lg:col-span-6">
             {/* Header Info Right */}
-            <div>
-              <div className="inline-flex items-center gap-1.5 rounded-full border border-purple-200 bg-purple-50/80 px-3 py-0.5 mb-2 shadow-2xs">
-                <ShieldCheck size={12} className="text-[#3A1494]" />
-                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3A1494]">
+            <div className="mb-4">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white px-3 py-0.5 mb-2 shadow-2xs">
+                <ShieldCheck size={12} className="text-[#3B0D3B]" />
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3B0D3B]">
                   GLOBAL CREDENTIALS
                 </span>
               </div>
 
-              <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-slate-950 leading-tight">
+              <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-[#1A0A1A] leading-tight">
                 Other Industry Certification
               </h3>
 
-              <p className="text-xs sm:text-sm text-slate-600 m-0 leading-relaxed">
+              <p className="text-xs sm:text-sm text-[#5A4A5A] m-0 leading-relaxed font-medium">
                 From Google &amp; Meta to HubSpot &amp; SEMrush, graduate with 30+ credentials recruiters look for.
               </p>
 
               {/* Provider Badges Row */}
               <div className="flex items-center gap-2 mt-3 flex-wrap">
                 {[
-                  { name: "Google", bg: "#eff6ff", text: "#4285F4", count: "8 certs", border: "#dbeafe" },
-                  { name: "Meta",   bg: "#eff6ff", text: "#0082FB", count: "6 certs", border: "#dbeafe" },
-                  { name: "HubSpot",bg: "#fff2ee", text: "#FF7A59", count: "6 certs", border: "#fedbd1" },
-                  { name: "SEMrush",bg: "#fff1eb", text: "#FF642D", count: "4 certs", border: "#ffded3" },
+                  { name: "Google", color: "#4285F4", count: "8 certs" },
+                  { name: "Meta",   color: "#0082FB", count: "6 certs" },
+                  { name: "HubSpot",color: "#FF7A59", count: "6 certs" },
+                  { name: "SEMrush",color: "#FF642D", count: "4 certs" },
                 ].map((p) => (
                   <div
                     key={p.name}
-                    className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs"
-                    style={{
-                      background: p.bg,
-                      border: `1px solid ${p.border}`,
-                    }}
+                    className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-slate-200 bg-white shadow-2xs"
                   >
-                    <span className="text-[10px] font-extrabold" style={{ color: p.text }}>
+                    <span className="text-[10px] font-extrabold" style={{ color: p.color }}>
                       {p.name}
                     </span>
                     <span className="text-[9px] font-semibold text-slate-500">
@@ -282,7 +279,7 @@ export default function CertificationSection() {
 
             {/* ── VERTICAL FLOWING MARQUEE (DUAL COLUMNS: DOWN & UP) ── */}
             <div
-              className="relative grid grid-cols-2 gap-3.5 h-[340px] sm:h-[360px] overflow-hidden"
+              className="relative grid grid-cols-2 gap-3.5 h-[460px] sm:h-[500px] lg:h-[520px] overflow-hidden rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 p-3 shadow-inner"
               style={{
                 maskImage: "linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)",
                 WebkitMaskImage: "linear-gradient(to bottom, transparent, black 8%, black 92%, transparent)",
@@ -292,8 +289,13 @@ export default function CertificationSection() {
               <VerticalInfiniteCol certs={col1Certs} direction="down" speed={54} />
 
               {/* Column 2: Flows Upward (Bottom to Top) */}
-              <VerticalInfiniteCol certs={col2Certs} direction="up" speed={48} />
+              <VerticalInfiniteCol certs={col2Certs} direction="up" speed={60} />
             </div>
+
+            {/* Sub-caption below marquee */}
+            <p className="text-[11px] text-[#5A4A5A] text-center mt-2.5 m-0 leading-relaxed font-medium">
+              All 30+ exam vouchers and preparation guides included with tuition.
+            </p>
           </div>
         </div>
       </Container>

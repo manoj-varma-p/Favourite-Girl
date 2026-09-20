@@ -52,7 +52,7 @@ import type {
 export const heroContent: HeroContentData = {
   eyebrow: "New Age Digital Marketing",
   headline: {
-    lines: ["Leave with Skills", "you can implement.", "Not just a certificate"],
+    lines: ["LEARN THE SKILLS.", "BUILD THE MINDSET", "BREAK THE PATTERN."],
     emphasizedLine: -1,
   },
   description:
@@ -64,13 +64,13 @@ export const heroContent: HeroContentData = {
   ],
   featurePills: [],
   primaryCta: { label: "Browse the 7 courses", href: "/#courses" },
-  secondaryCta: { label: "See how it works", href: "/#method" },
+  secondaryCta: { label: "Book a demo", href: "#apply" },
 };
 
 export const heroStats: HeroStat[] = [
   { value: "30+", label: "live brand projects" },
   { value: "70/30", label: "doing to theory" },
-  { value: "₹5L+", label: "earned for a real client" },
+  { value: "1 : 1", label: "Mentorship" },
 ];
 
 export const heroVisualCards: {
@@ -210,11 +210,13 @@ export const learningSystemCourses: LearningSystemCourse[] = [
       phasesNavLabel: "12 phases",
       challengeNavLabel: "CEO Challenge",
       overview: {
-        whoForHeading: "Who this is for",
+        whoForHeading: "What You'll Master in Digital Marketing",
         whoFor: [
-          "Graduates and early-career marketers who want something to point at in the first interview, not a certificate to mention",
-          "People switching into marketing who can't afford to stop earning for two years to do it",
-          "Founders and freelancers running their own acquisition who are tired of guessing which half of it works",
+          "Full-Funnel Performance Marketing: Launch, scale, and optimize live campaigns across Meta Ads, Google Ads (Search, YouTube, PMax), and programmatic channels with real media budgets.",
+          "AI-Powered Marketing Workflows: Integrate generative AI tools (ChatGPT, Midjourney, Claude, Perplexity) from day one for audience research, creative ideation, ad copywriting, and asset creation.",
+          "Organic Search & Technical SEO Architecture: Execute end-to-end SEO audits, programmatic keyword architecture, search intent optimization, and scalable content strategies to drive compounding organic traffic.",
+          "Analytics, Attribution & Conversion Tracking: Build robust data pipelines with GA4, Server-Side Tracking (Meta CAPI), and multi-touch attribution models to accurately measure CAC, ROAS, and customer LTV.",
+          "Conversion Rate Optimization (CRO) & Retention: Design high-converting landing pages, lead generation funnels, automated email & WhatsApp nurture journeys, and customer retention systems.",
         ],
         differentiators: [
           { value: "70/30", label: "Doing, against theory" },
@@ -236,7 +238,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
           },
           {
             eyebrow: "PHASE 02",
-            heading: "CUSTOMER + MARKET",
+            heading: "CUSTOMER + MARKET UNDERSTANDING",
             range: "02",
             lessons: ["Learn how customers think, what they want, and what makes them choose one brand over another."],
           },
@@ -260,19 +262,19 @@ export const learningSystemCourses: LearningSystemCourse[] = [
           },
           {
             eyebrow: "PHASE 06",
-            heading: "BRAND + POSITIONING",
+            heading: "BRAND STRATEGY & MARKET POSITIONING",
             range: "06",
             lessons: ["Build brands people can recognise, remember and choose."],
           },
           {
             eyebrow: "PHASE 07",
-            heading: "MEDIA + SEARCH",
+            heading: "MEDIA STRATEGY & SEARCH & WEBSITE ECOSYSTEM",
             range: "07",
             lessons: ["Learn how SEO, search and websites capture existing demand and turn intent into action."],
           },
           {
             eyebrow: "PHASE 08",
-            heading: "META + SOCIAL",
+            heading: "META & SOCIAL MEDIA ECOSYSTEM",
             range: "08",
             lessons: ["Understand attention, content and paid social, and how to turn scrolling into action."],
           },
@@ -377,7 +379,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         admissionsNote:
           "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -550,7 +552,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         admissionsNote:
           "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -698,7 +700,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         admissionsNote:
           "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -798,7 +800,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download Syllabus",
         admissionsNote: "Have questions about transitioning into full-time digital marketing? Speak with our team anytime.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -901,7 +903,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download 4M Syllabus",
         admissionsNote: "Talk to admission management team for 20 minutes to verify on-campus seat availability.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -1005,7 +1007,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download PGDM Syllabus",
         admissionsNote: "Talk to admission management team for 20 minutes to evaluate your profile for fellowship eligibility.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -1103,7 +1105,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download Campus Syllabus",
         admissionsNote: "Talk to admission management team for 20 minutes to verify your student scholarship eligibility.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -1201,7 +1203,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download Founder Syllabus",
         admissionsNote: "Talk to admission management team for 20 minutes to discuss your venture and fit.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -1299,7 +1301,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         downloadLabel: "Download Media Buying Syllabus",
         admissionsNote: "Talk to admission management team for 20 minutes to assess your ad account background.",
         phone: "+91 99480 00491",
-        email: "admission@treqo.org",
+        email: "admissions@treqo.org",
       },
     },
   },
@@ -1313,12 +1315,12 @@ export const taughtByContent: TaughtByContent = {
 };
 
 export const tutors: TutorProfile[] = [
-  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+" },
-  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+" },
-  { name: "Megha Punjabi", role: "American Express", mentored: "236+" },
-  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+" },
-  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+" },
-  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+" },
+  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+", image: "/uploads/tutors/mohit-goel.jpg" },
+  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+", image: "/uploads/tutors/deeptika-bajaj.jpg" },
+  { name: "Megha Punjabi", role: "American Express", mentored: "236+", image: "/uploads/tutors/megha-punjabi.jpg" },
+  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+", image: "/uploads/tutors/akshat-aggarwal.jpg" },
+  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+", image: "/uploads/tutors/prateek-narang.jpg" },
+  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+", image: "/uploads/tutors/ritika-sharma.jpg" },
 ];
 
 export const certificatePreview: CertificatePreview = {
@@ -1424,7 +1426,7 @@ export const toolsContent: ToolsContent = {
 export const tools: ToolItem[] = [
   { name: "Meta Ads", icon: Megaphone, color: "text-blue-600 bg-blue-600/10" },
   { name: "Semrush", icon: TrendingUp, color: "text-orange-500 bg-orange-500/10" },
-  { name: "Ahrefs", icon: Link2, color: "text-violet-600 bg-violet-600/10" },
+  { name: "Ahrefs", icon: Link2, color: "text-[#3B0D3B] bg-[#3B0D3B]/10" },
   { name: "Amazon Seller", icon: ShoppingCart, color: "text-orange-600 bg-orange-600/10" },
   { name: "SurferSEO", icon: Waves, color: "text-rose-500 bg-rose-500/10", isAI: true },
   { name: "Google AI", icon: Cpu, color: "text-sky-500 bg-sky-500/10", isAI: true },
@@ -1434,7 +1436,7 @@ export const tools: ToolItem[] = [
   { name: "Nykaa Seller", icon: ShoppingBag, color: "text-pink-600 bg-pink-600/10" },
   { name: "Myntra Partner", icon: Shirt, color: "text-fuchsia-600 bg-fuchsia-600/10" },
   { name: "SQL", icon: Database, color: "text-blue-500 bg-blue-500/10" },
-  { name: "Power BI", icon: BarChart3, color: "text-indigo-600 bg-indigo-600/10" },
+  { name: "Power BI", icon: BarChart3, color: "text-[#5A2A5A] bg-[#5A2A5A]/10" },
   { name: "Google Sheets", icon: Table, color: "text-emerald-500 bg-emerald-500/10" },
   { name: "Notion", icon: FileText, color: "text-text-primary bg-text-primary/10" },
   { name: "HubSpot CRM", icon: Users, color: "text-orange-500 bg-orange-500/10" },

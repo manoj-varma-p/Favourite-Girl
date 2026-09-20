@@ -130,10 +130,10 @@ export default function InstagramVideoPopup() {
                     y: "-50%",
                     width: "44px",
                     height: "176px",
-                    backgroundColor: "#2c0e78",
-                    borderColor: "rgba(192, 132, 252, 0.4)",
+                    backgroundColor: "#3B0D3B",
+                    borderColor: "rgba(140, 106, 140, 0.4)",
                     borderRadius: "12px 0px 0px 12px",
-                    boxShadow: "-4px 0 24px -2px rgba(58, 20, 148, 0.5)",
+                    boxShadow: "-4px 0 24px -2px rgba(59, 13, 59, 0.5)",
                   }
             }
             exit={{
@@ -192,14 +192,14 @@ export default function InstagramVideoPopup() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.1 }}
-                  className="w-full h-full flex flex-col items-center justify-between py-3 px-1 bg-gradient-to-b from-[#3A1494] via-[#2c0e78] to-[#1e0a52] text-white hover:from-[#4b1aa6] hover:to-[#3A1494] transition-all group"
+                  className="w-full h-full flex flex-col items-center justify-between py-3 px-1 bg-gradient-to-b from-[#5A2A5A] via-[#3B0D3B] to-[#0B0B0F] text-white hover:from-[#8C6A8C] hover:to-[#3B0D3B] transition-all group"
                 >
                   {/* Top: Video icon with pulse dot */}
                   <div className="relative flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white/15 border border-white/25 shadow-xs group-hover:scale-110 group-hover:bg-white/25 transition-all">
                     <Video size={13} className="text-white" />
                     <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0CA30C] opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0CA30C]" />
                     </span>
                   </div>
 
@@ -214,8 +214,8 @@ export default function InstagramVideoPopup() {
                   </div>
 
                   {/* Bottom: Play Icon with proper separation */}
-                  <div className="flex items-center justify-center text-purple-200 group-hover:text-white group-hover:scale-110 transition-transform shrink-0 pb-0.5">
-                    <Play size={10} className="fill-purple-200/50" />
+                  <div className="flex items-center justify-center text-[#FDFAF6] group-hover:text-white group-hover:scale-110 transition-transform shrink-0 pb-0.5">
+                    <Play size={10} className="fill-[#FDFAF6]/50" />
                   </div>
                 </motion.div>
               )}

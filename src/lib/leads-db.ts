@@ -13,25 +13,18 @@ export interface Lead {
   submittedAt: string;
 }
 
+import { getMongoDb } from "./mongodb";
+
 // In-memory runtime cache
 let memoryLeads: Lead[] = [];
 
-// MongoDB Client connection cache
-let mongoClient: MongoClient | null = null;
-
 async function getMongoCollection() {
-  const uri = process.env.MONGODB_URI;
-  if (!uri) return null;
-
   try {
-    if (!mongoClient) {
-      mongoClient = new MongoClient(uri);
-      await mongoClient.connect();
-    }
-    const db = mongoClient.db(process.env.MONGODB_DB || "treqo");
+    const db = await getMongoDb();
+    if (!db) return null;
     return db.collection<Lead>("leads");
   } catch (err) {
-    console.error("[MongoDB Connection Error]:", err);
+    console.warn("[MongoDB Collection Notice]:", err);
     return null;
   }
 }

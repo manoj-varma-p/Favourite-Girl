@@ -151,6 +151,7 @@ export interface TutorProfile {
   name: string;
   role: string;
   mentored: string;
+  image?: string;
 }
 
 export interface CertificatePreview {
@@ -166,6 +167,7 @@ export interface AlumniStory {
   name: string;
   role: string;
   company: string;
+  image?: string;
 }
 
 export interface AlumniContent {

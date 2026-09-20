@@ -33,15 +33,15 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
   return (
     <div className="mt-5 flex flex-col gap-3">
       {/* Controls Bar on Mobile & Desktop */}
-      <div className="flex items-center justify-between border-b border-border-subtle/80 pb-3">
-        <span className="text-xs font-bold text-text-secondary uppercase tracking-wider">
+      <div className="flex items-center justify-between border-b border-[#C4D7D2] pb-3">
+        <span className="text-xs font-bold text-[#012A22]/80 uppercase tracking-wider">
           Curriculum Phases ({groups.length})
         </span>
 
         <button
           type="button"
           onClick={toggleAll}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border-subtle bg-surface px-3 py-1.5 text-xs font-bold text-text-secondary hover:text-brand-primary hover:border-brand-primary/40 active:scale-95 transition-all cursor-pointer"
+          className="inline-flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-[#012A22] hover:bg-slate-50 hover:border-slate-400 active:scale-95 transition-all cursor-pointer shadow-2xs"
         >
           <ChevronsUpDown className="h-3.5 w-3.5" aria-hidden="true" />
           <span>{allExpanded ? "Collapse All" : "Expand All"}</span>
@@ -53,7 +53,7 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
         {groups.map((group, originalIndex) => {
           const isOpen = expandedIndices.includes(originalIndex);
           const phaseNum = group.range || String(originalIndex + 1).padStart(2, "0");
-          const isHighlighted = phaseNum === "05" || group.heading.toUpperCase().includes("MARKET EXECUTION");
+          const isHighlighted = phaseNum === "04" || group.heading.toUpperCase().includes("IDEA + PROBLEM DISCOVERY") || group.heading.toUpperCase().includes("PROBLEM DISCOVERY");
 
           return (
             <div
@@ -61,10 +61,10 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
               className={cn(
                 "overflow-hidden rounded-xl sm:rounded-2xl border transition-all duration-250",
                 isHighlighted
-                  ? "border-[#3A1494] bg-gradient-to-r from-purple-50/90 via-indigo-50/40 to-indigo-50/30 shadow-md ring-2 ring-[#3A1494]/20"
+                  ? "border-[#5A2A5A] bg-gradient-to-r from-[#3B0D3B] via-[#240824] to-[#0B0B0F] shadow-lg ring-1 ring-[#5A2A5A]/40 text-[#FDFAF6]"
                   : isOpen
-                  ? "border-brand-primary/40 bg-surface shadow-[0_8px_24px_-12px_rgba(58,22,147,0.18)] ring-1 ring-brand-primary/20"
-                  : "border-border-subtle bg-surface hover:border-slate-300"
+                  ? "border-[#5A2A5A]/60 bg-white shadow-md ring-1 ring-[#5A2A5A]/30 text-[#1A0A1A]"
+                  : "border-[#F5EDE0] bg-white/95 hover:border-slate-300 text-[#1A0A1A] shadow-2xs"
               )}
             >
               <button
@@ -76,8 +76,8 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
                   isHighlighted
                     ? "bg-transparent"
                     : isOpen
-                    ? "bg-brand-primary/[0.03]"
-                    : "bg-surface-alt/50 hover:bg-surface-alt active:bg-surface-alt/80"
+                    ? "bg-[#FAF5EE]/70"
+                    : "bg-white hover:bg-[#FAF5EE]/50 active:bg-[#FAF5EE]"
                 )}
               >
                 {/* Phase Number Badge */}
@@ -85,10 +85,10 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
                   className={cn(
                     "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg font-mono text-xs font-bold transition-all sm:h-9 sm:w-9 sm:text-sm",
                     isHighlighted
-                      ? "bg-[#3A1494] text-white ring-2 ring-purple-300 shadow-xs"
+                      ? "bg-[#5A2A5A] text-[#FDFAF6] ring-2 ring-[#8C6A8C]/40 shadow-xs"
                       : isOpen
-                      ? "bg-brand-primary text-white shadow-xs scale-105"
-                      : "bg-slate-200/80 text-slate-700"
+                      ? "bg-[#3B0D3B] text-[#FDFAF6] shadow-xs scale-105"
+                      : "bg-slate-100 text-[#3B0D3B]"
                   )}
                 >
                   {phaseNum}
@@ -99,19 +99,19 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
                   <div className="flex items-center gap-2">
                     <span className={cn(
                       "text-[10px] font-extrabold tracking-wider uppercase",
-                      isHighlighted ? "text-[#3A1494]" : "text-brand-primary"
+                      isHighlighted ? "text-[#8C6A8C]" : "text-[#5A2A5A]"
                     )}>
                       {group.eyebrow}
                     </span>
                     {isHighlighted && (
-                      <span className="inline-flex items-center rounded-full bg-[#3A1494] px-2 py-0.5 text-[9px] font-black tracking-wider uppercase text-white shadow-2xs">
+                      <span className="inline-flex items-center rounded-full bg-[#5A2A5A] px-2 py-0.5 text-[9px] font-black tracking-wider uppercase text-[#FDFAF6] shadow-2xs">
                         Key Milestone
                       </span>
                     )}
                   </div>
                   <h3 className={cn(
                     "mt-0.5 text-xs sm:text-sm font-bold tracking-tight leading-snug",
-                    isHighlighted ? "text-slate-950 font-black sm:text-base text-[#3A1494]" : "text-text-primary"
+                    isHighlighted ? "text-white font-black sm:text-base" : "text-[#1A0A1A]"
                   )}>
                     {group.heading}
                   </h3>
@@ -122,10 +122,10 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
                   className={cn(
                     "flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-transform duration-200 sm:h-8 sm:w-8",
                     isOpen
-                      ? "rotate-180 bg-brand-primary/10 text-brand-primary"
+                      ? "rotate-180 bg-[#3B0D3B] text-[#FDFAF6]"
                       : isHighlighted
-                      ? "bg-[#3A1494]/10 text-[#3A1494]"
-                      : "text-text-secondary hover:bg-slate-200/50"
+                      ? "bg-white/10 text-white"
+                      : "text-slate-600 hover:bg-slate-100"
                   )}
                   aria-hidden="true"
                 >
@@ -141,25 +141,25 @@ export default function PhaseAccordion({ groups = [] }: PhaseAccordionProps) {
                 )}
               >
                 <div className="overflow-hidden">
-                  <div className="border-t border-border-subtle/70 bg-surface px-3.5 py-3.5 sm:px-5 sm:py-4">
+                  <div className="border-t border-slate-200 bg-slate-50/50 px-3.5 py-3.5 sm:px-5 sm:py-4">
                     <div className="flex flex-col gap-2.5">
                       {group.lessons.map((lesson) => (
                         <div
                           key={lesson}
-                          className="flex flex-col gap-2.5 rounded-xl border border-border-subtle/70 bg-surface-alt/40 p-3 sm:p-4"
+                          className="flex flex-col gap-2.5 rounded-xl border border-slate-200 bg-white p-3 sm:p-4 shadow-2xs"
                         >
                           {/* Deliverable Header */}
                           <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] sm:text-xs font-bold tracking-wide text-brand-primary uppercase">
+                            <span className="text-[10px] sm:text-xs font-bold tracking-wide text-[#3B0D3B] uppercase">
                               Core Deliverable & Skill
                             </span>
-                            <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-800">
+                            <span className="rounded-full bg-[#5A2A5A]/15 px-2 py-0.5 text-[10px] font-bold text-[#3B0D3B]">
                               Portfolio Graded
                             </span>
                           </div>
 
                           {/* Lesson Description */}
-                          <p className="text-xs sm:text-sm leading-relaxed text-text-primary/90 font-medium">
+                          <p className="text-xs sm:text-sm leading-relaxed text-slate-700 font-medium">
                             {lesson}
                           </p>
                         </div>

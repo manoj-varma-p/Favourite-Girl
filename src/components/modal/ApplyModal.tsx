@@ -5,12 +5,12 @@ import { X, CheckCircle2, ChevronDown, ArrowRight } from "lucide-react";
 import { useApplyModal } from "@/context/ApplyModalContext";
 
 export default function ApplyModal() {
-  const { isOpen, courseName, closeApplyModal } = useApplyModal();
+  const { isOpen, courseName, closeApplyModal, forms } = useApplyModal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+91 ");
   const [selectedCourse, setSelectedCourse] = useState(courseName);
-  const [background, setBackground] = useState("College Student / Recent Graduate");
+  const [background, setBackground] = useState("Student");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -52,6 +52,8 @@ export default function ApplyModal() {
 
   if (!isOpen) return null;
 
+  const isBookDemo = courseName === "Book a Demo";
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
@@ -71,9 +73,9 @@ export default function ApplyModal() {
           name,
           email,
           phone,
-          course: selectedCourse,
+          course: isBookDemo ? "New Age Digital Marketing (Live Demo)" : selectedCourse,
           background,
-          source: "Apply for Batch 2 Modal",
+          source: isBookDemo ? "Book a Demo Pop-up" : "Apply for Batch 2 Modal",
         }),
       });
 
@@ -117,7 +119,7 @@ export default function ApplyModal() {
         className="relative z-10 w-full max-w-lg overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl animate-in zoom-in-95 duration-200 my-auto"
       >
         {/* Top Header */}
-        <div className="relative bg-[#3A1494] px-6 py-6 sm:px-8 sm:py-7 text-white">
+        <div className="relative bg-[#3B0D3B] px-6 py-6 sm:px-8 sm:py-7 text-white">
           <button
             type="button"
             onClick={closeApplyModal}
@@ -128,32 +130,36 @@ export default function ApplyModal() {
           </button>
 
           <h2 id="apply-modal-title" className="text-2xl sm:text-3xl font-black tracking-tight text-white pr-10">
-            Apply for Batch 2
+            {isBookDemo
+              ? "Book a Live Demo"
+              : (forms?.applyModalTitle || "Apply for Batch 2")}
           </h2>
-          <p className="mt-1 text-xs sm:text-sm text-white/85">
-            Leave with work you can show in an interview, not a certificate.
+          <p className="mt-1 text-xs sm:text-sm text-[#FDFAF6]/85">
+            {isBookDemo
+              ? "Experience live campaign dashboards, real client teardowns, and curriculum overview."
+              : (forms?.applyModalSubtitle || "Leave with work you can show in an interview, not a certificate.")}
           </p>
         </div>
 
         {/* Modal Body */}
         {submitted ? (
           <div className="flex flex-col items-center justify-center p-8 text-center sm:p-12 animate-in fade-in duration-300">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-emerald-600 mb-4">
+            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-[#0CA30C] mb-4">
               <CheckCircle2 className="h-10 w-10" />
             </div>
 
             <h3 className="text-2xl sm:text-3xl font-black text-slate-950">
-              Submitted
+              {forms?.applyModalSuccessTitle || "Submitted"}
             </h3>
 
             <p className="mt-2 text-sm text-slate-600 max-w-xs">
-              Thank you! Your details have been received successfully.
+              {forms?.applyModalSuccessMessage || "Thank you! Your details have been received successfully."}
             </p>
 
             <button
               type="button"
               onClick={handleReset}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#3A1494] px-8 py-3 text-sm font-bold text-white shadow-md hover:bg-[#2c0e78] active:scale-98 transition-all cursor-pointer"
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#3B0D3B] px-8 py-3 text-sm font-bold text-[#FDFAF6] shadow-md hover:bg-[#5A2A5A] active:scale-98 transition-all cursor-pointer"
             >
               Done
             </button>
@@ -178,7 +184,7 @@ export default function ApplyModal() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Rahul Sharma"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -195,7 +201,7 @@ export default function ApplyModal() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="rahul@example.com"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -212,7 +218,7 @@ export default function ApplyModal() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
@@ -221,34 +227,33 @@ export default function ApplyModal() {
               <label className="text-xs sm:text-sm font-bold text-slate-800">
                 Program
               </label>
-              <div className="flex items-center justify-between rounded-xl border border-[#3A1494]/20 bg-purple-50/70 px-4 py-3 shadow-2xs">
-                <span className="text-sm font-bold text-[#3A1494]">
+              <div className="flex items-center justify-between rounded-xl border border-[#5A2A5A]/20 bg-[#FAF5EE] px-4 py-3 shadow-2xs">
+                <span className="text-sm font-bold text-[#3B0D3B]">
                   {selectedCourse || "New Age Digital Marketing"}
                 </span>
-                <span className="rounded-md bg-[#3A1494] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                <span className="rounded-md bg-[#3B0D3B] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-[#FDFAF6]">
                   Batch 2
                 </span>
               </div>
               <input type="hidden" name="course" value={selectedCourse || "New Age Digital Marketing"} />
             </div>
 
-            {/* Current Background */}
+            {/* Current Position */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="modal-background" className="text-xs sm:text-sm font-bold text-slate-800">
-                Current background
+                Current position
               </label>
               <div className="relative">
                 <select
                   id="modal-background"
                   value={background}
                   onChange={(e) => setBackground(e.target.value)}
-                  className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm font-medium text-slate-900 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all cursor-pointer"
+                  className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm font-medium text-slate-900 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all cursor-pointer"
                 >
-                  <option value="College Student / Recent Graduate">College Student / Recent Graduate</option>
-                  <option value="Working Professional (Marketing)">Working Professional (Marketing)</option>
-                  <option value="Career Switcher (Non-Marketing)">Career Switcher (Non-Marketing)</option>
-                  <option value="Founder / Business Owner">Founder / Business Owner</option>
-                  <option value="Freelancer / Consultant">Freelancer / Consultant</option>
+                  <option value="Student">Student</option>
+                  <option value="Recent Graduate">Recent Graduate</option>
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Aspiring Business Founder">Aspiring Business Founder</option>
                 </select>
                 <ChevronDown
                   className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
@@ -261,13 +266,17 @@ export default function ApplyModal() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 w-full rounded-xl bg-[#3A1494] py-3.5 px-4 text-center text-sm sm:text-base font-bold text-white shadow-md hover:bg-[#2c0e78] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A1494] focus-visible:ring-offset-2 transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+              className="mt-2 w-full rounded-xl bg-[#3B0D3B] py-3.5 px-4 text-center text-sm sm:text-base font-bold text-[#FDFAF6] shadow-md hover:bg-[#5A2A5A] active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B0D3B] focus-visible:ring-offset-2 transition-all cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
             >
               {submitting ? (
-                <span>Submitting application...</span>
+                <span>{isBookDemo ? "Booking your demo..." : "Submitting application..."}</span>
               ) : (
                 <>
-                  <span>Submit Application</span>
+                  <span>
+                    {isBookDemo
+                      ? "Confirm Demo Booking"
+                      : (forms?.applyModalButtonText || "Submit Application")}
+                  </span>
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}

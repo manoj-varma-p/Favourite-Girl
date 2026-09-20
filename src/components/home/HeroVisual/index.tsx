@@ -2,12 +2,14 @@
 
 import { useState, type FormEvent } from "react";
 import { ChevronDown, CheckCircle2 } from "lucide-react";
+import { useApplyModal } from "@/context/ApplyModalContext";
 
 export default function HeroVisual() {
+  const { forms } = useApplyModal();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+91 ");
-  const [course, setCourse] = useState("New Age Digital Marketing");
+  const [position, setPosition] = useState("Student");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +33,9 @@ export default function HeroVisual() {
           name,
           email,
           phone,
-          course,
+          course: "New Age Digital Marketing",
+          background: position,
+          position,
           source: "Hero Application Form",
         }),
       });
@@ -54,6 +58,16 @@ export default function HeroVisual() {
   return (
     <div id="apply" className="w-full max-w-md mx-auto lg:max-w-none scroll-mt-28">
       <div id="fees" className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-lg scroll-mt-28">
+        {/* Optional Form Header */}
+        <div className="border-b border-slate-100 bg-slate-50/80 px-6 py-4">
+          <h3 className="text-base font-black text-slate-900 tracking-tight">
+            {forms?.heroFormTitle || "Fast Track Application"}
+          </h3>
+          <p className="mt-0.5 text-xs text-slate-500 font-medium">
+            {forms?.heroFormSubtitle || "Live cohort starts soon · Limited seats"}
+          </p>
+        </div>
+
         {/* Form Body */}
         {submitted ? (
           <div className="flex flex-col items-center justify-center p-8 text-center sm:p-12 animate-in fade-in duration-300">
@@ -61,10 +75,10 @@ export default function HeroVisual() {
               <CheckCircle2 className="h-10 w-10" />
             </div>
             <h3 className="text-2xl sm:text-3xl font-black text-slate-900">
-              Submitted
+              {forms?.heroFormSuccessTitle || "Submitted"}
             </h3>
             <p className="mt-2 text-sm text-slate-600 max-w-xs">
-              Thank you! Your details have been received successfully.
+              {forms?.heroFormSuccessMessage || "Thank you! Your details have been received successfully."}
             </p>
             <button
               type="button"
@@ -72,41 +86,42 @@ export default function HeroVisual() {
                 setName("");
                 setEmail("");
                 setPhone("+91 ");
+                setPosition("Student");
                 setSubmitted(false);
               }}
-              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#3A1494] px-8 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#2e0f77] active:scale-95 transition-all cursor-pointer"
+              className="mt-6 inline-flex items-center justify-center rounded-xl bg-[#3B0D3B] px-8 py-2.5 text-sm font-bold text-white shadow-md hover:bg-[#2B052B] active:scale-95 transition-all cursor-pointer"
             >
               Done
             </button>
           </div>
         ) : (
-          <form onSubmit={handleSubmit} className="flex flex-col gap-4.5 p-6 sm:p-7">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6 sm:p-7">
             {error && (
               <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs text-red-700 font-medium">
                 {error}
               </div>
             )}
-            {/* Full name */}
+            {/* Full Name */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="fullName" className="text-xs sm:text-sm font-bold text-slate-800">
-                Full name
+              <label htmlFor="name" className="text-xs sm:text-sm font-bold text-slate-800">
+                Full name <span className="text-rose-500">*</span>
               </label>
               <input
-                id="fullName"
+                id="name"
                 type="text"
                 required
                 autoComplete="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Your name"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
             {/* Email */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="email" className="text-xs sm:text-sm font-bold text-slate-800">
-                Email
+                Email address <span className="text-rose-500">*</span>
               </label>
               <input
                 id="email"
@@ -116,14 +131,14 @@ export default function HeroVisual() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@email.com"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
             {/* WhatsApp */}
             <div className="flex flex-col gap-1.5">
               <label htmlFor="phone" className="text-xs sm:text-sm font-bold text-slate-800">
-                WhatsApp number
+                WhatsApp number <span className="text-rose-500">*</span>
               </label>
               <input
                 id="phone"
@@ -133,29 +148,26 @@ export default function HeroVisual() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+91 98765 43210"
-                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20 transition-all"
+                className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all"
               />
             </div>
 
-            {/* Course of interest */}
+            {/* Current position */}
             <div className="flex flex-col gap-1.5">
-              <label htmlFor="course" className="text-xs sm:text-sm font-bold text-slate-800">
-                Course of interest
+              <label htmlFor="position" className="text-xs sm:text-sm font-bold text-slate-800">
+                Current position
               </label>
               <div className="relative">
                 <select
-                  id="course"
-                  value={course}
-                  onChange={(e) => setCourse(e.target.value)}
-                  className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm font-medium text-slate-900 focus:border-[#3A1494] focus:outline-none focus:ring-2 focus:ring-[#3A1494]/20"
+                  id="position"
+                  value={position}
+                  onChange={(e) => setPosition(e.target.value)}
+                  className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm font-medium text-slate-900 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 cursor-pointer"
                 >
-                  <option value="New Age Digital Marketing">New Age Digital Marketing</option>
-                  <option value="Fundamentals of Digital Marketing">Fundamentals of Digital Marketing</option>
-                  <option value="New Age Digital Marketing (On Campus)">New Age Digital Marketing (On Campus)</option>
-                  <option value="Treqo PGDM">Treqo PGDM</option>
-                  <option value="Campus Edition">Campus Edition</option>
-                  <option value="The Founder Semester">The Founder Semester</option>
-                  <option value="Performance & Growth Specialist">Performance &amp; Growth Specialist</option>
+                  <option value="Student">Student</option>
+                  <option value="Recent Graduate">Recent Graduate</option>
+                  <option value="Working Professional">Working Professional</option>
+                  <option value="Aspiring Business Founder">Aspiring Business Founder</option>
                 </select>
                 <ChevronDown
                   className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"
@@ -164,13 +176,13 @@ export default function HeroVisual() {
               </div>
             </div>
 
-            {/* CTA Submit Button */}
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={submitting}
-              className="mt-1 w-full rounded-xl bg-[#3A1494] py-3.5 px-4 text-center text-sm sm:text-base font-extrabold text-white shadow-xs transition-all hover:bg-[#2c0e78] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A1494] focus-visible:ring-offset-2"
+              className="mt-1 w-full rounded-xl bg-[#3B0D3B] py-3.5 px-4 text-center text-sm sm:text-base font-extrabold text-white shadow-xs transition-all hover:bg-[#2B052B] disabled:opacity-60 disabled:cursor-not-allowed active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B0D3B] focus-visible:ring-offset-2 cursor-pointer"
             >
-              {submitting ? "Sending..." : "Get the brochure"}
+              {submitting ? "Sending..." : (forms?.heroFormButtonText || "Apply for Batch 2")}
             </button>
 
             {/* Footer Disclaimer */}

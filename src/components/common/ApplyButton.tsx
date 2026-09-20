@@ -27,10 +27,10 @@ export default function ApplyButton({
 
   const variantStyles = {
     primary:
-      "bg-[#3A1494] text-white shadow-md hover:bg-[#2c0e78] hover:shadow-lg active:scale-[0.98]",
+      "bg-[#3B0D3B] text-[#FDFAF6] shadow-md shadow-[#3B0D3B]/25 hover:bg-[#5A2A5A] hover:shadow-lg active:scale-[0.98]",
     secondary:
-      "bg-white text-slate-800 border border-slate-200 hover:border-slate-300 hover:bg-slate-50 active:scale-[0.98]",
-    ghost: "bg-transparent text-slate-800 hover:bg-slate-100",
+      "bg-white/10 text-[#FDFAF6] border border-white/20 hover:border-white/35 hover:bg-white/15 active:scale-[0.98]",
+    ghost: "bg-transparent text-[#8C6A8C] hover:bg-white/10 hover:text-white",
   };
 
   const sizeStyles = {
@@ -43,7 +43,7 @@ export default function ApplyButton({
       type="button"
       onClick={() => openApplyModal(courseName)}
       className={cn(
-        "inline-flex items-center justify-center rounded-full font-bold whitespace-nowrap transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3A1494] focus-visible:ring-offset-2 cursor-pointer select-none",
+        "inline-flex items-center justify-center rounded-full font-bold whitespace-nowrap transition-all duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#8C6A8C] focus-visible:ring-offset-2 cursor-pointer select-none",
         variantStyles[variant],
         sizeStyles[size],
         fullWidth && "w-full",

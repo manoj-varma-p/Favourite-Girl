@@ -272,17 +272,17 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                   {detail.description}
                 </p>
 
-                {/* Stat Grid (Fast Scanning with Rich Cards) */}
-                <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-3.5">
+                {/* Stat Grid (Fast Scanning with Clean, Proportionate Cards) */}
+                <div className="mt-6 grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
                   {detail.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className="group rounded-2xl border border-[#EBDDC8] bg-white p-3.5 sm:p-4 transition-all duration-200 shadow-2xs hover:shadow-md hover:border-[#3B0D3B]/30 hover:-translate-y-0.5"
+                      className="group flex flex-col justify-center rounded-xl border border-[#EBDDC8]/90 bg-white px-3.5 py-2.5 sm:px-4 sm:py-3 transition-all duration-200 shadow-2xs hover:shadow-sm hover:border-[#3B0D3B]/30 hover:-translate-y-0.5 min-h-[64px]"
                     >
-                      <p className="text-[10px] font-bold tracking-wider text-[#8C6A8C] uppercase sm:text-[11px]">
+                      <p className="text-[10px] font-bold tracking-wider text-[#8C6A8C] uppercase">
                         {stat.label}
                       </p>
-                      <p className="mt-1 text-sm font-black text-[#1A0A1A] sm:text-base group-hover:text-[#3B0D3B] transition-colors">
+                      <p className="mt-0.5 text-[15px] sm:text-[16px] font-extrabold text-[#1A0A1A] leading-snug tracking-tight group-hover:text-[#3B0D3B] transition-colors">
                         {stat.value}
                       </p>
                     </div>

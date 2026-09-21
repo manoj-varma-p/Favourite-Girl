@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Save, Sparkles, CheckCircle2, AlertCircle, Eye } from "lucide-react";
 import type { SixDecisionsContent } from "@/lib/content-db";
 
@@ -11,7 +11,7 @@ interface Props {
 }
 
 const defaultSixDecisions: SixDecisionsContent = {
-  title: "Six decisions we made differently",
+  title: "Six decisions that make Treqo different.",
   decisions: [
     {
       num: "01",
@@ -56,6 +56,19 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
   const [data, setData] = useState<SixDecisionsContent>(initialData || defaultSixDecisions);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setData({
+        ...defaultSixDecisions,
+        ...initialData,
+        decisions:
+          initialData.decisions && initialData.decisions.length > 0
+            ? initialData.decisions
+            : defaultSixDecisions.decisions,
+      });
+    }
+  }, [initialData]);
 
   async function handleSave(e?: React.FormEvent) {
     if (e) e.preventDefault();

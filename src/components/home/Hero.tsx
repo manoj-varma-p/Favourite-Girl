@@ -149,7 +149,7 @@ export default async function Hero() {
           </div>
 
           {/* Stats Table under buttons */}
-          <HeroStats className="mt-8" />
+          <HeroStats className="mt-8" stats={homeContent.stats} />
         </div>
       </Container>
 

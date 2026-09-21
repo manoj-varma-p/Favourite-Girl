@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Save, Upload, Sparkles, CheckCircle2, AlertCircle } from "lucide-react";
 import type { GovCertsContent } from "@/lib/content-db";
@@ -28,6 +28,12 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingIdx, setUploadingIdx] = useState<number | null>(null);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setData(initialData);
+    }
+  }, [initialData]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const activeCertUploadIdx = useRef<number | null>(null);

@@ -1,20 +1,23 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   Save,
   Sparkles,
   CheckCircle2,
   AlertCircle,
   Eye,
-  Sliders,
-  Upload,
-  RefreshCw,
-  Trash2,
-  Image as ImageIcon,
-  Link as LinkIcon,
+  Layers,
 } from "lucide-react";
 import type { WhyTreqqoContent } from "@/lib/content-db";
+import { cn } from "@/lib/utils";
+
+interface SubmissionItem {
+  tag: string;
+  title: string;
+  description: string;
+  rule?: string;
+}
 
 interface Props {
   initialData?: WhyTreqqoContent;
@@ -22,37 +25,39 @@ interface Props {
   onSaved: (updated: WhyTreqqoContent) => void;
 }
 
+const defaultSubmissions: SubmissionItem[] = [
+  {
+    tag: "01",
+    title: "The problem",
+    description: "One sentence. If it takes three, you haven't found the problem yet.",
+    rule: "Criterion: Exactly 1 sentence",
+  },
+  {
+    tag: "02",
+    title: "The market logic",
+    description: "Why this market behaves the way you claim. Assertion is not logic.",
+    rule: "Criterion: Causal logic & proof",
+  },
+  {
+    tag: "03",
+    title: "The experiment",
+    description: "Something small, live and measurable. Report it even when it flopped.",
+    rule: "Criterion: Real spend & live data",
+  },
+  {
+    tag: "04",
+    title: "The revenue plan",
+    description: "A business without a path to revenue is just an expensive idea.",
+    rule: "Criterion: Board-level financial model",
+  },
+];
+
 const defaultWhyTreqqo: WhyTreqqoContent = {
   eyebrow: "THE CEO CHALLENGE",
   titleLines: ["Every phase ends", "with a problem", "someone actually has."],
   description:
-    "You work on brands with real customers to disappoint. Fictional case studies teach confidence about risk you never carried.",
-  submissions: [
-    {
-      tag: "SUBMIT 01",
-      title: "The problem",
-      description: "One sentence. If it takes three, you haven't found the problem yet.",
-    },
-    {
-      tag: "SUBMIT 02",
-      title: "The market logic",
-      description: "Why this market behaves the way you claim. Assertion is not logic.",
-    },
-    {
-      tag: "SUBMIT 03",
-      title: "The experiment",
-      description: "Something small, live and measurable. Report it even when it flopped.",
-    },
-    {
-      tag: "SUBMIT 04",
-      title: "The revenue plan",
-      description: "A business without a path to revenue is just an expensive idea.",
-    },
-  ],
-  methodCard: {
-    tag: "METHOD · 4:5 PORTRAIT",
-    title: "STUDENT DEFENDING NUMBERS TO A PANEL",
-  },
+    "70% doing, 30% theory enforced, not aspirational. A right answer with no evidence behind it does not pass. You submit four things and defend them out loud.",
+  submissions: defaultSubmissions,
   banner: {
     title: "Phase 4 is a wall, not a checkpoint.",
     description:
@@ -65,54 +70,27 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
-  const [isDragActive, setIsDragActive] = useState(false);
-  const [showManualUrl, setShowManualUrl] = useState(false);
-
-  async function handleMethodImageUpload(file: File) {
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setStatusMsg({ type: "error", text: "Please select a valid image file (PNG, JPG, WEBP)." });
-      return;
+  // Sync state whenever initialData changes from parent
+  useEffect(() => {
+    if (initialData) {
+      setData((prev) => ({
+        ...defaultWhyTreqqo,
+        ...initialData,
+        submissions:
+          initialData.submissions && initialData.submissions.length > 0
+            ? initialData.submissions
+            : defaultSubmissions,
+        banner: initialData.banner || defaultWhyTreqqo.banner,
+      }));
     }
-    if (file.size > 10 * 1024 * 1024) {
-      setStatusMsg({ type: "error", text: "Image size exceeds 10MB limit." });
-      return;
-    }
+  }, [initialData]);
 
-    setIsUploadingImage(true);
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      formData.append("folder", "why-treqo");
-
-      const res = await fetch("/api/admin/upload", {
-        method: "POST",
-        headers: { "x-admin-pin": adminPin },
-        body: formData,
-      });
-
-      const resData = await res.json();
-      if (res.ok && resData.url) {
-        setData((prev) => ({
-          ...prev,
-          methodCard: {
-            ...(prev.methodCard || { tag: "METHOD · 4:5 PORTRAIT", title: "STUDENT DEFENDING NUMBERS TO A PANEL" }),
-            image: resData.url,
-          },
-        }));
-        setStatusMsg({ type: "success", text: "4:5 Portrait photo uploaded successfully!" });
-      } else {
-        setStatusMsg({ type: "error", text: resData.error || "Failed to upload image." });
-      }
-    } catch {
-      setStatusMsg({ type: "error", text: "Network error while uploading image." });
-    } finally {
-      setIsUploadingImage(false);
-      setIsDragActive(false);
-    }
-  }
+  const eyebrow = data.eyebrow || "THE CEO CHALLENGE";
+  const titleLines = data.titleLines && data.titleLines.length > 0 ? data.titleLines : ["Every phase ends", "with a problem", "someone actually has."];
+  const submissions = data.submissions && data.submissions.length > 0 ? data.submissions : defaultSubmissions;
+  const description = data.description || defaultWhyTreqqo.description;
+  const bannerTitle = data.banner?.title || "Phase 4 is a wall, not a checkpoint.";
+  const bannerDesc = data.banner?.description || "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry.";
 
   async function handleSave(e?: React.FormEvent) {
     if (e) e.preventDefault();
@@ -120,7 +98,6 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
     setStatusMsg(null);
 
     try {
-      // First fetch current home content to preserve other sections
       const getRes = await fetch("/api/admin/content", {
         headers: { "x-admin-pin": adminPin },
       });
@@ -137,66 +114,50 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
       });
 
       if (res.ok) {
-        setStatusMsg({ type: "success", text: "Why Treqo section saved successfully to live website!" });
+        setStatusMsg({ type: "success", text: "CEO Challenge & Defense section saved successfully!" });
         onSaved(data);
       } else {
-        setStatusMsg({ type: "error", text: "Failed to save section. Check permissions." });
+        setStatusMsg({ type: "error", text: "Failed to save section content." });
       }
     } catch {
-      setStatusMsg({ type: "error", text: "Network error saving Why Treqo section." });
+      setStatusMsg({ type: "error", text: "Network error while saving." });
     } finally {
       setIsSaving(false);
       setTimeout(() => setStatusMsg(null), 4000);
     }
   }
 
-  function updateSubmission(index: number, field: "tag" | "title" | "description", val: string) {
-    const next = [...(data.submissions || defaultWhyTreqqo.submissions)];
-    next[index] = { ...next[index], [field]: val };
-    setData({ ...data, submissions: next });
-  }
-
   function updateTitleLine(index: number, val: string) {
-    const lines = [...(data.titleLines || ["Every phase ends", "with a problem", "someone actually has."])];
-    lines[index] = val;
-    setData({ ...data, titleLines: lines });
+    const updated = [...titleLines];
+    updated[index] = val;
+    setData({ ...data, titleLines: updated });
   }
 
-  const eyebrow = data.eyebrow || "THE CEO CHALLENGE";
-  const titleLines = data.titleLines && data.titleLines.length > 0
-    ? data.titleLines
-    : ["Every phase ends", "with a problem", "someone actually has."];
-  const submissions = data.submissions && data.submissions.length > 0
-    ? data.submissions
-    : defaultWhyTreqqo.submissions;
-  const methodTag = data.methodCard?.tag || "METHOD · 4:5 PORTRAIT";
-  const methodTitle = data.methodCard?.title || "STUDENT DEFENDING NUMBERS TO A PANEL";
-  const bannerTitle = data.banner?.title || "Phase 4 is a wall, not a checkpoint.";
-  const bannerDesc =
-    data.banner?.description ||
-    "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry.";
+  function updateSubmission(index: number, field: "title" | "description" | "rule" | "tag", val: string) {
+    const updated = submissions.map((sub, i) => (i === index ? { ...sub, [field]: val } : sub));
+    setData({ ...data, submissions: updated });
+  }
 
   return (
     <div className="space-y-6">
-      {/* Top Header Control Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#3B0D3B]/10 shadow-xs">
+      {/* Header & Status Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] text-[10px] font-bold uppercase tracking-wider mb-1.5">
-            <Sparkles className="h-3 w-3" />
-            <span>Interactive Visual Editor</span>
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] text-[10px] font-bold uppercase tracking-wider mb-2">
+            Homepage Section
           </div>
           <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">
-            Why Treqo (The CEO Challenge)
+            CEO Challenge &amp; Defense Deliverables
           </h2>
-          <p className="text-xs text-[#5A4A5A]">
-            Edit text directly within the exact blocks as they appear on the live website.
+          <p className="text-xs sm:text-sm text-[#5A4A5A]">
+            Synchronized with the homepage live section. Edit the headline, proof standards, and defense deliverable cards.
           </p>
         </div>
 
         <div className="flex items-center gap-3">
           {statusMsg && (
             <div
-              className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold ${
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold ${
                 statusMsg.type === "success"
                   ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
                   : "bg-red-50 border border-red-200 text-red-700"
@@ -215,7 +176,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
             type="button"
             onClick={() => handleSave()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs font-bold text-white shadow-xs cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs font-bold text-white shadow-sm cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Changes"}</span>
@@ -223,373 +184,198 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
         </div>
       </div>
 
-      {/* ========================================================= */}
-      {/* EXACT FRONTEND SECTION BLOCKS (Directly Editable)         */}
-      {/* ========================================================= */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#3B0D3B] via-[#2A082A] to-[#180518] p-6 sm:p-10 lg:p-14 text-white shadow-2xl border border-white/10">
-        {/* Background ambient lighting matching frontend */}
-        <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/4 h-[400px] w-[400px] rounded-full bg-white/5 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-[#8C6A8C]/20 blur-3xl" />
+      {/* Live Visual Interactive Section (Mirrors Homepage) */}
+      <div className="rounded-3xl border border-[#E5E0D5] bg-[#F9F8F3] p-6 sm:p-8 lg:p-10 text-[#1A0A1A] shadow-sm">
+        <div className="flex items-center gap-2 pb-6 border-b border-[#E5E0D5] mb-8">
+          <Eye className="h-4 w-4 text-[#3B0D3B]" />
+          <span className="text-xs font-bold uppercase tracking-wider text-[#3B0D3B]">
+            Interactive Live Preview &amp; Editor
+          </span>
         </div>
 
-        {/* Top Header Grid */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-10 lg:items-end">
-          {/* Left: Eyebrow + 3-line Headline */}
-          <div className="flex flex-col items-start lg:col-span-7 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider">Badge:</span>
-              <input
-                type="text"
-                value={eyebrow}
-                onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
-                placeholder="THE CEO CHALLENGE"
-                className="rounded-full bg-[#180518] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#FAF5EE] shadow-xs focus:ring-2 focus:ring-[#8C6A8C] focus:outline-none"
-              />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+          {/* Left Column: Eyebrow, Title Lines, Description, Phase 4 Banner */}
+          <div className="flex flex-col items-start lg:col-span-5 space-y-4">
+            <div>
+              <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block mb-1">
+                Eyebrow Badge:
+              </label>
+              <div className="inline-flex items-center gap-2 rounded-full border border-[#3B0D3B]/20 bg-[#3B0D3B]/5 px-3 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#3B0D3B]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#0ca30c]" />
+                <input
+                  type="text"
+                  value={eyebrow}
+                  onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
+                  placeholder="THE CEO CHALLENGE"
+                  className="bg-transparent text-[#3B0D3B] font-black focus:outline-none w-44"
+                />
+              </div>
             </div>
 
-            <div className="w-full space-y-1 pt-1">
-              <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
-                Main Headline (3 Lines):
-              </span>
+            <div className="w-full space-y-1.5">
+              <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
+                Main Headline (3 lines):
+              </label>
               {[0, 1, 2].map((idx) => (
                 <input
                   key={idx}
                   type="text"
                   value={titleLines[idx] || ""}
                   onChange={(e) => updateTitleLine(idx, e.target.value)}
-                  placeholder={`Line ${idx + 1}...`}
-                  className="block w-full bg-transparent text-2xl sm:text-3xl lg:text-[2.75rem] font-black leading-[1.1] tracking-tight text-white border-b border-white/20 focus:border-[#8C6A8C] focus:outline-none transition-colors py-0.5"
+                  placeholder={`Headline Line ${idx + 1}...`}
+                  className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-lg sm:text-xl font-black text-[#1A0A1A] focus:border-[#3B0D3B] focus:outline-none shadow-2xs"
                 />
               ))}
             </div>
-          </div>
 
-          {/* Right: Subtitle description */}
-          <div className="lg:col-span-5 space-y-1">
-            <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
-              Section Description:
-            </span>
-            <textarea
-              rows={3}
-              value={data.description || ""}
-              onChange={(e) => setData({ ...data, description: e.target.value })}
-              placeholder="You work on brands with real customers to disappoint..."
-              className="w-full rounded-xl border border-white/20 bg-white/5 p-3 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#8C6A8C] focus:outline-none transition-colors resize-none"
-            />
-          </div>
-        </div>
-
-        {/* Middle Content: 2x2 Submission Grid + Portrait Frame */}
-        <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6 lg:items-stretch">
-          {/* 2x2 Submissions */}
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-8">
-            {submissions.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex flex-col justify-between rounded-2xl border border-white/15 bg-white/10 p-5 sm:p-6 shadow-sm backdrop-blur-md transition-all duration-200 hover:bg-white/15 hover:border-white/20 hover:shadow-md"
-              >
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <input
-                      type="text"
-                      value={item.tag}
-                      onChange={(e) => updateSubmission(idx, "tag", e.target.value)}
-                      placeholder="SUBMIT 01"
-                      className="rounded-lg bg-white/10 px-2 py-0.5 text-[11px] font-black uppercase tracking-wider text-white border border-white/20 focus:outline-none focus:ring-1 focus:ring-[#8C6A8C] w-28"
-                    />
-                    <span className="text-[10px] font-bold text-white/50">Block #{idx + 1}</span>
-                  </div>
-
-                  <input
-                    type="text"
-                    value={item.title}
-                    onChange={(e) => updateSubmission(idx, "title", e.target.value)}
-                    placeholder="e.g. The problem"
-                    className="block w-full bg-transparent text-base sm:text-lg font-bold text-white border-b border-white/15 focus:border-[#8C6A8C] focus:outline-none py-0.5 transition-colors"
-                  />
-
-                  <textarea
-                    rows={2}
-                    value={item.description}
-                    onChange={(e) => updateSubmission(idx, "description", e.target.value)}
-                    placeholder="Describe this submission criteria..."
-                    className="mt-1 block w-full bg-transparent text-xs leading-relaxed text-white/80 placeholder:text-white/50 focus:bg-white/60 rounded-lg p-1.5 focus:outline-none resize-none border border-transparent focus:border-white/20"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Right: Method 4:5 Portrait Frame */}
-          <div className="relative flex flex-col justify-between rounded-2xl border-2 border-white/15 bg-white/5 p-4 lg:col-span-4 backdrop-blur-xs transition-colors hover:border-white/20 min-h-[380px] overflow-hidden group">
-            {/* Hidden file input for 4:5 photo */}
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/png,image/jpeg,image/webp,image/jpg"
-              className="hidden"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) handleMethodImageUpload(file);
-                e.target.value = "";
-              }}
-            />
-
-            {/* Header bar inside card */}
-            <div className="flex items-center justify-between z-20 mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-white bg-white/10 px-2 py-0.5 rounded-md border border-white/15 shadow-xs">
-                Method 4:5 Frame
-              </span>
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  onClick={() => setShowManualUrl(!showManualUrl)}
-                  className="p-1 rounded-md bg-white/10 hover:bg-white text-white hover:text-[#3B0D3B] text-[10px] font-bold border border-white/15 shadow-xs transition-all cursor-pointer"
-                  title="Toggle URL Input"
-                >
-                  <LinkIcon className="h-3.5 w-3.5" />
-                </button>
-                {data.methodCard?.image && (
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setData((prev) => ({
-                        ...prev,
-                        methodCard: {
-                          ...(prev.methodCard || { tag: "METHOD · 4:5 PORTRAIT", title: "" }),
-                          image: "",
-                        },
-                      }));
-                    }}
-                    className="p-1 rounded-md bg-white/10 hover:bg-red-50 text-slate-500 hover:text-red-600 text-[10px] font-bold border border-white/15 shadow-xs transition-all cursor-pointer"
-                    title="Remove Photo"
-                  >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
-                )}
-              </div>
-            </div>
-
-            {/* Manual URL Input dropdown if toggled */}
-            {showManualUrl && (
-              <div className="mb-2 z-20">
-                <input
-                  type="url"
-                  value={data.methodCard?.image || ""}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    setData((prev) => ({
-                      ...prev,
-                      methodCard: {
-                        ...(prev.methodCard || { tag: "METHOD · 4:5 PORTRAIT", title: "" }),
-                        image: val,
-                      },
-                    }));
-                  }}
-                  placeholder="Paste image URL (4:5 portrait)..."
-                  className="w-full rounded-lg bg-white p-2 text-xs text-[#0B0B0F] border border-white/20 focus:outline-none focus:ring-1 focus:ring-[#8C6A8C] shadow-xs"
-                />
-              </div>
-            )}
-
-            {/* Image Preview or Dropzone */}
-            {data.methodCard?.image ? (
-              <div className="relative flex-1 w-full min-h-[300px] rounded-xl overflow-hidden border border-white/20 shadow-inner group/img bg-[#180518]/40 flex flex-col justify-end p-4">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={data.methodCard.image}
-                  alt={methodTitle}
-                  className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/img:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#180518]/90 via-[#180518]/25 to-transparent" />
-
-                {/* Floating Replace Button */}
-                <div className="absolute top-2.5 right-2.5 z-20">
-                  <button
-                    type="button"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploadingImage}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/20 text-[11px] font-bold backdrop-blur-md shadow-md transition-all cursor-pointer"
-                  >
-                    {isUploadingImage ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
-                    <span>Replace Photo</span>
-                  </button>
-                </div>
-
-                {/* Overlay Editable Tag & Title inside Image */}
-                <div className="relative z-10 space-y-1.5 text-left">
-                  <input
-                    type="text"
-                    value={methodTag}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        methodCard: { ...(data.methodCard || {}), tag: e.target.value, title: methodTitle },
-                      })
-                    }
-                    placeholder="METHOD · 4:5 PORTRAIT"
-                    className="rounded-md bg-white/25 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-black uppercase tracking-wider text-white border border-white/25 focus:outline-none focus:bg-white/5 max-w-full"
-                  />
-                  <input
-                    type="text"
-                    value={methodTitle}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        methodCard: { ...(data.methodCard || {}), title: e.target.value, tag: methodTag },
-                      })
-                    }
-                    placeholder="STUDENT DEFENDING NUMBERS TO A PANEL"
-                    className="block w-full bg-transparent text-xs sm:text-sm font-black uppercase tracking-wider text-white leading-tight focus:outline-none border-b border-white/30 focus:border-white py-0.5"
-                  />
-                </div>
-              </div>
-            ) : (
-              /* Drag & Drop Upload Zone when no image */
-              <div
-                onDragOver={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsDragActive(true);
-                }}
-                onDragEnter={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsDragActive(true);
-                }}
-                onDragLeave={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsDragActive(false);
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsDragActive(false);
-                  const file = e.dataTransfer.files?.[0];
-                  if (file) handleMethodImageUpload(file);
-                }}
-                onClick={() => !isUploadingImage && fileInputRef.current?.click()}
-                className={`flex-1 w-full min-h-[300px] flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-4 text-center transition-all cursor-pointer space-y-3 ${
-                  isDragActive
-                    ? "border-[#8C6A8C] bg-[#8C6A8C]/15 scale-[1.01] shadow-lg shadow-[#3B0D3B]/20"
-                    : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
-                }`}
-              >
-                {isUploadingImage ? (
-                  <div className="flex flex-col items-center gap-2">
-                    <RefreshCw className="h-6 w-6 text-white animate-spin" />
-                    <span className="text-xs font-bold text-white">Uploading 4:5 Photo...</span>
-                  </div>
-                ) : (
-                  <>
-                    <div className="h-12 w-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
-                      <Upload className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <p className="text-xs font-black text-white uppercase tracking-wide">
-                        Upload 4:5 Ratio Image
-                      </p>
-                      <p className="text-[11px] text-white/70 mt-0.5">
-                        Click or drag &amp; drop portrait photo
-                      </p>
-                    </div>
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-2.5 py-0.5 text-[10px] font-bold text-white">
-                      <ImageIcon className="h-3 w-3" />
-                      <span>4:5 Portrait Ratio · Max 10MB</span>
-                    </div>
-                  </>
-                )}
-
-                {/* Editable tags even before image upload */}
-                <div className="w-full pt-3 border-t border-white/10 space-y-1.5" onClick={(e) => e.stopPropagation()}>
-                  <input
-                    type="text"
-                    value={methodTag}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        methodCard: { ...(data.methodCard || {}), tag: e.target.value, title: methodTitle },
-                      })
-                    }
-                    placeholder="METHOD · 4:5 PORTRAIT"
-                    className="w-full rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.15em] text-white border border-white/15 text-center focus:outline-none focus:ring-1 focus:ring-[#8C6A8C]"
-                  />
-                  <input
-                    type="text"
-                    value={methodTitle}
-                    onChange={(e) =>
-                      setData({
-                        ...data,
-                        methodCard: { ...(data.methodCard || {}), title: e.target.value, tag: methodTag },
-                      })
-                    }
-                    placeholder="STUDENT DEFENDING NUMBERS TO A PANEL"
-                    className="w-full rounded-md bg-white/70 px-2 py-1 text-center text-[11px] font-black uppercase tracking-wider text-white/80 border border-white/15 focus:outline-none focus:bg-white"
-                  />
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Bottom Banner */}
-        <div className="mt-6 rounded-2xl border border-white/20 bg-white/5 p-5 sm:p-7 backdrop-blur-xs shadow-xs">
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-8 lg:items-center">
-            <div className="lg:col-span-5 space-y-1">
-              <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
-                Banner Headline:
-              </span>
-              <input
-                type="text"
-                value={bannerTitle}
-                onChange={(e) =>
-                  setData({
-                    ...data,
-                    banner: { ...data.banner, title: e.target.value, description: bannerDesc },
-                  })
-                }
-                placeholder="Phase 4 is a wall, not a checkpoint."
-                className="w-full bg-transparent text-lg sm:text-xl font-black leading-tight text-white border-b border-white/20 focus:border-[#8C6A8C] focus:outline-none py-1 transition-colors"
+            <div className="w-full">
+              <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block mb-1">
+                Section Description:
+              </label>
+              <textarea
+                rows={3}
+                value={description}
+                onChange={(e) => setData({ ...data, description: e.target.value })}
+                placeholder="Describe the proof standard..."
+                className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs sm:text-[13px] leading-relaxed text-[#5A4A5A] font-medium focus:border-[#3B0D3B] focus:outline-none shadow-2xs resize-none"
               />
             </div>
-            <div className="lg:col-span-7 space-y-1">
-              <span className="text-[10px] font-bold text-white/60 uppercase tracking-wider block">
-                Banner Subtitle:
-              </span>
+
+            {/* Phase 4 Wall Banner Card */}
+            <div className="w-full rounded-none border-l-4 border-l-[#3B0D3B] border-y border-r border-[#E2DDD3] bg-white p-5 shadow-xs space-y-2">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 bg-[#3B0D3B] shrink-0" />
+                <input
+                  type="text"
+                  value={bannerTitle}
+                  onChange={(e) =>
+                    setData({
+                      ...data,
+                      banner: { ...(data.banner || {}), title: e.target.value, description: bannerDesc },
+                    })
+                  }
+                  placeholder="Phase 4 is a wall, not a checkpoint."
+                  className="w-full text-xs font-bold text-[#1A0A1A] tracking-wide border-b border-transparent hover:border-[#3B0D3B]/30 focus:border-[#3B0D3B] focus:outline-none"
+                />
+              </div>
               <textarea
-                rows={2}
+                rows={3}
                 value={bannerDesc}
                 onChange={(e) =>
                   setData({
                     ...data,
-                    banner: { ...data.banner, description: e.target.value, title: bannerTitle },
+                    banner: { ...(data.banner || {}), title: bannerTitle, description: e.target.value },
                   })
                 }
-                placeholder="Idea clarity is graded pass or rework..."
-                className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#8C6A8C] focus:outline-none resize-none"
+                placeholder="Banner description..."
+                className="w-full text-[11px] leading-relaxed text-[#5A4A5A] font-normal border-b border-transparent hover:border-[#3B0D3B]/30 focus:border-[#3B0D3B] focus:outline-none resize-none bg-transparent"
               />
             </div>
           </div>
-        </div>
 
-        {/* Bottom Action inside the live block */}
-        <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-5">
-          <span className="text-xs font-semibold text-white/70 flex items-center gap-1.5">
-            <Eye className="h-4 w-4 text-[#8C6A8C]" />
-            <span>This preview mirrors your live website layout in real-time</span>
-          </span>
+          {/* Right Column: The 4 Defense Deliverable Cards */}
+          <div className="lg:col-span-7">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider">
+                The 4 Defense Deliverables:
+              </span>
+              <span className="text-[10px] text-[#5A4A5A] font-semibold">Card 4 is Flagship Highlighted</span>
+            </div>
 
-          <button
-            type="button"
-            onClick={() => handleSave()}
-            disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#180518] hover:bg-[#3B0D3B] px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all disabled:opacity-50"
-          >
-            <Save className="h-4 w-4" />
-            <span>{isSaving ? "Saving..." : "Save Why Treqo Section"}</span>
-          </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-5 items-start">
+              {submissions.map((item, index) => {
+                const isHighlighted = index === 3;
+                const numStr = String(index + 1).padStart(2, "0");
+
+                return (
+                  <div
+                    key={index}
+                    className={cn(
+                      "rounded-none p-5 sm:p-6 transition-all flex flex-col justify-between min-h-[220px] relative border",
+                      isHighlighted
+                        ? "bg-[#3B0D3B] text-white border-[#5A2A5A] border-t-[3px] border-t-[#8C6A8C] shadow-md"
+                        : "bg-white text-[#1A0A1A] border-[#E5E0D5] border-t-[3px] border-t-[#3B0D3B] shadow-xs"
+                    )}
+                  >
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <span
+                          className={cn(
+                            "text-[9px] font-mono font-bold uppercase tracking-widest",
+                            isHighlighted ? "text-[#FAF5EE]/70" : "text-[#8C6A8C]"
+                          )}
+                        >
+                          Defense Deliverable
+                        </span>
+                        <span
+                          className={cn(
+                            "text-xl font-mono font-black",
+                            isHighlighted ? "text-[#FDFAF6]" : "text-[#3B0D3B]"
+                          )}
+                        >
+                          {numStr}
+                        </span>
+                      </div>
+
+                      {/* Card Title Input */}
+                      <div>
+                        <input
+                          type="text"
+                          value={item.title}
+                          onChange={(e) => updateSubmission(index, "title", e.target.value)}
+                          placeholder="Deliverable Title..."
+                          className={cn(
+                            "w-full text-sm sm:text-base font-black tracking-tight bg-transparent border-b focus:outline-none py-0.5",
+                            isHighlighted
+                              ? "text-white border-white/20 focus:border-white"
+                              : "text-[#1A0A1A] border-[#E5E0D5] focus:border-[#3B0D3B]"
+                          )}
+                        />
+                      </div>
+
+                      {/* Card Description Textarea */}
+                      <div>
+                        <textarea
+                          rows={2}
+                          value={item.description}
+                          onChange={(e) => updateSubmission(index, "description", e.target.value)}
+                          placeholder="Deliverable description..."
+                          className={cn(
+                            "w-full text-xs leading-relaxed font-medium bg-transparent focus:outline-none resize-none border-b",
+                            isHighlighted
+                              ? "text-[#FAF5EE]/85 border-white/10 focus:border-white/40"
+                              : "text-[#5A4A5A] border-[#F0ECE1] focus:border-[#3B0D3B]/40"
+                          )}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Bottom Proof Standard Strip */}
+                    <div
+                      className={cn(
+                        "mt-4 pt-2.5 border-t flex items-center justify-between text-[10px] font-mono",
+                        isHighlighted ? "border-white/15 text-[#FAF5EE]/70" : "border-[#F0ECE1] text-slate-500"
+                      )}
+                    >
+                      <input
+                        type="text"
+                        value={item.rule || `Criterion ${numStr}`}
+                        onChange={(e) => updateSubmission(index, "rule", e.target.value)}
+                        placeholder={`Criterion: e.g. Exactly 1 sentence`}
+                        className={cn(
+                          "bg-transparent focus:outline-none text-[10px] font-mono w-4/5",
+                          isHighlighted ? "text-[#FAF5EE]/90" : "text-[#5A4A5A]"
+                        )}
+                      />
+                      <span
+                        className={cn("h-1.5 w-1.5", isHighlighted ? "bg-[#0CA30C]" : "bg-[#3B0D3B]")}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
     </div>

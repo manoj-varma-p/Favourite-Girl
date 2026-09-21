@@ -248,17 +248,96 @@ export default function CustomAdminPanelPage() {
 
   const [homeContent, setHomeContent] = useState<HomePageContent>({
     hero: {
-      eyebrow: "New Age Digital Marketing",
-      headlineLines: ["LEARN THE SKILLS.", "BUILD THE MINDSET", "BREAK THE PATTERN.",],
+      eyebrow: "COHORT ADMISSIONS OPEN · 2026",
+      headlineLines: ["Leave with Skills", "you can implement.", "Not just a certificate"],
       description:
         "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
     },
     stats: [
-      { value: "100%", label: "Live Brand Work" },
-      { value: "12", label: "Structured Phases" },
-      { value: "1:1", label: "Direct Mentorship" },
+      { value: "100%", label: "Live Brand Work", detail: "Real ad spends, not simulations" },
+      { value: "12", label: "Structured Phases", detail: "Zero to full-stack marketer" },
+      { value: "1:1", label: "Direct Mentorship", detail: "Every student assigned a coach" },
+      { value: "30+", label: "Verified Tools", detail: "Hands-on mastery guaranteed" },
     ],
     faqs: [],
+    whyTreqqo: {
+      eyebrow: "THE CEO CHALLENGE",
+      titleLines: ["Every phase ends", "with a problem", "someone actually has."],
+      description:
+        "70% doing, 30% theory enforced, not aspirational. A right answer with no evidence behind it does not pass. You submit four things and defend them out loud.",
+      submissions: [
+        {
+          tag: "01",
+          title: "The problem",
+          description: "One sentence. If it takes three, you haven't found the problem yet.",
+          rule: "Criterion: Exactly 1 sentence",
+        },
+        {
+          tag: "02",
+          title: "The market logic",
+          description: "Why this market behaves the way you claim. Assertion is not logic.",
+          rule: "Criterion: Causal logic & proof",
+        },
+        {
+          tag: "03",
+          title: "The experiment",
+          description: "Something small, live and measurable. Report it even when it flopped.",
+          rule: "Criterion: Real spend & live data",
+        },
+        {
+          tag: "04",
+          title: "The revenue plan",
+          description: "A business without a path to revenue is just an expensive idea.",
+          rule: "Criterion: Board-level financial model",
+        },
+      ],
+      banner: {
+        title: "Phase 4 is a wall, not a checkpoint.",
+        description:
+          "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry.",
+      },
+    },
+    executionProof: {
+      eyebrow: "BATCH 1 · ALREADY HAPPENED",
+      title: "Four names. All checkable.",
+      description:
+        "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
+      outcomes: [
+        {
+          tag: "FOUNDER",
+          name: "Somu Shekar",
+          description: "Never went job-hunting. Co-founded Gesture Co while still in the course.",
+          photoUrl: "/uploads/alumni/somu-shekar.jpg",
+        },
+        {
+          tag: "FOUNDER",
+          name: "Subhani",
+          description: "Turned his capstone into a company. Founded JASS Media.",
+          photoUrl: "/uploads/alumni/subhani.jpg",
+        },
+        {
+          tag: "PLACED IN 30 DAYS",
+          name: "Dikshtha",
+          description: "At Bristle Tech within a month of finishing.",
+          photoUrl: "/uploads/alumni/dikshtha.jpg",
+        },
+        {
+          tag: "HIRED ON PORTFOLIO",
+          name: "Harshit",
+          description: "Placed at TCS on the strength of the work, not the résumé.",
+          photoUrl: "/uploads/alumni/harshit.jpg",
+        },
+      ],
+      metrics: [
+        { value: "100%", label: "of Batch 1 placed or founding" },
+        { value: "₹5L+", label: "earned for a client, mid-course" },
+      ],
+      companies: [
+        { name: "Gesture Co", logo: "/images/dark-gesture.png" },
+        { name: "JASS Media", logo: "/images/dark-jass-media.png" },
+        { name: "Bristle Tech", logo: "/images/dark-bristletech.png" },
+      ],
+    },
   });
 
   const [blogs, setBlogs] = useState<BlogPost[]>([]);

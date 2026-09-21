@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Save, Upload, Sparkles, CheckCircle2, AlertCircle, Trash2, Plus } from "lucide-react";
 import type { ExecutionProofContent } from "@/lib/content-db";
@@ -16,20 +16,19 @@ const defaultExecutionProof: ExecutionProofContent = {
   title: "Four names. All checkable.",
   description: "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
   outcomes: [
-    { tag: "FOUNDER", name: "Somu Shekar", description: "Never went job-hunting. Co-founded Gesture Co while still in the course.", photoUrl: "" },
-    { tag: "FOUNDER", name: "Subhani", description: "Turned his capstone into a company. Founded JASS Media.", photoUrl: "" },
-    { tag: "PLACED IN 30 DAYS", name: "Dikshtha", description: "At Bristle Tech within a month of finishing.", photoUrl: "" },
-    { tag: "HIRED ON PORTFOLIO", name: "Harshit", description: "Placed at TCS on the strength of the work, not the résumé.", photoUrl: "" },
+    { tag: "FOUNDER", name: "Somu Shekar", description: "Never went job-hunting. Co-founded Gesture Co while still in the course.", photoUrl: "/uploads/alumni/somu-shekar.jpg" },
+    { tag: "FOUNDER", name: "Subhani", description: "Turned his capstone into a company. Founded JASS Media.", photoUrl: "/uploads/alumni/subhani.jpg" },
+    { tag: "PLACED IN 30 DAYS", name: "Dikshtha", description: "At Bristle Tech within a month of finishing.", photoUrl: "/uploads/alumni/dikshtha.jpg" },
+    { tag: "HIRED ON PORTFOLIO", name: "Harshit", description: "Placed at TCS on the strength of the work, not the résumé.", photoUrl: "/uploads/alumni/harshit.jpg" },
   ],
   metrics: [
     { value: "100%", label: "of Batch 1 placed or founding" },
-    { value: "1:1", label: "Mentorship" },
+    { value: "₹5L+", label: "earned for a client, mid-course" },
   ],
   companies: [
-    { name: "Gesture Co", logo: "/images/gesture.png" },
-    { name: "JASS Media", logo: "/images/jass-media.png" },
-    { name: "Bristle Tech", logo: "/images/bristletech.png" },
-    { name: "TCS", logo: "/images/tcs.png" },
+    { name: "Gesture Co", logo: "/images/dark-gesture.png" },
+    { name: "JASS Media", logo: "/images/dark-jass-media.png" },
+    { name: "Bristle Tech", logo: "/images/dark-bristletech.png" },
   ],
   story: "That ₹5L came out of Gesture Co's Diwali campaign briefed, built, run and reported by students who hadn't graduated yet. Batch 2 gets measured against it.",
 };
@@ -40,6 +39,25 @@ export default function AdminPlacementsTab({ initialData, adminPin, onSaved }: P
   const [uploadingIndex, setUploadingIndex] = useState<number | null>(null);
   const [uploadingCompanyIdx, setUploadingCompanyIdx] = useState<number | null>(null);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  // Synchronize state when initialData updates from parent
+  useEffect(() => {
+    if (initialData) {
+      const fallbackCompanies = defaultExecutionProof.companies || [];
+      const companies = (initialData.companies || fallbackCompanies).filter(
+        (c) => c.name !== "TCS"
+      );
+      setData({
+        ...defaultExecutionProof,
+        ...initialData,
+        companies,
+        metrics:
+          initialData.metrics && initialData.metrics.length > 0
+            ? initialData.metrics
+            : defaultExecutionProof.metrics,
+      });
+    }
+  }, [initialData]);
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const activeStudentUploadIdx = useRef<number | null>(null);

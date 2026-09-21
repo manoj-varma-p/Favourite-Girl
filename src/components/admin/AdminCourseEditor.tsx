@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -48,6 +48,10 @@ export default function AdminCourseEditor({
   const [course, setCourse] = useState<CourseItem>(initialCourse);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    setCourse(initialCourse);
+  }, [initialCourse]);
 
   // Upload image states
   const fileInputRef = useRef<HTMLInputElement | null>(null);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Save, MapPin, Mail, Phone, Globe, CheckCircle2, AlertCircle } from "lucide-react";
 import type { GeneralSettings } from "@/lib/content-db";
 
@@ -28,6 +28,12 @@ export default function AdminFooterTab({ initialData, adminPin, onSaved }: Props
   const [settings, setSettings] = useState<GeneralSettings>(initialData || defaultSettings);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setSettings(initialData);
+    }
+  }, [initialData]);
 
   async function handleSave(e: React.FormEvent) {
     e.preventDefault();

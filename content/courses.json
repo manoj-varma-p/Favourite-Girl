@@ -7,18 +7,24 @@
     "badgeVariant": "blue",
     "duration": "4 months · Online",
     "meta": "4 months · Online",
-    "description": "The flagship. 12 phases, 30+ real brand projects, AI in the workflow.",
+    "description": "The flagship. 12 phases, 30+ real brand projects, AI in the workflow from phase one. Batch 2 starts Oct 2026.",
     "isFlagship": true,
     "isLocked": false,
+    "batch": "Batch 2 · Oct 2026",
+    "feeTotal": "₹55,000",
+    "feeEmi": "₹4,583 / month",
     "applyCta": "Apply for Batch 2",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
     "image": "/images/course1.png",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "previewLabel": "CLASSROOM · CEO CHALLENGE REVIEW",
     "actionText": "View course →",
     "actionHref": "/categories/digital-marketing",
     "tags": [
-      "All"
+      "All",
+      "Flagship"
     ],
-    "order": 999
+    "order": 1
   },
   {
     "id": "fundamentals",
@@ -28,60 +34,80 @@
     "badgeVariant": "gray",
     "duration": "6 modules · Self-paced",
     "meta": "6 modules · Self-paced",
-    "description": "The door in. Learn what digital marketing is & how funnels work.",
+    "description": "The door in. What digital marketing is, how funnels behave, and what to settle before you pay for anything.",
     "isFlagship": false,
     "isLocked": true,
+    "batch": "Self-Paced · Coming Soon",
+    "feeTotal": "₹15,000",
+    "feeEmi": "₹2,500 / month",
     "applyCta": "Notify Me When Open",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "SELF-PACED MODULE SCREEN",
     "actionText": "Get notified →",
     "actionHref": "/categories/fundamentals",
     "tags": [
-      "All"
+      "All",
+      "Short",
+      "Students"
     ],
-    "order": 999
+    "order": 2
   },
   {
     "id": "4m-program",
-    "title": "New Age Digital Marketing ",
+    "title": "New Age Digital Marketing (On Campus)",
     "href": "/categories/4m-program",
     "badge": "OPEN · ON-CAMPUS",
     "badgeVariant": "blue",
     "duration": "4 months · On campus",
     "meta": "4 months · On campus",
-    "description": "Full Stack Marketing On Campus Edition at our Madhapur studio floor.",
+    "description": "Full Stack Marketing On Campus Edition. Brand strategy through performance in four months on our Madhapur studio floor.",
     "isFlagship": false,
     "isLocked": false,
+    "batch": "On Campus · Batch 2",
+    "feeTotal": "₹75,000",
+    "feeEmi": "₹6,250 / month",
     "applyCta": "Apply for Batch 2",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "MADHAPUR STUDIO FLOOR",
     "actionText": "View course →",
     "actionHref": "/categories/4m-program",
     "tags": [
-      "All"
+      "All",
+      "Short",
+      "Flagship"
     ],
-    "order": 999
+    "order": 3
   },
   {
     "id": "pgdm",
-    "title": "Treqo PGDM",
+    "title": "Treqo PGDM in Modern Marketing",
     "href": "/categories/pgdm",
     "badge": "COMING SOON",
     "badgeVariant": "gray",
     "duration": "12 months · Hybrid",
     "meta": "12 months · Hybrid",
-    "description": "Post Graduate Diploma built for graduates targeting senior roles.",
+    "description": "Post Graduate Diploma in New Age Marketing. Built for graduates ready for senior marketing roles.",
     "isFlagship": false,
     "isLocked": true,
+    "batch": "Hybrid · Coming Soon",
+    "feeTotal": "₹1,80,000",
+    "feeEmi": "₹15,000 / month",
     "applyCta": "Notify Me When Open",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "COHORT SESSION",
     "actionText": "Get notified →",
     "actionHref": "/categories/pgdm",
     "tags": [
-      "All"
+      "All",
+      "PG"
     ],
-    "order": 999
+    "order": 4
   },
   {
     "id": "campus-edition",
@@ -91,18 +117,24 @@
     "badgeVariant": "gray",
     "duration": "4 months · Online",
     "meta": "4 months · Online",
-    "description": "Runs alongside your BBA/MBA without colliding with exams.",
+    "description": "The flagship, timed to run alongside a BBA or MBA without colliding with your semester exams.",
     "isFlagship": false,
     "isLocked": true,
+    "batch": "Online · Coming Soon",
+    "feeTotal": "₹45,000",
+    "feeEmi": "₹3,750 / month",
     "applyCta": "Notify Me When Open",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "STUDENT AT DESK",
     "actionText": "Get notified →",
     "actionHref": "/categories/campus-edition",
     "tags": [
-      "All"
+      "All",
+      "Students"
     ],
-    "order": 999
+    "order": 5
   },
   {
     "id": "founder-semester",
@@ -112,18 +144,25 @@
     "badgeVariant": "gray",
     "duration": "4 months · Online",
     "meta": "4 months · Online",
-    "description": "Marketing & growth for founders launching or scaling ventures.",
+    "description": "Marketing and entrepreneurship for people who want to launch, scale, or run their own venture.",
     "isFlagship": false,
     "isLocked": true,
+    "batch": "Online · Coming Soon",
+    "feeTotal": "₹65,000",
+    "feeEmi": "₹5,416 / month",
     "applyCta": "Notify Me When Open",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "FOUNDER PITCH SESSION",
     "actionText": "Get notified →",
     "actionHref": "/categories/founder-semester",
     "tags": [
-      "All"
+      "All",
+      "Short",
+      "Flagship"
     ],
-    "order": 999
+    "order": 6
   },
   {
     "id": "performance-growth",
@@ -133,17 +172,23 @@
     "badgeVariant": "gray",
     "duration": "3 months · Online",
     "meta": "3 months · Online",
-    "description": "Deep dive into Meta, Google Ads & full-funnel attribution.",
+    "description": "Deep dive into Meta, Google Ads, and attribution models for direct response growth.",
     "isFlagship": false,
     "isLocked": true,
+    "batch": "Online · Coming Soon",
+    "feeTotal": "₹35,000",
+    "feeEmi": "₹2,916 / month",
     "applyCta": "Notify Me When Open",
-    "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    "previewLabel": "CAMPUS MODULE REVIEW",
+    "syllabusCta": "Download Curriculum",
+    "curriculumPdf": "/treqo-curriculum.pdf",
+    "image": "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=800&q=80",
+    "previewLabel": "LIVE MEDIA DASHBOARD",
     "actionText": "Get notified →",
     "actionHref": "/categories/performance-growth",
     "tags": [
-      "All"
+      "All",
+      "Short"
     ],
-    "order": 999
+    "order": 7
   }
 ]

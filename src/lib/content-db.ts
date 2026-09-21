@@ -59,6 +59,7 @@ export interface WhyTreqqoContent {
     tag: string;
     title: string;
     description: string;
+    rule?: string;
   }>;
   methodCard?: {
     tag: string;

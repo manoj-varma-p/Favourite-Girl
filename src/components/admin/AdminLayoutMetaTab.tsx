@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Save,
   Search,
@@ -43,8 +43,8 @@ const defaultLayoutSettings: LayoutSettings = {
   canonicalUrl: "https://treqo.org",
   ogTitle: "TREQO: LEARN THE SKILLS. BUILD THE MINDSET. BREAK THE PATTERN.",
   ogDescription:
-    "TREQO is a digital marketing learning system built around 70% doing, live brand projects, and capstone revenue proof.",
-  ogImage: "/icon.svg",
+    "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
+  ogImage: "/images/og-treqo.png",
   twitterTitle: "TREQO: The Marketing School",
   twitterDescription: "LEARN THE SKILLS. BUILD THE MINDSET. BREAK THE PATTERN.",
   twitterCard: "summary_large_image",
@@ -70,6 +70,12 @@ export default function AdminLayoutMetaTab({ initialData, adminPin, onSaved }: P
   const [settings, setSettings] = useState<LayoutSettings>(initialData || defaultLayoutSettings);
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (initialData) {
+      setSettings(initialData);
+    }
+  }, [initialData]);
 
   // Keyword input state
   const [newKeywordInput, setNewKeywordInput] = useState("");

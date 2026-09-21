@@ -104,16 +104,16 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
   return (
     <div className="space-y-6">
       {/* Top Header Control Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0e111a] p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#3B0D3B]/10 shadow-xs">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B796A]/20 border border-[#3B796A]/30 text-[#ABCAC2] text-[10px] font-bold uppercase tracking-wider mb-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] text-[10px] font-bold uppercase tracking-wider mb-1.5">
             <Sparkles className="h-3 w-3" />
             <span>Interactive Visual Editor</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">
             Six Decisions (Why Us)
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#5A4A5A]">
             Edit the six key differentiator cards shown on the live homepage.
           </p>
         </div>
@@ -123,8 +123,8 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
             <div
               className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold ${
                 statusMsg.type === "success"
-                  ? "bg-emerald-950/80 border border-emerald-500/40 text-emerald-300"
-                  : "bg-red-950/80 border border-red-500/40 text-red-300"
+                  ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                  : "bg-red-50 border border-red-200 text-red-700"
               }`}
             >
               {statusMsg.type === "success" ? (
@@ -140,7 +140,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
             type="button"
             onClick={() => handleSave()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs font-bold text-white shadow-xs cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Changes"}</span>
@@ -151,14 +151,14 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
       {/* ========================================================= */}
       {/* EXACT FRONTEND SECTION BLOCKS (Directly Editable)         */}
       {/* ========================================================= */}
-      <div className="rounded-3xl bg-slate-50 p-6 sm:p-10 lg:p-12 border border-slate-200/80 shadow-xl">
+      <div className="rounded-2xl bg-[#FAF5EE] p-6 sm:p-10 lg:p-12 border border-[#3B0D3B]/10 shadow-xs">
         {/* Header Block Matching Frontend */}
         <div className="flex flex-col items-start max-w-2xl space-y-2">
-          <span className="text-xs font-bold uppercase tracking-[0.18em] text-slate-600">
+          <span className="text-xs font-bold uppercase tracking-[0.18em] text-[#3B0D3B]">
             WHY TREQO
           </span>
           <div className="w-full">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
               Section Title:
             </span>
             <input
@@ -166,12 +166,12 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
               value={title}
               onChange={(e) => setData({ ...data, title: e.target.value })}
               placeholder="Six decisions we made differently"
-              className="mt-1 w-full bg-transparent text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-slate-950 border-b border-slate-300 focus:border-[#012A22] focus:outline-none transition-colors py-1"
+              className="mt-1 w-full bg-transparent text-2xl sm:text-3xl lg:text-4xl font-black leading-tight tracking-tight text-[#0B0B0F] border-b border-[#3B0D3B]/20 focus:border-[#3B0D3B] focus:outline-none transition-colors py-1"
             />
           </div>
 
           <div className="w-full pt-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+            <span className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
               Optional Subtitle:
             </span>
             <input
@@ -179,7 +179,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
               value={data.subtitle || ""}
               onChange={(e) => setData({ ...data, subtitle: e.target.value })}
               placeholder="e.g. Why our pedagogy actually works"
-              className="mt-1 w-full bg-transparent text-sm sm:text-base text-slate-600 border-b border-slate-200 focus:border-[#012A22] focus:outline-none transition-colors py-0.5"
+              className="mt-1 w-full bg-transparent text-sm sm:text-base text-[#5A4A5A] border-b border-[#3B0D3B]/15 focus:border-[#3B0D3B] focus:outline-none transition-colors py-0.5"
             />
           </div>
         </div>
@@ -189,7 +189,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
           {decisions.map((item, idx) => (
             <div
               key={idx}
-              className="flex flex-col justify-between rounded-2xl border border-slate-200/90 bg-white p-6 sm:p-7 shadow-xs hover:shadow-md transition-all duration-200 space-y-4"
+              className="flex flex-col justify-between rounded-xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-7 shadow-xs hover:shadow-md hover:border-[#3B0D3B]/30 transition-all duration-200 space-y-4"
             >
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -198,9 +198,9 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
                     value={item.num}
                     onChange={(e) => updateDecision(idx, "num", e.target.value)}
                     placeholder={`0${idx + 1}`}
-                    className="w-14 rounded-md bg-[#3B796A]/10 px-2.5 py-1 text-xs font-bold text-[#012A22] text-center border border-[#3B796A]/30 focus:outline-none focus:ring-1 focus:ring-[#012A22]"
+                    className="w-14 rounded-md bg-[#3B0D3B]/10 px-2.5 py-1 text-xs font-bold text-[#3B0D3B] text-center border border-[#3B0D3B]/20 focus:outline-none focus:ring-1 focus:ring-[#3B0D3B]"
                   />
-                  <span className="text-[10px] font-semibold text-slate-400">Card #{idx + 1}</span>
+                  <span className="text-[10px] font-semibold text-[#8C6A8C]">Card #{idx + 1}</span>
                 </div>
 
                 <input
@@ -208,7 +208,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
                   value={item.title}
                   onChange={(e) => updateDecision(idx, "title", e.target.value)}
                   placeholder="e.g. 70% doing"
-                  className="block w-full bg-transparent text-lg sm:text-xl font-bold tracking-tight text-slate-900 border-b border-slate-200 focus:border-[#012A22] focus:outline-none py-0.5 transition-colors"
+                  className="block w-full bg-transparent text-lg sm:text-xl font-bold tracking-tight text-[#0B0B0F] border-b border-[#3B0D3B]/15 focus:border-[#3B0D3B] focus:outline-none py-0.5 transition-colors"
                 />
 
                 <textarea
@@ -216,7 +216,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
                   value={item.description}
                   onChange={(e) => updateDecision(idx, "description", e.target.value)}
                   placeholder="The ratio is enforced, not aspirational..."
-                  className="block w-full bg-transparent text-xs sm:text-sm leading-relaxed text-slate-600 placeholder:text-slate-400 focus:bg-slate-50 rounded-lg p-1.5 focus:outline-none resize-none border border-transparent focus:border-slate-200"
+                  className="block w-full bg-transparent text-xs sm:text-sm leading-relaxed text-[#5A4A5A] placeholder:text-[#8C6A8C] focus:bg-[#FAF5EE] rounded-lg p-1.5 focus:outline-none resize-none border border-transparent focus:border-[#3B0D3B]/20"
                 />
               </div>
             </div>
@@ -224,9 +224,9 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
         </div>
 
         {/* Bottom Save Action */}
-        <div className="mt-8 flex items-center justify-between border-t border-slate-200 pt-5">
-          <span className="text-xs font-semibold text-slate-500 flex items-center gap-1.5">
-            <Eye className="h-4 w-4 text-[#012A22]" />
+        <div className="mt-8 flex items-center justify-between border-t border-[#3B0D3B]/10 pt-5">
+          <span className="text-xs font-semibold text-[#5A4A5A] flex items-center gap-1.5">
+            <Eye className="h-4 w-4 text-[#3B0D3B]" />
             <span>This layout matches your live website &quot;Why Treqo&quot; section</span>
           </span>
 
@@ -234,7 +234,7 @@ export default function AdminSixDecisionsTab({ initialData, adminPin, onSaved }:
             type="button"
             onClick={() => handleSave()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-6 py-2.5 text-xs font-bold text-white shadow-xs cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Six Decisions"}</span>

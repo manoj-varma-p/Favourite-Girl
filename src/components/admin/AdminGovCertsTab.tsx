@@ -124,13 +124,13 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B796A]/20 border border-[#3B796A]/30 text-[#ABCAC2] text-[10px] font-bold uppercase tracking-wider mb-2">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] text-[10px] font-bold uppercase tracking-wider mb-2">
             Homepage Section
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">
             Government Accreditations &amp; Certifications
           </h2>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm text-[#5A4A5A]">
             Edit government recognition badges (MSME, DPIIT, Startup India) and official accredited ministry text.
           </p>
         </div>
@@ -139,8 +139,8 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
           <div
             className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold ${
               statusMsg.type === "success"
-                ? "bg-emerald-950/80 border border-emerald-500/40 text-emerald-300"
-                : "bg-red-950/80 border border-red-500/40 text-red-300"
+                ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                : "bg-red-50 border border-red-200 text-red-700"
             }`}
           >
             {statusMsg.type === "success" ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
@@ -151,66 +151,66 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
 
       <form onSubmit={handleSave} className="space-y-6">
         {/* Section Heading */}
-        <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-          <h3 className="text-sm font-bold text-white flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-[#ABCAC2]" />
+        <div className="rounded-xl border border-[#3B0D3B]/10 bg-white p-6 space-y-4 shadow-xs">
+          <h3 className="text-sm font-bold text-[#0B0B0F] flex items-center gap-2">
+            <Sparkles className="h-4 w-4 text-[#3B0D3B]" />
             <span>Section Titles</span>
           </h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="text-xs font-bold text-slate-300">Eyebrow Tag</label>
+              <label className="text-xs font-bold text-[#0B0B0F]">Eyebrow Tag</label>
               <input
                 type="text"
                 value={data.eyebrow || ""}
                 onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
                 placeholder="Officially Recognised"
-                className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs text-white focus:outline-none"
+                className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3.5 py-2 text-xs text-[#0B0B0F] focus:outline-none focus:border-[#3B0D3B]"
               />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-300">Main Title</label>
+              <label className="text-xs font-bold text-[#0B0B0F]">Main Title</label>
               <input
                 type="text"
                 value={data.title || ""}
                 onChange={(e) => setData({ ...data, title: e.target.value })}
                 placeholder="Government Certified"
-                className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs text-white focus:outline-none"
+                className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3.5 py-2 text-xs text-[#0B0B0F] focus:outline-none focus:border-[#3B0D3B]"
               />
             </div>
             <div>
-              <label className="text-xs font-bold text-slate-300">Highlighted Word</label>
+              <label className="text-xs font-bold text-[#0B0B0F]">Highlighted Word</label>
               <input
                 type="text"
                 value={data.titleHighlight || ""}
                 onChange={(e) => setData({ ...data, titleHighlight: e.target.value })}
                 placeholder="Institution"
-                className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs text-[#ABCAC2] font-bold focus:outline-none"
+                className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3.5 py-2 text-xs text-[#3B0D3B] font-bold focus:outline-none focus:border-[#3B0D3B]"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-xs font-bold text-slate-300">Subtitle Text</label>
+            <label className="text-xs font-bold text-[#0B0B0F]">Subtitle Text</label>
             <input
               type="text"
               value={data.subtitle || ""}
               onChange={(e) => setData({ ...data, subtitle: e.target.value })}
               placeholder="Recognised by official government initiatives & accredited ministries"
-              className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-3.5 py-2 text-xs text-slate-300 focus:outline-none"
+              className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3.5 py-2 text-xs text-[#5A4A5A] focus:outline-none focus:border-[#3B0D3B]"
             />
           </div>
         </div>
 
         {/* 3 Accreditation Badges */}
-        <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-          <h3 className="text-sm font-bold text-white">Government Badges &amp; Logos</h3>
+        <div className="rounded-xl border border-[#3B0D3B]/10 bg-white p-6 space-y-4 shadow-xs">
+          <h3 className="text-sm font-bold text-[#0B0B0F]">Government Badges &amp; Logos</h3>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {(data.certs || defaultGovCerts.certs).map((cert, idx) => (
-              <div key={idx} className="rounded-xl border border-slate-800/80 bg-[#121520] p-4 space-y-3">
+              <div key={idx} className="rounded-xl border border-[#3B0D3B]/10 bg-[#FAF5EE] p-4 space-y-3">
                 {/* Logo Preview & Uploader */}
-                <div className="h-28 rounded-xl bg-white p-3 flex items-center justify-center relative overflow-hidden border border-slate-700">
+                <div className="h-28 rounded-xl bg-white p-3 flex items-center justify-center relative overflow-hidden border border-[#3B0D3B]/10">
                   {cert.src ? (
                     <Image
                       src={cert.src}
@@ -220,7 +220,7 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
                       className="max-h-20 w-auto object-contain"
                     />
                   ) : (
-                    <span className="text-xs text-slate-400 font-bold">No logo uploaded</span>
+                    <span className="text-xs text-[#8C6A8C] font-bold">No logo uploaded</span>
                   )}
                 </div>
 
@@ -230,7 +230,7 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
                     value={cert.src}
                     onChange={(e) => updateCert(idx, "src", e.target.value)}
                     placeholder="/logo.png"
-                    className="flex-1 rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-white focus:outline-none"
+                    className="flex-1 rounded-md border border-[#3B0D3B]/15 bg-white px-2 py-1 text-[11px] text-[#0B0B0F] focus:outline-none focus:border-[#3B0D3B]"
                   />
                   <button
                     type="button"
@@ -239,7 +239,7 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
                       activeCertUploadIdx.current = idx;
                       fileInputRef.current?.click();
                     }}
-                    className="p-1.5 rounded-md bg-[#012A22] hover:bg-[#001F18] text-white cursor-pointer"
+                    className="p-1.5 rounded-md bg-[#3B0D3B] hover:bg-[#2A082A] text-white cursor-pointer"
                     title="Upload Badge Image"
                   >
                     <Upload className="h-3 w-3" />
@@ -247,24 +247,24 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400">Badge Label</label>
+                  <label className="text-[10px] font-bold text-[#5A4A5A]">Badge Label</label>
                   <input
                     type="text"
                     value={cert.label}
                     onChange={(e) => updateCert(idx, "label", e.target.value)}
                     placeholder="MSME Registered"
-                    className="mt-0.5 w-full rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-xs text-white font-bold focus:outline-none"
+                    className="mt-0.5 w-full rounded-md border border-[#3B0D3B]/15 bg-white px-2 py-1 text-xs text-[#0B0B0F] font-bold focus:outline-none focus:border-[#3B0D3B]"
                   />
                 </div>
 
                 <div>
-                  <label className="text-[10px] font-bold text-slate-400">Issuing Authority / Subtitle</label>
+                  <label className="text-[10px] font-bold text-[#5A4A5A]">Issuing Authority / Subtitle</label>
                   <input
                     type="text"
                     value={cert.sub}
                     onChange={(e) => updateCert(idx, "sub", e.target.value)}
                     placeholder="Ministry of MSME, Govt. of India"
-                    className="mt-0.5 w-full rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] text-slate-300 focus:outline-none"
+                    className="mt-0.5 w-full rounded-md border border-[#3B0D3B]/15 bg-white px-2 py-1 text-[11px] text-[#5A4A5A] focus:outline-none focus:border-[#3B0D3B]"
                   />
                 </div>
               </div>
@@ -276,7 +276,7 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
           <button
             type="submit"
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-6 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-6 py-2.5 text-xs font-bold text-white shadow-xs cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Government Certifications"}</span>

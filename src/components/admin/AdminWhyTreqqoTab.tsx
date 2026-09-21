@@ -179,16 +179,16 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
   return (
     <div className="space-y-6">
       {/* Top Header Control Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-[#0e111a] p-5 rounded-2xl border border-slate-800">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-xl border border-[#3B0D3B]/10 shadow-xs">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B796A]/20 border border-[#3B796A]/30 text-[#ABCAC2] text-[10px] font-bold uppercase tracking-wider mb-1.5">
+          <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] text-[10px] font-bold uppercase tracking-wider mb-1.5">
             <Sparkles className="h-3 w-3" />
             <span>Interactive Visual Editor</span>
           </div>
-          <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+          <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">
             Why Treqo (The CEO Challenge)
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#5A4A5A]">
             Edit text directly within the exact blocks as they appear on the live website.
           </p>
         </div>
@@ -198,8 +198,8 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
             <div
               className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold ${
                 statusMsg.type === "success"
-                  ? "bg-emerald-950/80 border border-emerald-500/40 text-emerald-300"
-                  : "bg-red-950/80 border border-red-500/40 text-red-300"
+                  ? "bg-emerald-50 border border-emerald-200 text-emerald-700"
+                  : "bg-red-50 border border-red-200 text-red-700"
               }`}
             >
               {statusMsg.type === "success" ? (
@@ -215,7 +215,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
             type="button"
             onClick={() => handleSave()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs font-bold text-white shadow-xs cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Changes"}</span>
@@ -226,11 +226,11 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
       {/* ========================================================= */}
       {/* EXACT FRONTEND SECTION BLOCKS (Directly Editable)         */}
       {/* ========================================================= */}
-      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#012A22] via-[#09352c] to-[#011d17] p-6 sm:p-10 lg:p-14 text-white shadow-2xl border border-white/10">
+      <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#3B0D3B] via-[#2A082A] to-[#180518] p-6 sm:p-10 lg:p-14 text-white shadow-2xl border border-white/10">
         {/* Background ambient lighting matching frontend */}
         <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute top-0 left-1/4 h-[400px] w-[400px] rounded-full bg-white/5 blur-3xl" />
-          <div className="absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-[#3B796A]/20 blur-3xl" />
+          <div className="absolute right-0 bottom-0 h-[400px] w-[400px] rounded-full bg-[#8C6A8C]/20 blur-3xl" />
         </div>
 
         {/* Top Header Grid */}
@@ -244,7 +244,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                 value={eyebrow}
                 onChange={(e) => setData({ ...data, eyebrow: e.target.value })}
                 placeholder="THE CEO CHALLENGE"
-                className="rounded-full bg-[#001712] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#ABCAC2] shadow-xs focus:ring-2 focus:ring-[#012A22] focus:outline-none"
+                className="rounded-full bg-[#180518] px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.2em] text-[#FAF5EE] shadow-xs focus:ring-2 focus:ring-[#8C6A8C] focus:outline-none"
               />
             </div>
 
@@ -259,7 +259,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                   value={titleLines[idx] || ""}
                   onChange={(e) => updateTitleLine(idx, e.target.value)}
                   placeholder={`Line ${idx + 1}...`}
-                  className="block w-full bg-transparent text-2xl sm:text-3xl lg:text-[2.75rem] font-black leading-[1.1] tracking-tight text-white border-b border-white/20 focus:border-[#012A22] focus:outline-none transition-colors py-0.5"
+                  className="block w-full bg-transparent text-2xl sm:text-3xl lg:text-[2.75rem] font-black leading-[1.1] tracking-tight text-white border-b border-white/20 focus:border-[#8C6A8C] focus:outline-none transition-colors py-0.5"
                 />
               ))}
             </div>
@@ -275,12 +275,12 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
               value={data.description || ""}
               onChange={(e) => setData({ ...data, description: e.target.value })}
               placeholder="You work on brands with real customers to disappoint..."
-              className="w-full rounded-xl border border-white/20 bg-white/5 p-3 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#012A22] focus:outline-none transition-colors resize-none"
+              className="w-full rounded-xl border border-white/20 bg-white/5 p-3 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#8C6A8C] focus:outline-none transition-colors resize-none"
             />
           </div>
         </div>
 
-        {/* Middle Content: 2x2 Submission Grid + Portrait Placeholder */}
+        {/* Middle Content: 2x2 Submission Grid + Portrait Frame */}
         <div className="mt-10 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:gap-6 lg:items-stretch">
           {/* 2x2 Submissions */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:col-span-8">
@@ -296,7 +296,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                       value={item.tag}
                       onChange={(e) => updateSubmission(idx, "tag", e.target.value)}
                       placeholder="SUBMIT 01"
-                      className="rounded-lg bg-[#ABCAC2]/20 px-2 py-0.5 text-[11px] font-black uppercase tracking-wider text-[#012A22] border border-[#3B796A]/30 focus:outline-none focus:ring-1 focus:ring-[#012A22] w-28"
+                      className="rounded-lg bg-white/10 px-2 py-0.5 text-[11px] font-black uppercase tracking-wider text-white border border-white/20 focus:outline-none focus:ring-1 focus:ring-[#8C6A8C] w-28"
                     />
                     <span className="text-[10px] font-bold text-white/50">Block #{idx + 1}</span>
                   </div>
@@ -306,7 +306,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                     value={item.title}
                     onChange={(e) => updateSubmission(idx, "title", e.target.value)}
                     placeholder="e.g. The problem"
-                    className="block w-full bg-transparent text-base sm:text-lg font-bold text-white border-b border-white/15 focus:border-[#012A22] focus:outline-none py-0.5 transition-colors"
+                    className="block w-full bg-transparent text-base sm:text-lg font-bold text-white border-b border-white/15 focus:border-[#8C6A8C] focus:outline-none py-0.5 transition-colors"
                   />
 
                   <textarea
@@ -338,14 +338,14 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
 
             {/* Header bar inside card */}
             <div className="flex items-center justify-between z-20 mb-2">
-              <span className="text-[10px] font-black uppercase tracking-wider text-[#012A22] bg-white/10 px-2 py-0.5 rounded-md border border-white/15 shadow-xs">
+              <span className="text-[10px] font-black uppercase tracking-wider text-white bg-white/10 px-2 py-0.5 rounded-md border border-white/15 shadow-xs">
                 Method 4:5 Frame
               </span>
               <div className="flex items-center gap-1.5">
                 <button
                   type="button"
                   onClick={() => setShowManualUrl(!showManualUrl)}
-                  className="p-1 rounded-md bg-white/10 hover:bg-white text-white hover:text-[#012A22] text-[10px] font-bold border border-white/15 shadow-xs transition-all cursor-pointer"
+                  className="p-1 rounded-md bg-white/10 hover:bg-white text-white hover:text-[#3B0D3B] text-[10px] font-bold border border-white/15 shadow-xs transition-all cursor-pointer"
                   title="Toggle URL Input"
                 >
                   <LinkIcon className="h-3.5 w-3.5" />
@@ -388,21 +388,21 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                     }));
                   }}
                   placeholder="Paste image URL (4:5 portrait)..."
-                  className="w-full rounded-lg bg-white p-2 text-xs text-white border border-white/20 focus:outline-none focus:ring-1 focus:ring-[#012A22] shadow-xs"
+                  className="w-full rounded-lg bg-white p-2 text-xs text-[#0B0B0F] border border-white/20 focus:outline-none focus:ring-1 focus:ring-[#8C6A8C] shadow-xs"
                 />
               </div>
             )}
 
             {/* Image Preview or Dropzone */}
             {data.methodCard?.image ? (
-              <div className="relative flex-1 w-full min-h-[300px] rounded-xl overflow-hidden border border-white/20 shadow-inner group/img bg-[#001712]/40 flex flex-col justify-end p-4">
+              <div className="relative flex-1 w-full min-h-[300px] rounded-xl overflow-hidden border border-white/20 shadow-inner group/img bg-[#180518]/40 flex flex-col justify-end p-4">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={data.methodCard.image}
                   alt={methodTitle}
                   className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover/img:scale-105"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#001712]/90 via-[#001712]/25 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#180518]/90 via-[#180518]/25 to-transparent" />
 
                 {/* Floating Replace Button */}
                 <div className="absolute top-2.5 right-2.5 z-20">
@@ -410,7 +410,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
                     disabled={isUploadingImage}
-                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-[#012A22] text-white border border-white/20 text-[11px] font-bold backdrop-blur-md shadow-md transition-all cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/20 text-[11px] font-bold backdrop-blur-md shadow-md transition-all cursor-pointer"
                   >
                     {isUploadingImage ? <RefreshCw className="h-3 w-3 animate-spin" /> : <Upload className="h-3 w-3" />}
                     <span>Replace Photo</span>
@@ -473,18 +473,18 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                 onClick={() => !isUploadingImage && fileInputRef.current?.click()}
                 className={`flex-1 w-full min-h-[300px] flex flex-col items-center justify-center rounded-xl border-2 border-dashed p-4 text-center transition-all cursor-pointer space-y-3 ${
                   isDragActive
-                    ? "border-[#012A22] bg-[#012A22]/15 scale-[1.01] shadow-lg shadow-[#012A22]/20"
+                    ? "border-[#8C6A8C] bg-[#8C6A8C]/15 scale-[1.01] shadow-lg shadow-[#3B0D3B]/20"
                     : "border-white/20 bg-white/5 hover:bg-white/10 hover:border-white/30"
                 }`}
               >
                 {isUploadingImage ? (
                   <div className="flex flex-col items-center gap-2">
-                    <RefreshCw className="h-6 w-6 text-[#012A22] animate-spin" />
+                    <RefreshCw className="h-6 w-6 text-white animate-spin" />
                     <span className="text-xs font-bold text-white">Uploading 4:5 Photo...</span>
                   </div>
                 ) : (
                   <>
-                    <div className="h-12 w-12 rounded-2xl bg-[#012A22]/10 border border-[#012A22]/25 flex items-center justify-center text-[#012A22] group-hover:scale-110 transition-transform">
+                    <div className="h-12 w-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
                       <Upload className="h-6 w-6" />
                     </div>
                     <div>
@@ -495,7 +495,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                         Click or drag &amp; drop portrait photo
                       </p>
                     </div>
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-[#ABCAC2]/20 border border-[#3B796A]/30 px-2.5 py-0.5 text-[10px] font-bold text-[#012A22]">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 border border-white/20 px-2.5 py-0.5 text-[10px] font-bold text-white">
                       <ImageIcon className="h-3 w-3" />
                       <span>4:5 Portrait Ratio · Max 10MB</span>
                     </div>
@@ -514,7 +514,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                       })
                     }
                     placeholder="METHOD · 4:5 PORTRAIT"
-                    className="w-full rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.15em] text-[#012A22] border border-white/15 text-center focus:outline-none focus:ring-1 focus:ring-[#012A22]"
+                    className="w-full rounded-md bg-white/10 px-2 py-0.5 text-[10px] font-black uppercase tracking-[0.15em] text-white border border-white/15 text-center focus:outline-none focus:ring-1 focus:ring-[#8C6A8C]"
                   />
                   <input
                     type="text"
@@ -551,7 +551,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                   })
                 }
                 placeholder="Phase 4 is a wall, not a checkpoint."
-                className="w-full bg-transparent text-lg sm:text-xl font-black leading-tight text-white border-b border-white/20 focus:border-[#012A22] focus:outline-none py-1 transition-colors"
+                className="w-full bg-transparent text-lg sm:text-xl font-black leading-tight text-white border-b border-white/20 focus:border-[#8C6A8C] focus:outline-none py-1 transition-colors"
               />
             </div>
             <div className="lg:col-span-7 space-y-1">
@@ -568,7 +568,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
                   })
                 }
                 placeholder="Idea clarity is graded pass or rework..."
-                className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#012A22] focus:outline-none resize-none"
+                className="w-full rounded-xl border border-white/15 bg-white/5 p-2.5 text-xs sm:text-sm leading-relaxed text-white placeholder:text-white/50 focus:bg-white/10 focus:border-[#8C6A8C] focus:outline-none resize-none"
               />
             </div>
           </div>
@@ -577,7 +577,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
         {/* Bottom Action inside the live block */}
         <div className="mt-8 flex items-center justify-between border-t border-white/15 pt-5">
           <span className="text-xs font-semibold text-white/70 flex items-center gap-1.5">
-            <Eye className="h-4 w-4 text-[#012A22]" />
+            <Eye className="h-4 w-4 text-[#8C6A8C]" />
             <span>This preview mirrors your live website layout in real-time</span>
           </span>
 
@@ -585,7 +585,7 @@ export default function AdminWhyTreqqoTab({ initialData, adminPin, onSaved }: Pr
             type="button"
             onClick={() => handleSave()}
             disabled={isSaving}
-            className="inline-flex items-center gap-2 rounded-xl bg-[#001712] hover:bg-[#200c4d] px-6 py-2.5 text-xs font-bold text-[#ABCAC2] shadow-md cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-2 rounded-xl bg-[#180518] hover:bg-[#3B0D3B] px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all disabled:opacity-50"
           >
             <Save className="h-4 w-4" />
             <span>{isSaving ? "Saving..." : "Save Why Treqo Section"}</span>

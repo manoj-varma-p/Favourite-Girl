@@ -391,21 +391,21 @@ export default function AdminProgramsPage() {
   // Unauthenticated view
   if (!isAuthenticated) {
     return (
-      <div className={`min-h-screen bg-[#07090e] text-slate-100 flex items-center justify-center p-4 ${plusJakarta.className}`}>
-        <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-[#0e111a] p-8 shadow-2xl">
+      <div className={`min-h-screen bg-[#FDFAF6] text-[#0B0B0F] flex items-center justify-center p-4 ${plusJakarta.className}`}>
+        <div className="w-full max-w-md rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE] p-8 shadow-xl">
           <div className="text-center">
-            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#012A22]/10 border border-[#3B796A]/30 text-[#ABCAC2]">
+            <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B]">
               <Lock className="h-7 w-7" />
             </div>
-            <h1 className="mt-4 text-2xl font-black text-white tracking-tight">Programs Management</h1>
-            <p className="mt-1.5 text-xs text-slate-400">
+            <h1 className="mt-4 text-2xl font-black text-[#0B0B0F] tracking-tight">Programs Management</h1>
+            <p className="mt-1.5 text-xs text-[#5A4A5A]">
               Enter your Administrator PIN to access the programs console.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="mt-6 space-y-4">
             <div>
-              <label className="text-xs font-bold text-slate-300">Administrator PIN</label>
+              <label className="text-xs font-bold text-[#0B0B0F]">Administrator PIN</label>
               <div className="relative mt-1.5">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -415,13 +415,13 @@ export default function AdminProgramsPage() {
                     setAuthError("");
                   }}
                   placeholder="Enter administrator PIN"
-                  className="w-full rounded-xl border border-slate-700 bg-slate-900/90 px-4 py-3 text-sm text-white placeholder:text-slate-500 focus:border-[#3B796A] focus:outline-none"
+                  className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-3 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#5A4A5A] hover:text-[#0B0B0F]"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -429,7 +429,7 @@ export default function AdminProgramsPage() {
             </div>
 
             {authError && (
-              <div className="flex items-center gap-2 rounded-xl bg-red-950/40 border border-red-800/40 p-3 text-xs text-red-300">
+              <div className="flex items-center gap-2 rounded-xl bg-red-50 border border-red-200 p-3 text-xs text-red-700">
                 <AlertCircle className="h-4 w-4 shrink-0" />
                 <span>{authError}</span>
               </div>
@@ -437,14 +437,14 @@ export default function AdminProgramsPage() {
 
             <button
               type="submit"
-              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] py-3 text-sm font-bold text-white shadow-lg transition-all cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] py-3 text-sm font-bold text-white shadow-sm transition-all cursor-pointer"
             >
               <LogIn className="h-4 w-4" />
               <span>Unlock Programs Console</span>
             </button>
 
             <div className="text-center pt-2">
-              <Link href="/" className="text-xs text-slate-500 hover:text-slate-300 transition-colors">
+              <Link href="/" className="text-xs text-[#5A4A5A] hover:text-[#0B0B0F] transition-colors">
                 ← Return to Public Website
               </Link>
             </div>
@@ -456,13 +456,13 @@ export default function AdminProgramsPage() {
 
   // Authenticated view
   return (
-    <div className={`min-h-screen bg-[#07090e] text-slate-100 flex ${plusJakarta.className}`}>
+    <div className={`min-h-screen bg-[#FDFAF6] text-[#0B0B0F] flex ${plusJakarta.className}`}>
       {/* 1. SIDEBAR */}
-      <aside className="w-64 border-r border-slate-800/80 bg-[#0a0d14] flex flex-col justify-between hidden md:flex shrink-0">
+      <aside className="w-64 border-r border-[#3B0D3B]/15 bg-[#FAF5EE] flex flex-col justify-between hidden md:flex shrink-0">
         <div className="p-6 space-y-6">
           <Link href="/" target="_blank" className="flex items-center gap-2.5">
-            <span className="text-xl font-black text-white tracking-wider">TREQO</span>
-            <span className="rounded bg-[#3B796A]/20 px-1.5 py-0.5 text-[9px] font-black text-[#ABCAC2] tracking-widest uppercase">
+            <span className="text-xl font-black text-[#0B0B0F] tracking-wider">TREQO</span>
+            <span className="rounded bg-[#3B0D3B]/10 px-1.5 py-0.5 text-[9px] font-black text-[#3B0D3B] tracking-widest uppercase">
               ADMIN
             </span>
           </Link>
@@ -470,55 +470,55 @@ export default function AdminProgramsPage() {
           <nav className="space-y-1">
             <Link
               href="/admin"
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900/60 transition-colors"
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#F5EDE0] transition-colors"
             >
-              <LayoutDashboard className="h-4 w-4 shrink-0" />
+              <LayoutDashboard className="h-4 w-4 shrink-0 text-[#5A4A5A]" />
               <span>Dashboard Overview</span>
             </Link>
 
             <Link
               href="/admin/programs"
-              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-[#161a26] text-white shadow-sm"
+              className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold bg-[#3B0D3B] text-white shadow-sm"
             >
               <div className="flex items-center gap-3">
-                <GraduationCap className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
+                <GraduationCap className="h-4 w-4 shrink-0 text-white" />
                 <span>Programs &amp; Courses</span>
               </div>
-              <span className="text-[10px] text-[#ABCAC2] font-black">{programs.length}</span>
+              <span className="text-[10px] text-white/80 font-black">{programs.length}</span>
             </Link>
 
             <Link
               href="/admin/leads"
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900/60 transition-colors"
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#F5EDE0] transition-colors"
             >
-              <Users className="h-4 w-4 shrink-0" />
+              <Users className="h-4 w-4 shrink-0 text-[#5A4A5A]" />
               <span>Student Leads</span>
             </Link>
 
             <Link
               href="/admin"
-              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900/60 transition-colors"
+              className="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#F5EDE0] transition-colors"
             >
-              <BookOpen className="h-4 w-4 shrink-0" />
+              <BookOpen className="h-4 w-4 shrink-0 text-[#5A4A5A]" />
               <span>Settings &amp; Blogs</span>
             </Link>
           </nav>
         </div>
 
-        <div className="p-4 border-t border-slate-800/60 flex items-center justify-between">
+        <div className="p-4 border-t border-[#3B0D3B]/10 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full bg-[#3B796A]/20 text-[#ABCAC2] font-bold text-xs flex items-center justify-center border border-[#3B796A]/30">
+            <div className="h-8 w-8 rounded-full bg-[#3B0D3B]/10 text-[#3B0D3B] font-bold text-xs flex items-center justify-center border border-[#3B0D3B]/20">
               A
             </div>
             <div>
-              <p className="text-xs font-bold text-white leading-tight">Admin</p>
-              <p className="text-[10px] text-slate-500 leading-tight">Treqo HQ</p>
+              <p className="text-xs font-bold text-[#0B0B0F] leading-tight">Admin</p>
+              <p className="text-[10px] text-[#5A4A5A] leading-tight">Treqo HQ</p>
             </div>
           </div>
           <button
             type="button"
             onClick={handleLogout}
-            className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+            className="p-1.5 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
             title="Log Out"
           >
             <LogOut className="h-4 w-4" />
@@ -529,12 +529,12 @@ export default function AdminProgramsPage() {
       {/* 2. MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Top Header */}
-        <header className="h-16 px-6 sm:px-8 flex items-center justify-between border-b border-slate-800/70 bg-[#07090e]/90 backdrop-blur-md sticky top-0 z-30">
+        <header className="h-16 px-6 sm:px-8 flex items-center justify-between border-b border-[#3B0D3B]/15 bg-[#FDFAF6]/90 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center gap-3">
-            <h1 className="text-base sm:text-lg font-black text-white tracking-tight">
+            <h1 className="text-base sm:text-lg font-black text-[#0B0B0F] tracking-tight">
               Programs &amp; Curriculum Tracks
             </h1>
-            <span className="rounded-full bg-slate-800 px-2.5 py-0.5 text-[11px] font-bold text-slate-300">
+            <span className="rounded-full bg-[#3B0D3B]/10 px-2.5 py-0.5 text-[11px] font-bold text-[#3B0D3B]">
               {programs.length} total
             </span>
           </div>
@@ -543,7 +543,7 @@ export default function AdminProgramsPage() {
             <Link
               href="/"
               target="_blank"
-              className="inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-3 py-1.5 rounded-lg border border-slate-800 hover:bg-slate-900 transition-colors"
+              className="inline-flex items-center gap-1.5 text-xs text-[#5A4A5A] hover:text-[#0B0B0F] px-3 py-1.5 rounded-lg border border-[#3B0D3B]/15 hover:bg-[#FAF5EE] transition-colors"
             >
               <span>View Website</span>
               <ExternalLink className="h-3 w-3 opacity-70" />
@@ -552,7 +552,7 @@ export default function AdminProgramsPage() {
             <button
               type="button"
               onClick={openAddModal}
-              className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-3.5 py-2 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-3.5 py-2 text-xs font-bold text-white shadow-sm transition-all cursor-pointer"
             >
               <Plus className="h-3.5 w-3.5" />
               <span>Add Program</span>
@@ -561,7 +561,7 @@ export default function AdminProgramsPage() {
             <button
               type="button"
               onClick={handleLogout}
-              className="md:hidden p-2 text-slate-400 hover:text-red-400"
+              className="md:hidden p-2 text-[#5A4A5A] hover:text-red-600"
               title="Logout"
             >
               <LogOut className="h-4 w-4" />
@@ -571,14 +571,14 @@ export default function AdminProgramsPage() {
 
         {/* Notifications Bar */}
         {saveMessage && (
-          <div className="mx-6 mt-4 p-3.5 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-xs text-emerald-200 flex items-center gap-2 shadow-lg">
-            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
+          <div className="mx-6 mt-4 p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-800 flex items-center gap-2 shadow-sm">
+            <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-600" />
             <span>{saveMessage}</span>
           </div>
         )}
         {errorMessage && (
-          <div className="mx-6 mt-4 p-3.5 rounded-xl bg-red-950/60 border border-red-500/40 text-xs text-red-200 flex items-center gap-2 shadow-lg">
-            <AlertCircle className="h-4 w-4 shrink-0 text-red-400" />
+          <div className="mx-6 mt-4 p-3.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-800 flex items-center gap-2 shadow-sm">
+            <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
             <span>{errorMessage}</span>
           </div>
         )}
@@ -586,33 +586,33 @@ export default function AdminProgramsPage() {
         <main className="p-6 sm:p-8 space-y-6 flex-1 max-w-[1350px] w-full">
           {/* Top Metric Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="rounded-2xl bg-[#0e111a] border border-slate-800/80 p-4 flex items-center gap-4">
-              <div className="h-11 w-11 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center shrink-0">
-                <GraduationCap className="h-5 w-5 text-[#ABCAC2]" />
+            <div className="rounded-2xl bg-white border border-[#3B0D3B]/15 p-4 flex items-center gap-4 shadow-sm">
+              <div className="h-11 w-11 rounded-xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 flex items-center justify-center shrink-0 text-[#3B0D3B]">
+                <GraduationCap className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-2xl font-black text-white">{programs.length}</div>
-                <div className="text-[11px] text-slate-400 font-medium">Total Programs</div>
+                <div className="text-2xl font-black text-[#0B0B0F]">{programs.length}</div>
+                <div className="text-[11px] text-[#5A4A5A] font-medium">Total Programs</div>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-[#0e111a] border border-slate-800/80 p-4 flex items-center gap-4">
-              <div className="h-11 w-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                <Unlock className="h-5 w-5 text-emerald-400" />
+            <div className="rounded-2xl bg-white border border-[#3B0D3B]/15 p-4 flex items-center gap-4 shadow-sm">
+              <div className="h-11 w-11 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center justify-center shrink-0 text-emerald-600">
+                <Unlock className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-2xl font-black text-emerald-400">{liveCount}</div>
-                <div className="text-[11px] text-slate-400 font-medium">Live Programs</div>
+                <div className="text-2xl font-black text-emerald-600">{liveCount}</div>
+                <div className="text-[11px] text-[#5A4A5A] font-medium">Live Programs</div>
               </div>
             </div>
 
-            <div className="rounded-2xl bg-[#0e111a] border border-slate-800/80 p-4 flex items-center gap-4">
-              <div className="h-11 w-11 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                <Lock className="h-5 w-5 text-amber-400" />
+            <div className="rounded-2xl bg-white border border-[#3B0D3B]/15 p-4 flex items-center gap-4 shadow-sm">
+              <div className="h-11 w-11 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center shrink-0 text-amber-600">
+                <Lock className="h-5 w-5" />
               </div>
               <div>
-                <div className="text-2xl font-black text-amber-400">{comingSoonCount}</div>
-                <div className="text-[11px] text-slate-400 font-medium">Coming Soon</div>
+                <div className="text-2xl font-black text-amber-600">{comingSoonCount}</div>
+                <div className="text-[11px] text-[#5A4A5A] font-medium">Coming Soon</div>
               </div>
             </div>
           </div>
@@ -622,19 +622,19 @@ export default function AdminProgramsPage() {
             <div className="flex flex-1 flex-col sm:flex-row gap-3">
               {/* Search Bar */}
               <div className="relative flex-1">
-                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#5A4A5A]" />
                 <input
                   type="text"
                   placeholder="Search by title, description, tags, preview label..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-xl border border-slate-800 bg-[#0e111a] pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#3B796A] focus:outline-none"
+                  className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white pl-10 pr-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
                 {searchQuery && (
                   <button
                     type="button"
                     onClick={() => setSearchQuery("")}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5A4A5A] hover:text-[#0B0B0F]"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -642,12 +642,12 @@ export default function AdminProgramsPage() {
               </div>
 
               {/* Status Filter */}
-              <div className="flex items-center gap-1 bg-[#0e111a] border border-slate-800 rounded-xl p-1 shrink-0">
+              <div className="flex items-center gap-1 bg-white border border-[#3B0D3B]/15 rounded-xl p-1 shrink-0 shadow-sm">
                 <button
                   type="button"
                   onClick={() => setFilterStatus("all")}
                   className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    filterStatus === "all" ? "bg-[#012A22] text-white shadow-sm" : "text-slate-400 hover:text-white"
+                    filterStatus === "all" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
                   }`}
                 >
                   All ({programs.length})
@@ -756,7 +756,7 @@ export default function AdminProgramsPage() {
                             ? "bg-amber-500 text-black font-black"
                             : program.badgeVariant === "gray" || program.isLocked
                             ? "bg-slate-800 text-slate-300 border border-slate-700"
-                            : "bg-[#012A22] text-white"
+                            : "bg-[#3B0D3B] text-white"
                         }`}
                       >
                         {program.badge}
@@ -854,21 +854,21 @@ export default function AdminProgramsPage() {
 
       {/* 3. ADD / EDIT PROGRAM MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-          <div className="relative w-full max-w-2xl rounded-2xl border border-slate-800 bg-[#0e111a] p-6 sm:p-8 shadow-2xl my-8">
-            <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
+        <div className="fixed inset-0 z-50 bg-[#0B0B0F]/60 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-8 shadow-2xl my-8 text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
               <div>
-                <h2 className="text-xl font-bold text-white">
+                <h2 className="text-xl font-bold text-[#0B0B0F]">
                   {editingProgram ? `Edit Program: ${editingProgram.title}` : "Create New Program Track"}
                 </h2>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-[#5A4A5A] mt-0.5">
                   Configure titles, badges, preview labels, and homepage display metadata.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] p-1.5 rounded-lg transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -877,43 +877,43 @@ export default function AdminProgramsPage() {
             <form onSubmit={handleSaveProgram} className="mt-6 space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-300">Program Title *</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Program Title *</label>
                   <input
                     type="text"
                     required
                     value={programForm.title || ""}
                     onChange={(e) => setProgramForm({ ...programForm, title: e.target.value })}
                     placeholder="e.g. Growth & Performance Marketing Specialist"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-300">Description *</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Description *</label>
                   <textarea
                     required
                     rows={3}
                     value={programForm.description || ""}
                     onChange={(e) => setProgramForm({ ...programForm, description: e.target.value })}
                     placeholder="Detailed program summary and curriculum highlights..."
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Badge Text *</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Badge Text *</label>
                   <input
                     type="text"
                     required
                     value={programForm.badge || ""}
                     onChange={(e) => setProgramForm({ ...programForm, badge: e.target.value })}
                     placeholder="e.g. BATCH 2 · OPEN or COMING SOON"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Badge Variant *</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Badge Variant *</label>
                   <select
                     value={programForm.badgeVariant || "blue"}
                     onChange={(e) =>
@@ -922,7 +922,7 @@ export default function AdminProgramsPage() {
                         badgeVariant: e.target.value as "blue" | "amber" | "gray" | "emerald",
                       })
                     }
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none cursor-pointer"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none cursor-pointer transition-all"
                   >
                     <option value="blue">Blue (Standard Active)</option>
                     <option value="amber">Amber (Attention / Limited)</option>
@@ -932,7 +932,7 @@ export default function AdminProgramsPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Meta / Duration</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Meta / Duration</label>
                   <input
                     type="text"
                     value={programForm.duration || ""}
@@ -944,45 +944,45 @@ export default function AdminProgramsPage() {
                       })
                     }
                     placeholder="e.g. 4 months · Online"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Preview Label</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Preview Label</label>
                   <input
                     type="text"
                     value={programForm.previewLabel || ""}
                     onChange={(e) => setProgramForm({ ...programForm, previewLabel: e.target.value })}
                     placeholder="e.g. CLASSROOM · CEO CHALLENGE"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className="text-xs font-bold text-slate-300">Cover Image URL</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Cover Image URL</label>
                   <input
                     type="text"
                     value={programForm.image || ""}
                     onChange={(e) => setProgramForm({ ...programForm, image: e.target.value })}
                     placeholder="https://images.unsplash.com/..."
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Action CTA Text</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Action CTA Text</label>
                   <input
                     type="text"
                     value={programForm.actionText || ""}
                     onChange={(e) => setProgramForm({ ...programForm, actionText: e.target.value })}
                     placeholder="e.g. View course → or Get notified →"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Action Target URL *</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Action Target URL *</label>
                   <input
                     type="text"
                     required
@@ -995,12 +995,12 @@ export default function AdminProgramsPage() {
                       })
                     }
                     placeholder="/categories/digital-marketing"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Tags (comma-separated)</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Tags (comma-separated)</label>
                   <input
                     type="text"
                     value={Array.isArray(programForm.tags) ? programForm.tags.join(", ") : ""}
@@ -1011,27 +1011,27 @@ export default function AdminProgramsPage() {
                       })
                     }
                     placeholder="All, Flagship, Short, Students"
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Display Order</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Display Order</label>
                   <input
                     type="number"
                     min={1}
                     value={programForm.order ?? 1}
                     onChange={(e) => setProgramForm({ ...programForm, order: Number(e.target.value) })}
-                    className="mt-1 w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-xs text-white focus:border-[#3B796A] focus:outline-none"
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Status Toggle in Form */}
-              <div className="flex items-center justify-between rounded-xl bg-slate-950/60 border border-slate-800 p-3.5 mt-2">
+              <div className="flex items-center justify-between rounded-xl bg-white border border-[#3B0D3B]/15 p-3.5 mt-2 shadow-sm">
                 <div>
-                  <span className="text-xs font-bold text-white block">Program Lock Status</span>
-                  <span className="text-[11px] text-slate-400">
+                  <span className="text-xs font-bold text-[#0B0B0F] block">Program Lock Status</span>
+                  <span className="text-[11px] text-[#5A4A5A]">
                     {programForm.isLocked ? "Currently Locked (Coming Soon mode)" : "Currently Open (Live enrollment)"}
                   </span>
                 </div>
@@ -1048,26 +1048,26 @@ export default function AdminProgramsPage() {
                   }
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                     programForm.isLocked
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                      : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                      ? "bg-amber-50 text-amber-700 border border-amber-200"
+                      : "bg-emerald-50 text-emerald-700 border border-emerald-200"
                   }`}
                 >
                   {programForm.isLocked ? "🔒 Locked (Coming Soon)" : "🔓 Live (Open)"}
                 </button>
               </div>
 
-              <div className="pt-4 border-t border-slate-800/80 flex items-center justify-end gap-3">
+              <div className="pt-4 border-t border-[#3B0D3B]/10 flex items-center justify-end gap-3">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="rounded-xl border border-slate-700 px-4 py-2.5 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-colors"
+                  className="rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs font-semibold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] transition-colors cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs font-bold text-white shadow-lg transition-all cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs font-bold text-white shadow-sm transition-all cursor-pointer disabled:opacity-50"
                 >
                   <Save className="h-4 w-4" />
                   <span>{isSaving ? "Saving..." : editingProgram ? "Save Changes" : "Create Program"}</span>

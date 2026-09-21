@@ -65,8 +65,36 @@ import AdminSixDecisionsTab from "@/components/admin/AdminSixDecisionsTab";
 import AdminFooterTab from "@/components/admin/AdminFooterTab";
 import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
 import AdminCourseEditor from "@/components/admin/AdminCourseEditor";
+import AdminSidebar from "@/components/admin/ui/AdminSidebar";
+import AdminHeader from "@/components/admin/ui/AdminHeader";
+import CommandPalette from "@/components/admin/ui/CommandPalette";
+import StatusBadge from "@/components/admin/ui/StatusBadge";
+import StatBlock from "@/components/admin/ui/StatBlock";
+import ActionList from "@/components/admin/ui/ActionList";
+import DropdownMenu from "@/components/admin/ui/DropdownMenu";
+import EmptyState from "@/components/admin/ui/EmptyState";
 import { Award, Trophy, Compass, MapPin, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
+  overview: { title: "Overview Dashboard", breadcrumb: "Workspace" },
+  leads: { title: "Student Applications", breadcrumb: "Admissions & CRM" },
+  courses: { title: "Courses & Curriculum", breadcrumb: "Learning & Programs" },
+  tutors: { title: "Mentors & Faculty", breadcrumb: "Learning & Programs" },
+  whyTreqqo: { title: "CEO Challenge & Defense", breadcrumb: "Learning & Programs" },
+  placements: { title: "Batch Placements", breadcrumb: "Learning & Programs" },
+  govCerts: { title: "Accreditations & Certificates", breadcrumb: "Credentials & Compliance" },
+  sixDecisions: { title: "Six Decisions Framework", breadcrumb: "Credentials & Compliance" },
+  blogs: { title: "Articles & Insights", breadcrumb: "Content & Marketing" },
+  faqs: { title: "Frequently Asked Questions", breadcrumb: "Content & Marketing" },
+  hero: { title: "Hero & Key Metrics", breadcrumb: "Content & Marketing" },
+  banner: { title: "Announcement Banner", breadcrumb: "Content & Marketing" },
+  alerts: { title: "Email Notifications & Alerts", breadcrumb: "System & Settings" },
+  forms: { title: "Form Titles & Modals", breadcrumb: "System & Settings" },
+  branding: { title: "Branding & Logos", breadcrumb: "System & Settings" },
+  layout: { title: "Layout & SEO Meta", breadcrumb: "System & Settings" },
+  footer: { title: "Footer & Contact Details", breadcrumb: "System & Settings" },
+};
 
 const AVATAR_GRADIENTS = [
   "from-[#16213e] via-[#1a3ba8] to-[#2563eb]",
@@ -109,6 +137,22 @@ export default function CustomAdminPanelPage() {
   const [pinInput, setPinInput] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [authError, setAuthError] = useState("");
+
+  // Command Palette & Mobile Menu state
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [selectedLeadForDetail, setSelectedLeadForDetail] = useState<Lead | null>(null);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   // Tabs: overview | leads | courses | tutors | alerts | forms | layout | branding | banner | hero | whyTreqqo | placements | govCerts | sixDecisions | footer | faqs | blogs
   const [activeTab, setActiveTab] = useState<
@@ -1220,40 +1264,41 @@ export default function CustomAdminPanelPage() {
   // -------------------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className={`min-h-screen flex flex-col justify-between bg-[#08090d] text-white p-6 sm:p-10 ${plusJakarta.className}`}>
+      <div className={`min-h-screen flex flex-col justify-between bg-[#FDFAF6] text-[#0B0B0F] p-6 sm:p-10 ${plusJakarta.className}`}>
         {/* Top Spacer */}
         <div className="w-full h-8" />
 
         {/* Centered Minimalist Form */}
-        <div className="w-full max-w-[390px] mx-auto my-auto space-y-7">
+        <div className="w-full max-w-[420px] mx-auto my-auto bg-white border border-[#3B0D3B]/10 rounded-3xl p-8 sm:p-10 shadow-xl shadow-[#3B0D3B]/5 space-y-7">
           <div className="space-y-3">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/25">
-              <span className="text-sm font-black text-[#ABCAC2] tracking-wider">TREQO</span>
-              <span className="rounded bg-[#3B796A]/20 px-1 py-0.2 text-[8px] font-bold text-[#ABCAC2] uppercase tracking-widest">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FAF5EE] border border-[#3B0D3B]/15">
+              <span className="text-xs font-black text-[#3B0D3B] tracking-wider">TREQO</span>
+              <span className="rounded bg-[#3B0D3B] px-1.5 py-0.2 text-[8px] font-bold text-white uppercase tracking-widest">
                 HQ
               </span>
             </div>
-            <h1 className="text-3xl sm:text-[2.1rem] font-bold text-white tracking-tight leading-tight">
-              Welcome to Treqo Admin Panel
+            <h1 className="text-2xl sm:text-3xl font-black text-[#0B0B0F] tracking-tight leading-tight">
+              Sign in to Treqo HQ
             </h1>
-            <p className="mt-2 text-sm text-slate-400 font-normal leading-relaxed">
-              Use the passcode provided by your administrator.
+            <p className="text-xs text-[#5A4A5A] font-medium leading-relaxed">
+              Enter the administrator passcode to access admissions, courses, and site configuration.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             {authError && (
-              <div className="text-xs text-red-400 font-medium bg-red-950/40 border border-red-500/30 rounded-lg p-2.5">
-                {authError}
+              <div className="text-xs text-red-700 font-medium bg-red-50 border border-red-200 rounded-xl p-3 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4 shrink-0 text-red-600" />
+                <span>{authError}</span>
               </div>
             )}
 
             <div className="space-y-2">
-              <label htmlFor="adminPin" className="block text-[11px] font-bold uppercase tracking-wider text-slate-400">
+              <label htmlFor="adminPin" className="block text-[11px] font-bold uppercase tracking-wider text-[#5A4A5A]">
                 PASSCODE
               </label>
-              <div className="relative flex items-center rounded-xl bg-[#1b202e] border border-slate-800/80 px-3.5 focus-within:border-slate-600 transition-colors">
-                <Lock className="h-4 w-4 text-slate-400 shrink-0" />
+              <div className="relative flex items-center rounded-xl bg-[#FAF5EE]/60 border border-[#3B0D3B]/15 px-3.5 focus-within:border-[#3B0D3B] focus-within:bg-white transition-all">
+                <Lock className="h-4 w-4 text-[#8C6A8C] shrink-0" />
                 <input
                   id="adminPin"
                   type={showPassword ? "text" : "password"}
@@ -1262,12 +1307,12 @@ export default function CustomAdminPanelPage() {
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-transparent px-3 py-3.5 text-sm text-white placeholder:text-slate-500 focus:outline-none"
+                  className="w-full bg-transparent px-3 py-3.5 text-sm text-[#0B0B0F] placeholder:text-slate-400 focus:outline-none font-medium"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="text-slate-400 hover:text-slate-200 transition-colors p-1 cursor-pointer"
+                  className="text-[#8C6A8C] hover:text-[#3B0D3B] transition-colors p-1 cursor-pointer"
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
@@ -1276,10 +1321,10 @@ export default function CustomAdminPanelPage() {
 
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#e6e8ec] hover:bg-white py-3.5 text-sm font-semibold text-[#0f1117] transition-all active:scale-[0.99] cursor-pointer shadow-sm"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] py-3.5 text-sm font-bold text-white transition-all active:scale-[0.99] cursor-pointer shadow-md shadow-[#3B0D3B]/20"
             >
               <LogIn className="h-4 w-4 stroke-[2.2]" />
-              <span>Sign in</span>
+              <span>Enter Workspace</span>
             </button>
           </form>
         </div>
@@ -1288,7 +1333,7 @@ export default function CustomAdminPanelPage() {
         <div className="w-full text-center py-2">
           <Link
             href="/"
-            className="text-xs text-slate-600 hover:text-slate-400 transition-colors"
+            className="text-xs font-semibold text-[#5A4A5A] hover:text-[#3B0D3B] transition-colors"
           >
             ← Return to public website
           </Link>
@@ -1301,460 +1346,373 @@ export default function CustomAdminPanelPage() {
   // 2. AUTHENTICATED MASTER CONSOLE
   // -------------------------------------------------------------
   return (
-    <div className={`min-h-screen bg-[#07090e] text-slate-100 flex ${plusJakarta.className}`}>
+    <div className={`min-h-screen bg-[#FDFAF6] text-[#0B0B0F] flex ${plusJakarta.className}`}>
       {/* Toast Feedback Messages */}
       {saveMessage && (
-        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-xl bg-emerald-950 border border-emerald-500/50 px-4 py-3 text-xs font-bold text-emerald-200 shadow-2xl animate-in fade-in slide-in-from-top-3">
-          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-xl bg-white border border-[#3B0D3B]/20 px-4 py-3 text-xs font-bold text-[#0B0B0F] shadow-2xl animate-in fade-in slide-in-from-top-3">
+          <CheckCircle2 className="h-4 w-4 text-emerald-600" />
           <span>{saveMessage}</span>
         </div>
       )}
       {errorMessage && (
-        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-xl bg-red-950 border border-red-500/50 px-4 py-3 text-xs font-bold text-red-200 shadow-2xl animate-in fade-in slide-in-from-top-3">
-          <AlertCircle className="h-4 w-4 text-red-400" />
+        <div className="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-xl bg-white border border-red-300 px-4 py-3 text-xs font-bold text-red-700 shadow-2xl animate-in fade-in slide-in-from-top-3">
+          <AlertCircle className="h-4 w-4 text-red-600" />
           <span>{errorMessage}</span>
         </div>
       )}
 
-      {/* 1. LEFT SIDEBAR */}
-      <aside className="w-64 shrink-0 bg-[#090b11] border-r border-slate-800/70 flex flex-col justify-between min-h-screen sticky top-0 h-screen overflow-y-auto z-40">
-        <div>
-          {/* Top Brand Logo */}
-          <div className="h-16 px-6 flex items-center border-b border-slate-800/60">
-            <Link href="/" target="_blank" className="flex items-center gap-2 group">
-              <span className="text-2xl font-black tracking-tight text-[#ABCAC2] group-hover:text-[#ABCAC2] transition-colors">
-                TREQO
-              </span>
-              <span className="rounded-md bg-[#3B796A]/20 border border-[#3B796A]/30 px-1.5 py-0.5 text-[9px] font-bold text-[#ABCAC2] uppercase tracking-widest">
-                HQ
-              </span>
-            </Link>
-          </div>
+      {/* 1. BRANDED SIDEBAR (COLLAPSIBLE & MOBILE DRAWER) */}
+      <AdminSidebar
+        activeTab={activeTab}
+        onSelectTab={(tabId) => setActiveTab(tabId as any)}
+        onLogout={handleLogout}
+        leadsCount={leads.length}
+        coursesCount={courses.length}
+        tutorsCount={tutors.length}
+        blogsCount={blogs.length}
+        faqsCount={homeContent.faqs?.length || 0}
+        emailAlertsActive={alertSettings.emailAlertsEnabled}
+        isOpenMobile={isMobileMenuOpen}
+        onCloseMobile={() => setIsMobileMenuOpen(false)}
+      />
 
-          {/* Navigation Links List */}
-          <nav className="p-3 space-y-1">
-            <div className="px-3 pt-1 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              Admissions &amp; Leads
-            </div>
+      {/* 2. COMMAND PALETTE (CMD+K) */}
+      <CommandPalette
+        isOpen={isCommandPaletteOpen}
+        onClose={() => setIsCommandPaletteOpen(false)}
+        onSelectTab={(tabId) => setActiveTab(tabId as any)}
+        leads={leads}
+        courses={courses}
+        onSelectLead={(lead) => {
+          setActiveTab("leads");
+          setSelectedLeadForDetail(lead);
+        }}
+      />
 
-            <button
-              type="button"
-              onClick={() => setActiveTab("overview")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "overview" || activeTab === "leads"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Users className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
-                <span>Student Submissions</span>
-              </div>
-              <span className="text-[10px] bg-[#012A22]/80 text-[#ABCAC2] border border-[#3B796A]/40 rounded-md px-1.5 py-0.5 font-bold">
-                {leads.length}
-              </span>
-            </button>
-
-            <Link
-              href="/admin/leads"
-              className="w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white hover:bg-slate-900/60 transition-all cursor-pointer"
-            >
-              <div className="flex items-center gap-2.5">
-                <Users className="h-4 w-4 shrink-0 text-emerald-400" />
-                <span>Leads Console</span>
-              </div>
-              <ExternalLink className="h-3 w-3 text-slate-500" />
-            </Link>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("alerts")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "alerts"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Mail className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
-                <span>Email Alerts</span>
-              </div>
-              <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("forms")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "forms"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <FileText className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
-                <span>Form Titles &amp; Modals</span>
-              </div>
-            </button>
-
-            {/* SECTION 2: HOMEPAGE SECTIONS */}
-            <div className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              Homepage Sections
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("hero")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "hero"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Layers className="h-4 w-4 shrink-0 text-blue-400" />
-              <span>Hero &amp; Stats</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("whyTreqqo")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "whyTreqqo"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Compass className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
-              <span>Why Treqo (CEO Challenge)</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("placements")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "placements"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Trophy className="h-4 w-4 shrink-0 text-blue-400" />
-              <span>Batch 1 Placements</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("tutors")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "tutors"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <Sparkles className="h-4 w-4 shrink-0 text-emerald-400" />
-                <span>Mentors &amp; Faculty</span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-bold">{tutors.length}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("govCerts")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "govCerts"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Award className="h-4 w-4 shrink-0 text-amber-400" />
-              <span>Gov Certifications</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("sixDecisions")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "sixDecisions"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-[#ABCAC2]" />
-              <span>Six Decisions (Why Us)</span>
-            </button>
-
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("faqs")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "faqs"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <HelpCircle className="h-4 w-4 shrink-0 text-slate-400" />
-                <span>FAQ Manager</span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-bold">{homeContent.faqs?.length || 0}</span>
-            </button>
-
-            {/* SECTION 3: COURSES, CONTENT & BRAND */}
-            <div className="px-3 pt-3 pb-1 text-[10px] font-bold uppercase tracking-wider text-slate-500">
-              Tracks, Blog &amp; Brand
-            </div>
-
-            <button
-              type="button"
-              onClick={() => {
-                setActiveTab("courses");
-                setCourseInStudio(null);
-              }}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "courses" && !courseInStudio
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <GraduationCap className="h-4 w-4 shrink-0 text-blue-400" />
-                <span>Courses &amp; Tracks</span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-bold">{courses.length}</span>
-            </button>
-
-            {courseInStudio && activeTab === "courses" && (
-              <div className="ml-3 pl-3 border-l-2 border-[#3B796A]/40 py-1 flex items-center justify-between">
-                <span className="text-[11px] font-bold text-[#ABCAC2] truncate">
-                  Studio: {courseInStudio.title}
-                </span>
-                <span className="h-2 w-2 rounded-full bg-[#ABCAC2] animate-pulse shrink-0" />
-              </div>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("blogs")}
-              className={`w-full flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "blogs"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <div className="flex items-center gap-2.5">
-                <BookOpen className="h-4 w-4 shrink-0 text-slate-400" />
-                <span>Blog Articles</span>
-              </div>
-              <span className="text-[10px] text-slate-500 font-bold">{blogs.length}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("banner")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "banner"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Sparkles className="h-4 w-4 shrink-0 text-amber-400" />
-              <span>Announcement Banner</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("branding")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "branding"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Settings className="h-4 w-4 shrink-0 text-slate-400" />
-              <span>Branding &amp; Logo</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("layout")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "layout"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <Globe className="h-4 w-4 shrink-0 text-sky-400" />
-              <span>Layout &amp; SEO Meta</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => setActiveTab("footer")}
-              className={`w-full flex items-center gap-2.5 px-3.5 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${activeTab === "footer"
-                  ? "bg-[#161a26] text-white shadow-sm"
-                  : "text-slate-400 hover:text-white hover:bg-slate-900/60"
-                }`}
-            >
-              <MapPin className="h-4 w-4 shrink-0 text-red-400" />
-              <span>Footer &amp; Contact Info</span>
-            </button>
-          </nav>
-        </div>
-
-        {/* Bottom Sidebar: User Profile & Logout */}
-        <div className="p-4 border-t border-slate-800/60 flex items-center justify-between">
-          <div className="flex items-center gap-2.5">
-            <div className="h-8 w-8 rounded-full bg-[#3B796A]/20 text-[#ABCAC2] font-bold text-xs flex items-center justify-center border border-[#3B796A]/30">
-              A
-            </div>
-            <div>
-              <p className="text-xs font-bold text-white leading-tight">Admin</p>
-              <p className="text-[10px] text-slate-500 leading-tight">Treqo HQ</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
-            title="Log Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
-        </div>
-      </aside>
-
-      {/* 2. RIGHT WORKSPACE */}
+      {/* 3. RIGHT WORKSPACE */}
       <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Header Bar */}
-        <header className="h-16 px-6 sm:px-8 flex items-center justify-between border-b border-slate-800/70 bg-[#07090e]/90 backdrop-blur-md sticky top-0 z-30">
-          {/* Center Search Bar */}
-          <div className="relative w-80 sm:w-96">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Search applicants, courses, articles..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-xl bg-[#12151f] border border-slate-800/80 pl-9 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:border-slate-700"
-            />
-          </div>
-
-          {/* Right Header Items (Bell, Sun, Top Right Logo, Profile) */}
-          <div className="flex items-center gap-3">
-            <Link
-              href="/"
-              target="_blank"
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs text-slate-400 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-slate-900 transition-colors"
-            >
-              <span>Public Site</span>
-              <ExternalLink className="h-3 w-3 opacity-70" />
-            </Link>
-
-            {/* Top Right Logo */}
-            <div className="flex items-center gap-3 pl-2">
-              <Link
-                href="/"
-                target="_blank"
-                className="flex items-center gap-2 group px-3 py-1.5 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/25 hover:bg-[#3B796A]/20 transition-all"
-                title="Treqo Public Site"
-              >
-                <span className="text-sm font-black text-[#ABCAC2] tracking-wider">TREQO</span>
-                <span className="rounded bg-[#3B796A]/20 px-1 py-0.2 text-[8px] font-bold text-[#ABCAC2] uppercase tracking-widest">
-                  HQ
-                </span>
-              </Link>
-              <div className="h-8 w-8 rounded-full bg-slate-800 text-slate-200 font-bold text-xs flex items-center justify-center border border-slate-700">
-                A
-              </div>
-            </div>
-          </div>
-        </header>
+        <AdminHeader
+          title={TAB_TITLES[activeTab]?.title || "Workspace"}
+          breadcrumb={TAB_TITLES[activeTab]?.breadcrumb || "TREQO HQ"}
+          onOpenSearch={() => setIsCommandPaletteOpen(true)}
+          onRefreshData={loadAllData}
+          isRefreshing={loadingLeads}
+          onToggleMobileMenu={() => setIsMobileMenuOpen(true)}
+        />
 
         {/* Main Content Workspace */}
-        <main className="p-6 sm:p-8 space-y-7 flex-1 max-w-[1300px] w-full">
+        <main className="p-4 sm:p-6 lg:p-8 space-y-6 flex-1 max-w-[1400px] w-full mx-auto">
           {/* ========================================================= */}
-          {/* TAB 0: STUDENT FORM SUBMISSIONS (PRIMARY DASHBOARD)       */}
+          {/* TAB: OVERVIEW DASHBOARD                                   */}
           {/* ========================================================= */}
-          {(activeTab === "overview" || activeTab === "leads") && (
+          {activeTab === "overview" && (
             <div className="space-y-6">
-              {/* Top Greeting & Live Clock Card */}
-              <div className="rounded-2xl bg-[#0e111a] border border-slate-800/80 p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-                    Good morning, <span className="text-[#3b82f6]">Admin</span>
+              {/* Welcome & Context Banner */}
+              <div className="rounded-3xl bg-gradient-to-br from-[#3B0D3B] via-[#2A082A] to-[#180518] p-6 sm:p-8 text-white shadow-xl shadow-[#3B0D3B]/10 flex flex-col md:flex-row md:items-center justify-between gap-6 relative overflow-hidden">
+                <div className="relative z-10 space-y-2">
+                  <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 border border-white/15 text-[11px] font-bold uppercase tracking-wider text-[#FDFAF6]">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>Live Admissions Portal</span>
+                  </div>
+                  <h2 className="text-2xl sm:text-3xl font-black tracking-tight text-white">
+                    Welcome to Treqo HQ Console
                   </h2>
-                  <p className="mt-1 text-xs text-slate-400 font-normal">
-                    Student Details &amp; Live Form Submissions from your Treqo website
+                  <p className="text-xs sm:text-sm text-[#FDFAF6]/80 font-normal max-w-xl leading-relaxed">
+                    Track live applicant submissions, monitor cohort enrollments, configure structured curriculum phases, and update marketing content.
                   </p>
                 </div>
-                <div className="flex items-center gap-2.5 text-xs text-slate-300 bg-[#161a26] border border-slate-800 px-4 py-2.5 rounded-xl shrink-0">
-                  <Clock className="h-4 w-4 text-slate-400" />
-                  <div className="text-right">
-                    <div className="font-bold text-white text-xs">{currentTime}</div>
-                    <div className="text-[10px] text-slate-400">{currentDate}</div>
+
+                <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center gap-3 shrink-0">
+                  <div className="rounded-2xl bg-white/10 backdrop-blur-md border border-white/15 px-4 py-3 text-left">
+                    <div className="text-[10px] font-bold text-[#FDFAF6]/70 uppercase tracking-wider">Local IST Time</div>
+                    <div className="text-sm font-black text-white">{currentTime}</div>
+                    <div className="text-[10px] text-[#FDFAF6]/70">{currentDate}</div>
                   </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("leads")}
+                    className="rounded-2xl bg-white text-[#3B0D3B] px-5 py-3 text-xs font-black hover:bg-[#FAF5EE] transition-all shadow-md active:scale-95 cursor-pointer"
+                  >
+                    View All CRM Leads →
+                  </button>
                 </div>
+
+                {/* Subtle Decorative Background Circles */}
+                <div className="absolute -right-16 -bottom-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+                <div className="absolute right-32 -top-16 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
               </div>
 
-              {/* 4 Clean Student Metrics Cards */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5">
-                <div className="rounded-2xl bg-[#0e111a] border border-slate-800/70 p-4 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center shrink-0">
-                    <Users className="h-5 w-5 text-[#ABCAC2]" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-2xl font-black text-white tracking-tight">{leads.length}</div>
-                    <div className="text-[11px] text-slate-400 font-medium truncate">Total Students</div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-[#0e111a] border border-slate-800/70 p-4 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center shrink-0">
-                    <Sparkles className="h-5 w-5 text-emerald-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-2xl font-black text-white tracking-tight">
-                      {leads.filter((l) => l.submittedAt.startsWith(new Date().toISOString().split("T")[0])).length}
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-medium truncate">Applied Today</div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-[#0e111a] border border-slate-800/70 p-4 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-                    <GraduationCap className="h-5 w-5 text-blue-400" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-2xl font-black text-white tracking-tight">
-                      {courses.length}
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-medium truncate">Active Courses</div>
-                  </div>
-                </div>
-
-                <div className="rounded-2xl bg-[#0e111a] border border-slate-800/70 p-4 flex items-center gap-4">
-                  <div className="h-12 w-12 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center shrink-0">
-                    <Mail className="h-5 w-5 text-[#ABCAC2]" />
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-2xl font-black text-[#ABCAC2] tracking-tight">
-                      {alertSettings.emailAlertsEnabled ? "Active" : "Paused"}
-                    </div>
-                    <div className="text-[11px] text-slate-400 font-medium truncate">Email Alerts</div>
-                  </div>
-                </div>
+              {/* Typography-Driven Stat Blocks */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <StatBlock
+                  title="Total Applications"
+                  value={leads.length}
+                  trend={{ value: `${leads.length} verified`, isPositive: true }}
+                  icon={Users}
+                  description="Lifetime student submissions"
+                />
+                <StatBlock
+                  title="Applied Today"
+                  value={leads.filter((l) => l.submittedAt.startsWith(new Date().toISOString().split("T")[0])).length}
+                  trend={{ value: "Live tracker", isPositive: true }}
+                  icon={Sparkles}
+                  description="Submissions in last 24h"
+                />
+                <StatBlock
+                  title="Active Programs"
+                  value={`${courses.filter((c) => !c.isLocked).length} Open`}
+                  badge={`${courses.length} total tracks`}
+                  icon={GraduationCap}
+                  description="Courses available for enrollment"
+                />
+                <StatBlock
+                  title="Email Alerts"
+                  value={alertSettings.emailAlertsEnabled ? "Active" : "Paused"}
+                  badge={`${(alertSettings.notifyEmails || "").split(",").filter(Boolean).length} Admins`}
+                  icon={Mail}
+                  description="Live dispatch on form submit"
+                />
               </div>
 
-              {/* Action Bar: Search, Course Filter, Refresh, Export */}
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 pt-1">
-                <div className="flex flex-1 flex-col sm:flex-row gap-3">
+              {/* Action-First Attention Section */}
+              <ActionList
+                title="Needs Your Attention"
+                items={[
+                  {
+                    id: "leads-review",
+                    title: `Review Student Applications (${leads.filter((l) => l.submittedAt.startsWith(new Date().toISOString().split("T")[0])).length} today)`,
+                    description: "Verify applicant phone numbers, backgrounds, and track choices before scheduling founder interviews.",
+                    severity: leads.length > 0 ? "warning" : "info",
+                    actionLabel: "Open CRM",
+                    onAction: () => setActiveTab("leads"),
+                  },
+                  {
+                    id: "courses-batch",
+                    title: "Program Batches & Locked Status",
+                    description: "Keep batch start dates and coming soon labels synchronized with upcoming enrollment cycles.",
+                    severity: "info",
+                    actionLabel: "Manage Courses",
+                    onAction: () => setActiveTab("courses"),
+                  },
+                  {
+                    id: "email-check",
+                    title: alertSettings.emailAlertsEnabled ? "Instant Email Alerts Operational" : "Email Alerts Currently Paused",
+                    description: alertSettings.emailAlertsEnabled
+                      ? `Notifications routed to ${alertSettings.notifyEmails || "configured admins"}.`
+                      : "Enable alerts to instantly receive new lead submissions via email.",
+                    severity: alertSettings.emailAlertsEnabled ? "info" : "critical",
+                    actionLabel: "Configure Alerts",
+                    onAction: () => setActiveTab("alerts"),
+                  },
+                ]}
+              />
+
+              {/* Quick Actions Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingCourse(null);
+                    setCourseForm({
+                      id: "",
+                      title: "",
+                      description: "",
+                      badge: "BATCH 2 · OPEN",
+                      duration: "4 months · Online",
+                      href: "/courses/",
+                      image: "",
+                      previewLabel: "CLASSROOM · SESSIONS",
+                      isLocked: false,
+                      isFlagship: false,
+                      batch: "Batch 2 · Sep 2026",
+                      feeTotal: "₹55,000",
+                      feeEmi: "₹4,583 / month",
+                      applyCta: "Apply for Batch 2",
+                      syllabusCta: "Download Curriculum",
+                      curriculumPdf: "/treqo-curriculum.pdf",
+                      overview: "",
+                      challenge: { title: "The CEO Challenge", prompt: "" },
+                    });
+                    setIsCourseModalOpen(true);
+                  }}
+                  className="p-5 rounded-2xl bg-white border border-[#3B0D3B]/10 hover:border-[#3B0D3B]/30 hover:shadow-md transition-all text-left group cursor-pointer"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B] flex items-center justify-center mb-3 group-hover:bg-[#3B0D3B] group-hover:text-white transition-colors">
+                    <Plus className="h-5 w-5" />
+                  </div>
+                  <div className="font-bold text-[#0B0B0F] text-sm">Add New Course Track</div>
+                  <div className="text-xs text-[#5A4A5A] mt-0.5">Publish a cohort program</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setActiveTab("leads")}
+                  className="p-5 rounded-2xl bg-white border border-[#3B0D3B]/10 hover:border-[#3B0D3B]/30 hover:shadow-md transition-all text-left group cursor-pointer"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B] flex items-center justify-center mb-3 group-hover:bg-[#3B0D3B] group-hover:text-white transition-colors">
+                    <Users className="h-5 w-5" />
+                  </div>
+                  <div className="font-bold text-[#0B0B0F] text-sm">View Student CRM</div>
+                  <div className="text-xs text-[#5A4A5A] mt-0.5">{leads.length} applicants enrolled</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleTestAlert}
+                  disabled={isTestingAlert}
+                  className="p-5 rounded-2xl bg-white border border-[#3B0D3B]/10 hover:border-[#3B0D3B]/30 hover:shadow-md transition-all text-left group cursor-pointer"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B] flex items-center justify-center mb-3 group-hover:bg-[#3B0D3B] group-hover:text-white transition-colors">
+                    <Send className={`h-5 w-5 ${isTestingAlert ? "animate-spin" : ""}`} />
+                  </div>
+                  <div className="font-bold text-[#0B0B0F] text-sm">Send Test Alert</div>
+                  <div className="text-xs text-[#5A4A5A] mt-0.5">Validate email dispatch</div>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEditingBlog(null);
+                    setBlogForm({
+                      title: "",
+                      slug: "",
+                      category: "Performance Marketing",
+                      coverImage: "",
+                      excerpt: "",
+                      authorName: "Manoj Varma",
+                      authorRole: "Founder & Growth Architect, Treqo",
+                      readTime: "5 min read",
+                      tags: "Performance, Growth, AI",
+                      body: "",
+                    });
+                    setIsBlogModalOpen(true);
+                  }}
+                  className="p-5 rounded-2xl bg-white border border-[#3B0D3B]/10 hover:border-[#3B0D3B]/30 hover:shadow-md transition-all text-left group cursor-pointer"
+                >
+                  <div className="h-10 w-10 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B] flex items-center justify-center mb-3 group-hover:bg-[#3B0D3B] group-hover:text-white transition-colors">
+                    <BookOpen className="h-5 w-5" />
+                  </div>
+                  <div className="font-bold text-[#0B0B0F] text-sm">Publish Article</div>
+                  <div className="text-xs text-[#5A4A5A] mt-0.5">Create blog or teardown</div>
+                </button>
+              </div>
+
+              {/* Recent Student Applications Preview */}
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-7 space-y-4 shadow-sm">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-base font-bold text-[#0B0B0F]">Recent Student Applications</h3>
+                    <p className="text-xs text-[#5A4A5A] mt-0.5">Latest admissions submissions from the website</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab("leads")}
+                    className="text-xs font-bold text-[#3B0D3B] hover:underline cursor-pointer"
+                  >
+                    View all in CRM ({leads.length}) →
+                  </button>
+                </div>
+
+                {leads.length === 0 ? (
+                  <EmptyState
+                    title="No student applications yet"
+                    description="When students fill out forms on the live website, their submissions will appear here instantly."
+                  />
+                ) : (
+                  <div className="divide-y divide-[#3B0D3B]/10">
+                    {leads.slice(0, 5).map((lead) => (
+                      <div key={lead.id} className="py-3.5 flex items-center justify-between gap-4 hover:bg-[#FAF5EE]/50 px-2 rounded-xl transition-colors">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="h-9 w-9 rounded-full bg-[#3B0D3B]/10 text-[#3B0D3B] font-bold text-xs flex items-center justify-center shrink-0">
+                            {lead.name ? lead.name.charAt(0).toUpperCase() : "S"}
+                          </div>
+                          <div className="min-w-0">
+                            <div className="text-xs font-bold text-[#0B0B0F] truncate">{lead.name}</div>
+                            <div className="text-[11px] text-[#5A4A5A] truncate">{lead.email} · {lead.phone}</div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 shrink-0">
+                          <StatusBadge status="active" label={lead.course} />
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setActiveTab("leads");
+                              setSelectedLeadForDetail(lead);
+                            }}
+                            className="text-xs font-semibold text-[#3B0D3B] hover:underline cursor-pointer"
+                          >
+                            Details
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB: STUDENT SUBMISSIONS / CRM                            */}
+          {/* ========================================================= */}
+          {activeTab === "leads" && (
+            <div className="space-y-6">
+              {/* Header with Search, Filter, Export */}
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 space-y-4 shadow-sm">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div>
+                    <h2 className="text-xl font-bold text-[#0B0B0F] tracking-tight">Student Applications CRM</h2>
+                    <p className="text-xs text-[#5A4A5A] mt-0.5">
+                      Direct form submissions with applicant contact details, track choices, and backgrounds.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={loadAllData}
+                      disabled={loadingLeads}
+                      className="inline-flex items-center gap-2 rounded-xl border border-[#3B0D3B]/20 bg-white px-3.5 py-2 text-xs font-bold text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] transition-colors cursor-pointer disabled:opacity-50"
+                    >
+                      <RefreshCw className={`h-3.5 w-3.5 ${loadingLeads ? "animate-spin" : ""}`} />
+                      <span>Refresh</span>
+                    </button>
+
+                    <a
+                      href={`/api/leads?format=csv&pin=${encodeURIComponent(getStoredPin())}`}
+                      download
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-md transition-all cursor-pointer"
+                    >
+                      <Download className="h-3.5 w-3.5" />
+                      <span>Export CSV</span>
+                    </a>
+                  </div>
+                </div>
+
+                {/* Filter and Search Bar */}
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C6A8C]" />
                     <input
                       type="text"
                       placeholder="Search students by name, email, phone, background..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-[#0e111a] pl-10 pr-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-slate-700 focus:outline-none"
+                      className="w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 pl-10 pr-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#8C6A8C] focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-all"
                     />
                   </div>
 
                   {coursesList.length > 1 && (
                     <div className="relative sm:w-60">
-                      <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-500 pointer-events-none" />
+                      <Filter className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#8C6A8C] pointer-events-none" />
                       <select
                         value={selectedCourse}
                         onChange={(e) => setSelectedCourse(e.target.value)}
-                        className="w-full appearance-none rounded-xl border border-slate-800 bg-[#0e111a] pl-9 pr-8 py-2.5 text-xs text-white focus:border-slate-700 focus:outline-none cursor-pointer"
+                        className="w-full appearance-none rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 pl-9 pr-8 py-2.5 text-xs font-semibold text-[#0B0B0F] focus:bg-white focus:border-[#3B0D3B] focus:outline-none cursor-pointer"
                       >
                         {coursesList.map((c) => (
-                          <option key={c} value={c} className="bg-slate-900 text-white">
+                          <option key={c} value={c}>
                             {c}
                           </option>
                         ))}
@@ -1762,109 +1720,83 @@ export default function CustomAdminPanelPage() {
                     </div>
                   )}
                 </div>
-
-                <div className="flex items-center gap-2">
-                  <button
-                    type="button"
-                    onClick={loadAllData}
-                    disabled={loadingLeads}
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-800 bg-[#0e111a] px-3.5 py-2.5 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer disabled:opacity-50"
-                  >
-                    <RefreshCw className={`h-3.5 w-3.5 ${loadingLeads ? "animate-spin" : ""}`} />
-                    <span>Refresh</span>
-                  </button>
-
-                  <a
-                    href={`/api/leads?format=csv&pin=${encodeURIComponent(getStoredPin())}`}
-                    download
-                    className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition-colors cursor-pointer"
-                  >
-                    <Download className="h-3.5 w-3.5" />
-                    <span>Export CSV</span>
-                  </a>
-                </div>
               </div>
 
-              {/* Students Details Table */}
-              <div className="overflow-hidden rounded-2xl border border-slate-800/80 bg-[#0e111a] shadow-xl">
+              {/* Students Table */}
+              <div className="overflow-hidden rounded-3xl border border-[#3B0D3B]/10 bg-white shadow-sm">
                 {filteredLeads.length === 0 ? (
-                  <div className="p-12 text-center space-y-2">
-                    <Users className="h-8 w-8 text-slate-600 mx-auto stroke-[1.5]" />
-                    <p className="text-sm font-bold text-slate-300">No student submissions found</p>
-                    <p className="text-xs text-slate-500">
-                      When students fill the application form on the website, their full details appear here.
-                    </p>
-                  </div>
+                  <EmptyState
+                    title="No student submissions found"
+                    description="Try adjusting your search query or filter to see results."
+                  />
                 ) : (
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-black/30 border-b border-slate-800/80 text-[11px] uppercase tracking-wider text-slate-400">
+                      <thead className="bg-[#FAF5EE] border-b border-[#3B0D3B]/10 text-[11px] uppercase tracking-wider text-[#5A4A5A]">
                         <tr>
                           <th className="px-5 py-3.5 font-bold">Student</th>
                           <th className="px-5 py-3.5 font-bold">Contact Details</th>
                           <th className="px-5 py-3.5 font-bold">Enrolled Track</th>
                           <th className="px-5 py-3.5 font-bold">Background / Education</th>
-                          <th className="px-5 py-3.5 font-bold">Submission Source</th>
+                          <th className="px-5 py-3.5 font-bold">Source</th>
                           <th className="px-5 py-3.5 font-bold">Date &amp; Time</th>
-                          <th className="px-5 py-3.5 font-bold text-right">Delete</th>
+                          <th className="px-5 py-3.5 font-bold text-right">Actions</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-800/60">
+                      <tbody className="divide-y divide-[#3B0D3B]/10">
                         {filteredLeads.map((lead) => (
-                          <tr key={lead.id} className="hover:bg-slate-900/40 transition-colors">
+                          <tr key={lead.id} className="hover:bg-[#FAF5EE]/40 transition-colors">
                             <td className="px-5 py-4">
                               <div className="flex items-center gap-3">
-                                <div className="h-8 w-8 rounded-full bg-[#3B796A]/20 border border-[#3B796A]/30 text-[#ABCAC2] font-bold text-xs flex items-center justify-center shrink-0">
+                                <div className="h-8 w-8 rounded-full bg-[#3B0D3B]/10 border border-[#3B0D3B]/15 text-[#3B0D3B] font-bold text-xs flex items-center justify-center shrink-0">
                                   {lead.name ? lead.name.charAt(0).toUpperCase() : "S"}
                                 </div>
                                 <div>
-                                  <span className="font-bold text-white text-xs block">{lead.name}</span>
-                                  <span className="text-[10px] text-slate-500">ID: {lead.id.slice(-6)}</span>
+                                  <span className="font-bold text-[#0B0B0F] text-xs block">{lead.name}</span>
+                                  <span className="text-[10px] text-[#5A4A5A]">ID: {lead.id.slice(-6)}</span>
                                 </div>
                               </div>
                             </td>
                             <td className="px-5 py-4 space-y-1">
-                              <div className="flex items-center gap-1.5 text-slate-300">
-                                <Mail className="h-3 w-3 text-slate-500 shrink-0" />
+                              <div className="flex items-center gap-1.5 text-[#0B0B0F]">
+                                <Mail className="h-3 w-3 text-[#8C6A8C] shrink-0" />
                                 <a
                                   href={`mailto:${lead.email}`}
-                                  className="hover:text-[#ABCAC2] transition-colors text-xs font-mono"
+                                  className="hover:text-[#3B0D3B] transition-colors text-xs font-mono font-medium"
                                 >
                                   {lead.email}
                                 </a>
                               </div>
-                              <div className="flex items-center gap-1.5 text-slate-300">
-                                <Phone className="h-3 w-3 text-slate-500 shrink-0" />
+                              <div className="flex items-center gap-1.5 text-[#0B0B0F]">
+                                <Phone className="h-3 w-3 text-[#8C6A8C] shrink-0" />
                                 <a
                                   href={`tel:${lead.phone}`}
-                                  className="hover:text-[#ABCAC2] transition-colors text-xs font-mono"
+                                  className="hover:text-[#3B0D3B] transition-colors text-xs font-mono font-medium"
                                 >
                                   {lead.phone}
                                 </a>
                               </div>
                             </td>
                             <td className="px-5 py-4">
-                              <span className="inline-block rounded-lg bg-[#012A22]/70 border border-[#3B796A]/40 px-2.5 py-1 text-[11px] font-semibold text-[#ABCAC2]">
-                                {lead.course}
-                              </span>
+                              <StatusBadge status="active" label={lead.course} />
                             </td>
-                            <td className="px-5 py-4 text-slate-300 text-xs">
+                            <td className="px-5 py-4 text-[#5A4A5A] text-xs">
                               {lead.background || "—"}
                             </td>
                             <td className="px-5 py-4">
-                              <span className="text-[11px] text-slate-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                              <span className="text-[11px] text-[#5A4A5A] bg-[#FAF5EE] px-2 py-0.5 rounded-md border border-[#3B0D3B]/10 font-medium">
                                 {lead.source || "Website Form"}
                               </span>
                             </td>
-                            <td className="px-5 py-4 text-slate-400 text-xs whitespace-nowrap">
-                              <div>
+                            <td className="px-5 py-4 text-[#5A4A5A] text-xs whitespace-nowrap">
+                              <div className="font-semibold text-[#0B0B0F]">
                                 {new Date(lead.submittedAt).toLocaleDateString("en-US", {
                                   month: "short",
                                   day: "numeric",
                                   year: "numeric",
                                 })}
                               </div>
-                              <div className="text-[10px] text-slate-500">
+                              <div className="text-[10px] text-[#8C6A8C]">
                                 {new Date(lead.submittedAt).toLocaleTimeString("en-US", {
                                   hour: "2-digit",
                                   minute: "2-digit",
@@ -1872,14 +1804,31 @@ export default function CustomAdminPanelPage() {
                               </div>
                             </td>
                             <td className="px-5 py-4 text-right">
-                              <button
-                                type="button"
-                                onClick={() => handleDeleteLead(lead.id)}
-                                className="p-1.5 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg cursor-pointer transition-colors"
-                                title="Delete Lead"
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </button>
+                              <DropdownMenu
+                                items={[
+                                  {
+                                    label: "View Full Profile",
+                                    icon: Eye,
+                                    onSelect: () => setSelectedLeadForDetail(lead),
+                                  },
+                                  {
+                                    label: "Email Student",
+                                    icon: Mail,
+                                    href: `mailto:${lead.email}`,
+                                  },
+                                  {
+                                    label: "Call Student",
+                                    icon: Phone,
+                                    href: `tel:${lead.phone}`,
+                                  },
+                                  {
+                                    label: "Delete Record",
+                                    icon: Trash2,
+                                    onSelect: () => handleDeleteLead(lead.id),
+                                    destructive: true,
+                                  },
+                                ]}
+                              />
                             </td>
                           </tr>
                         ))}
@@ -1888,6 +1837,91 @@ export default function CustomAdminPanelPage() {
                   </div>
                 )}
               </div>
+
+              {/* Lead Details Modal */}
+              {selectedLeadForDetail && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
+                  <div className="relative w-full max-w-lg rounded-3xl bg-white border border-[#3B0D3B]/15 p-6 sm:p-8 shadow-2xl space-y-6">
+                    <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="h-10 w-10 rounded-full bg-[#3B0D3B] text-white font-bold flex items-center justify-center text-sm">
+                          {selectedLeadForDetail.name.charAt(0).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="text-base font-bold text-[#0B0B0F]">{selectedLeadForDetail.name}</h3>
+                          <p className="text-xs text-[#5A4A5A]">Student Applicant ID: {selectedLeadForDetail.id}</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setSelectedLeadForDetail(null)}
+                        className="p-1.5 text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-xl transition-colors cursor-pointer"
+                      >
+                        <X className="h-5 w-5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-4 text-xs">
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                          <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Email Address</div>
+                          <a href={`mailto:${selectedLeadForDetail.email}`} className="font-bold text-[#3B0D3B] hover:underline break-all">
+                            {selectedLeadForDetail.email}
+                          </a>
+                        </div>
+                        <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                          <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Phone Number</div>
+                          <a href={`tel:${selectedLeadForDetail.phone}`} className="font-bold text-[#3B0D3B] hover:underline">
+                            {selectedLeadForDetail.phone}
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Applied Track</div>
+                        <div className="font-bold text-[#0B0B0F] text-sm">{selectedLeadForDetail.course}</div>
+                      </div>
+
+                      <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Educational Background</div>
+                        <div className="text-[#0B0B0F] font-medium leading-relaxed">
+                          {selectedLeadForDetail.background || "No background details specified."}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                          <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Form Source</div>
+                          <div className="font-semibold text-[#0B0B0F]">{selectedLeadForDetail.source || "Website Form"}</div>
+                        </div>
+                        <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                          <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Submitted At</div>
+                          <div className="font-semibold text-[#0B0B0F]">
+                            {new Date(selectedLeadForDetail.submittedAt).toLocaleString("en-US")}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-3 pt-2">
+                      <a
+                        href={`tel:${selectedLeadForDetail.phone}`}
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#3B0D3B]/20 font-bold text-xs text-[#3B0D3B] hover:bg-[#FAF5EE] transition-colors"
+                      >
+                        <Phone className="h-3.5 w-3.5" />
+                        <span>Call</span>
+                      </a>
+                      <a
+                        href={`mailto:${selectedLeadForDetail.email}`}
+                        className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#3B0D3B] text-white font-bold text-xs hover:bg-[#2A082A] shadow-md transition-colors"
+                      >
+                        <Mail className="h-3.5 w-3.5" />
+                        <span>Send Email</span>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
 
@@ -1897,58 +1931,58 @@ export default function CustomAdminPanelPage() {
           {activeTab === "branding" && (
             <div className="max-w-2xl space-y-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Branding &amp; Site Identity</h2>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Branding &amp; Site Identity</h2>
+                <p className="text-xs sm:text-sm text-[#5A4A5A]">
                   Change your website logo, company title, and admissions contact numbers.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-5 shadow-sm">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Site Title</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Site Title</label>
                   <input
                     type="text"
                     value={generalSettings.siteTitle}
                     onChange={(e) => setGeneralSettings({ ...generalSettings, siteTitle: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Logo Text (Default)</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Logo Text (Default)</label>
                   <input
                     type="text"
                     value={generalSettings.logoText}
                     onChange={(e) => setGeneralSettings({ ...generalSettings, logoText: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
-                  <p className="mt-1 text-[11px] text-slate-500">Displayed in the header when no image logo is set.</p>
+                  <p className="mt-1 text-[11px] text-[#5A4A5A]">Displayed in the header when no image logo is set.</p>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Logo Image URL (Optional)</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Logo Image URL (Optional)</label>
                   <input
                     type="text"
                     placeholder="https://your-domain.com/logo.png"
                     value={generalSettings.logoImage || ""}
                     onChange={(e) => setGeneralSettings({ ...generalSettings, logoImage: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
-                  <p className="mt-1 text-[11px] text-slate-500">
+                  <p className="mt-1 text-[11px] text-[#5A4A5A]">
                     Provide a direct URL to your logo (SVG or PNG). Leave empty to use text logo.
                   </p>
                 </div>
 
                 {/* Logo Live Preview */}
-                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4 flex items-center justify-between">
+                <div className="rounded-2xl border border-[#3B0D3B]/10 bg-[#FAF5EE] p-4 flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Header Preview</span>
+                    <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A4A5A]">Header Preview</span>
                     <div className="mt-2">
                       {generalSettings.logoImage ? (
                         // eslint-disable-next-line @next/next/no-img-element
                         <img src={generalSettings.logoImage} alt="Logo" className="h-8 w-auto object-contain" />
                       ) : (
-                        <span className="text-2xl font-black text-[#ABCAC2] tracking-tight">{generalSettings.logoText}</span>
+                        <span className="text-2xl font-black text-[#3B0D3B] tracking-tight">{generalSettings.logoText}</span>
                       )}
                     </div>
                   </div>
@@ -1956,22 +1990,22 @@ export default function CustomAdminPanelPage() {
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Admissions Email</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Admissions Email</label>
                     <input
                       type="email"
                       value={generalSettings.supportEmail}
                       onChange={(e) => setGeneralSettings({ ...generalSettings, supportEmail: e.target.value })}
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Admissions Phone / WhatsApp</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Admissions Phone / WhatsApp</label>
                     <input
                       type="text"
                       value={generalSettings.supportPhone}
                       onChange={(e) => setGeneralSettings({ ...generalSettings, supportPhone: e.target.value })}
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -1981,7 +2015,7 @@ export default function CustomAdminPanelPage() {
                     type="button"
                     disabled={isSaving}
                     onClick={() => saveSettings(generalSettings)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     <span>{isSaving ? "Saving..." : "Save Branding Changes"}</span>
@@ -1997,66 +2031,66 @@ export default function CustomAdminPanelPage() {
           {activeTab === "banner" && (
             <div className="max-w-2xl space-y-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Top Announcement Banner</h2>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Top Announcement Banner</h2>
+                <p className="text-xs sm:text-sm text-[#5A4A5A]">
                   Update the urgent notification bar displayed across the top of every page.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-5 shadow-sm">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Badge Tag</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Badge Tag</label>
                   <input
                     type="text"
                     value={navigationSettings.bannerBadge}
                     onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerBadge: e.target.value })}
                     placeholder="e.g. BATCH 2 · 50 SEATS"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Banner Announcement Copy</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Banner Announcement Copy</label>
                   <input
                     type="text"
                     value={navigationSettings.bannerText}
                     onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerText: e.target.value })}
                     placeholder="e.g. Applications close on 25th September 2026."
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Button Label</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Button Label</label>
                     <input
                       type="text"
                       value={navigationSettings.bannerLinkText}
                       onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerLinkText: e.target.value })}
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Target Link URL</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Target Link URL</label>
                     <input
                       type="text"
                       value={navigationSettings.bannerLinkHref}
                       onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerLinkHref: e.target.value })}
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
                 </div>
 
                 {/* Banner Preview */}
                 <div>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Live Preview</span>
-                  <div className="mt-1.5 overflow-hidden rounded-xl border border-slate-800 bg-[#0a0c10] py-2.5 px-4 text-center text-xs text-white flex flex-wrap items-center justify-center gap-2">
-                    <span className="rounded-md bg-[#012A22] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-[#5A4A5A]">Live Preview</span>
+                  <div className="mt-1.5 overflow-hidden rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE] py-2.5 px-4 text-center text-xs text-[#0B0B0F] flex flex-wrap items-center justify-center gap-2">
+                    <span className="rounded-md bg-[#3B0D3B] px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-white">
                       {navigationSettings.bannerBadge}
                     </span>
-                    <span className="text-slate-200">{navigationSettings.bannerText}</span>
-                    <span className="font-bold underline text-white">{navigationSettings.bannerLinkText}</span>
+                    <span className="text-[#0B0B0F]">{navigationSettings.bannerText}</span>
+                    <span className="font-bold underline text-[#3B0D3B]">{navigationSettings.bannerLinkText}</span>
                   </div>
                 </div>
 
@@ -2065,7 +2099,7 @@ export default function CustomAdminPanelPage() {
                     type="button"
                     disabled={isSaving}
                     onClick={() => saveBanner(navigationSettings)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     <span>{isSaving ? "Saving..." : "Save Banner Changes"}</span>
@@ -2081,15 +2115,15 @@ export default function CustomAdminPanelPage() {
           {activeTab === "hero" && (
             <div className="max-w-3xl space-y-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Homepage Hero &amp; Copy</h2>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Homepage Hero &amp; Copy</h2>
+                <p className="text-xs sm:text-sm text-[#5A4A5A]">
                   Directly edit the primary headline lines, eyebrow badge, and stats counters.
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/60 p-6 space-y-5">
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-5 shadow-sm">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Eyebrow Badge</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Eyebrow Badge</label>
                   <input
                     type="text"
                     value={homeContent.hero.eyebrow}
@@ -2099,12 +2133,12 @@ export default function CustomAdminPanelPage() {
                         hero: { ...homeContent.hero, eyebrow: e.target.value },
                       })
                     }
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Headline Lines (Stacked)</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Headline Lines (Stacked)</label>
                   <div className="space-y-2 mt-1.5">
                     {homeContent.hero.headlineLines.map((line, idx) => (
                       <input
@@ -2119,14 +2153,14 @@ export default function CustomAdminPanelPage() {
                             hero: { ...homeContent.hero, headlineLines: newLines },
                           });
                         }}
-                        className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                       />
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Description Text</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Description Text</label>
                   <textarea
                     rows={3}
                     value={homeContent.hero.description}
@@ -2136,16 +2170,16 @@ export default function CustomAdminPanelPage() {
                         hero: { ...homeContent.hero, description: e.target.value },
                       })
                     }
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-4 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-4 text-sm font-medium text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
 
                 {/* Stats Counters */}
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Hero Stats Counters</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Hero Stats Counters</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1.5">
                     {homeContent.stats.map((stat, idx) => (
-                      <div key={idx} className="rounded-xl border border-slate-700 bg-slate-800/80 p-3 space-y-2">
+                      <div key={idx} className="rounded-2xl border border-[#3B0D3B]/10 bg-[#FAF5EE]/60 p-3.5 space-y-2">
                         <input
                           type="text"
                           value={stat.value}
@@ -2155,7 +2189,7 @@ export default function CustomAdminPanelPage() {
                             setHomeContent({ ...homeContent, stats: newStats });
                           }}
                           placeholder="e.g. 100%"
-                          className="w-full rounded-lg border border-slate-600 bg-slate-900 px-2.5 py-1.5 text-xs font-bold text-[#ABCAC2]"
+                          className="w-full rounded-lg border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-xs font-bold text-[#3B0D3B]"
                         />
                         <input
                           type="text"
@@ -2166,7 +2200,7 @@ export default function CustomAdminPanelPage() {
                             setHomeContent({ ...homeContent, stats: newStats });
                           }}
                           placeholder="Label"
-                          className="w-full rounded-lg border border-slate-600 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-300"
+                          className="w-full rounded-lg border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-xs text-[#5A4A5A]"
                         />
                       </div>
                     ))}
@@ -2178,7 +2212,7 @@ export default function CustomAdminPanelPage() {
                     type="button"
                     disabled={isSaving}
                     onClick={() => saveHeroContent(homeContent)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     <span>{isSaving ? "Saving..." : "Save Hero Changes"}</span>
@@ -2195,8 +2229,8 @@ export default function CustomAdminPanelPage() {
             <div className="space-y-6 max-w-4xl">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Frequently Asked Questions</h2>
-                  <p className="text-xs sm:text-sm text-slate-400">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Frequently Asked Questions</h2>
+                  <p className="text-xs sm:text-sm text-[#5A4A5A]">
                     Manage the accordion questions displayed in the FAQ section.
                   </p>
                 </div>
@@ -2204,7 +2238,7 @@ export default function CustomAdminPanelPage() {
                 <button
                   type="button"
                   onClick={() => setIsFaqModalOpen(true)}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-md cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-md cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Add Question</span>
@@ -2213,18 +2247,18 @@ export default function CustomAdminPanelPage() {
 
               <div className="space-y-3">
                 {(homeContent.faqs || []).map((faq, idx) => (
-                  <div key={idx} className="rounded-2xl border border-slate-800 bg-slate-900/60 p-5 flex items-start justify-between gap-4">
+                  <div key={idx} className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-5 sm:p-6 flex items-start justify-between gap-4 shadow-sm">
                     <div className="space-y-1.5 flex-1">
-                      <span className="rounded-md bg-[#012A22]/80 border border-[#3B796A]/40 px-2 py-0.5 text-[10px] font-bold text-[#ABCAC2]">
+                      <span className="rounded-md bg-[#FAF5EE] border border-[#3B0D3B]/15 px-2 py-0.5 text-[10px] font-bold text-[#3B0D3B]">
                         {faq.category || "General"}
                       </span>
-                      <h3 className="text-sm sm:text-base font-bold text-white">{faq.question}</h3>
-                      <p className="text-xs sm:text-sm text-slate-400 leading-relaxed">{faq.answer}</p>
+                      <h3 className="text-sm sm:text-base font-bold text-[#0B0B0F]">{faq.question}</h3>
+                      <p className="text-xs sm:text-sm text-[#5A4A5A] leading-relaxed">{faq.answer}</p>
                     </div>
                     <button
                       type="button"
                       onClick={() => handleDeleteFaq(idx)}
-                      className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-950/30 rounded-lg cursor-pointer transition-colors"
+                      className="p-2 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
                     >
                       <Trash2 className="h-4 w-4" />
                     </button>
@@ -2241,8 +2275,8 @@ export default function CustomAdminPanelPage() {
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Blog &amp; Field Notes Studio</h2>
-                  <p className="text-xs sm:text-sm text-slate-400">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Blog &amp; Field Notes Studio</h2>
+                  <p className="text-xs sm:text-sm text-[#5A4A5A]">
                     Write and publish real growth case studies with cover photos and custom tags.
                   </p>
                 </div>
@@ -2250,7 +2284,7 @@ export default function CustomAdminPanelPage() {
                 <button
                   type="button"
                   onClick={openNewBlogModal}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Write New Article</span>
@@ -2261,38 +2295,38 @@ export default function CustomAdminPanelPage() {
                 {blogs.map((blog) => (
                   <div
                     key={blog.slug}
-                    className="rounded-2xl border border-slate-800 bg-slate-900/60 overflow-hidden flex flex-col justify-between hover:border-[#3B796A]/40 transition-all"
+                    className="rounded-3xl border border-[#3B0D3B]/10 bg-white overflow-hidden flex flex-col justify-between hover:border-[#3B0D3B]/30 hover:shadow-xl transition-all shadow-sm"
                   >
-                    <div className="relative aspect-[16/9] w-full bg-slate-800">
+                    <div className="relative aspect-[16/9] w-full bg-[#FAF5EE]">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img src={blog.coverImage} alt={blog.title} className="h-full w-full object-cover" />
-                      <span className="absolute top-3 left-3 rounded-full bg-slate-950/80 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-bold text-[#ABCAC2]">
+                      <span className="absolute top-3 left-3 rounded-full bg-white/90 backdrop-blur-md px-2.5 py-0.5 text-[10px] font-bold text-[#3B0D3B] shadow-sm">
                         {blog.category}
                       </span>
                     </div>
 
-                    <div className="p-5 flex-1 flex flex-col justify-between space-y-3">
+                    <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3">
                       <div>
-                        <div className="text-[11px] text-slate-400">
+                        <div className="text-[11px] text-[#5A4A5A]">
                           {blog.publishedAt} · {blog.readTime}
                         </div>
-                        <h3 className="mt-1 font-bold text-base text-white line-clamp-2">{blog.title}</h3>
-                        <p className="mt-2 text-xs text-slate-400 line-clamp-2">{blog.excerpt}</p>
+                        <h3 className="mt-1 font-bold text-base text-[#0B0B0F] line-clamp-2">{blog.title}</h3>
+                        <p className="mt-2 text-xs text-[#5A4A5A] line-clamp-2 leading-relaxed">{blog.excerpt}</p>
                       </div>
 
-                      <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                      <div className="pt-3 border-t border-[#3B0D3B]/10 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <button
                             type="button"
                             onClick={() => openEditBlogModal(blog)}
-                            className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-700 cursor-pointer"
+                            className="rounded-lg border border-[#3B0D3B]/20 bg-white px-3 py-1 text-xs font-semibold text-[#0B0B0F] hover:bg-[#FAF5EE] cursor-pointer transition-colors"
                           >
                             Edit
                           </button>
                           <Link
                             href={`/blog/${blog.slug}`}
                             target="_blank"
-                            className="rounded-lg bg-[#012A22] px-3 py-1 text-xs font-bold text-white hover:bg-[#001F18]"
+                            className="rounded-lg bg-[#3B0D3B] px-3 py-1 text-xs font-bold text-white hover:bg-[#2A082A] transition-colors"
                           >
                             View
                           </Link>
@@ -2301,7 +2335,7 @@ export default function CustomAdminPanelPage() {
                         <button
                           type="button"
                           onClick={() => handleDeleteBlog(blog.slug)}
-                          className="text-slate-500 hover:text-red-400 p-1 cursor-pointer"
+                          className="text-[#5A4A5A] hover:text-red-600 p-1 cursor-pointer transition-colors"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -2334,15 +2368,15 @@ export default function CustomAdminPanelPage() {
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Courses &amp; Curriculum Tracks</h2>
-                    <p className="text-xs sm:text-sm text-slate-400">
+                    <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Courses &amp; Curriculum Tracks</h2>
+                    <p className="text-xs sm:text-sm text-[#5A4A5A]">
                       Manage curriculum tracks, toggle lock/open enrollment status, edit pricing, or open in Course Studio.
                     </p>
                   </div>
                   <button
                     type="button"
                     onClick={openNewCourseStudio}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-4 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all self-start sm:self-auto"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all self-start sm:self-auto"
                   >
                     <Plus className="h-4 w-4" />
                     <span>Add New Course</span>
@@ -2350,32 +2384,32 @@ export default function CustomAdminPanelPage() {
                 </div>
 
                 {/* Filter and Search Bar */}
-                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-[#0e111a] p-3 rounded-2xl border border-slate-800">
+                <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 bg-white p-3 rounded-2xl border border-[#3B0D3B]/10 shadow-sm">
                   <div className="relative flex-1">
-                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-500" />
+                    <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C6A8C]" />
                     <input
                       type="text"
                       placeholder="Search courses by title, description, or batch..."
                       value={courseSearch}
                       onChange={(e) => setCourseSearch(e.target.value)}
-                      className="w-full rounded-xl border border-slate-800 bg-slate-900/90 pl-10 pr-4 py-2 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 pl-10 pr-4 py-2 text-xs text-[#0B0B0F] placeholder:text-[#8C6A8C] focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-all"
                     />
                     {courseSearch && (
                       <button
                         type="button"
                         onClick={() => setCourseSearch("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#8C6A8C] hover:text-[#0B0B0F]"
                       >
                         <X className="h-3.5 w-3.5" />
                       </button>
                     )}
                   </div>
 
-                  <div className="flex items-center gap-1.5 shrink-0 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                  <div className="flex items-center gap-1.5 shrink-0 bg-[#FAF5EE] p-1 rounded-xl border border-[#3B0D3B]/10">
                     <button
                       type="button"
                       onClick={() => setCourseFilter("all")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "all" ? "bg-[#012A22] text-white shadow-sm" : "text-slate-400 hover:text-white"
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "all" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
                         }`}
                     >
                       All ({courses.length})
@@ -2383,7 +2417,7 @@ export default function CustomAdminPanelPage() {
                     <button
                       type="button"
                       onClick={() => setCourseFilter("open")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "open" ? "bg-emerald-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "open" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
                         }`}
                     >
                       Open ({courses.filter((c) => !c.isLocked).length})
@@ -2391,7 +2425,7 @@ export default function CustomAdminPanelPage() {
                     <button
                       type="button"
                       onClick={() => setCourseFilter("locked")}
-                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "locked" ? "bg-[#012A22] text-white shadow-sm" : "text-slate-400 hover:text-white"
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${courseFilter === "locked" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
                         }`}
                     >
                       Coming Soon ({courses.filter((c) => c.isLocked).length})
@@ -2400,26 +2434,25 @@ export default function CustomAdminPanelPage() {
                 </div>
 
                 {filteredCourses.length === 0 ? (
-                  <div className="rounded-2xl border border-dashed border-slate-800 p-12 text-center bg-[#0e111a]/50">
-                    <GraduationCap className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-                    <h3 className="text-sm font-bold text-white">No courses match your criteria</h3>
-                    <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                      {courseSearch || courseFilter !== "all"
+                  <EmptyState
+                    title="No courses match your criteria"
+                    description={
+                      courseSearch || courseFilter !== "all"
                         ? "Try clearing your search query or status filter."
-                        : "Click 'Add New Course' above to create your first track."}
-                    </p>
-                  </div>
+                        : "Click 'Add New Course' above to create your first track."
+                    }
+                  />
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
                     {filteredCourses.map((course) => (
                       <div
                         key={course.id}
                         className={`group flex flex-col overflow-hidden rounded-3xl border bg-white shadow-sm hover:shadow-xl transition-all duration-300 justify-between ${course.isLocked
-                            ? "border-slate-200/80 bg-slate-50/60"
-                            : "border-slate-200/90"
+                            ? "border-[#3B0D3B]/10 bg-white"
+                            : "border-[#3B0D3B]/15"
                           }`}
                       >
-                        {/* Card Image Header (Identical to Frontend) */}
+                        {/* Card Image Header */}
                         <div className="relative h-48 w-full overflow-hidden bg-slate-900 shrink-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
@@ -2434,8 +2467,8 @@ export default function CustomAdminPanelPage() {
 
                           {/* Coming Soon Overlay if locked */}
                           {course.isLocked && (
-                            <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1px] flex items-center justify-center">
-                              <div className="flex items-center gap-1.5 rounded-full bg-slate-900/90 border border-[#3B796A]/40 px-3.5 py-1.5 text-xs font-bold text-[#ABCAC2] shadow-xl backdrop-blur-md">
+                            <div className="absolute inset-0 bg-black/40 backdrop-blur-[1px] flex items-center justify-center">
+                              <div className="flex items-center gap-1.5 rounded-full bg-[#3B0D3B]/90 border border-white/20 px-3.5 py-1.5 text-xs font-bold text-white shadow-xl backdrop-blur-md">
                                 <Clock className="h-3.5 w-3.5" />
                                 <span>Coming Soon</span>
                               </div>
@@ -2448,7 +2481,7 @@ export default function CustomAdminPanelPage() {
                               type="button"
                               onClick={() => handleToggleCourseLock(course.id)}
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold backdrop-blur-md shadow-md transition-all cursor-pointer ${course.isLocked
-                                  ? "bg-red-950/80 text-red-200 border border-red-500/40 hover:bg-red-900"
+                                  ? "bg-slate-900/80 text-white border border-white/20 hover:bg-slate-900"
                                   : "bg-emerald-950/80 text-emerald-200 border border-emerald-500/40 hover:bg-emerald-900"
                                 }`}
                               title="Click to toggle lock/unlock"
@@ -2463,7 +2496,7 @@ export default function CustomAdminPanelPage() {
                             <button
                               type="button"
                               onClick={() => openEditCourseModal(course)}
-                              className="h-7 px-2.5 rounded-lg bg-black/75 hover:bg-[#012A22] text-white border border-white/15 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md cursor-pointer"
+                              className="h-7 px-2.5 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/15 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md cursor-pointer"
                               title="Edit Course"
                             >
                               <Edit3 className="h-3 w-3" />
@@ -2492,51 +2525,46 @@ export default function CustomAdminPanelPage() {
                           </div>
                         </div>
 
-                        {/* Card Body Content (Identical to Frontend) */}
+                        {/* Card Body Content */}
                         <div className="flex flex-1 flex-col justify-between p-5 sm:p-6">
                           <div>
                             {/* Badge + Meta row */}
                             <div className="flex items-center gap-2.5">
                               {course.isLocked ? (
-                                <span className="inline-flex items-center gap-1 rounded-md bg-slate-900 border border-[#3B796A]/40 px-2 py-0.5 text-[10px] font-black tracking-wide text-[#ABCAC2] uppercase">
-                                  <Clock className="h-3 w-3" />
-                                  <span>COMING SOON</span>
-                                </span>
+                                <StatusBadge status="neutral" label="COMING SOON" />
                               ) : (
-                                <span className="inline-flex items-center rounded-md bg-[#012A22] px-2.5 py-0.5 text-[10px] font-bold tracking-wide text-white uppercase">
-                                  {course.badge || "OPEN"}
-                                </span>
+                                <StatusBadge status="active" label={course.badge || "OPEN"} />
                               )}
-                              <span className="text-xs font-medium text-slate-500">
+                              <span className="text-xs font-semibold text-[#5A4A5A]">
                                 {course.duration || course.meta || "4 months · Online"}
                               </span>
                             </div>
 
                             {/* Title */}
-                            <h3 className="mt-3 text-lg sm:text-xl font-bold tracking-tight text-slate-900 group-hover:text-[#012A22] transition-colors line-clamp-1">
+                            <h3 className="mt-3 text-lg sm:text-xl font-bold tracking-tight text-[#0B0B0F] group-hover:text-[#3B0D3B] transition-colors line-clamp-1">
                               {course.title}
                             </h3>
 
                             {/* Description */}
-                            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 line-clamp-2">
+                            <p className="mt-2 text-xs sm:text-sm leading-relaxed text-[#5A4A5A] line-clamp-2">
                               {course.description || "Comprehensive hands-on digital growth program with real brands."}
                             </p>
 
                             {/* Batch & Pricing Chips */}
-                            <div className="mt-4 grid grid-cols-2 gap-2 pt-3 border-t border-slate-100 text-[11px]">
-                              <div className="rounded-xl bg-slate-50 p-2 border border-slate-200/80">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                            <div className="mt-4 grid grid-cols-2 gap-2 pt-3 border-t border-[#3B0D3B]/10 text-[11px]">
+                              <div className="rounded-2xl bg-[#FAF5EE]/60 p-2.5 border border-[#3B0D3B]/10">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C6A8C] block">
                                   Batch
                                 </span>
-                                <span className="font-bold text-slate-800 truncate block mt-0.5">
+                                <span className="font-bold text-[#0B0B0F] truncate block mt-0.5">
                                   {course.batch || "Batch 2 · Sep 2026"}
                                 </span>
                               </div>
-                              <div className="rounded-xl bg-slate-50 p-2 border border-slate-200/80">
-                                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                              <div className="rounded-2xl bg-[#FAF5EE]/60 p-2.5 border border-[#3B0D3B]/10">
+                                <span className="text-[10px] font-bold uppercase tracking-wider text-[#8C6A8C] block">
                                   Fee &amp; EMI
                                 </span>
-                                <span className="font-bold text-slate-800 truncate block mt-0.5">
+                                <span className="font-bold text-[#3B0D3B] truncate block mt-0.5">
                                   {course.feeTotal || "₹55,000"} {course.feeEmi ? `(${course.feeEmi})` : ""}
                                 </span>
                               </div>
@@ -2544,7 +2572,7 @@ export default function CustomAdminPanelPage() {
                           </div>
 
                           {/* Footer: Action Buttons */}
-                          <div className="mt-5 flex items-center justify-between border-t border-slate-100 pt-4">
+                          <div className="mt-5 flex items-center justify-between border-t border-[#3B0D3B]/10 pt-4">
                             <button
                               type="button"
                               onClick={() => handleToggleCourseLock(course.id)}
@@ -2554,7 +2582,7 @@ export default function CustomAdminPanelPage() {
                                 }`}
                             >
                               {course.isLocked ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
-                              <span>{course.isLocked ? "Unlock Enrollment" : "Lock Enrollment"}</span>
+                              <span>{course.isLocked ? "Unlock Track" : "Lock Track"}</span>
                             </button>
 
                             <div className="flex items-center gap-3">
@@ -2562,7 +2590,7 @@ export default function CustomAdminPanelPage() {
                                 href={course.href || `/categories/${course.id}`}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-xs font-bold text-slate-500 hover:text-[#012A22] transition-colors inline-flex items-center gap-1"
+                                className="text-xs font-bold text-[#5A4A5A] hover:text-[#3B0D3B] transition-colors inline-flex items-center gap-1"
                                 title="Preview live course page"
                               >
                                 <span>View Page</span>
@@ -2572,7 +2600,7 @@ export default function CustomAdminPanelPage() {
                               <button
                                 type="button"
                                 onClick={() => openCourseStudio(course)}
-                                className="text-xs sm:text-sm font-bold text-[#012A22] hover:text-[#001F18] transition-colors inline-flex items-center gap-1 cursor-pointer"
+                                className="text-xs sm:text-sm font-bold text-[#3B0D3B] hover:text-[#2A082A] transition-colors inline-flex items-center gap-1 cursor-pointer"
                               >
                                 <span>Studio →</span>
                               </button>
@@ -2586,15 +2614,15 @@ export default function CustomAdminPanelPage() {
                     <button
                       type="button"
                       onClick={openNewCourseStudio}
-                      className="rounded-3xl border-2 border-dashed border-slate-700 hover:border-[#3B796A] bg-[#0e111a]/40 hover:bg-[#012A22]/10 min-h-[380px] flex flex-col items-center justify-center p-6 text-center group transition-all cursor-pointer"
+                      className="rounded-3xl border-2 border-dashed border-[#3B0D3B]/20 hover:border-[#3B0D3B] bg-[#FAF5EE]/40 hover:bg-[#FAF5EE] min-h-[380px] flex flex-col items-center justify-center p-6 text-center group transition-all cursor-pointer"
                     >
-                      <div className="h-14 w-14 rounded-2xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center text-[#ABCAC2] group-hover:scale-110 group-hover:bg-[#012A22] group-hover:text-white transition-all">
+                      <div className="h-14 w-14 rounded-2xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/15 flex items-center justify-center text-[#3B0D3B] group-hover:scale-110 group-hover:bg-[#3B0D3B] group-hover:text-white transition-all">
                         <Plus className="h-7 w-7" />
                       </div>
-                      <span className="mt-4 text-base font-bold text-white group-hover:text-[#ABCAC2]">
+                      <span className="mt-4 text-base font-bold text-[#0B0B0F] group-hover:text-[#3B0D3B]">
                         Add New Course
                       </span>
-                      <span className="text-xs text-slate-400 mt-1 max-w-[200px]">
+                      <span className="text-xs text-[#5A4A5A] mt-1 max-w-[200px]">
                         Create a new curriculum track with syllabus, cover image &amp; pricing
                       </span>
                     </button>
@@ -2611,15 +2639,15 @@ export default function CustomAdminPanelPage() {
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Mentors &amp; Faculty Tutors</h2>
-                  <p className="text-xs sm:text-sm text-slate-400">
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Mentors &amp; Faculty Tutors</h2>
+                  <p className="text-xs sm:text-sm text-[#5A4A5A]">
                     Manage instructors, mentors, photos, and roles displayed across the website.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={openNewTutorModal}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-4 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all self-start sm:self-auto"
+                  className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all self-start sm:self-auto"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Add Mentor</span>
@@ -2627,19 +2655,16 @@ export default function CustomAdminPanelPage() {
               </div>
 
               {tutors.length === 0 ? (
-                <div className="rounded-2xl border border-dashed border-slate-800 p-12 text-center">
-                  <Users className="h-10 w-10 text-slate-600 mx-auto mb-3" />
-                  <h3 className="text-sm font-bold text-white">No mentors added yet</h3>
-                  <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-                    Click &quot;Add Mentor&quot; above to add mentors with photos and bios.
-                  </p>
-                </div>
+                <EmptyState
+                  title="No mentors added yet"
+                  description="Click 'Add Mentor' above to add mentors with photos, roles, and backgrounds."
+                />
               ) : (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-5">
                   {tutors.map((tutor, index) => (
                     <div
                       key={tutor.id}
-                      className="group relative aspect-[3/4] overflow-hidden rounded-2xl border border-slate-800 bg-[#0e111a] shadow-lg transition-all duration-300 hover:shadow-2xl hover:border-[#3B796A]/50"
+                      className="group relative aspect-[3/4] overflow-hidden rounded-3xl border border-[#3B0D3B]/15 bg-slate-900 shadow-sm transition-all duration-300 hover:shadow-2xl hover:border-[#3B0D3B]/40"
                     >
                       {/* Photo or placeholder matching live site exactly */}
                       {tutor.image ? (
@@ -2674,7 +2699,7 @@ export default function CustomAdminPanelPage() {
                         </>
                       )}
 
-                      {/* Top-Right Mentored Badge (live look) */}
+                      {/* Top-Right Mentored Badge */}
                       <span className="absolute top-2.5 right-2.5 rounded-full bg-black/60 border border-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md z-20 shadow-sm">
                         {tutor.mentored}
                       </span>
@@ -2687,7 +2712,7 @@ export default function CustomAdminPanelPage() {
                             e.stopPropagation();
                             openEditTutorModal(tutor);
                           }}
-                          className="h-7 px-2.5 rounded-lg bg-black/75 hover:bg-[#012A22] text-white border border-white/15 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer"
+                          className="h-7 px-2.5 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/15 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer"
                           title="Edit Mentor"
                         >
                           <Edit3 className="h-3 w-3" />
@@ -2712,7 +2737,7 @@ export default function CustomAdminPanelPage() {
                         className="absolute inset-0 z-10 cursor-pointer"
                       />
 
-                      {/* Bottom Gradient Overlay: Name & Role (live look) */}
+                      {/* Bottom Gradient Overlay: Name & Role */}
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3.5 pt-12 z-15 pointer-events-none">
                         <p className="text-xs sm:text-sm font-bold text-white leading-tight truncate">
                           {tutor.name}
@@ -2728,13 +2753,13 @@ export default function CustomAdminPanelPage() {
                   <button
                     type="button"
                     onClick={openNewTutorModal}
-                    className="aspect-[3/4] rounded-2xl border-2 border-dashed border-slate-800 hover:border-[#3B796A]/60 bg-[#0e111a]/40 hover:bg-[#012A22]/10 flex flex-col items-center justify-center p-4 text-center group transition-all cursor-pointer"
+                    className="aspect-[3/4] rounded-3xl border-2 border-dashed border-[#3B0D3B]/20 hover:border-[#3B0D3B] bg-[#FAF5EE]/40 hover:bg-[#FAF5EE] flex flex-col items-center justify-center p-4 text-center group transition-all cursor-pointer"
                   >
-                    <div className="h-11 w-11 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center text-[#ABCAC2] group-hover:scale-110 group-hover:bg-[#012A22] group-hover:text-white transition-all">
+                    <div className="h-11 w-11 rounded-2xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/15 flex items-center justify-center text-[#3B0D3B] group-hover:scale-110 group-hover:bg-[#3B0D3B] group-hover:text-white transition-all">
                       <Plus className="h-5 w-5" />
                     </div>
-                    <span className="mt-3 text-xs sm:text-sm font-bold text-white group-hover:text-[#ABCAC2]">Add Mentor</span>
-                    <span className="text-[10px] text-slate-400 mt-0.5">Upload photo &amp; bio</span>
+                    <span className="mt-3 text-xs sm:text-sm font-bold text-[#0B0B0F] group-hover:text-[#3B0D3B]">Add Mentor</span>
+                    <span className="text-[10px] text-[#5A4A5A] mt-0.5">Upload photo &amp; bio</span>
                   </button>
                 </div>
               )}
@@ -2747,25 +2772,25 @@ export default function CustomAdminPanelPage() {
           {activeTab === "alerts" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">
                   Real-Time Student Lead Email Alerts
                 </h2>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <p className="text-xs sm:text-sm text-[#5A4A5A]">
                   Whenever a student fills out the application form on the website, automatically send an instant alert with their details.
                 </p>
               </div>
 
               {/* Alert Status Card */}
-              <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm">
                 <div className="flex items-center gap-3.5">
-                  <div className="h-11 w-11 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center shrink-0">
-                    <Mail className="h-5 w-5 text-[#ABCAC2]" />
+                  <div className="h-11 w-11 rounded-2xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/15 flex items-center justify-center shrink-0 text-[#3B0D3B]">
+                    <Mail className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-bold text-white">
+                    <h3 className="text-sm font-bold text-[#0B0B0F]">
                       Email Alert Dispatch: {alertSettings.emailAlertsEnabled ? "Active" : "Paused"}
                     </h3>
-                    <p className="text-xs text-slate-400">
+                    <p className="text-xs text-[#5A4A5A]">
                       {alertSettings.emailAlertsEnabled ? "✓ Instant Student Lead Alerts Active" : "✗ Email Alerts Paused"}
                     </p>
                   </div>
@@ -2775,7 +2800,7 @@ export default function CustomAdminPanelPage() {
                   type="button"
                   onClick={handleTestAlert}
                   disabled={isTestingAlert}
-                  className="inline-flex items-center gap-2 rounded-xl border border-[#3B796A]/30 bg-[#3B796A]/20 hover:bg-[#3B796A]/20 px-4 py-2 text-xs font-bold text-[#ABCAC2] transition-all cursor-pointer disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-xl border border-[#3B0D3B]/20 bg-[#FAF5EE] hover:bg-[#FAF5EE]/80 px-4 py-2 text-xs font-bold text-[#3B0D3B] transition-all cursor-pointer disabled:opacity-50"
                 >
                   <Send className="h-3.5 w-3.5" />
                   <span>{isTestingAlert ? "Dispatching..." : "Send Test Email Alert"}</span>
@@ -2784,14 +2809,14 @@ export default function CustomAdminPanelPage() {
 
               {testAlertResult && (
                 <div
-                  className={`rounded-xl border p-4 text-xs ${testAlertResult.startsWith("Error:")
-                      ? "border-rose-500/30 bg-rose-950/40 text-rose-300"
-                      : "border-emerald-500/30 bg-emerald-950/40 text-emerald-300"
+                  className={`rounded-2xl border p-4 text-xs ${testAlertResult.startsWith("Error:")
+                      ? "border-rose-300 bg-rose-50 text-rose-800"
+                      : "border-emerald-300 bg-emerald-50 text-emerald-800"
                     }`}
                 >
                   <div className="font-semibold">{testAlertResult}</div>
                   {testAlertResult.includes("Resend Sandbox Restriction") && (
-                    <div className="mt-2.5 text-[11px] text-rose-200/90 leading-relaxed border-t border-rose-500/20 pt-2">
+                    <div className="mt-2.5 text-[11px] text-rose-700 leading-relaxed border-t border-rose-200 pt-2">
                       💡 <strong>Why this happens:</strong> Resend&apos;s free development sandbox (<code>onboarding@resend.dev</code>) only delivers to the Resend account owner&apos;s email (<code>plmanojvarma@gmail.com</code>).
                       <br />
                       <strong>To send to other emails:</strong> You can either test with <code>plmanojvarma@gmail.com</code>, or add and verify your custom domain (e.g. <code>treqo.org</code>) at{" "}
@@ -2799,7 +2824,7 @@ export default function CustomAdminPanelPage() {
                         href="https://resend.com/domains"
                         target="_blank"
                         rel="noreferrer"
-                        className="underline font-bold text-white hover:text-rose-100"
+                        className="underline font-bold text-[#3B0D3B]"
                       >
                         resend.com/domains
                       </a>
@@ -2811,11 +2836,11 @@ export default function CustomAdminPanelPage() {
 
               <form onSubmit={handleSaveAlertSettings} className="space-y-6">
                 {/* Email Configuration Card */}
-                <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-3">
                     <div className="flex items-center gap-2.5">
-                      <Mail className="h-4 w-4 text-[#ABCAC2]" />
-                      <h3 className="text-sm font-bold text-white">Email Addresses for Notifications</h3>
+                      <Mail className="h-4 w-4 text-[#3B0D3B]" />
+                      <h3 className="text-sm font-bold text-[#0B0B0F]">Email Addresses for Notifications</h3>
                     </div>
                     <label className="relative inline-flex items-center cursor-pointer">
                       <input
@@ -2826,12 +2851,12 @@ export default function CustomAdminPanelPage() {
                         }
                         className="sr-only peer"
                       />
-                      <div className="w-9 h-5 bg-slate-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#012A22]" />
+                      <div className="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#3B0D3B]" />
                     </label>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">
+                    <label className="text-xs font-bold text-[#0B0B0F]">
                       Notification Emails (Separate multiple emails with commas)
                     </label>
                     <input
@@ -2842,22 +2867,22 @@ export default function CustomAdminPanelPage() {
                         setAlertSettings({ ...alertSettings, notifyEmails: e.target.value })
                       }
                       placeholder="admissions@treqo.org, founder@treqo.org"
-                      className="mt-1.5 w-full rounded-xl border border-slate-800 bg-[#12151f] px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-slate-700 focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
-                    <p className="text-[11px] text-slate-500 mt-1">
+                    <p className="text-[11px] text-[#5A4A5A] mt-1">
                       When a student submits any application or syllabus form, their full details will be emailed to these inboxes immediately.
                     </p>
-                    <p className="text-[11px] text-amber-400/90 mt-1.5 bg-amber-950/20 border border-amber-500/20 p-2 rounded-lg leading-relaxed">
+                    <p className="text-[11px] text-amber-800 mt-1.5 bg-amber-50 border border-amber-200 p-2.5 rounded-xl leading-relaxed">
                       ⚠️ <strong>Resend Free Sandbox Note:</strong> While using <code>onboarding@resend.dev</code>, Resend only allows delivery to the account owner (<code>plmanojvarma@gmail.com</code>). To receive leads on other emails, verify your domain at Resend.com.
                     </p>
                   </div>
 
-                  <div className="pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                  <div className="pt-3 border-t border-[#3B0D3B]/10 flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                      <span className="text-xs font-semibold text-slate-300">Resend.com Email Delivery Service</span>
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      <span className="text-xs font-semibold text-[#5A4A5A]">Resend.com Email Delivery Service</span>
                     </div>
-                    <span className="text-[10px] text-emerald-400 font-bold bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-lg">
+                    <span className="text-[10px] text-emerald-800 font-bold bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg">
                       Connected &amp; Active
                     </span>
                   </div>
@@ -2867,7 +2892,7 @@ export default function CustomAdminPanelPage() {
                   <button
                     type="submit"
                     disabled={isSavingAlerts}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-6 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     <span>{isSavingAlerts ? "Saving Settings..." : "Save Email Settings"}</span>
@@ -2883,199 +2908,199 @@ export default function CustomAdminPanelPage() {
           {activeTab === "forms" && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl sm:text-2xl font-black text-white tracking-tight">Form Titles &amp; Popup Modals</h2>
-                <p className="text-xs sm:text-sm text-slate-400">
+                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Form Titles &amp; Popup Modals</h2>
+                <p className="text-xs sm:text-sm text-[#5A4A5A]">
                   Customize headlines, subtitles, and button text across your application forms, curriculum download popups, and success screens.
                 </p>
               </div>
 
               <form onSubmit={handleSaveForms} className="space-y-6">
                 {/* 1. HERO APPLICATION FORM */}
-                <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-[#ABCAC2]" />
-                      <h3 className="text-sm font-bold text-white">Homepage Hero Application Form</h3>
+                      <span className="h-2 w-2 rounded-full bg-[#3B0D3B]" />
+                      <h3 className="text-sm font-bold text-[#0B0B0F]">Homepage Hero Application Form</h3>
                     </div>
-                    <span className="text-[10px] text-[#ABCAC2] bg-[#3B796A]/20 border border-[#3B796A]/30 px-2 py-0.5 rounded font-bold uppercase">
+                    <span className="text-[10px] text-[#3B0D3B] bg-[#FAF5EE] border border-[#3B0D3B]/15 px-2 py-0.5 rounded font-bold uppercase">
                       Homepage
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Form Header Title</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Form Header Title</label>
                       <input
                         type="text"
                         value={formSettings.heroFormTitle || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, heroFormTitle: e.target.value })}
                         placeholder="e.g. Fast Track Application"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Submit Button Label</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Submit Button Label</label>
                       <input
                         type="text"
                         value={formSettings.heroFormButtonText || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, heroFormButtonText: e.target.value })}
                         placeholder="e.g. Apply for Batch 2"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Form Subtitle / Note</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Form Subtitle / Note</label>
                     <input
                       type="text"
                       value={formSettings.heroFormSubtitle || ""}
                       onChange={(e) => setFormSettings({ ...formSettings, heroFormSubtitle: e.target.value })}
                       placeholder="e.g. Live cohort starts soon · Limited seats"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800/60">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#3B0D3B]/10">
                     <div>
-                      <label className="text-xs font-bold text-slate-400">Success Screen Headline</label>
+                      <label className="text-xs font-bold text-[#5A4A5A]">Success Screen Headline</label>
                       <input
                         type="text"
                         value={formSettings.heroFormSuccessTitle || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, heroFormSuccessTitle: e.target.value })}
                         placeholder="Submitted"
-                        className="mt-1.5 w-full rounded-xl border border-slate-800 bg-[#12151f] px-3.5 py-2 text-xs text-white focus:border-slate-700 focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-slate-400">Success Screen Description</label>
+                      <label className="text-xs font-bold text-[#5A4A5A]">Success Screen Description</label>
                       <input
                         type="text"
                         value={formSettings.heroFormSuccessMessage || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, heroFormSuccessMessage: e.target.value })}
                         placeholder="Thank you! Your details have been received successfully."
-                        className="mt-1.5 w-full rounded-xl border border-slate-800 bg-[#12151f] px-3.5 py-2 text-xs text-white focus:border-slate-700 focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* 2. APPLICATION POPUP MODAL */}
-                <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-blue-400" />
-                      <h3 className="text-sm font-bold text-white">Application Popup Modal (&quot;Apply Now&quot; across site)</h3>
+                      <span className="h-2 w-2 rounded-full bg-[#3B0D3B]" />
+                      <h3 className="text-sm font-bold text-[#0B0B0F]">Application Popup Modal (&quot;Apply Now&quot; across site)</h3>
                     </div>
-                    <span className="text-[10px] text-blue-300 bg-blue-500/15 border border-blue-500/30 px-2 py-0.5 rounded font-bold uppercase">
+                    <span className="text-[10px] text-[#3B0D3B] bg-[#FAF5EE] border border-[#3B0D3B]/15 px-2 py-0.5 rounded font-bold uppercase">
                       Site-wide Modal
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Modal Header Title</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Modal Header Title</label>
                       <input
                         type="text"
                         value={formSettings.applyModalTitle || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, applyModalTitle: e.target.value })}
                         placeholder="e.g. Apply for Batch 2"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Submit Button Text</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Submit Button Text</label>
                       <input
                         type="text"
                         value={formSettings.applyModalButtonText || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, applyModalButtonText: e.target.value })}
                         placeholder="e.g. Submit Application"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Modal Subtitle / Value Proposition</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Modal Subtitle / Value Proposition</label>
                     <input
                       type="text"
                       value={formSettings.applyModalSubtitle || ""}
                       onChange={(e) => setFormSettings({ ...formSettings, applyModalSubtitle: e.target.value })}
                       placeholder="e.g. Leave with work you can show in an interview, not a certificate."
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-slate-800/60">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#3B0D3B]/10">
                     <div>
-                      <label className="text-xs font-bold text-slate-400">Modal Success Headline</label>
+                      <label className="text-xs font-bold text-[#5A4A5A]">Modal Success Headline</label>
                       <input
                         type="text"
                         value={formSettings.applyModalSuccessTitle || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, applyModalSuccessTitle: e.target.value })}
                         placeholder="Submitted"
-                        className="mt-1.5 w-full rounded-xl border border-slate-800 bg-[#12151f] px-3.5 py-2 text-xs text-white focus:border-slate-700 focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                     <div>
-                      <label className="text-xs font-bold text-slate-400">Modal Success Description</label>
+                      <label className="text-xs font-bold text-[#5A4A5A]">Modal Success Description</label>
                       <input
                         type="text"
                         value={formSettings.applyModalSuccessMessage || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, applyModalSuccessMessage: e.target.value })}
                         placeholder="Thank you! Your details have been received successfully."
-                        className="mt-1.5 w-full rounded-xl border border-slate-800 bg-[#12151f] px-3.5 py-2 text-xs text-white focus:border-slate-700 focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/40 px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                   </div>
                 </div>
 
                 {/* 3. CURRICULUM DOWNLOAD MODAL */}
-                <div className="rounded-2xl border border-slate-800 bg-[#0e111a] p-6 space-y-4">
-                  <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-4 shadow-sm">
+                  <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-3">
                     <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full bg-emerald-400" />
-                      <h3 className="text-sm font-bold text-white">Curriculum &amp; Syllabus Download Modal</h3>
+                      <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                      <h3 className="text-sm font-bold text-[#0B0B0F]">Curriculum &amp; Syllabus Download Modal</h3>
                     </div>
-                    <span className="text-[10px] text-emerald-300 bg-emerald-500/15 border border-emerald-500/30 px-2 py-0.5 rounded font-bold uppercase">
+                    <span className="text-[10px] text-emerald-800 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded font-bold uppercase">
                       Brochure Modal
                     </span>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Modal Header Title</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Modal Header Title</label>
                       <input
                         type="text"
                         value={formSettings.curriculumModalTitle || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, curriculumModalTitle: e.target.value })}
                         placeholder="e.g. Download Curriculum"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
 
                     <div>
-                      <label className="text-xs font-bold text-slate-300">Submit Button Text</label>
+                      <label className="text-xs font-bold text-[#0B0B0F]">Submit Button Text</label>
                       <input
                         type="text"
                         value={formSettings.curriculumModalButtonText || ""}
                         onChange={(e) => setFormSettings({ ...formSettings, curriculumModalButtonText: e.target.value })}
                         placeholder="e.g. Download Syllabus Now"
-                        className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                        className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Modal Subtitle / Note</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Modal Subtitle / Note</label>
                     <input
                       type="text"
                       value={formSettings.curriculumModalSubtitle || ""}
                       onChange={(e) => setFormSettings({ ...formSettings, curriculumModalSubtitle: e.target.value })}
                       placeholder="e.g. Get the full week-by-week phase roadmap, deliverables & toolstack."
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
                 </div>
@@ -3084,7 +3109,7 @@ export default function CustomAdminPanelPage() {
                   <button
                     type="submit"
                     disabled={isSavingForms}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] px-6 py-2.5 text-xs font-bold text-white shadow-lg cursor-pointer transition-all disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-6 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all disabled:opacity-50"
                   >
                     <Save className="h-4 w-4" />
                     <span>{isSavingForms ? "Saving..." : "Save Form Titles & Popups"}</span>
@@ -3166,16 +3191,16 @@ export default function CustomAdminPanelPage() {
       {/* MODAL: WRITE / EDIT BLOG POST                             */}
       {/* ========================================================= */}
       {isBlogModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-2xl rounded-3xl border border-slate-800 bg-slate-900 p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B0F]/60 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-8 shadow-2xl max-h-[90vh] overflow-y-auto space-y-5 text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
+              <h3 className="text-lg font-bold text-[#0B0B0F]">
                 {editingBlog ? "Edit Blog Post" : "Write New Article"}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsBlogModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-lg p-1.5 transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -3183,26 +3208,26 @@ export default function CustomAdminPanelPage() {
 
             <form onSubmit={handleBlogSubmit} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-300">Article Title</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Article Title</label>
                 <input
                   type="text"
                   required
                   value={blogForm.title}
                   onChange={(e) => setBlogForm({ ...blogForm, title: e.target.value })}
                   placeholder="e.g. Why Running Real Ad Budgets Beats 100 Theoretical Case Studies"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Category</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Category</label>
                   <select
                     value={blogForm.category}
                     onChange={(e) =>
                       setBlogForm({ ...blogForm, category: e.target.value as BlogPost["category"] })
                     }
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   >
                     <option value="Performance Marketing">Performance Marketing</option>
                     <option value="AI & Automation">AI & Automation</option>
@@ -3212,13 +3237,13 @@ export default function CustomAdminPanelPage() {
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Read Time</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Read Time</label>
                   <input
                     type="text"
                     value={blogForm.readTime}
                     onChange={(e) => setBlogForm({ ...blogForm, readTime: e.target.value })}
                     placeholder="e.g. 5 min read"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
@@ -3226,8 +3251,8 @@ export default function CustomAdminPanelPage() {
               {/* Cover Image Upload (Direct File Manager & Drag & Drop & Media Library) */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                    <ImageIcon className="h-3.5 w-3.5 text-[#ABCAC2]" />
+                  <label className="text-xs font-bold text-[#0B0B0F] flex items-center gap-1.5">
+                    <ImageIcon className="h-3.5 w-3.5 text-[#3B0D3B]" />
                     Cover Image
                   </label>
                   <div className="flex items-center gap-2">
@@ -3237,16 +3262,16 @@ export default function CustomAdminPanelPage() {
                         setIsMediaPickerOpen(true);
                         fetchMediaFiles();
                       }}
-                      className="text-[11px] text-slate-400 hover:text-white transition-colors cursor-pointer flex items-center gap-1"
+                      className="text-[11px] text-[#5A4A5A] hover:text-[#3B0D3B] font-medium transition-colors cursor-pointer flex items-center gap-1"
                     >
-                      <FolderOpen className="h-3 w-3 text-[#ABCAC2]" />
+                      <FolderOpen className="h-3 w-3 text-[#3B0D3B]" />
                       Browse Media
                     </button>
-                    <span className="text-slate-600 text-xs">·</span>
+                    <span className="text-[#3B0D3B]/20 text-xs">·</span>
                     <button
                       type="button"
                       onClick={() => setShowManualBlogUrl(!showManualBlogUrl)}
-                      className="text-[11px] text-[#ABCAC2] hover:text-[#ABCAC2] transition-colors cursor-pointer"
+                      className="text-[11px] text-[#3B0D3B] hover:underline font-medium transition-colors cursor-pointer"
                     >
                       {showManualBlogUrl ? "Switch to File Upload" : "or enter URL manually"}
                     </button>
@@ -3292,48 +3317,48 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingBlogImage && blogFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-4 transition-all cursor-pointer ${isBlogDragActive
-                          ? "border-[#ABCAC2] bg-[#3B796A]/20 scale-[1.01] shadow-lg shadow-[#012A22]/30"
-                          : "border-slate-700/80 bg-[#12151f] hover:border-[#3B796A]/50 hover:bg-slate-900/80"
+                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingBlogImage ? (
                         <div className="flex flex-col items-center gap-2 text-center py-2">
-                          <RefreshCw className="h-6 w-6 text-[#ABCAC2] animate-spin" />
-                          <p className="text-xs font-bold text-white">Uploading cover image...</p>
-                          <p className="text-[10px] text-slate-400">Saving file to media library</p>
+                          <RefreshCw className="h-6 w-6 text-[#3B0D3B] animate-spin" />
+                          <p className="text-xs font-bold text-[#0B0B0F]">Uploading cover image...</p>
+                          <p className="text-[10px] text-[#5A4A5A]">Saving file to media library</p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-1.5 text-center py-1">
-                          <div className="h-9 w-9 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/25 flex items-center justify-center text-[#ABCAC2]">
+                          <div className="h-9 w-9 rounded-xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 flex items-center justify-center text-[#3B0D3B]">
                             <Upload className="h-4 w-4" />
                           </div>
-                          <p className="text-xs font-bold text-white">
-                            <span className="text-[#ABCAC2] underline underline-offset-2">Click to take from file manager</span> or drag to upload
+                          <p className="text-xs font-bold text-[#0B0B0F]">
+                            <span className="text-[#3B0D3B] underline underline-offset-2">Click to browse file</span> or drag to upload
                           </p>
-                          <p className="text-[10px] text-slate-400">PNG, JPG, WEBP, or SVG up to 8MB</p>
+                          <p className="text-[10px] text-[#5A4A5A]">PNG, JPG, WEBP, or SVG up to 8MB</p>
                         </div>
                       )}
                     </div>
 
                     {blogForm.coverImage && (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#151926] border border-slate-800">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#3B0D3B]/15 shadow-sm">
                         <div className="flex items-center gap-3 min-w-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={blogForm.coverImage}
                             alt="Cover Preview"
-                            className="h-12 w-20 rounded-lg object-cover border border-[#3B796A]/30 shrink-0"
+                            className="h-12 w-20 rounded-lg object-cover border border-[#3B0D3B]/15 shrink-0"
                             onError={(e) => {
                               (e.target as HTMLImageElement).src = "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1200&q=80";
                             }}
                           />
                           <div className="min-w-0">
-                            <span className="text-xs font-bold text-white block truncate">
+                            <span className="text-xs font-bold text-[#0B0B0F] block truncate">
                               {blogForm.coverImage.startsWith("/uploads/")
                                 ? blogForm.coverImage.split("/").pop()
                                 : blogForm.coverImage}
                             </span>
-                            <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
+                            <span className="text-[10px] text-emerald-600 flex items-center gap-1 font-semibold">
                               <Check className="h-3 w-3 shrink-0" /> Cover image attached
                             </span>
                           </div>
@@ -3343,14 +3368,14 @@ export default function CustomAdminPanelPage() {
                           <button
                             type="button"
                             onClick={() => blogFileInputRef.current?.click()}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 cursor-pointer"
+                            className="px-2.5 py-1 text-[11px] font-semibold text-[#0B0B0F] hover:bg-[#FAF5EE] bg-white rounded-lg border border-[#3B0D3B]/15 cursor-pointer transition-colors"
                           >
                             Replace
                           </button>
                           <button
                             type="button"
                             onClick={() => setBlogForm((prev) => ({ ...prev, coverImage: "" }))}
-                            className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg cursor-pointer"
+                            className="p-1.5 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
                             title="Remove Photo"
                           >
                             <Trash2 className="h-3.5 w-3.5" />
@@ -3366,17 +3391,17 @@ export default function CustomAdminPanelPage() {
                       value={blogForm.coverImage}
                       onChange={(e) => setBlogForm({ ...blogForm, coverImage: e.target.value })}
                       placeholder="https://images.unsplash.com/..."
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                     {blogForm.coverImage && (
-                      <div className="flex items-center gap-3 p-2 rounded-lg bg-[#151926] border border-slate-800">
+                      <div className="flex items-center gap-3 p-2 rounded-lg bg-white border border-[#3B0D3B]/15 shadow-sm">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={blogForm.coverImage}
                           alt="Cover Preview"
-                          className="h-10 w-16 rounded object-cover border border-slate-700 shrink-0"
+                          className="h-10 w-16 rounded object-cover border border-[#3B0D3B]/15 shrink-0"
                         />
-                        <span className="text-xs text-slate-300 truncate">{blogForm.coverImage}</span>
+                        <span className="text-xs text-[#5A4A5A] truncate">{blogForm.coverImage}</span>
                       </div>
                     )}
                   </div>
@@ -3384,52 +3409,52 @@ export default function CustomAdminPanelPage() {
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Short Excerpt (Summary)</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Short Excerpt (Summary)</label>
                 <textarea
                   rows={2}
                   required
                   value={blogForm.excerpt}
                   onChange={(e) => setBlogForm({ ...blogForm, excerpt: e.target.value })}
                   placeholder="A 2-sentence summary of key insights..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Tags (Comma-separated)</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Tags (Comma-separated)</label>
                 <input
                   type="text"
                   value={blogForm.tags}
                   onChange={(e) => setBlogForm({ ...blogForm, tags: e.target.value })}
                   placeholder="Meta Ads, CAC, Unit Economics"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Article Body (Paragraphs)</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Article Body (Paragraphs)</label>
                 <textarea
                   rows={8}
                   required
                   value={blogForm.body}
                   onChange={(e) => setBlogForm({ ...blogForm, body: e.target.value })}
                   placeholder="Write your article paragraphs here. Separate paragraphs with an empty line..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-sm text-white focus:border-[#012A22] focus:outline-none font-mono text-xs leading-relaxed"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none font-mono text-xs leading-relaxed transition-all"
                 />
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#3B0D3B]/10">
                 <button
                   type="button"
                   onClick={() => setIsBlogModalOpen(false)}
-                  className="rounded-xl border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 cursor-pointer"
+                  className="rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-xs font-bold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2 text-xs font-bold text-white shadow-md cursor-pointer disabled:opacity-50"
+                  className="rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer disabled:opacity-50 transition-colors"
                 >
                   {isSaving ? "Saving..." : editingBlog ? "Save Updates" : "Publish Article"}
                 </button>
@@ -3443,14 +3468,14 @@ export default function CustomAdminPanelPage() {
       {/* MODAL: ADD FAQ                                            */}
       {/* ========================================================= */}
       {isFaqModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="relative w-full max-w-lg rounded-3xl border border-slate-800 bg-slate-900 p-6 sm:p-8 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white">Add New FAQ Question</h3>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B0F]/60 backdrop-blur-md p-4">
+          <div className="relative w-full max-w-lg rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-8 shadow-2xl space-y-5 text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
+              <h3 className="text-lg font-bold text-[#0B0B0F]">Add New FAQ Question</h3>
               <button
                 type="button"
                 onClick={() => setIsFaqModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-lg p-1.5 transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -3458,51 +3483,51 @@ export default function CustomAdminPanelPage() {
 
             <form onSubmit={handleAddFaq} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-300">Category</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Category</label>
                 <input
                   type="text"
                   value={faqForm.category}
                   onChange={(e) => setFaqForm({ ...faqForm, category: e.target.value })}
                   placeholder="e.g. General, Curriculum, Placements"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Question</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Question</label>
                 <input
                   type="text"
                   required
                   value={faqForm.question}
                   onChange={(e) => setFaqForm({ ...faqForm, question: e.target.value })}
                   placeholder="e.g. What is the batch size?"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Answer</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Answer</label>
                 <textarea
                   rows={3}
                   required
                   value={faqForm.answer}
                   onChange={(e) => setFaqForm({ ...faqForm, answer: e.target.value })}
                   placeholder="Provide the direct, honest answer..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-sm text-white focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-sm text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#3B0D3B]/10">
                 <button
                   type="button"
                   onClick={() => setIsFaqModalOpen(false)}
-                  className="rounded-xl border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 cursor-pointer"
+                  className="rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-xs font-bold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2 text-xs font-bold text-white shadow-md cursor-pointer"
+                  className="rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer transition-colors"
                 >
                   Save Question
                 </button>
@@ -3516,21 +3541,21 @@ export default function CustomAdminPanelPage() {
       {/* MODAL: CREATE / EDIT COURSE                               */}
       {/* ========================================================= */}
       {isCourseModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-xl rounded-3xl border border-slate-800 bg-[#0e111a] p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B0F]/60 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="relative w-full max-w-xl rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-8 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
               <div>
-                <h3 className="text-lg font-bold text-white">
+                <h3 className="text-lg font-bold text-[#0B0B0F]">
                   {editingCourse ? "Edit Course Track" : "Add New Course Track"}
                 </h3>
-                <p className="text-xs text-slate-400 mt-0.5">
+                <p className="text-xs text-[#5A4A5A] mt-0.5">
                   Set program duration, curriculum details, and lock status.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setIsCourseModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-lg p-1.5 transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -3540,11 +3565,11 @@ export default function CustomAdminPanelPage() {
               {/* Cover Image Upload (Direct File Manager & Drag & Drop) */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-300">Course Cover Image</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Course Cover Image</label>
                   <button
                     type="button"
                     onClick={() => setShowManualCourseUrl(!showManualCourseUrl)}
-                    className="text-[11px] text-[#ABCAC2] hover:text-[#ABCAC2] transition-colors cursor-pointer"
+                    className="text-[11px] text-[#3B0D3B] hover:underline font-medium transition-colors cursor-pointer"
                   >
                     {showManualCourseUrl ? "Switch to File Upload" : "or enter URL manually"}
                   </button>
@@ -3589,40 +3614,40 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingCourseImage && courseFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-4 transition-all cursor-pointer ${isCourseDragActive
-                          ? "border-[#ABCAC2] bg-[#3B796A]/20 scale-[1.01]"
-                          : "border-slate-700/80 bg-[#12151f] hover:border-[#3B796A]/50 hover:bg-slate-900/80"
+                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingCourseImage ? (
                         <div className="flex flex-col items-center gap-2 text-center py-2">
-                          <RefreshCw className="h-6 w-6 text-[#ABCAC2] animate-spin" />
-                          <p className="text-xs font-bold text-white">Uploading cover image...</p>
+                          <RefreshCw className="h-6 w-6 text-[#3B0D3B] animate-spin" />
+                          <p className="text-xs font-bold text-[#0B0B0F]">Uploading cover image...</p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-1.5 text-center">
-                          <Upload className="h-5 w-5 text-[#ABCAC2]" />
-                          <p className="text-xs font-bold text-white">
-                            <span className="text-[#ABCAC2] underline">Click to upload cover photo</span> or drag &amp; drop
+                          <Upload className="h-5 w-5 text-[#3B0D3B]" />
+                          <p className="text-xs font-bold text-[#0B0B0F]">
+                            <span className="text-[#3B0D3B] underline">Click to upload cover photo</span> or drag &amp; drop
                           </p>
-                          <p className="text-[10px] text-slate-400">PNG, JPG, WEBP up to 8MB</p>
+                          <p className="text-[10px] text-[#5A4A5A]">PNG, JPG, WEBP up to 8MB</p>
                         </div>
                       )}
                     </div>
 
                     {courseForm.image && (
-                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-[#151926] border border-slate-800">
+                      <div className="flex items-center justify-between p-2.5 rounded-xl bg-white border border-[#3B0D3B]/15 shadow-sm">
                         <div className="flex items-center gap-3 min-w-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={courseForm.image}
                             alt="Preview"
-                            className="h-12 w-20 rounded-lg object-cover border border-[#3B796A]/30 shrink-0"
+                            className="h-12 w-20 rounded-lg object-cover border border-[#3B0D3B]/15 shrink-0"
                           />
                           <div className="min-w-0">
-                            <span className="text-xs font-bold text-white block truncate">
+                            <span className="text-xs font-bold text-[#0B0B0F] block truncate">
                               {courseForm.title || "Cover Photo"}
                             </span>
-                            <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium">
+                            <span className="text-[10px] text-emerald-600 flex items-center gap-1 font-semibold">
                               <Check className="h-3 w-3 shrink-0" /> Photo attached
                             </span>
                           </div>
@@ -3632,14 +3657,14 @@ export default function CustomAdminPanelPage() {
                           <button
                             type="button"
                             onClick={() => courseFileInputRef.current?.click()}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 cursor-pointer"
+                            className="px-2.5 py-1 text-[11px] font-semibold text-[#0B0B0F] hover:bg-[#FAF5EE] bg-white rounded-lg border border-[#3B0D3B]/15 cursor-pointer transition-colors"
                           >
                             Replace
                           </button>
                           <button
                             type="button"
                             onClick={() => setCourseForm({ ...courseForm, image: "" })}
-                            className="p-1.5 text-slate-400 hover:text-red-400 rounded-lg cursor-pointer"
+                            className="p-1.5 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg cursor-pointer transition-colors"
                             title="Remove Photo"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -3655,7 +3680,7 @@ export default function CustomAdminPanelPage() {
                       value={courseForm.image || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, image: e.target.value })}
                       placeholder="https://images.unsplash.com/photo-..."
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
                 )}
@@ -3663,167 +3688,167 @@ export default function CustomAdminPanelPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Course Title</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Course Title</label>
                   <input
                     type="text"
                     required
                     value={courseForm.title}
                     onChange={(e) => setCourseForm({ ...courseForm, title: e.target.value })}
                     placeholder="e.g. Performance Marketing &amp; Growth Architecture"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Image Preview Tag</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Image Preview Tag</label>
                   <input
                     type="text"
                     value={courseForm.previewLabel || ""}
                     onChange={(e) => setCourseForm({ ...courseForm, previewLabel: e.target.value })}
                     placeholder="e.g. CLASSROOM · CEO CHALLENGE REVIEW"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Badge Text</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Badge Text</label>
                   <input
                     type="text"
                     value={courseForm.badge}
                     onChange={(e) => setCourseForm({ ...courseForm, badge: e.target.value })}
                     placeholder="e.g. BATCH 2 · OPEN"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Duration &amp; Format</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Duration &amp; Format</label>
                   <input
                     type="text"
                     value={courseForm.duration}
                     onChange={(e) => setCourseForm({ ...courseForm, duration: e.target.value })}
                     placeholder="e.g. 4 months · Online"
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Course URL / Slug</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Course URL / Slug</label>
                 <input
                   type="text"
                   value={courseForm.href}
                   onChange={(e) => setCourseForm({ ...courseForm, href: e.target.value })}
                   placeholder="/courses/digital-marketing"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Course Summary Description</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Course Summary Description</label>
                 <textarea
                   rows={2}
                   value={courseForm.description}
                   onChange={(e) => setCourseForm({ ...courseForm, description: e.target.value })}
                   placeholder="Real ad budgets, CRO, creative testing, analytics, client sprints..."
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               {/* Course Page Specific Data */}
-              <div className="pt-2 border-t border-slate-800/80 space-y-4">
+              <div className="pt-2 border-t border-[#3B0D3B]/10 space-y-4">
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-black uppercase tracking-wider text-[#ABCAC2]">Course Page Data &amp; Pricing</span>
-                  <div className="h-px bg-[#3B796A]/20 flex-1" />
+                  <span className="text-[11px] font-black uppercase tracking-wider text-[#3B0D3B]">Course Page Data &amp; Pricing</span>
+                  <div className="h-px bg-[#3B0D3B]/15 flex-1" />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Batch / Cohort Label</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Batch / Cohort Label</label>
                     <input
                       type="text"
                       value={courseForm.batch || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, batch: e.target.value })}
                       placeholder="e.g. Batch 2 · Sep 2026"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Curriculum PDF URL</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Curriculum PDF URL</label>
                     <input
                       type="text"
                       value={courseForm.curriculumPdf || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, curriculumPdf: e.target.value })}
                       placeholder="e.g. /treqo-curriculum.pdf"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Total Course Fee</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Total Course Fee</label>
                     <input
                       type="text"
                       value={courseForm.feeTotal || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeTotal: e.target.value })}
                       placeholder="e.g. ₹55,000"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Monthly EMI Plan</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Monthly EMI Plan</label>
                     <input
                       type="text"
                       value={courseForm.feeEmi || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeEmi: e.target.value })}
                       placeholder="e.g. ₹4,583 / month"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Apply Button Label</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Apply Button Label</label>
                     <input
                       type="text"
                       value={courseForm.applyCta || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, applyCta: e.target.value })}
                       placeholder="e.g. Apply for Batch 2"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
 
                   <div>
-                    <label className="text-xs font-bold text-slate-300">Syllabus Button Label</label>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Syllabus Button Label</label>
                     <input
                       type="text"
                       value={courseForm.syllabusCta || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, syllabusCta: e.target.value })}
                       placeholder="e.g. Download Curriculum"
-                      className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">Course Page Overview Text</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Course Page Overview Text</label>
                   <textarea
                     rows={2}
                     value={courseForm.overview || ""}
                     onChange={(e) => setCourseForm({ ...courseForm, overview: e.target.value })}
                     placeholder="Extended overview text shown on the public course page..."
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
 
                 <div>
-                  <label className="text-xs font-bold text-slate-300">CEO Challenge Problem Statement / Prompt</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">CEO Challenge Problem Statement / Prompt</label>
                   <textarea
                     rows={2}
                     value={courseForm.challenge?.prompt || ""}
@@ -3838,52 +3863,52 @@ export default function CustomAdminPanelPage() {
                       })
                     }
                     placeholder="e.g. You are handed a brand with declining CAC and customer churn. Defend your recovery plan..."
-                    className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 p-3 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
               {/* Status Toggles: Flagship & Lock */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-900/60 cursor-pointer">
+                <label className="flex items-center gap-3 p-3 rounded-xl border border-[#3B0D3B]/15 bg-white cursor-pointer hover:bg-[#FAF5EE]/50 transition-colors">
                   <input
                     type="checkbox"
                     checked={courseForm.isLocked}
                     onChange={(e) => setCourseForm({ ...courseForm, isLocked: e.target.checked })}
-                    className="h-4 w-4 rounded border-slate-700 bg-slate-800 text-[#012A22] focus:ring-[#3B796A]"
+                    className="h-4 w-4 rounded border-[#3B0D3B]/20 text-[#3B0D3B] accent-[#3B0D3B] focus:ring-[#3B0D3B]"
                   />
                   <div>
-                    <span className="text-xs font-bold text-white block">Lock Course</span>
-                    <span className="text-[10px] text-slate-400">Shows &quot;🔒 Locked&quot; badge</span>
+                    <span className="text-xs font-bold text-[#0B0B0F] block">Lock Course</span>
+                    <span className="text-[10px] text-[#5A4A5A]">Shows &quot;🔒 Locked&quot; badge</span>
                   </div>
                 </label>
 
-                <label className="flex items-center gap-3 p-3 rounded-xl border border-slate-800 bg-slate-900/60 cursor-pointer">
+                <label className="flex items-center gap-3 p-3 rounded-xl border border-[#3B0D3B]/15 bg-white cursor-pointer hover:bg-[#FAF5EE]/50 transition-colors">
                   <input
                     type="checkbox"
                     checked={courseForm.isFlagship}
                     onChange={(e) => setCourseForm({ ...courseForm, isFlagship: e.target.checked })}
-                    className="h-4 w-4 rounded border-slate-700 bg-slate-800 text-[#012A22] focus:ring-[#3B796A]"
+                    className="h-4 w-4 rounded border-[#3B0D3B]/20 text-[#3B0D3B] accent-[#3B0D3B] focus:ring-[#3B0D3B]"
                   />
                   <div>
-                    <span className="text-xs font-bold text-white block">Flagship Program</span>
-                    <span className="text-[10px] text-slate-400">Highlighted on public site</span>
+                    <span className="text-xs font-bold text-[#0B0B0F] block">Flagship Program</span>
+                    <span className="text-[10px] text-[#5A4A5A]">Highlighted on public site</span>
                   </div>
                 </label>
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#3B0D3B]/10">
                 <button
                   type="button"
                   onClick={() => setIsCourseModalOpen(false)}
-                  className="rounded-xl border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 cursor-pointer"
+                  className="rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-xs font-bold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2 text-xs font-bold text-white shadow-md cursor-pointer disabled:opacity-50"
+                  className="rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer disabled:opacity-50 transition-colors"
                 >
                   {isSaving ? "Saving..." : editingCourse ? "Update Course" : "Create Course"}
                 </button>
@@ -3897,16 +3922,16 @@ export default function CustomAdminPanelPage() {
       {/* MODAL: CREATE / EDIT TUTOR / MENTOR                       */}
       {/* ========================================================= */}
       {isTutorModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4 overflow-y-auto">
-          <div className="relative w-full max-w-lg rounded-3xl border border-slate-800 bg-[#0e111a] p-6 sm:p-8 shadow-2xl space-y-5">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-4">
-              <h3 className="text-lg font-bold text-white">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0B0B0F]/60 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="relative w-full max-w-lg rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-8 shadow-2xl space-y-5 text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
+              <h3 className="text-lg font-bold text-[#0B0B0F]">
                 {editingTutor ? "Edit Mentor Profile" : "Add New Mentor"}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsTutorModalOpen(false)}
-                className="text-slate-400 hover:text-white p-1 cursor-pointer"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-lg p-1.5 transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -3914,47 +3939,47 @@ export default function CustomAdminPanelPage() {
 
             <form onSubmit={handleSaveTutor} className="space-y-4">
               <div>
-                <label className="text-xs font-bold text-slate-300">Mentor Full Name</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Mentor Full Name</label>
                 <input
                   type="text"
                   required
                   value={tutorForm.name}
                   onChange={(e) => setTutorForm({ ...tutorForm, name: e.target.value })}
                   placeholder="e.g. Manoj Varma"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Role / Specialization</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Role / Specialization</label>
                 <input
                   type="text"
                   required
                   value={tutorForm.role}
                   onChange={(e) => setTutorForm({ ...tutorForm, role: e.target.value })}
                   placeholder="e.g. Founder &amp; Growth Architect"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div>
-                <label className="text-xs font-bold text-slate-300">Students Mentored</label>
+                <label className="text-xs font-bold text-[#0B0B0F]">Students Mentored</label>
                 <input
                   type="text"
                   value={tutorForm.mentored}
                   onChange={(e) => setTutorForm({ ...tutorForm, mentored: e.target.value })}
                   placeholder="e.g. 500+ or 1,200+"
-                  className="mt-1.5 w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <label className="text-xs font-bold text-slate-300">Mentor Profile Photo</label>
+                  <label className="text-xs font-bold text-[#0B0B0F]">Mentor Profile Photo</label>
                   <button
                     type="button"
                     onClick={() => setShowManualTutorUrl(!showManualTutorUrl)}
-                    className="text-[11px] text-[#ABCAC2] hover:text-[#ABCAC2] transition-colors cursor-pointer"
+                    className="text-[11px] text-[#3B0D3B] hover:underline font-medium transition-colors cursor-pointer"
                   >
                     {showManualTutorUrl ? "Switch to Drag & Drop Upload" : "or enter URL manually"}
                   </button>
@@ -4001,26 +4026,26 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingTutorImage && tutorFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-5 transition-all cursor-pointer ${isTutorDragActive
-                          ? "border-[#ABCAC2] bg-[#3B796A]/20 scale-[1.01] shadow-lg shadow-[#012A22]/30"
-                          : "border-slate-700/80 bg-[#12151f] hover:border-[#3B796A]/50 hover:bg-slate-900/80"
+                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingTutorImage ? (
                         <div className="flex flex-col items-center gap-2 text-center py-2">
-                          <RefreshCw className="h-6 w-6 text-[#ABCAC2] animate-spin" />
-                          <p className="text-xs font-bold text-white">Uploading photo...</p>
-                          <p className="text-[11px] text-slate-400">Saving file to media library</p>
+                          <RefreshCw className="h-6 w-6 text-[#3B0D3B] animate-spin" />
+                          <p className="text-xs font-bold text-[#0B0B0F]">Uploading photo...</p>
+                          <p className="text-[11px] text-[#5A4A5A]">Saving file to media library</p>
                         </div>
                       ) : (
                         <div className="flex flex-col items-center gap-2 text-center">
-                          <div className="h-10 w-10 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/25 flex items-center justify-center text-[#ABCAC2]">
+                          <div className="h-10 w-10 rounded-xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 flex items-center justify-center text-[#3B0D3B]">
                             <Upload className="h-5 w-5" />
                           </div>
                           <div>
-                            <p className="text-xs font-bold text-white">
-                              <span className="text-[#ABCAC2] underline underline-offset-2">Click to upload</span> or drag &amp; drop
+                            <p className="text-xs font-bold text-[#0B0B0F]">
+                              <span className="text-[#3B0D3B] underline underline-offset-2">Click to upload</span> or drag &amp; drop
                             </p>
-                            <p className="text-[11px] text-slate-400 mt-0.5">PNG, JPG, WEBP, or SVG up to 8MB</p>
+                            <p className="text-[11px] text-[#5A4A5A] mt-0.5">PNG, JPG, WEBP, or SVG up to 8MB</p>
                           </div>
                         </div>
                       )}
@@ -4028,19 +4053,19 @@ export default function CustomAdminPanelPage() {
 
                     {/* Image Preview Card if Photo Exists */}
                     {tutorForm.image && (
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-[#151926] border border-slate-800">
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-white border border-[#3B0D3B]/15 shadow-sm">
                         <div className="flex items-center gap-3 min-w-0">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={tutorForm.image}
                             alt="Mentor preview"
-                            className="h-12 w-12 rounded-xl object-cover border border-[#3B796A]/30 shadow-md shrink-0"
+                            className="h-12 w-12 rounded-xl object-cover border border-[#3B0D3B]/15 shadow-sm shrink-0"
                           />
                           <div className="min-w-0">
-                            <span className="text-xs font-bold text-white block truncate">
+                            <span className="text-xs font-bold text-[#0B0B0F] block truncate">
                               {tutorForm.name || "Mentor Photo"}
                             </span>
-                            <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-medium truncate">
+                            <span className="text-[10px] text-emerald-600 flex items-center gap-1 font-semibold truncate">
                               <Check className="h-3 w-3 shrink-0" /> Photo attached
                             </span>
                           </div>
@@ -4050,14 +4075,14 @@ export default function CustomAdminPanelPage() {
                           <button
                             type="button"
                             onClick={() => tutorFileInputRef.current?.click()}
-                            className="px-2.5 py-1 text-[11px] font-semibold text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors cursor-pointer"
+                            className="px-2.5 py-1 text-[11px] font-semibold text-[#0B0B0F] hover:bg-[#FAF5EE] bg-white rounded-lg border border-[#3B0D3B]/15 transition-colors cursor-pointer"
                           >
                             Replace
                           </button>
                           <button
                             type="button"
                             onClick={() => setTutorForm({ ...tutorForm, image: "" })}
-                            className="p-1.5 text-slate-400 hover:text-red-400 hover:bg-red-950/30 rounded-lg transition-colors cursor-pointer"
+                            className="p-1.5 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
                             title="Remove Photo"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -4073,35 +4098,35 @@ export default function CustomAdminPanelPage() {
                       value={tutorForm.image}
                       onChange={(e) => setTutorForm({ ...tutorForm, image: e.target.value })}
                       placeholder="https://images.unsplash.com/photo-..."
-                      className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-2.5 text-xs text-white placeholder:text-slate-500 focus:border-[#012A22] focus:outline-none"
+                      className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                     {tutorForm.image && (
-                      <div className="mt-3 flex items-center gap-3 p-2 bg-slate-900 rounded-xl border border-slate-800">
+                      <div className="mt-3 flex items-center gap-3 p-2 bg-white rounded-xl border border-[#3B0D3B]/15 shadow-sm">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={tutorForm.image}
                           alt="Preview"
-                          className="h-12 w-12 rounded-xl object-cover border border-slate-700"
+                          className="h-12 w-12 rounded-xl object-cover border border-[#3B0D3B]/15"
                         />
-                        <span className="text-[11px] text-emerald-400 font-medium">Image preview loaded</span>
+                        <span className="text-[11px] text-emerald-600 font-semibold">Image preview loaded</span>
                       </div>
                     )}
                   </div>
                 )}
               </div>
 
-              <div className="pt-3 flex items-center justify-end gap-3 border-t border-slate-800">
+              <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#3B0D3B]/10">
                 <button
                   type="button"
                   onClick={() => setIsTutorModalOpen(false)}
-                  className="rounded-xl border border-slate-700 px-4 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 cursor-pointer"
+                  className="rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-xs font-bold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] cursor-pointer transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className="rounded-xl bg-[#012A22] hover:bg-[#001F18] px-5 py-2 text-xs font-bold text-white shadow-md cursor-pointer disabled:opacity-50"
+                  className="rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer disabled:opacity-50 transition-colors"
                 >
                   {isSaving ? "Saving..." : editingTutor ? "Update Mentor" : "Add Mentor"}
                 </button>
@@ -4114,29 +4139,29 @@ export default function CustomAdminPanelPage() {
       {/* MODAL: MEDIA LIBRARY / RECENT UPLOADS PICKER               */}
       {/* ========================================================= */}
       {isMediaPickerOpen && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 backdrop-blur-md p-4 overflow-y-auto">
-          <div className="relative w-full max-w-2xl rounded-3xl border border-slate-800 bg-[#0e111a] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[85vh] flex flex-col">
-            <div className="flex items-center justify-between border-b border-slate-800 pb-3.5">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#0B0B0F]/60 backdrop-blur-md p-4 overflow-y-auto">
+          <div className="relative w-full max-w-2xl rounded-2xl border border-[#3B0D3B]/15 bg-[#FDFAF6] p-6 sm:p-7 shadow-2xl space-y-4 max-h-[85vh] flex flex-col text-[#0B0B0F]">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="h-9 w-9 rounded-xl bg-[#3B796A]/20 border border-[#3B796A]/30 flex items-center justify-center text-[#ABCAC2]">
+                <div className="h-9 w-9 rounded-xl bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 flex items-center justify-center text-[#3B0D3B]">
                   <FolderOpen className="h-5 w-5" />
                 </div>
                 <div>
-                  <h3 className="text-base font-bold text-white">Media Library</h3>
-                  <p className="text-xs text-slate-400">Choose from previously uploaded images or upload a new file</p>
+                  <h3 className="text-base font-bold text-[#0B0B0F]">Media Library</h3>
+                  <p className="text-xs text-[#5A4A5A]">Choose from previously uploaded images or upload a new file</p>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => setIsMediaPickerOpen(false)}
-                className="text-slate-400 hover:text-white p-1 rounded-lg cursor-pointer"
+                className="text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] p-1.5 rounded-lg transition-colors cursor-pointer"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             <div className="flex items-center justify-between gap-3">
-              <span className="text-xs text-slate-400">
+              <span className="text-xs text-[#5A4A5A]">
                 {mediaFiles.length} {mediaFiles.length === 1 ? "file" : "files"} available
               </span>
               <div className="flex items-center gap-2">
@@ -4144,7 +4169,7 @@ export default function CustomAdminPanelPage() {
                   type="button"
                   onClick={fetchMediaFiles}
                   disabled={isLoadingMedia}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-800 bg-slate-900 text-xs text-slate-300 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#3B0D3B]/15 bg-white text-xs text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
                 >
                   <RefreshCw className={`h-3 w-3 ${isLoadingMedia ? "animate-spin" : ""}`} />
                   Refresh
@@ -4155,7 +4180,7 @@ export default function CustomAdminPanelPage() {
                     setIsMediaPickerOpen(false);
                     blogFileInputRef.current?.click();
                   }}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#012A22] hover:bg-[#001F18] text-xs font-bold text-white transition-colors cursor-pointer"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] text-xs font-bold text-white shadow-sm transition-colors cursor-pointer"
                 >
                   <Upload className="h-3 w-3" />
                   Upload from File Manager
@@ -4165,15 +4190,15 @@ export default function CustomAdminPanelPage() {
 
             <div className="flex-1 overflow-y-auto min-h-[220px] max-h-[380px] pr-1">
               {isLoadingMedia ? (
-                <div className="flex flex-col items-center justify-center py-16 text-slate-400 gap-2">
-                  <RefreshCw className="h-6 w-6 animate-spin text-[#ABCAC2]" />
+                <div className="flex flex-col items-center justify-center py-16 text-[#5A4A5A] gap-2">
+                  <RefreshCw className="h-6 w-6 animate-spin text-[#3B0D3B]" />
                   <p className="text-xs">Loading media files...</p>
                 </div>
               ) : mediaFiles.length === 0 ? (
-                <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-slate-800 rounded-2xl p-6">
-                  <FolderOpen className="h-10 w-10 text-slate-600 mb-2" />
-                  <p className="text-sm font-semibold text-white">No uploaded images yet</p>
-                  <p className="text-xs text-slate-400 mt-1 max-w-sm">
+                <div className="flex flex-col items-center justify-center py-16 text-center border-2 border-dashed border-[#3B0D3B]/20 rounded-2xl p-6 bg-white/50">
+                  <FolderOpen className="h-10 w-10 text-[#5A4A5A]/50 mb-2" />
+                  <p className="text-sm font-semibold text-[#0B0B0F]">No uploaded images yet</p>
+                  <p className="text-xs text-[#5A4A5A] mt-1 max-w-sm">
                     Upload an image using your file manager or drag-and-drop to see it stored here.
                   </p>
                   <button
@@ -4182,7 +4207,7 @@ export default function CustomAdminPanelPage() {
                       setIsMediaPickerOpen(false);
                       blogFileInputRef.current?.click();
                     }}
-                    className="mt-4 px-4 py-2 rounded-xl bg-[#012A22] hover:bg-[#001F18] text-xs font-bold text-white cursor-pointer"
+                    className="mt-4 px-4 py-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] text-xs font-bold text-white shadow-sm cursor-pointer transition-colors"
                   >
                     Upload Now
                   </button>
@@ -4199,10 +4224,10 @@ export default function CustomAdminPanelPage() {
                           setIsMediaPickerOpen(false);
                           notifySuccess("Image selected as blog cover!");
                         }}
-                        className={`group relative flex flex-col rounded-xl overflow-hidden border transition-all cursor-pointer bg-[#131722] hover:border-[#3B796A] ${isSelected ? "border-[#3B796A] ring-2 ring-[#3B796A]/40" : "border-slate-800"
+                        className={`group relative flex flex-col rounded-xl overflow-hidden border transition-all cursor-pointer bg-white hover:border-[#3B0D3B] shadow-sm ${isSelected ? "border-[#3B0D3B] ring-2 ring-[#3B0D3B]/30" : "border-[#3B0D3B]/10"
                           }`}
                       >
-                        <div className="h-28 w-full bg-slate-950 overflow-hidden relative">
+                        <div className="h-28 w-full bg-[#FAF5EE] overflow-hidden relative">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={file.url}
@@ -4210,16 +4235,16 @@ export default function CustomAdminPanelPage() {
                             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                           />
                           {isSelected && (
-                            <div className="absolute top-2 right-2 bg-[#012A22] text-white rounded-full p-1 shadow">
+                            <div className="absolute top-2 right-2 bg-[#3B0D3B] text-white rounded-full p-1 shadow">
                               <Check className="h-3 w-3" />
                             </div>
                           )}
                         </div>
                         <div className="p-2.5">
-                          <p className="text-xs font-semibold text-white truncate group-hover:text-[#ABCAC2]" title={file.name}>
+                          <p className="text-xs font-semibold text-[#0B0B0F] truncate group-hover:text-[#3B0D3B]" title={file.name}>
                             {file.name}
                           </p>
-                          <p className="text-[10px] text-slate-400 mt-0.5">
+                          <p className="text-[10px] text-[#5A4A5A] mt-0.5">
                             {(file.size / 1024).toFixed(0)} KB
                           </p>
                         </div>
@@ -4230,11 +4255,11 @@ export default function CustomAdminPanelPage() {
               )}
             </div>
 
-            <div className="pt-3 border-t border-slate-800 flex justify-end">
+            <div className="pt-3 border-t border-[#3B0D3B]/10 flex justify-end">
               <button
                 type="button"
                 onClick={() => setIsMediaPickerOpen(false)}
-                className="px-4 py-2 rounded-xl border border-slate-700 text-xs font-bold text-slate-300 hover:bg-slate-800 cursor-pointer"
+                className="px-4 py-2 rounded-xl border border-[#3B0D3B]/15 bg-white text-xs font-bold text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#0B0B0F] cursor-pointer transition-colors"
               >
                 Close
               </button>

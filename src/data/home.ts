@@ -97,7 +97,7 @@ export const heroVisualCards: {
   },
   certificate: {
     eyebrow: "Certificate Earned",
-    title: "Advanced React Developer",
+    title: "New Age Digital Marketing",
   },
 };
 
@@ -196,7 +196,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "Flagship · Now Enrolling",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Four months, online. 12 phases in a fixed order, 30+ real brand projects across 16+ industries, and a CEO Challenge closing every module. You finish with work you can put in front of someone, not notes you'll never reread.",
       stats: [
@@ -369,15 +369,15 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 4 months",
         feePlans: "₹50,000 + 12%, or ₹75,000 flat",
         seats: "Small enough that a weak idea can't hide",
         applyLabel: "Apply for Batch 2",
         downloadLabel: "Download curriculum",
         admissionsNote:
-          "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
+          "Talk to admission management team. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
         email: "admissions@treqo.org",
       },
@@ -396,7 +396,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "Flagship · Now Enrolling",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Eight months, online. 20 phases in a fixed order, 15+ real builds shipped to production, and a code review closing every module. You finish with a portfolio you can point to, not a certificate no one asks for.",
       stats: [
@@ -542,15 +542,15 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 8 months",
         feePlans: "₹60,000 + 12%, or ₹90,000 flat",
         seats: "Small enough that a weak idea can't hide",
         applyLabel: "Apply for Batch 2",
         downloadLabel: "Download curriculum",
         admissionsNote:
-          "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
+          "Talk to admission management team. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
         email: "admissions@treqo.org",
       },
@@ -569,7 +569,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "Flagship · Now Enrolling",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Five months, live online. 16 phases from UX research and design systems to interaction prototyping and usability testing. You graduate with 3 production-grade case studies, not generic Figma redesigns.",
       stats: [
@@ -690,15 +690,15 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 5 months",
         feePlans: "₹45,000 + 12%, or ₹65,000 flat",
         seats: "Limited to 25 designers per batch",
         applyLabel: "Apply for Batch 2",
         downloadLabel: "Download curriculum",
         admissionsNote:
-          "Talk to admission management team for 20 minutes. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
+          "Talk to admission management team. If the flagship isn't right for you, we'll say so and point you at the free course instead.",
         phone: "+91 99480 00491",
         email: "admissions@treqo.org",
       },
@@ -817,14 +817,14 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "On-Campus Flagship · Madhapur",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Four months in person on our Madhapur studio floor. Full Stack Marketing On Campus Edition run like a real agency. You sit beside practitioners, manage live brand budgets, and defend campaigns live before brand CEOs.",
       stats: [
         { label: "Duration", value: "4 months" },
-        { label: "Location", value: "Madhapur, Hyd" },
-        { label: "Format", value: "On Campus Studio" },
-        { label: "Cohort Size", value: "30 Fellows Max" },
+        { label: "Format", value: "On campus" },
+        { label: "Phases", value: "12" },
+        { label: "Projects", value: "30+ brand projects" },
       ],
       applyCtaLabel: "Apply for New Age Digital Marketing (On Campus)",
       breakdownCtaLabel: "Download 4M Syllabus",
@@ -894,14 +894,14 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         { question: "What are the eligibility criteria and batch size?", answer: "Each on-campus cohort is strictly capped at 30 fellows to ensure 1-on-1 mentorship. Admission is based on a 20-minute profile evaluation discussion." },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "Coming soon",
         format: "On Campus, 4 months",
         feePlans: "₹60,000 + 10%, or ₹85,000 flat",
         seats: "Strictly limited to 30 fellows",
         applyLabel: "Apply for Batch 2",
         downloadLabel: "Download 4M Syllabus",
-        admissionsNote: "Talk to admission management team for 20 minutes to verify on-campus seat availability.",
+        admissionsNote: "Talk to admission management team to verify on-campus seat availability.",
         phone: "+91 99480 00491",
         email: "admissions@treqo.org",
       },
@@ -920,7 +920,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "Post Graduate Diploma · 1 Year",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Twelve months, hybrid format. 24 comprehensive phases covering enterprise brand building, omnichannel performance, marketing data architecture, and CMO-level strategy.",
       stats: [
@@ -998,8 +998,8 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         { question: "What executive career support is provided?", answer: "You get 1-on-1 executive mentorship, portfolio polish, and direct recruitment access to VP Marketing and Growth Director roles." },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Hybrid, 12 months",
         feePlans: "₹1,20,000 + 8%, or ₹1,75,000 flat",
         seats: "Limited to 35 executive fellows",
@@ -1017,18 +1017,18 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     description: "The flagship digital marketing program timed for college students. Build an industry-grade portfolio without colliding with semester exams.",
     href: "/categories/campus-edition",
     features: [
-      { icon: Clock, label: "4 Months Program" },
+      { icon: Clock, label: "6 Months Program" },
       { icon: BookOpen, label: "College-Friendly Schedule" },
       { icon: Award, label: "Placement Portfolio" },
       { icon: Layers, label: "12+ Live Projects" },
     ],
     detail: {
       badge: "Campus Edition · For Students",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Four months online. Tailored specifically for BBA, B.Com, B.Tech, and MBA students. Weekend and evening live cohorts with pause windows for your university exams. You graduate with real campaigns before your campus placements begin.",
       stats: [
-        { label: "Duration", value: "4 months" },
+        { label: "Duration", value: "6 months" },
         { label: "Timings", value: "Weekends & Evenings" },
         { label: "Exam Breaks", value: "Built-in pause weeks" },
         { label: "Target", value: "Day 1 Placement Ready" },
@@ -1096,8 +1096,8 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         { question: "What tools and AI platforms will I master?", answer: "You get hands-on training with Meta Ads Manager, GA4, Semrush, ChatGPT, Claude, and Canva Pro from week one." },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 4 months",
         feePlans: "₹35,000 flat student rate",
         seats: "Limited student seats available",
@@ -1115,18 +1115,18 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     description: "Marketing and venture building for founders. Master customer validation, go-to-market strategy, paid acquisition, and unit economics.",
     href: "/categories/founder-semester",
     features: [
-      { icon: Clock, label: "4 Months Program" },
+      { icon: Clock, label: "9 Months Program" },
       { icon: Rocket, label: "Founder Cohort" },
       { icon: Award, label: "Venture Credential" },
       { icon: Layers, label: "GTM Execution" },
     ],
     detail: {
       badge: "Founder Cohort · Venture Marketing",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Four months online. Built exclusively for early-stage founders, solo entrepreneurs, and venture operators. Turn your product idea into a validated offer, build a scalable customer acquisition engine, and achieve sustainable unit economics.",
       stats: [
-        { label: "Duration", value: "4 months" },
+        { label: "Duration", value: "9 months" },
         { label: "Format", value: "Online, live" },
         { label: "Phases", value: "14 phases" },
         { label: "Focus", value: "GTM & Revenue" },
@@ -1194,8 +1194,8 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         { question: "Will I get introductions to angel investors and venture funds?", answer: "Yes, graduating founders with validated revenue numbers get introduced directly to our early-stage investor network." },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 4 months",
         feePlans: "₹55,000 flat",
         seats: "Limited to 20 founders",
@@ -1220,7 +1220,7 @@ export const learningSystemCourses: LearningSystemCourse[] = [
     ],
     detail: {
       badge: "Advanced Track · Media Buying",
-      batch: "Batch 2 · Sep 2026",
+      batch: "Batch 2 · Oct 2026",
       description:
         "Three months online. For media buyers, agency operators, and growth marketers who want to scale campaigns beyond ₹10L/month with predictable ROAS, advanced GA4 attribution, and creative testing systems.",
       stats: [
@@ -1292,8 +1292,8 @@ export const learningSystemCourses: LearningSystemCourse[] = [
         { question: "What job opportunities are available for performance specialists?", answer: "Graduates qualify for Senior Media Buyer, Performance Marketing Lead, and Head of Growth roles at top agencies and brands." },
       ],
       sidebar: {
-        batchLabel: "Batch 2 (Forming)",
-        starts: "September 2026",
+        batchLabel: "Batch 2",
+        starts: "October 2026",
         format: "Online, 3 months",
         feePlans: "₹45,000 flat",
         seats: "Strictly limited to 25 media buyers",

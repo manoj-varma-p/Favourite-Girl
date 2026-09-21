@@ -34,7 +34,7 @@ const defaultPrograms: ProgramCard[] = [
     meta: "4 months · Online",
     title: "New Age Digital Marketing",
     description:
-      "The flagship. 12 phases, 30+ real brand projects, AI in the workflow from phase one. Batch 2 starts Sep 2026.",
+      "The flagship. 12 phases, 30+ real brand projects, AI in the workflow from phase one. Batch 2 starts Oct 2026.",
     actionText: "View course →",
     actionHref: "/categories/digital-marketing",
     tags: ["All", "Flagship"],
@@ -158,9 +158,9 @@ function mapCourseToProgramCard(c: any): ProgramCard {
 
 const COURSE_POINTS_MAP: Record<string, string[]> = {
   "digital-marketing": [
-    "12 Structured phases with live agency execution",
-    "30+ Real brand projects & active spend budgets",
-    "AI integrated into workflow from Phase 1",
+    "12 Structured phases",
+    "30+ Real brand projects",
+    "AI integrated Workflow",
   ],
   fundamentals: [
     "Core digital marketing & funnel mechanics",
@@ -168,13 +168,13 @@ const COURSE_POINTS_MAP: Record<string, string[]> = {
     "Pre-spend economics & unit economics checklist",
   ],
   "4m-program": [
-    "Full-stack immersion on Madhapur studio floor",
-    "Real client deliverables & campaign audits",
+    "Full-stack Marketing",
+    "Dedicated career assistance",
     "Direct 1:1 mentorship with agency founders",
   ],
   pgdm: [
-    "12-Month executive modern marketing diploma",
-    "Advanced media mix modeling & enterprise attribution",
+    "12-Month Marketing diploma",
+    "Media mix & attribution",
     "Direct leadership placement pipeline",
   ],
   "campus-edition": [
@@ -188,7 +188,12 @@ const COURSE_POINTS_MAP: Record<string, string[]> = {
     "Direct mentorship on venture scaling",
   ],
   "performance-growth": [
-    "Meta Ads & Google PMax ₹10L+ monthly scaling",
+    "Meta Ads & Google PMax ₹5L+ monthly scaling",
+    "Multi-touch attribution models & GA4 custom setups",
+    "Creative testing SOPs & teardown audits",
+  ],
+  "Performance & Growth Marketing": [
+    "Meta Ads & Google PMax ₹5L+ monthly scaling",
     "Multi-touch attribution models & GA4 custom setups",
     "Creative testing SOPs & teardown audits",
   ],
@@ -197,6 +202,9 @@ const COURSE_POINTS_MAP: Record<string, string[]> = {
 function getCourseHighlights(program: ProgramCard): string[] {
   if (COURSE_POINTS_MAP[program.id]) {
     return COURSE_POINTS_MAP[program.id];
+  }
+  if (COURSE_POINTS_MAP[program.title]) {
+    return COURSE_POINTS_MAP[program.title];
   }
   if (!program.description) {
     return ["Hands-on industry projects", "Live cohort mentorship", "Portfolio certification"];

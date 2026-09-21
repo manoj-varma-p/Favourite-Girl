@@ -157,13 +157,6 @@ export default function CertificationSection() {
       <Container className="w-full relative z-10">
         {/* ── MAIN SECTION HEADER ── */}
         <div className="text-center mb-6 sm:mb-8">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#3B0D3B]/15 bg-white px-3.5 py-1 mb-2.5 shadow-2xs">
-            <ShieldCheck size={12} className="text-[#3B0D3B]" />
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#3B0D3B]">
-              Proof That Travels
-            </span>
-          </div>
-
           <h2 className="m-0 mb-2 leading-tight tracking-tight text-[#1A0A1A]">
             <span className="block text-2xl sm:text-3xl lg:text-[2.65rem] font-black">
               Credentials Built For The{" "}
@@ -217,16 +210,22 @@ export default function CertificationSection() {
 
             {/* Certificate Container: Matching height with Right Marquee */}
             <div className="relative flex h-[460px] sm:h-[500px] lg:h-[520px] w-full flex-col items-center justify-center rounded-2xl border border-[#3B0D3B]/15 bg-white/70 p-4 shadow-sm backdrop-blur-xs">
-              <div className="relative h-full w-full transition-transform duration-300 hover:scale-[1.01]">
+              <a
+                href="/images/treqo-official-certificate.png"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Click to view full-resolution certificate"
+                className="relative h-full w-full block transition-transform duration-300 hover:scale-[1.01] cursor-zoom-in"
+              >
                 <Image
                   src="/images/treqo-official-certificate.png"
-                  alt="TREQO Official Certificate of Completion"
+                  alt="TREQO Official Certificate of Completion in Digital Marketing"
                   fill
                   sizes="(max-width: 1024px) 100vw, 550px"
                   className="object-contain drop-shadow-md"
                   priority
                 />
-              </div>
+              </a>
             </div>
 
             {/* Sub-caption below certificate */}

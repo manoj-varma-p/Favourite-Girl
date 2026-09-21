@@ -46,7 +46,7 @@ const defaultWhyTreqqo: WhyTreqqoContent = {
     {
       tag: "SUBMIT 04",
       title: "The revenue plan",
-      description: "Where the money comes from, how much, and by when.",
+      description: "A business without a path to revenue is just an expensive idea.",
     },
   ],
   methodCard: {

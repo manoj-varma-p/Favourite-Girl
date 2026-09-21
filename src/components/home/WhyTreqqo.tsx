@@ -31,7 +31,7 @@ const defaultSubmissions: SubmissionItem[] = [
   {
     tag: "04",
     title: "The revenue plan",
-    description: "Where the money comes from, how much, and by when.",
+    description: "A business without a path to revenue is just an expensive idea.",
     rule: "Criterion: Board-level financial model",
   },
 ];

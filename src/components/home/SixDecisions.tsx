@@ -65,7 +65,7 @@ const DECISION_DETAILS: Record<
   },
   "03": {
     standardWay: "À-la-carte electives that let students skip hard analytics, unit economics, or attribution models.",
-    treqoEnforcement: "A non-negotiable linear sequence: you master brief analysis and economics before touching Ads Manager.",
+    treqoEnforcement: "A non-negotiable linear sequence: you master campaign analysis and economics before touching Ads Manager.",
     protocolTag: "Non-Negotiable Linear Order",
   },
   "04": {
@@ -75,7 +75,7 @@ const DECISION_DETAILS: Record<
   },
   "05": {
     standardWay: "Submitting written PDF reports or slide decks that hiring panels never look at and mentors never critique.",
-    treqoEnforcement: "You stand up in our studio and defend your live campaign CAC, ROAS, and revenue model out loud to founders.",
+    treqoEnforcement: "You stand up in our class and defend your live campaign CAC, ROAS, and revenue model out loud to founders.",
     protocolTag: "Live Boardroom Defense",
   },
   "06": {

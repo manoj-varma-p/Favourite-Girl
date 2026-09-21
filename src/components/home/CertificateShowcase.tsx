@@ -14,8 +14,8 @@ export default function CertificateShowcase() {
             <div className="relative transition-all duration-300 hover:scale-[1.02]">
               <Image
                 src="/images/treqo-official-certificate.png"
-                alt="Sample TREQO certificate of completion"
-                width={721}
+                alt="TREQO Certificate of Completion in Digital Marketing"
+                width={792}
                 height={1024}
                 className="h-[470px] sm:h-[530px] lg:h-[560px] w-auto max-w-full rounded-xl border border-slate-300/90 bg-white shadow-xl shadow-black/12 object-contain block"
                 priority

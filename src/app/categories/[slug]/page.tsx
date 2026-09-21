@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock, Star, Sparkles } from "lucide-react";
+import { ArrowRight, Clock, Star } from "lucide-react";
 import Header from "@/components/header/Header";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
@@ -113,13 +113,20 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       : dbCourse?.badge || activeDetail.badge || "Flagship · Now Enrolling",
     batch: isLocked
       ? "Launching Soon · Get Notified"
-      : dbCourse?.batch || activeDetail.batch || "Batch 2 · Sep 2026",
+      : (dbCourse?.batch || activeDetail.batch || "Batch 2 · Oct 2026").replace(/sep(tember)?\s*2026/i, "Oct 2026"),
     description: activeDescription,
     stats: [
-      { label: "Duration", value: dbCourse?.duration || (dbCourse?.meta ? dbCourse.meta.split("·")[0].trim() : activeDetail.stats[0]?.value || "4 months") },
-      { label: "Format", value: dbCourse?.meta && dbCourse.meta.includes("·") ? dbCourse.meta.split("·")[1].trim() : (activeDetail.stats[1]?.value || "Online, live") },
-      { label: "Phases", value: dbCourse?.phases?.groups ? `${dbCourse.phases.groups.length} phases` : (activeDetail.stats[2]?.value || "12 phases") },
-      { label: "Projects", value: activeDetail.stats[3]?.value || "30+ real brands" },
+      {
+        label: "Duration",
+        value:
+          (dbCourse?.duration || dbCourse?.meta || activeDetail.stats[0]?.value || "4 months")
+            .split("·")[0]
+            .replace(/,\s*(online|offline|on campus)/i, "")
+            .trim() || "4 months",
+      },
+      { label: "Format", value: slug === "4m-program" ? "On campus" : (dbCourse?.meta && dbCourse.meta.includes("·") ? dbCourse.meta.split("·")[1].trim() : (activeDetail.stats[1]?.value || "Online, live")) },
+      { label: "Phases", value: slug === "4m-program" ? "12" : (dbCourse?.phases?.groups ? `${dbCourse.phases.groups.length} phases` : (activeDetail.stats[2]?.value || "12 phases")) },
+      { label: "Projects", value: slug === "4m-program" ? "30+ brand projects" : (activeDetail.stats[3]?.value || "30+ real brands") },
     ],
     phases: dbCourse?.phases?.groups ? { ...masterDetail.phases, ...dbCourse.phases } : (activeDetail.phases || masterDetail.phases),
     phasesNavLabel: activeDetail.phasesNavLabel || masterDetail.phasesNavLabel,
@@ -146,9 +153,12 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
       ...masterDetail.sidebar,
       ...(activeDetail.sidebar || {}),
       batchLabel: isLocked
-        ? `${activeTitle}: Coming Soon`
-        : (dbCourse?.batch ? `${activeTitle}: ${dbCourse.batch}` : (activeDetail.sidebar?.batchLabel || `${activeTitle}: Batch 2`)),
-      format: dbCourse?.duration || (slug === "4m-program" ? "On Campus, 4 months" : (activeDetail.sidebar?.format || masterDetail.sidebar.format)),
+        ? "Coming Soon"
+        : activeDetail.sidebar?.batchLabel
+        ? activeDetail.sidebar.batchLabel.replace(/\s*\(forming\)/i, "").trim()
+        : "Batch 2",
+      starts: slug === "4m-program" ? "Coming soon" : (activeDetail.sidebar?.starts || masterDetail.sidebar.starts || "Coming soon"),
+      format: slug === "4m-program" ? "On Campus, 4 months" : (dbCourse?.duration || activeDetail.sidebar?.format || masterDetail.sidebar.format),
       applyLabel: isLocked ? "Get Notified" : (dbCourse?.applyCta && dbCourse.applyCta !== "Get Notified" ? dbCourse.applyCta : "Apply for Batch 2"),
       downloadLabel: dbCourse?.syllabusCta || activeDetail.sidebar?.downloadLabel || masterDetail.sidebar.downloadLabel,
     },
@@ -249,10 +259,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                       </span>
                       <span className="inline-flex items-center rounded-full border border-[#E2D8CC] bg-white/90 px-3 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs">
                         {detail.batch}
-                      </span>
-                      <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-semibold text-[#5A4A5A]">
-                        <Sparkles className="h-3 w-3 text-[#3B0D3B]" />
-                        <span>Live Agency Residency</span>
                       </span>
                     </>
                   )}

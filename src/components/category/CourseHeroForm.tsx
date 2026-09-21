@@ -9,8 +9,6 @@ import {
   User,
   Mail,
   Phone,
-  Clock,
-  Lock,
 } from "lucide-react";
 
 interface CourseHeroFormProps {
@@ -208,21 +206,6 @@ export default function CourseHeroForm({
               <span>{submitting ? "Processing Application..." : isLocked ? "Join Priority Waitlist" : "Apply for Batch 2"}</span>
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
             </button>
-
-            {/* Trust Indicators in Footer */}
-            <div className="mt-2 flex items-center justify-between border-t border-[#F5EDE0] pt-3 text-[11px] text-[#5A4A5A]">
-              <span className="inline-flex items-center gap-1">
-                <Lock className="h-3 w-3 text-emerald-600 shrink-0" />
-                100% Privacy
-              </span>
-              <span className="inline-flex items-center gap-1">
-                <Clock className="h-3 w-3 text-[#3B0D3B] shrink-0" />
-                Callback in 2h
-              </span>
-              <span className="text-emerald-700 font-semibold">
-                No-Spam Guarantee
-              </span>
-            </div>
           </form>
         )}
       </div>

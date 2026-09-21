@@ -23,7 +23,7 @@ export default function CertificateCard({ className }: { className?: string }) {
         </div>
       </div>
       <Link
-        href="/certificates"
+        href="/#certs"
         className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold text-brand-primary hover:underline"
       >
         View Certificate

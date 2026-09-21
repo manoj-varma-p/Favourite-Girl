@@ -143,7 +143,7 @@ export default function WhyTreqqo({ content }: { content?: WhyTreqqoContent }) {
   return (
     <section
       id="method"
-      className="relative z-0 overflow-hidden bg-[#F9F8F3] py-14 sm:py-18 lg:py-22 scroll-mt-16 sm:scroll-mt-20 text-[#1A0A1A] border-y border-[#E5E0D5]"
+      className="relative z-0 overflow-visible bg-[#F9F8F3] py-14 sm:py-18 lg:py-22 scroll-mt-16 sm:scroll-mt-20 text-[#1A0A1A] border-y border-[#E5E0D5]"
     >
       <Container className="relative z-10 max-w-7xl">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
@@ -182,9 +182,22 @@ export default function WhyTreqqo({ content }: { content?: WhyTreqqoContent }) {
 
           {/* Right Column: 4 Submission Boxes in [1 3] / [2 4] with Single Numbering & Unique Styling */}
           <div className="lg:col-span-7">
-            {/* Mobile (under 640px): 1, 2, 3, 4 strictly in numerical sequence */}
-            <div className="flex flex-col gap-4 sm:hidden">
-              {submissions.map((item, i) => renderSubmissionCard(item, i))}
+            {/* Mobile (under 640px): Scroll Stack / Stacking Cards */}
+            <div className="flex flex-col gap-6 sm:hidden relative pb-10">
+              {submissions.map((item, i) => (
+                <div
+                  key={i}
+                  className="sticky transition-all duration-300"
+                  style={{
+                    top: `calc(72px + ${i * 14}px)`,
+                    zIndex: 10 + i,
+                  }}
+                >
+                  <div className="shadow-lg">
+                    {renderSubmissionCard(item, i)}
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Tablet & Desktop: 1 3 (top) / 2 4 (bottom) with uneven/staggered offset */}

@@ -365,11 +365,11 @@ export default function ExecutionProof({ content }: { content?: ExecutionProofCo
           />
 
           <div className="relative z-10 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12 lg:items-center">
-            {/* Left Metrics */}
-            <div className="flex flex-wrap items-center gap-8 sm:gap-12 lg:col-span-5">
+            {/* Left Metrics: Side by side on mobile and desktop */}
+            <div className="grid grid-cols-2 gap-4 sm:gap-8 lg:col-span-5 items-start">
               {metrics.map((m, idx) => (
-                <div key={idx}>
-                  <span className="block text-3xl sm:text-4xl font-black tracking-tight text-white">
+                <div key={idx} className="flex flex-col">
+                  <span className="block text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight text-white">
                     {m.value}
                   </span>
                   <span className="mt-1 block text-xs sm:text-sm text-[#E8D8E8] font-medium leading-snug">

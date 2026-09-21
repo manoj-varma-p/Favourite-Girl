@@ -44,7 +44,7 @@ export default function FinalCta({
           />
 
           {/* Content Block */}
-          <div className="relative z-10 max-w-2xl">
+          <div className="relative z-10 max-w-2xl w-full">
             {/* Monospace Plum/Lilac Eyebrow */}
             <span className="font-mono text-xs font-bold uppercase tracking-[0.22em] text-[#C084FC]">
               {eyebrow}
@@ -61,12 +61,12 @@ export default function FinalCta({
             </p>
 
             {/* Buttons Row */}
-            <div className="mt-8 flex flex-wrap items-center gap-3.5">
-              {/* Primary Call Button (Crisp White) */}
+            <div className="mt-8 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 w-full">
+              {/* Primary Call Button (Crisp White, extended to right corner) */}
               <button
                 type="button"
                 onClick={handleBookCall}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-white hover:bg-slate-100 px-6 sm:px-7 py-3.5 text-xs sm:text-sm font-bold text-[#0C101A] transition-all shadow-md hover:shadow-xl active:scale-[0.98] cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-between sm:justify-center gap-3 rounded-full bg-white hover:bg-slate-100 px-6 sm:px-7 py-3.5 text-xs sm:text-sm font-bold text-[#0C101A] transition-all shadow-md hover:shadow-xl active:scale-[0.98] cursor-pointer"
               >
                 <span>{primaryButtonText}</span>
                 <span className="text-base leading-none">→</span>
@@ -79,7 +79,7 @@ export default function FinalCta({
                 )}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-white/10 hover:border-white/35 active:scale-[0.98] cursor-pointer"
+                className="w-full sm:w-auto inline-flex items-center justify-center rounded-full border border-white/20 bg-white/5 px-6 py-3.5 text-xs sm:text-sm font-bold text-white transition-all hover:bg-white/10 hover:border-white/35 active:scale-[0.98] cursor-pointer"
               >
                 {secondaryButtonText}
               </a>

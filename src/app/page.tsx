@@ -16,22 +16,33 @@ import FinalCta from "@/components/home/FinalCta";
 import Footer from "@/components/footer/Footer";
 import InstagramVideoPopup from "@/components/common/InstagramVideoPopup";
 import { getHomePageContent, getGeneralSettings, getTutors, getCourses } from "@/lib/cms";
+import { getPageSeoByPath } from "@/lib/content-db";
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  keywords: [
-    "digital marketing course near me",
-    "digital marketing courses in Hyderabad",
-    "Online marketing classes",
-    "Best Digital marketing course in Hyderabad",
-    "Digital marketing course fee",
-    "online digital marketing course with certificate",
-    "learn digital marketing online",
-    "new age digital marketing course",
-    "performance marketing course",
-    "digital marketing course with placement",
-  ],
-};
+const DEFAULT_HOME_KEYWORDS = [
+  "digital marketing course near me",
+  "digital marketing courses in Hyderabad",
+  "Online marketing classes",
+  "Best Digital marketing course in Hyderabad",
+  "Digital marketing course fee",
+  "online digital marketing course with certificate",
+  "learn digital marketing online",
+  "new age digital marketing course",
+  "performance marketing course",
+  "digital marketing course with placement",
+];
+
+export async function generateMetadata(): Promise<Metadata> {
+  const pageSeo = await getPageSeoByPath("/");
+  return {
+    ...(pageSeo?.title ? { title: pageSeo.title } : {}),
+    ...(pageSeo?.metaDescription ? { description: pageSeo.metaDescription } : {}),
+    keywords:
+      pageSeo?.metaKeywords && pageSeo.metaKeywords.length > 0
+        ? pageSeo.metaKeywords
+        : DEFAULT_HOME_KEYWORDS,
+  };
+}
 
 export const dynamic = "force-dynamic";
 

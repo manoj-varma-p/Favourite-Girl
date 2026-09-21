@@ -18,7 +18,7 @@ import MobileEnrollBar from "@/components/category/MobileEnrollBar";
 import CourseHeroForm from "@/components/category/CourseHeroForm";
 import { learningSystemCourses } from "@/data/home";
 import { megaMenuData } from "@/data/navigation";
-import { getCoursesFromDb, type CourseItem } from "@/lib/content-db";
+import { getCoursesFromDb, getPageSeoByPath, type CourseItem } from "@/lib/content-db";
 
 const categoryLinks = megaMenuData.columns.find((column) => column.title === "Learn by Category")?.links ?? [];
 
@@ -110,20 +110,30 @@ export async function generateMetadata({
   const meta = await resolveCategoryMeta(slug);
   if (!meta) return {};
 
+  const pageSeo = await getPageSeoByPath(`/categories/${slug}`);
+
   const isNewAgeOnline =
     slug === "digital-marketing" ||
     slug === "new-age-dm" ||
     meta.dbCourse?.id === "digital-marketing" ||
     meta.label.toLowerCase().includes("new age digital marketing");
 
+  const title = pageSeo?.title || pageSeo?.metaTitle || `${meta.label} | TREQO`;
+  const description =
+    pageSeo?.metaDescription ||
+    `Explore TREQO's ${meta.label} track, live mentorship, practical deliverables, and verified career portfolios.`;
+
+  const keywords =
+    pageSeo?.metaKeywords && pageSeo.metaKeywords.length > 0
+      ? pageSeo.metaKeywords
+      : isNewAgeOnline
+      ? NEW_AGE_ONLINE_KEYWORDS
+      : meta.dbCourse?.metaKeywords || [];
+
   return {
-    title: `${meta.label} | TREQO`,
-    description: `Explore TREQO's ${meta.label} track, live mentorship, practical deliverables, and verified career portfolios.`,
-    ...(isNewAgeOnline
-      ? { keywords: NEW_AGE_ONLINE_KEYWORDS }
-      : meta.dbCourse?.metaKeywords
-      ? { keywords: meta.dbCourse.metaKeywords }
-      : {}),
+    title,
+    description,
+    ...(keywords.length > 0 ? { keywords } : {}),
   };
 }
 

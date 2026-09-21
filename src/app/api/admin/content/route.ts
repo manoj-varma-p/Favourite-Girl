@@ -20,13 +20,15 @@ import {
   saveAlertSettingsToDb,
   getFormSettingsFromDb,
   saveFormSettingsToDb,
+  getPageSeoSettingsFromDb,
+  savePageSeoSettingsToDb,
 } from "@/lib/content-db";
 
 import { isAuthorizedRequest } from "@/lib/admin-auth";
 
 export async function GET(req: NextRequest) {
   try {
-    const [settings, layoutSettings, navigation, homeContent, blogs, courses, tutors, testimonials, alerts, forms] =
+    const [settings, layoutSettings, navigation, homeContent, blogs, courses, tutors, testimonials, alerts, forms, pageSeo] =
       await Promise.all([
         getGeneralSettingsFromDb(),
         getLayoutSettingsFromDb(),
@@ -38,6 +40,7 @@ export async function GET(req: NextRequest) {
         getTestimonialsFromDb(),
         getAlertSettingsFromDb(),
         getFormSettingsFromDb(),
+        getPageSeoSettingsFromDb(),
       ]);
 
     return NextResponse.json({
@@ -52,6 +55,7 @@ export async function GET(req: NextRequest) {
       testimonials,
       alerts,
       forms,
+      pageSeo,
     });
   } catch (error) {
     console.error("[GET /api/admin/content Error]:", error);
@@ -75,6 +79,13 @@ export async function POST(req: NextRequest) {
       await saveGeneralSettingsToDb(data);
     } else if (type === "layout" || type === "layoutSettings") {
       await saveLayoutSettingsToDb(data);
+      try {
+        revalidatePath("/", "layout");
+      } catch (e) {
+        console.warn("Revalidate error (non-fatal):", e);
+      }
+    } else if (type === "pageSeo" || type === "page-seo") {
+      await savePageSeoSettingsToDb(data);
       try {
         revalidatePath("/", "layout");
       } catch (e) {

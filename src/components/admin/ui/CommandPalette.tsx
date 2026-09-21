@@ -189,6 +189,14 @@ export default function CommandPalette({
         onSelect: () => onSelectTab("branding"),
       },
       {
+        id: "nav-page-keywords",
+        category: "Navigation",
+        title: "Page-Wise SEO & Keyword Manager",
+        subtitle: "Target high-intent keywords per route and category",
+        icon: <Search className="h-4 w-4 text-[#3B0D3B]" />,
+        onSelect: () => onSelectTab("pageKeywords"),
+      },
+      {
         id: "nav-layout",
         category: "Navigation",
         title: "Layout & SEO Meta",

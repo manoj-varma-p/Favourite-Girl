@@ -22,6 +22,7 @@ import {
   HelpCircle,
   Layers,
   X,
+  Search,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -177,6 +178,13 @@ export default function AdminSidebar({
     {
       groupTitle: "SYSTEM & SETTINGS",
       items: [
+        {
+          id: "pageKeywords",
+          label: "Page Keywords SEO",
+          icon: Search,
+          badge: "SEO",
+          badgeVariant: "solid",
+        },
         {
           id: "layout",
           label: "Layout & SEO Meta",

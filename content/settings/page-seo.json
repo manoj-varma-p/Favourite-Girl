@@ -1,0 +1,196 @@
+[
+  {
+    "id": "home",
+    "path": "/",
+    "name": "Home Page",
+    "category": "Core",
+    "title": "TREQO: LEARN THE SKILLS. BUILD THE MINDSET. BREAK THE PATTERN.",
+    "metaDescription": "TREQO is a digital marketing learning system built around 70% doing, live brand projects, and capstone revenue proof.",
+    "metaKeywords": [
+      "digital marketing course near me",
+      "digital marketing courses in Hyderabad",
+      "Online marketing classes",
+      "Best Digital marketing course in Hyderabad",
+      "Digital marketing course fee",
+      "online digital marketing course with certificate",
+      "learn digital marketing online",
+      "new age digital marketing course",
+      "performance marketing course",
+      "digital marketing course with placement"
+    ]
+  },
+  {
+    "id": "digital-marketing",
+    "path": "/categories/digital-marketing",
+    "name": "New Age Digital Marketing (Online Flagship)",
+    "category": "Courses",
+    "title": "New Age Digital Marketing | TREQO",
+    "metaDescription": "The flagship. 12 phases, 30+ real brand projects, AI in the workflow from phase one. Batch 2 starts Oct 2026.",
+    "metaKeywords": [
+      "digital marketing classes near me",
+      "search engine optimization in digital marketing",
+      "digital marketing institute near me",
+      "digital marketing certificate programs",
+      "marketing courses online with certificate",
+      "digital marketing online certification course",
+      "advanced digital marketing course",
+      "digital marketing course with placement",
+      "best online digital marketing courses in india",
+      "digital marketing classes online",
+      "study digital marketing online",
+      "best digital marketing courses",
+      "best online marketing courses",
+      "good digital marketing courses",
+      "top digital marketing courses",
+      "digital marketing certification course",
+      "certificate in digital marketing course",
+      "marketing strategy course",
+      "professional certificate in digital marketing",
+      "digital marketing course online",
+      "marketing courses online",
+      "online marketing classes",
+      "marketing digital course online",
+      "online marketing online course",
+      "fundamentals of digital marketing",
+      "learn digital marketing",
+      "digital marketing course online india",
+      "best online digital marketing courses",
+      "learn digital marketing online",
+      "digital marketing courses",
+      "digital marketing classes",
+      "digital marketing training courses",
+      "diploma in digital marketing",
+      "ai in marketing course",
+      "digital marketing for students",
+      "accredited digital marketing courses",
+      "best online courses for marketing professionals"
+    ]
+  },
+  {
+    "id": "4m-program",
+    "path": "/categories/4m-program",
+    "name": "New Age Digital Marketing (On Campus)",
+    "category": "Courses",
+    "title": "New Age Digital Marketing (On Campus) | TREQO",
+    "metaDescription": "Full Stack Marketing On Campus Edition. Brand strategy through performance in four months on our Madhapur studio floor.",
+    "metaKeywords": [
+      "digital marketing course in hyderabad",
+      "offline digital marketing classes",
+      "digital marketing classroom training hyderabad",
+      "madhapur digital marketing institute",
+      "on campus marketing diploma",
+      "performance marketing studio"
+    ]
+  },
+  {
+    "id": "fundamentals",
+    "path": "/categories/fundamentals",
+    "name": "Fundamentals of Digital Marketing",
+    "category": "Courses",
+    "title": "Fundamentals of Digital Marketing | TREQO",
+    "metaDescription": "The door in. Learn what digital marketing is, how funnels behave, and what to settle before you pay for anything.",
+    "metaKeywords": [
+      "fundamentals of digital marketing",
+      "learn digital marketing basics",
+      "digital marketing for beginners",
+      "funnel marketing basics",
+      "digital marketing certification self paced"
+    ]
+  },
+  {
+    "id": "pgdm",
+    "path": "/categories/pgdm",
+    "name": "Treqo PGDM in Modern Marketing",
+    "category": "Courses",
+    "title": "Treqo PGDM in Modern Marketing | TREQO",
+    "metaDescription": "Post Graduate Diploma in New Age Marketing. Built for graduates ready for senior marketing roles.",
+    "metaKeywords": [
+      "pgdm in digital marketing",
+      "post graduate diploma marketing",
+      "executive digital marketing program",
+      "marketing leadership diploma",
+      "hybrid marketing course india"
+    ]
+  },
+  {
+    "id": "campus-edition",
+    "path": "/categories/campus-edition",
+    "name": "Campus Edition",
+    "category": "Courses",
+    "title": "Campus Edition | TREQO",
+    "metaDescription": "The flagship, timed to run alongside a BBA or MBA without colliding with your semester exams.",
+    "metaKeywords": [
+      "digital marketing for students",
+      "college student marketing training",
+      "bba mba marketing certification",
+      "student digital marketing portfolio"
+    ]
+  },
+  {
+    "id": "founder-semester",
+    "path": "/categories/founder-semester",
+    "name": "The Founder Semester",
+    "category": "Courses",
+    "title": "The Founder Semester | TREQO",
+    "metaDescription": "Marketing and entrepreneurship for people who want to launch, scale, or run their own venture.",
+    "metaKeywords": [
+      "startup marketing course",
+      "growth marketing for founders",
+      "cac ltv unit economics training",
+      "entrepreneurship marketing semester"
+    ]
+  },
+  {
+    "id": "performance-growth",
+    "path": "/categories/performance-growth",
+    "name": "Performance & Growth Specialist",
+    "category": "Courses",
+    "title": "Performance & Growth Specialist | TREQO",
+    "metaDescription": "Deep dive into Meta, Google Ads, and attribution models for direct response growth.",
+    "metaKeywords": [
+      "performance marketing course",
+      "meta ads mastery",
+      "google ads performance max course",
+      "multi touch attribution ga4",
+      "paid acquisition specialist training"
+    ]
+  },
+  {
+    "id": "blog",
+    "path": "/blog",
+    "name": "Blog & Growth Articles",
+    "category": "Editorial",
+    "title": "Marketing Insights & Frameworks | TREQO Blog",
+    "metaDescription": "Tactical teardowns, growth marketing blueprints, and real ad campaign architectures from Treqo mentors.",
+    "metaKeywords": [
+      "digital marketing blog",
+      "performance marketing teardowns",
+      "growth marketing frameworks",
+      "paid media strategies"
+    ]
+  },
+  {
+    "id": "privacy",
+    "path": "/privacy",
+    "name": "Privacy Policy",
+    "category": "Legal",
+    "title": "Privacy Policy | TREQO",
+    "metaDescription": "Privacy Policy and data practices for Treqo learners, applicants, and visitors.",
+    "metaKeywords": [
+      "treqo privacy policy",
+      "student data protection"
+    ]
+  },
+  {
+    "id": "terms",
+    "path": "/terms",
+    "name": "Terms & Conditions",
+    "category": "Legal",
+    "title": "Terms & Conditions | TREQO",
+    "metaDescription": "Terms and conditions for enrolling in Treqo learning systems, programs, and certifications.",
+    "metaKeywords": [
+      "treqo terms and conditions",
+      "admissions policy"
+    ]
+  }
+]

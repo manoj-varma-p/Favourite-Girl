@@ -7,9 +7,23 @@ import { blogPosts as fallbackBlogs } from "@/data/blogs";
 import generalSettingsData from "@/content/settings/general.json";
 import navigationSettingsData from "@/content/settings/navigation.json";
 import layoutSettingsData from "@/content/settings/layout.json";
+import pageSeoData from "@/content/settings/page-seo.json";
 import homePageContentData from "@/content/pages/home.json";
 import type { FormSettings } from "@/types/forms";
 import { defaultFormSettings } from "@/types/forms";
+
+export interface PageSeoItem {
+  id: string;
+  path: string;
+  name: string;
+  category?: string;
+  title?: string;
+  metaTitle?: string;
+  metaDescription?: string;
+  metaKeywords: string[];
+  canonicalUrl?: string;
+  updatedAt?: string;
+}
 
 export interface LayoutSettings {
   siteTitle: string;
@@ -349,6 +363,60 @@ export async function saveLayoutSettingsToDb(settings: LayoutSettings): Promise<
       { upsert: true }
     );
   }
+}
+
+// -----------------------------------------------------------------
+// 1.2 PAGE-WISE SEO & KEYWORD SETTINGS
+// -----------------------------------------------------------------
+export async function getPageSeoSettingsFromDb(): Promise<PageSeoItem[]> {
+  try {
+    const db = await getMongoDb();
+    if (db) {
+      const doc = await db.collection("settings").findOne({ _id: "page-seo" as unknown as undefined });
+      if (doc && Array.isArray(doc.pages) && doc.pages.length > 0) {
+        return doc.pages;
+      }
+    }
+  } catch (err) {
+    console.error("[getPageSeoSettingsFromDb] MongoDB read failed, using local:", err);
+  }
+
+  try {
+    const filePath = path.join(process.cwd(), "content/settings/page-seo.json");
+    if (fs.existsSync(filePath)) {
+      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+    }
+  } catch (e) {
+    console.warn("Local page-seo settings read error (non-fatal):", e);
+  }
+
+  return (pageSeoData as unknown as PageSeoItem[]) || [];
+}
+
+export async function savePageSeoSettingsToDb(items: PageSeoItem[]): Promise<void> {
+  // Update local file backup
+  try {
+    const filePath = path.join(process.cwd(), "content/settings/page-seo.json");
+    fs.writeFileSync(filePath, JSON.stringify(items, null, 2), "utf-8");
+  } catch (e) {
+    console.warn("Local page-seo settings write error (non-fatal):", e);
+  }
+
+  // Update MongoDB
+  const db = await getMongoDb();
+  if (db) {
+    await db.collection("settings").updateOne(
+      { _id: "page-seo" as unknown as undefined },
+      { $set: { pages: items, updatedAt: new Date().toISOString() } },
+      { upsert: true }
+    );
+  }
+}
+
+export async function getPageSeoByPath(pagePath: string): Promise<PageSeoItem | null> {
+  const pages = await getPageSeoSettingsFromDb();
+  const clean = pagePath.endsWith("/") && pagePath !== "/" ? pagePath.slice(0, -1) : pagePath;
+  return pages.find((p) => p.path === clean || p.path === pagePath || p.id === pagePath || p.id === clean.replace(/^\/categories\//, "")) || null;
 }
 
 // -----------------------------------------------------------------

@@ -56,6 +56,7 @@ import type {
   TestimonialItem,
   AlertSettings,
   FormSettings,
+  PageSeoItem,
 } from "@/lib/content-db";
 import { defaultFormSettings } from "@/types/forms";
 import AdminWhyTreqqoTab from "@/components/admin/AdminWhyTreqqoTab";
@@ -64,6 +65,7 @@ import AdminGovCertsTab from "@/components/admin/AdminGovCertsTab";
 import AdminSixDecisionsTab from "@/components/admin/AdminSixDecisionsTab";
 import AdminFooterTab from "@/components/admin/AdminFooterTab";
 import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
+import AdminPageKeywordsTab from "@/components/admin/AdminPageKeywordsTab";
 import AdminCourseEditor from "@/components/admin/AdminCourseEditor";
 import AdminSidebar from "@/components/admin/ui/AdminSidebar";
 import AdminHeader from "@/components/admin/ui/AdminHeader";
@@ -88,6 +90,7 @@ const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
   blogs: { title: "Articles & Insights", breadcrumb: "Content & Marketing" },
   faqs: { title: "Frequently Asked Questions", breadcrumb: "Content & Marketing" },
   hero: { title: "Hero & Key Metrics", breadcrumb: "Content & Marketing" },
+  pageKeywords: { title: "Page-Wise SEO & Keywords", breadcrumb: "System & Settings" },
   banner: { title: "Announcement Banner", breadcrumb: "Content & Marketing" },
   alerts: { title: "Email Notifications & Alerts", breadcrumb: "System & Settings" },
   forms: { title: "Form Titles & Modals", breadcrumb: "System & Settings" },
@@ -173,6 +176,7 @@ export default function CustomAdminPanelPage() {
     | "footer"
     | "faqs"
     | "blogs"
+    | "pageKeywords"
   >("overview");
 
   const [currentTime, setCurrentTime] = useState("11:48 am IST");
@@ -238,6 +242,8 @@ export default function CustomAdminPanelPage() {
     robotsFollow: true,
     googleSiteVerification: "",
   });
+
+  const [pageSeo, setPageSeo] = useState<PageSeoItem[]>([]);
 
   const [navigationSettings, setNavigationSettings] = useState<NavigationSettings>({
     bannerBadge: "BATCH 2 · 50 SEATS",
@@ -528,6 +534,7 @@ export default function CustomAdminPanelPage() {
         if (d.testimonials) setTestimonials(d.testimonials);
         if (d.alerts) setAlertSettings(d.alerts);
         if (d.forms) setFormSettings(d.forms);
+        if (d.pageSeo) setPageSeo(d.pageSeo);
       }
     } catch (err) {
       console.error("Data load error:", err);
@@ -3905,6 +3912,20 @@ export default function CustomAdminPanelPage() {
               initialData={generalSettings}
               adminPin={getStoredPin()}
               onSaved={(updated) => setGeneralSettings(updated)}
+            />
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB: PAGE-WISE SEO & KEYWORD MANAGER                      */}
+          {/* ========================================================= */}
+          {activeTab === "pageKeywords" && (
+            <AdminPageKeywordsTab
+              initialPages={pageSeo}
+              adminPin={getStoredPin()}
+              onSaved={(updated) => {
+                setPageSeo(updated);
+                notifySuccess("All page-wise keywords and SEO settings saved successfully!");
+              }}
             />
           )}
 

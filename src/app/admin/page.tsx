@@ -2892,8 +2892,8 @@ export default function CustomAdminPanelPage() {
                       <div
                         key={course.id}
                         className={`group flex flex-col overflow-hidden rounded-3xl border bg-white shadow-sm hover:shadow-xl transition-all duration-300 justify-between ${course.isLocked
-                            ? "border-[#3B0D3B]/10 bg-white"
-                            : "border-[#3B0D3B]/15"
+                          ? "border-[#3B0D3B]/10 bg-white"
+                          : "border-[#3B0D3B]/15"
                           }`}
                       >
                         {/* Card Image Header */}
@@ -2903,8 +2903,8 @@ export default function CustomAdminPanelPage() {
                             src={course.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"}
                             alt={course.title}
                             className={`h-full w-full object-cover transition-transform duration-500 ${course.isLocked
-                                ? "opacity-60 grayscale-[35%]"
-                                : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
+                              ? "opacity-60 grayscale-[35%]"
+                              : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
                               }`}
                           />
                           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30" />
@@ -2925,8 +2925,8 @@ export default function CustomAdminPanelPage() {
                               type="button"
                               onClick={() => handleToggleCourseLock(course.id)}
                               className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl text-[11px] font-bold backdrop-blur-md shadow-md transition-all cursor-pointer ${course.isLocked
-                                  ? "bg-slate-900/80 text-white border border-white/20 hover:bg-slate-900"
-                                  : "bg-emerald-950/80 text-emerald-200 border border-emerald-500/40 hover:bg-emerald-900"
+                                ? "bg-slate-900/80 text-white border border-white/20 hover:bg-slate-900"
+                                : "bg-emerald-950/80 text-emerald-200 border border-emerald-500/40 hover:bg-emerald-900"
                                 }`}
                               title="Click to toggle lock/unlock"
                             >
@@ -3021,8 +3021,8 @@ export default function CustomAdminPanelPage() {
                               type="button"
                               onClick={() => handleToggleCourseLock(course.id)}
                               className={`text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer ${course.isLocked
-                                  ? "text-emerald-600 hover:text-emerald-700"
-                                  : "text-amber-600 hover:text-amber-700"
+                                ? "text-emerald-600 hover:text-emerald-700"
+                                : "text-amber-600 hover:text-amber-700"
                                 }`}
                             >
                               {course.isLocked ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
@@ -3544,8 +3544,8 @@ export default function CustomAdminPanelPage() {
               {testAlertResult && (
                 <div
                   className={`rounded-2xl border p-4 text-xs ${testAlertResult.startsWith("Error:")
-                      ? "border-rose-300 bg-rose-50 text-rose-800"
-                      : "border-emerald-300 bg-emerald-50 text-emerald-800"
+                    ? "border-rose-300 bg-rose-50 text-rose-800"
+                    : "border-emerald-300 bg-emerald-50 text-emerald-800"
                     }`}
                 >
                   <div className="font-semibold">{testAlertResult}</div>
@@ -4051,8 +4051,8 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingBlogImage && blogFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-4 transition-all cursor-pointer ${isBlogDragActive
-                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
-                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
+                        ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                        : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingBlogImage ? (
@@ -4348,8 +4348,8 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingCourseImage && courseFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-4 transition-all cursor-pointer ${isCourseDragActive
-                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
-                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
+                        ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                        : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingCourseImage ? (
@@ -4672,42 +4672,6 @@ export default function CustomAdminPanelPage() {
             </div>
 
             <form onSubmit={handleSaveTutor} className="space-y-4">
-              {/* Lock / Unlock Toggle for Mentor */}
-              <div className="flex items-center justify-between rounded-xl border border-[#3B0D3B]/15 bg-white p-3.5 shadow-2xs">
-                <div className="flex items-center gap-2.5">
-                  <div
-                    className={cn(
-                      "flex h-8 w-8 items-center justify-center rounded-lg",
-                      tutorForm.isLocked ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
-                    )}
-                  >
-                    {tutorForm.isLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
-                  </div>
-                  <div>
-                    <p className="text-xs font-bold text-[#0B0B0F]">
-                      {tutorForm.isLocked ? "Locked (Coming Soon Mode)" : "Live (Profile Revealed)"}
-                    </p>
-                    <p className="text-[10px] text-[#5A4A5A]">
-                      {tutorForm.isLocked
-                        ? "Shows 'Coming Soon' by default on the website until unlocked."
-                        : "Reveals actual photo, name, credentials, and quote."}
-                    </p>
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setTutorForm((prev) => ({ ...prev, isLocked: !prev.isLocked }))}
-                  className={cn(
-                    "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
-                    tutorForm.isLocked
-                      ? "bg-amber-600 text-white hover:bg-amber-500"
-                      : "bg-[#3B0D3B] text-white hover:bg-[#2A082A]"
-                  )}
-                >
-                  {tutorForm.isLocked ? "Unlock Profile" : "Lock Profile"}
-                </button>
-              </div>
-
               <div>
                 <label className="text-xs font-bold text-[#0B0B0F]">Mentor Full Name</label>
                 <input
@@ -4832,8 +4796,8 @@ export default function CustomAdminPanelPage() {
                       }}
                       onClick={() => !isUploadingTutorImage && tutorFileInputRef.current?.click()}
                       className={`relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed p-5 transition-all cursor-pointer ${isTutorDragActive
-                          ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
-                          : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
+                        ? "border-[#3B0D3B] bg-[#3B0D3B]/5 scale-[1.01] shadow-md shadow-[#3B0D3B]/10"
+                        : "border-[#3B0D3B]/20 bg-[#FAF5EE]/70 hover:border-[#3B0D3B]/40 hover:bg-[#FAF5EE]"
                         }`}
                     >
                       {isUploadingTutorImage ? (

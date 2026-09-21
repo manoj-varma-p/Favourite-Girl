@@ -1019,6 +1019,24 @@ export default function AdminProgramsPage() {
                     className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
+
+                <div className="sm:col-span-2">
+                  <label className="text-xs font-bold text-[#0B0B0F]">
+                    Category SEO Meta Keywords (comma-separated)
+                  </label>
+                  <input
+                    type="text"
+                    value={Array.isArray(programForm.metaKeywords) ? programForm.metaKeywords.join(", ") : ""}
+                    onChange={(e) =>
+                      setProgramForm({
+                        ...programForm,
+                        metaKeywords: e.target.value.split(",").map((k) => k.trim()).filter(Boolean),
+                      })
+                    }
+                    placeholder="digital marketing classes near me, advanced digital marketing course..."
+                    className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                  />
+                </div>
               </div>
 
               {/* Status Toggle in Form */}

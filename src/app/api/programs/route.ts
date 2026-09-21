@@ -192,6 +192,7 @@ export async function POST(req: NextRequest) {
       overview: sanitizeString(body.overview) || description,
       applyCta: sanitizeString(body.applyCta) || (isLocked ? "Notify Me When Open" : "Apply for Batch 2"),
       syllabusCta: sanitizeString(body.syllabusCta) || "Download Curriculum",
+      metaKeywords: Array.isArray(body.metaKeywords) ? body.metaKeywords : undefined,
     };
 
     await saveProgramToDb(newProgram);

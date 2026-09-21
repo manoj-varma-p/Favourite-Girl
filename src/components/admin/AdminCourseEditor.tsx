@@ -24,9 +24,65 @@ import {
   AlertCircle,
   HelpCircle,
   Trophy,
+  Search,
+  Tag,
+  Globe,
 } from "lucide-react";
 import type { CourseItem, CoursePhasesData, CourseChallenge } from "@/lib/content-db";
 import type { CoursePhaseGroup } from "@/types/home";
+
+const NEW_AGE_ONLINE_37_KEYWORDS = [
+  "digital marketing classes near me",
+  "search engine optimization in digital marketing",
+  "digital marketing institute near me",
+  "digital marketing certificate programs",
+  "marketing courses online with certificate",
+  "digital marketing online certification course",
+  "advanced digital marketing course",
+  "digital marketing course with placement",
+  "best online digital marketing courses in india",
+  "digital marketing classes online",
+  "study digital marketing online",
+  "best digital marketing courses",
+  "best online marketing courses",
+  "good digital marketing courses",
+  "top digital marketing courses",
+  "digital marketing certification course",
+  "certificate in digital marketing course",
+  "marketing strategy course",
+  "professional certificate in digital marketing",
+  "digital marketing course online",
+  "marketing courses online",
+  "online marketing classes",
+  "marketing digital course online",
+  "online marketing online course",
+  "fundamentals of digital marketing",
+  "learn digital marketing",
+  "digital marketing course online india",
+  "best online digital marketing courses",
+  "learn digital marketing online",
+  "digital marketing courses",
+  "digital marketing classes",
+  "digital marketing training courses",
+  "diploma in digital marketing",
+  "ai in marketing course",
+  "digital marketing for students",
+  "accredited digital marketing courses",
+  "best online courses for marketing professionals",
+];
+
+const HOME_PAGE_10_KEYWORDS = [
+  "digital marketing course near me",
+  "digital marketing courses in Hyderabad",
+  "Online marketing classes",
+  "Best Digital marketing course in Hyderabad",
+  "Digital marketing course fee",
+  "online digital marketing course with certificate",
+  "learn digital marketing online",
+  "new age digital marketing course",
+  "performance marketing course",
+  "digital marketing course with placement",
+];
 
 interface Props {
   course: CourseItem;
@@ -61,8 +117,12 @@ export default function AdminCourseEditor({
 
   // Active section inside the editor studio
   const [activeStudioTab, setActiveStudioTab] = useState<
-    "hero" | "pricing" | "curriculum" | "challenge" | "audience"
+    "hero" | "pricing" | "curriculum" | "challenge" | "audience" | "seo"
   >("hero");
+
+  // Keyword states
+  const [newKeywordInput, setNewKeywordInput] = useState("");
+  const [bulkKeywordInput, setBulkKeywordInput] = useState("");
 
   function isImage(file: File) {
     if (!file) return false;
@@ -156,6 +216,60 @@ export default function AdminCourseEditor({
         actionHref: prev.actionHref || prev.href || `/categories/${prev.id}`,
       };
     });
+  }
+
+  // SEO Meta Keywords helpers
+  function addKeyword(term: string) {
+    const cleaned = term.trim();
+    if (!cleaned) return;
+    const current = Array.isArray(course.metaKeywords) ? course.metaKeywords : [];
+    if (!current.some((k) => k.toLowerCase() === cleaned.toLowerCase())) {
+      setCourse((prev) => ({
+        ...prev,
+        metaKeywords: [...current, cleaned],
+      }));
+    }
+    setNewKeywordInput("");
+  }
+
+  function removeKeyword(index: number) {
+    const current = Array.isArray(course.metaKeywords) ? course.metaKeywords : [];
+    setCourse((prev) => ({
+      ...prev,
+      metaKeywords: current.filter((_, i) => i !== index),
+    }));
+  }
+
+  function bulkAddKeywords(text: string) {
+    if (!text.trim()) return;
+    const terms = text
+      .split(/[,;\n]+/)
+      .map((t) => t.trim())
+      .filter((t) => t.length > 0);
+    const current = Array.isArray(course.metaKeywords) ? [...course.metaKeywords] : [];
+    terms.forEach((term) => {
+      if (!current.some((k) => k.toLowerCase() === term.toLowerCase())) {
+        current.push(term);
+      }
+    });
+    setCourse((prev) => ({ ...prev, metaKeywords: current }));
+    setBulkKeywordInput("");
+    setStatusMsg({ type: "success", text: `Added ${terms.length} keywords to "${course.title}". Remember to click "Save Course Changes".` });
+  }
+
+  function applyPresetKeywords(keywords: string[], presetName: string) {
+    setCourse((prev) => ({
+      ...prev,
+      metaKeywords: [...keywords],
+    }));
+    setStatusMsg({ type: "success", text: `Applied ${keywords.length} keywords (${presetName}) to "${course.title}". Remember to click "Save Course Changes".` });
+  }
+
+  function clearAllKeywords() {
+    setCourse((prev) => ({
+      ...prev,
+      metaKeywords: [],
+    }));
   }
 
   // Phases helpers
@@ -335,6 +449,7 @@ export default function AdminCourseEditor({
           { id: "curriculum", label: "3. Curriculum & Phases", icon: Layers },
           { id: "challenge", label: "4. CEO Challenge", icon: Trophy },
           { id: "audience", label: "5. Target Audience", icon: FileText },
+          { id: "seo", label: "6. SEO Meta Keywords", icon: Sliders },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeStudioTab === tab.id;
@@ -900,6 +1015,170 @@ export default function AdminCourseEditor({
                 placeholder="Graduates looking for real execution proof&#10;Career switchers needing verifiable skills&#10;Founders managing their own marketing spend"
                 className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-4 text-xs text-[#0B0B0F] leading-relaxed focus:border-[#3B0D3B] focus:outline-none"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* TAB 6: SEO META KEYWORDS (Category-Specific SEO)          */}
+      {/* ========================================================= */}
+      {activeStudioTab === "seo" && (
+        <div className="space-y-6">
+          {/* Header Card */}
+          <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B]">
+                    <Search className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-lg font-bold text-[#0B0B0F]">Category SEO &amp; Meta Keywords</h3>
+                </div>
+                <p className="text-xs text-[#5A4A5A] mt-1.5">
+                  Configure search engine optimization meta tags and targeted keywords for{" "}
+                  <span className="font-bold text-[#3B0D3B]">{course.title}</span> (Route:{" "}
+                  <code className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] font-mono">{course.href || `/categories/${course.id}`}</code>).
+                </p>
+              </div>
+
+              {/* Tag counter badge */}
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#3B0D3B]/5 border border-[#3B0D3B]/15 text-xs font-bold text-[#3B0D3B] self-start sm:self-auto">
+                <Tag className="h-3.5 w-3.5" />
+                <span>{Array.isArray(course.metaKeywords) ? course.metaKeywords.length : 0} Active Keywords</span>
+              </div>
+            </div>
+
+            {/* Google Search Snippet Preview */}
+            <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4 space-y-1.5">
+              <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400">Search Engine SERP Preview</span>
+              <div className="text-xs text-emerald-800 flex items-center gap-1 font-mono">
+                <Globe className="h-3 w-3" />
+                <span>https://treqo.org{course.href || `/categories/${course.id}`}</span>
+              </div>
+              <h4 className="text-sm font-semibold text-blue-800 hover:underline cursor-pointer">
+                {course.title} | TREQO
+              </h4>
+              <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">
+                {course.description || "Explore TREQO's live mentorship track, practical deliverables, and verified career portfolios."}
+              </p>
+            </div>
+
+            {/* Keyword Management Tools */}
+            <div className="space-y-4 pt-2">
+              <label className="text-xs font-bold text-[#0B0B0F] block">Add Single Keyword</label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={newKeywordInput}
+                  onChange={(e) => setNewKeywordInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      addKeyword(newKeywordInput);
+                    }
+                  }}
+                  placeholder="e.g. digital marketing certification course"
+                  className="flex-1 rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] placeholder-slate-400 focus:border-[#3B0D3B] focus:outline-none"
+                />
+                <button
+                  type="button"
+                  onClick={() => addKeyword(newKeywordInput)}
+                  className="rounded-xl bg-[#3B0D3B] px-4 py-2.5 text-xs font-bold text-white hover:bg-[#2A082A] transition-colors cursor-pointer"
+                >
+                  Add Keyword
+                </button>
+              </div>
+
+              {/* Active Keywords Tag Cloud */}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xs font-bold text-[#0B0B0F]">
+                    Current Meta Keywords ({Array.isArray(course.metaKeywords) ? course.metaKeywords.length : 0})
+                  </span>
+                  {Array.isArray(course.metaKeywords) && course.metaKeywords.length > 0 && (
+                    <button
+                      type="button"
+                      onClick={clearAllKeywords}
+                      className="text-[11px] font-bold text-red-600 hover:text-red-800 cursor-pointer"
+                    >
+                      Clear All
+                    </button>
+                  )}
+                </div>
+
+                {Array.isArray(course.metaKeywords) && course.metaKeywords.length > 0 ? (
+                  <div className="flex flex-wrap gap-2 p-4 rounded-2xl bg-slate-50 border border-slate-200 max-h-72 overflow-y-auto">
+                    {course.metaKeywords.map((kw, idx) => (
+                      <span
+                        key={idx}
+                        className="inline-flex items-center gap-1.5 rounded-lg bg-white border border-[#3B0D3B]/15 px-2.5 py-1 text-xs font-medium text-[#0B0B0F] shadow-2xs group hover:border-[#3B0D3B]/30 transition-all"
+                      >
+                        <Tag className="h-3 w-3 text-[#3B0D3B]/50" />
+                        <span>{kw}</span>
+                        <button
+                          type="button"
+                          onClick={() => removeKeyword(idx)}
+                          className="h-3.5 w-3.5 rounded-full hover:bg-slate-200 text-slate-400 hover:text-red-600 inline-flex items-center justify-center cursor-pointer transition-colors"
+                          title="Remove keyword"
+                        >
+                          &times;
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="p-6 text-center rounded-2xl bg-slate-50 border border-dashed border-slate-200 text-xs text-slate-500">
+                    No custom keywords added yet for this category. You can add them individually or use the bulk paste / preset buttons below.
+                  </div>
+                )}
+              </div>
+
+              {/* Bulk Paste Area */}
+              <div className="pt-2 border-t border-[#3B0D3B]/10 space-y-2">
+                <label className="text-xs font-bold text-[#0B0B0F] block">
+                  Bulk Add Keywords (Paste comma or newline separated list)
+                </label>
+                <textarea
+                  rows={4}
+                  value={bulkKeywordInput}
+                  onChange={(e) => setBulkKeywordInput(e.target.value)}
+                  placeholder="keyword 1, keyword 2, keyword 3..."
+                  className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3.5 text-xs text-[#0B0B0F] placeholder-slate-400 focus:border-[#3B0D3B] focus:outline-none leading-relaxed"
+                />
+                <button
+                  type="button"
+                  onClick={() => bulkAddKeywords(bulkKeywordInput)}
+                  disabled={!bulkKeywordInput.trim()}
+                  className="rounded-xl bg-slate-900 px-4 py-2 text-xs font-bold text-white hover:bg-slate-800 transition-colors disabled:opacity-40 cursor-pointer"
+                >
+                  Import Keywords
+                </button>
+              </div>
+
+              {/* One-Click Presets */}
+              <div className="pt-3 border-t border-[#3B0D3B]/10 space-y-2">
+                <span className="text-xs font-bold text-[#0B0B0F] block">One-Click Keyword Presets</span>
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    type="button"
+                    onClick={() => applyPresetKeywords(NEW_AGE_ONLINE_37_KEYWORDS, "New Age Online Flagship Track")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-[#3B0D3B]/20 bg-[#3B0D3B]/5 hover:bg-[#3B0D3B]/10 text-xs font-bold text-[#3B0D3B] cursor-pointer transition-colors"
+                  >
+                    <Sparkles className="h-3.5 w-3.5" />
+                    <span>Apply New Age Online Preset (37 Keywords)</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => applyPresetKeywords(HOME_PAGE_10_KEYWORDS, "Hyderabad & Regional Preset")}
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 cursor-pointer transition-colors"
+                  >
+                    <Tag className="h-3.5 w-3.5" />
+                    <span>Apply Hyderabad Local Preset (10 Keywords)</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

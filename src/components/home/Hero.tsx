@@ -59,7 +59,7 @@ export default async function Hero() {
         {/* Full Image Artwork spanning neatly above the navbar with balanced proportions */}
         <div className="relative h-full w-full max-w-[840px] xl:max-w-[960px] 2xl:max-w-[1080px] flex items-end justify-end">
           <Image
-            src="/images/maiiin.webp"
+            src={hero.desktopImage || "/images/maiiin.webp"}
             alt="Treqo Modern Digital Marketing"
             fill
             priority
@@ -138,7 +138,7 @@ export default async function Hero() {
           <div className="mt-8 relative w-full flex items-center justify-center lg:hidden">
             <div className="relative w-full max-w-lg aspect-[14/10] sm:aspect-[14/9]">
               <Image
-                src="/images/mainnnn-bg.webp"
+                src={hero.mobileImage || "/images/mainnnn-bg.webp"}
                 alt="Treqo Modern Digital Marketing"
                 fill
                 priority

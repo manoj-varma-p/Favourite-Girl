@@ -6,7 +6,9 @@
       "you can implement.",
       "Not just a certificate"
     ],
-    "description": "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview."
+    "description": "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
+    "desktopImage": "/images/maiiin.webp",
+    "mobileImage": "/images/mainnnn-bg.webp"
   },
   "stats": [
     {
@@ -204,5 +206,17 @@
         "description": "Small enough that there's nowhere to hide, and small enough that we know what you're bad at by week three."
       }
     ]
+  },
+  "mentors": {
+    "eyebrow": "PRACTITIONER MENTORSHIP",
+    "title": "Taught by people still doing the work.",
+    "description": "Every tutor runs active accounts and active brands. When algorithms change on a Tuesday, your Wednesday session reflects it.",
+    "highlightChips": [
+      "100% Active Account Operators",
+      "1:1 Real Budget Defenses",
+      "Verified Career Outcomes"
+    ],
+    "guaranteeHighlight": "Zero Academic Theory:",
+    "guaranteeText": "Every mentor actively manages enterprise budgets, live client acquisition accounts, and direct-response campaigns."
   }
 }

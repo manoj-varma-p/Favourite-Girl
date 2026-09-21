@@ -117,12 +117,16 @@ export interface SixDecisionsContent {
   }>;
 }
 
+export interface HeroContent {
+  eyebrow?: string;
+  headlineLines: string[];
+  description: string;
+  desktopImage?: string;
+  mobileImage?: string;
+}
+
 export interface HomePageContent {
-  hero: {
-    eyebrow: string;
-    headlineLines: string[];
-    description: string;
-  };
+  hero: HeroContent;
   stats: Array<{
     value: string;
     label: string;
@@ -137,6 +141,17 @@ export interface HomePageContent {
   executionProof?: ExecutionProofContent;
   govCerts?: GovCertsContent;
   sixDecisions?: SixDecisionsContent;
+  mentors?: MentorsSectionContent;
+}
+
+export interface MentorsSectionContent {
+  eyebrow?: string;
+  title?: string;
+  description?: string;
+  highlightChips?: string[];
+  guaranteeHighlight?: string;
+  guaranteeText?: string;
+  isLocked?: boolean;
 }
 
 import type { CoursePhaseGroup } from "@/types/home";
@@ -202,6 +217,10 @@ export interface TutorItem {
   role: string;
   mentored: string;
   image?: string;
+  brandMetric?: string;
+  focus?: string;
+  specialty?: string;
+  isLocked?: boolean;
 }
 
 export interface TestimonialItem {
@@ -394,13 +413,19 @@ export async function getHomePageContentFromDb(): Promise<HomePageContent> {
       const doc = await db.collection("home_content").findOne({ _id: "home" as unknown as undefined });
       if (doc) {
         return {
-          hero: doc.hero || localData.hero,
+          hero: {
+            ...localData.hero,
+            ...doc.hero,
+            desktopImage: doc.hero?.desktopImage || localData.hero?.desktopImage || "/images/maiiin.webp",
+            mobileImage: doc.hero?.mobileImage || localData.hero?.mobileImage || "/images/mainnnn-bg.webp",
+          },
           stats: doc.stats || localData.stats,
           faqs: doc.faqs || localData.faqs,
           whyTreqqo: doc.whyTreqqo || localData.whyTreqqo,
           executionProof: doc.executionProof || localData.executionProof,
           govCerts: doc.govCerts || localData.govCerts,
           sixDecisions: doc.sixDecisions || localData.sixDecisions,
+          mentors: doc.mentors || localData.mentors,
         };
       }
     }
@@ -721,6 +746,48 @@ export async function reorderProgramsInDb(orderedIds: string[]): Promise<CourseI
 // -----------------------------------------------------------------
 // 6. TUTORS / MENTORS
 // -----------------------------------------------------------------
+const DEFAULT_TUTOR_PHOTOS: Record<string, string> = {
+  "Mohit Goel": "/uploads/tutors/mohit-goel.jpg",
+  "Deeptika Bajaj": "/uploads/tutors/deeptika-bajaj.jpg",
+  "Megha Punjabi": "/uploads/tutors/megha-punjabi.jpg",
+  "Akshat Aggarwal": "/uploads/tutors/akshat-aggarwal.jpg",
+  "Prateek Narang": "/uploads/tutors/prateek-narang.jpg",
+  "Ritika Sharma": "/uploads/tutors/ritika-sharma.jpg",
+};
+
+const DEFAULT_TUTOR_INSIGHTS: Record<string, { brandMetric: string; focus: string; specialty: string }> = {
+  "Mohit Goel": {
+    brandMetric: "₹10Cr+ Ad Spend Managed",
+    focus: "Direct-response unit economics and turning raw campaign data into profitable spend.",
+    specialty: "Funnel Economics & Scaling",
+  },
+  "Deeptika Bajaj": {
+    brandMetric: "3.8x Avg ROAS Across Clients",
+    focus: "Scaling paid acquisition on Meta & Google Ads without burning client margins.",
+    specialty: "Growth & Performance Marketing",
+  },
+  "Megha Punjabi": {
+    brandMetric: "Ex-Amex Growth Lead",
+    focus: "Enterprise positioning, high-LTV customer journeys, and retention architectures.",
+    specialty: "Enterprise Marketing & Brand",
+  },
+  "Akshat Aggarwal": {
+    brandMetric: "Enterprise Analytics",
+    focus: "Full-funnel attribution models, clean tracking setups, and defensible ROI reporting.",
+    specialty: "Attribution & Data-Driven Growth",
+  },
+  "Prateek Narang": {
+    brandMetric: "IIT Alum & Top Tech Mentor",
+    focus: "Defending campaign numbers out loud so hiring panels can't poke holes in your work.",
+    specialty: "Portfolio & Interview Defense",
+  },
+  "Ritika Sharma": {
+    brandMetric: "500+ Funnels Audited",
+    focus: "High-growth brand positioning, conversion rate optimization, and organic distribution.",
+    specialty: "Brand Strategy & Conversion",
+  },
+};
+
 export async function getTutorsFromDb(): Promise<TutorItem[]> {
   try {
     const db = await getMongoDb();
@@ -732,7 +799,11 @@ export async function getTutorsFromDb(): Promise<TutorItem[]> {
           name: d.name,
           role: d.role,
           mentored: d.mentored || "",
-          image: d.image || "",
+          image: d.image?.trim() || DEFAULT_TUTOR_PHOTOS[d.name] || "",
+          brandMetric: d.brandMetric || DEFAULT_TUTOR_INSIGHTS[d.name]?.brandMetric || "Active Practitioner",
+          focus: d.focus || DEFAULT_TUTOR_INSIGHTS[d.name]?.focus || "Direct-response campaigns and hands-on portfolio execution.",
+          specialty: d.specialty || DEFAULT_TUTOR_INSIGHTS[d.name]?.specialty || d.role || "Performance Marketing",
+          isLocked: Boolean(d.isLocked),
         }));
       }
     }
@@ -743,7 +814,15 @@ export async function getTutorsFromDb(): Promise<TutorItem[]> {
   try {
     const filePath = path.join(process.cwd(), "content/tutors.json");
     if (fs.existsSync(filePath)) {
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      const list: TutorItem[] = JSON.parse(fs.readFileSync(filePath, "utf-8"));
+      return list.map((d) => ({
+        ...d,
+        image: d.image?.trim() || DEFAULT_TUTOR_PHOTOS[d.name] || "",
+        brandMetric: d.brandMetric || DEFAULT_TUTOR_INSIGHTS[d.name]?.brandMetric || "Active Practitioner",
+        focus: d.focus || DEFAULT_TUTOR_INSIGHTS[d.name]?.focus || "Direct-response campaigns and hands-on portfolio execution.",
+        specialty: d.specialty || DEFAULT_TUTOR_INSIGHTS[d.name]?.specialty || d.role || "Performance Marketing",
+        isLocked: Boolean(d.isLocked),
+      }));
     }
   } catch (e) {
     console.warn("Local tutors read error:", e);

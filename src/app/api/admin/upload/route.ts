@@ -2,16 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
 
-const DEFAULT_PIN = "treqo2026";
-const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || DEFAULT_PIN;
+import { isAuthorizedRequest } from "@/lib/admin-auth";
 
-function isAuthorized(req: NextRequest): boolean {
-  const pin = req.headers.get("x-admin-pin");
-  return pin === ADMIN_PIN || pin === DEFAULT_PIN;
-}
+const ALLOWED_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".avif", ".ico"]);
 
 export async function POST(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  if (!isAuthorizedRequest(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
@@ -24,9 +20,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    // Validate mime type
-    if (!file.type.startsWith("image/")) {
-      return NextResponse.json({ error: "Only image files (PNG, JPG, WEBP, SVG) are allowed." }, { status: 400 });
+    // Determine extension
+    const ext = path.extname(file.name) || `.${file.type.split("/")[1] || "png"}`;
+    const isImageMime = Boolean(file.type && file.type.startsWith("image/"));
+    const hasImageExt = ALLOWED_EXTENSIONS.has(ext.toLowerCase());
+
+    // Validate mime type or extension (handles Windows cases where mime is octet-stream/empty)
+    if (!isImageMime && !hasImageExt) {
+      return NextResponse.json({ error: "Only image files (PNG, JPG, WEBP, SVG, GIF, AVIF) are allowed." }, { status: 400 });
     }
 
     // Validate size (max 8MB)
@@ -35,8 +36,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File size exceeds 8MB limit." }, { status: 400 });
     }
 
-    // Determine extension
-    const ext = path.extname(file.name) || `.${file.type.split("/")[1] || "png"}`;
     const sanitizedBase = file.name
       .replace(ext, "")
       .toLowerCase()
@@ -71,7 +70,7 @@ export async function POST(req: NextRequest) {
 }
 
 export async function GET(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  if (!isAuthorizedRequest(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

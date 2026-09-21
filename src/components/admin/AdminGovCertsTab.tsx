@@ -79,9 +79,15 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
     setData({ ...data, certs: next });
   }
 
+  function isImage(file: File) {
+    if (!file) return false;
+    if (file.type && file.type.startsWith("image/")) return true;
+    return /\.(png|jpe?g|webp|svg|gif|avif|ico)$/i.test(file.name);
+  }
+
   async function handleCertUpload(file: File, index: number) {
-    if (!file || !file.type.startsWith("image/")) {
-      setStatusMsg({ type: "error", text: "Please upload a valid image file." });
+    if (!isImage(file)) {
+      setStatusMsg({ type: "error", text: "Please upload a valid image file (PNG, JPG, WEBP, SVG)." });
       return;
     }
     setUploadingIdx(index);

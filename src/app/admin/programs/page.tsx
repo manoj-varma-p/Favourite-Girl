@@ -37,7 +37,7 @@ const plusJakarta = Plus_Jakarta_Sans({
 const DEFAULT_PIN = "treqo2026";
 const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || DEFAULT_PIN;
 
-const emptySubscribe = () => () => {};
+const emptySubscribe = () => () => { };
 function useAdminSession() {
   return useSyncExternalStore(
     emptySubscribe,
@@ -170,15 +170,15 @@ export default function AdminProgramsPage() {
       prev.map((p) =>
         p.id === program.id
           ? {
-              ...p,
-              isLocked: newLockState,
-              badge: newBadge,
-              badgeVariant: newVariant,
-              actionText: newAction,
-              applyCta: newApplyCta,
-              href: newHref,
-              actionHref: newHref,
-            }
+            ...p,
+            isLocked: newLockState,
+            badge: newBadge,
+            badgeVariant: newVariant,
+            actionText: newAction,
+            applyCta: newApplyCta,
+            href: newHref,
+            actionHref: newHref,
+          }
           : p
       )
     );
@@ -646,27 +646,24 @@ export default function AdminProgramsPage() {
                 <button
                   type="button"
                   onClick={() => setFilterStatus("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    filterStatus === "all" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
-                  }`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${filterStatus === "all" ? "bg-[#3B0D3B] text-white shadow-sm" : "text-[#5A4A5A] hover:text-[#0B0B0F]"
+                    }`}
                 >
                   All ({programs.length})
                 </button>
                 <button
                   type="button"
                   onClick={() => setFilterStatus("live")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    filterStatus === "live" ? "bg-emerald-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${filterStatus === "live" ? "bg-emerald-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   Live ({liveCount})
                 </button>
                 <button
                   type="button"
                   onClick={() => setFilterStatus("coming-soon")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                    filterStatus === "coming-soon" ? "bg-amber-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
-                  }`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${filterStatus === "coming-soon" ? "bg-amber-600 text-white shadow-sm" : "text-slate-400 hover:text-white"
+                    }`}
                 >
                   Coming Soon ({comingSoonCount})
                 </button>
@@ -702,11 +699,10 @@ export default function AdminProgramsPage() {
               {filteredPrograms.map((program, idx) => (
                 <div
                   key={program.id}
-                  className={`rounded-2xl border transition-all flex flex-col justify-between overflow-hidden bg-[#0e111a] ${
-                    program.isLocked
-                      ? "border-amber-900/40 shadow-amber-950/10"
-                      : "border-slate-800 hover:border-slate-700 shadow-slate-950/20"
-                  }`}
+                  className={`rounded-2xl border transition-all flex flex-col justify-between overflow-hidden bg-[#0e111a] ${program.isLocked
+                    ? "border-amber-900/40 shadow-amber-950/10"
+                    : "border-slate-800 hover:border-slate-700 shadow-slate-950/20"
+                    }`}
                 >
                   {/* Card Media Preview Header */}
                   <div className="relative aspect-[16/9] w-full bg-slate-900 overflow-hidden">
@@ -751,13 +747,12 @@ export default function AdminProgramsPage() {
                     <div className="absolute bottom-2.5 left-2.5 right-2.5 flex items-center justify-between">
                       {/* Badge pill */}
                       <span
-                        className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                          program.badgeVariant === "amber"
-                            ? "bg-amber-500 text-black font-black"
-                            : program.badgeVariant === "gray" || program.isLocked
+                        className={`rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${program.badgeVariant === "amber"
+                          ? "bg-amber-500 text-black font-black"
+                          : program.badgeVariant === "gray" || program.isLocked
                             ? "bg-slate-800 text-slate-300 border border-slate-700"
                             : "bg-[#3B0D3B] text-white"
-                        }`}
+                          }`}
                       >
                         {program.badge}
                       </span>
@@ -766,11 +761,10 @@ export default function AdminProgramsPage() {
                       <button
                         type="button"
                         onClick={() => handleToggleStatus(program)}
-                        className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md transition-all cursor-pointer ${
-                          program.isLocked
-                            ? "bg-amber-950/80 text-amber-300 border border-amber-600/50 hover:bg-amber-900"
-                            : "bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 hover:bg-emerald-900"
-                        }`}
+                        className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-md transition-all cursor-pointer ${program.isLocked
+                          ? "bg-amber-950/80 text-amber-300 border border-amber-600/50 hover:bg-amber-900"
+                          : "bg-emerald-950/80 text-emerald-300 border border-emerald-600/50 hover:bg-emerald-900"
+                          }`}
                         title={program.isLocked ? "Click to set Live" : "Click to set Coming Soon"}
                       >
                         {program.isLocked ? (
@@ -1046,11 +1040,10 @@ export default function AdminProgramsPage() {
                       actionText: !programForm.isLocked ? "Get notified →" : "View course →",
                     })
                   }
-                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                    programForm.isLocked
-                      ? "bg-amber-50 text-amber-700 border border-amber-200"
-                      : "bg-emerald-50 text-emerald-700 border border-emerald-200"
-                  }`}
+                  className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${programForm.isLocked
+                    ? "bg-amber-50 text-amber-700 border border-amber-200"
+                    : "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                    }`}
                 >
                   {programForm.isLocked ? "🔒 Locked (Coming Soon)" : "🔓 Live (Open)"}
                 </button>

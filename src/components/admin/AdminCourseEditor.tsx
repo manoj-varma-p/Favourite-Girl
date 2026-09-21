@@ -64,11 +64,17 @@ export default function AdminCourseEditor({
     "hero" | "pricing" | "curriculum" | "challenge" | "audience"
   >("hero");
 
+  function isImage(file: File) {
+    if (!file) return false;
+    if (file.type && file.type.startsWith("image/")) return true;
+    return /\.(png|jpe?g|webp|svg|gif|avif|ico)$/i.test(file.name);
+  }
+
   // Handle image upload
   async function handleImageUpload(file: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
-      setStatusMsg({ type: "error", text: "Please select a valid image file (PNG, JPG, WEBP)." });
+    if (!isImage(file)) {
+      setStatusMsg({ type: "error", text: "Please select a valid image file (PNG, JPG, WEBP, SVG)." });
       return;
     }
     if (file.size > 10 * 1024 * 1024) {

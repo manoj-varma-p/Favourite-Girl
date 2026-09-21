@@ -338,10 +338,25 @@ export default function CustomAdminPanelPage() {
         { name: "Bristle Tech", logo: "/images/dark-bristletech.png" },
       ],
     },
+    mentors: {
+      eyebrow: "PRACTITIONER MENTORSHIP",
+      title: "Taught by people still doing the work.",
+      description:
+        "Every tutor runs active accounts and active brands. When algorithms change on a Tuesday, your Wednesday session reflects it.",
+      highlightChips: [
+        "100% Active Account Operators",
+        "1:1 Real Budget Defenses",
+        "Verified Career Outcomes",
+      ],
+      guaranteeHighlight: "Zero Academic Theory:",
+      guaranteeText:
+        "Every mentor actively manages enterprise budgets, live client acquisition accounts, and direct-response campaigns.",
+    },
   });
 
   const [blogs, setBlogs] = useState<BlogPost[]>([]);
   const [isSaving, setIsSaving] = useState(false);
+  const [isSavingMentorsSection, setIsSavingMentorsSection] = useState(false);
 
   // 3. Courses State
   const [courses, setCourses] = useState<CourseItem[]>([]);
@@ -384,6 +399,10 @@ export default function CustomAdminPanelPage() {
     role: "",
     mentored: "500+",
     image: "",
+    brandMetric: "",
+    specialty: "",
+    focus: "",
+    isLocked: false,
   });
   const [isUploadingTutorImage, setIsUploadingTutorImage] = useState(false);
   const [isTutorDragActive, setIsTutorDragActive] = useState(false);
@@ -447,6 +466,16 @@ export default function CustomAdminPanelPage() {
   const [mediaFiles, setMediaFiles] = useState<Array<{ url: string; name: string; size: number }>>([]);
   const [isMediaPickerOpen, setIsMediaPickerOpen] = useState(false);
   const [isLoadingMedia, setIsLoadingMedia] = useState(false);
+
+  // Hero Artwork Upload States
+  const [isUploadingDesktopHero, setIsUploadingDesktopHero] = useState(false);
+  const [isUploadingMobileHero, setIsUploadingMobileHero] = useState(false);
+  const desktopHeroFileInputRef = useRef<HTMLInputElement | null>(null);
+  const mobileHeroFileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Branding Logo Upload State
+  const [isUploadingLogo, setIsUploadingLogo] = useState(false);
+  const logoFileInputRef = useRef<HTMLInputElement | null>(null);
 
   // 9. FAQ Modal State
   const [isFaqModalOpen, setIsFaqModalOpen] = useState(false);
@@ -634,14 +663,20 @@ export default function CustomAdminPanelPage() {
     openCourseStudio(c);
   }
 
+  function isValidImageFile(file: File): boolean {
+    if (!file) return false;
+    if (file.type && file.type.startsWith("image/")) return true;
+    return /\.(png|jpe?g|webp|svg|gif|avif|ico)$/i.test(file.name);
+  }
+
   async function handleCourseImageUpload(file: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!isValidImageFile(file)) {
       notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      notifyError("Image size exceeds 8MB limit.");
+    if (file.size > 10 * 1024 * 1024) {
+      notifyError("Image size exceeds 10MB limit.");
       return;
     }
 
@@ -669,6 +704,111 @@ export default function CustomAdminPanelPage() {
     } finally {
       setIsUploadingCourseImage(false);
       setIsCourseDragActive(false);
+    }
+  }
+
+  async function handleDesktopHeroImageUpload(file: File) {
+    if (!isValidImageFile(file)) {
+      notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
+      return;
+    }
+    if (file.size > 12 * 1024 * 1024) {
+      notifyError("Image size exceeds 12MB limit.");
+      return;
+    }
+    setIsUploadingDesktopHero(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "hero");
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { "x-admin-pin": getStoredPin() },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setHomeContent((prev) => ({
+          ...prev,
+          hero: { ...prev.hero, desktopImage: data.url },
+        }));
+        notifySuccess("Desktop hero artwork uploaded!");
+      } else {
+        notifyError(data.error || "Failed to upload image.");
+      }
+    } catch {
+      notifyError("Network error while uploading image.");
+    } finally {
+      setIsUploadingDesktopHero(false);
+    }
+  }
+
+  async function handleMobileHeroImageUpload(file: File) {
+    if (!isValidImageFile(file)) {
+      notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
+      return;
+    }
+    if (file.size > 12 * 1024 * 1024) {
+      notifyError("Image size exceeds 12MB limit.");
+      return;
+    }
+    setIsUploadingMobileHero(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "hero");
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { "x-admin-pin": getStoredPin() },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setHomeContent((prev) => ({
+          ...prev,
+          hero: { ...prev.hero, mobileImage: data.url },
+        }));
+        notifySuccess("Mobile hero artwork uploaded!");
+      } else {
+        notifyError(data.error || "Failed to upload image.");
+      }
+    } catch {
+      notifyError("Network error while uploading image.");
+    } finally {
+      setIsUploadingMobileHero(false);
+    }
+  }
+
+  async function handleLogoImageUpload(file: File) {
+    if (!isValidImageFile(file)) {
+      notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
+      return;
+    }
+    if (file.size > 8 * 1024 * 1024) {
+      notifyError("Image size exceeds 8MB limit.");
+      return;
+    }
+    setIsUploadingLogo(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "branding");
+      const res = await fetch("/api/admin/upload", {
+        method: "POST",
+        headers: { "x-admin-pin": getStoredPin() },
+        body: formData,
+      });
+      const data = await res.json();
+      if (res.ok && data.url) {
+        setGeneralSettings((prev) => ({ ...prev, logoImage: data.url }));
+        notifySuccess("Brand logo uploaded successfully!");
+      } else {
+        notifyError(data.error || "Failed to upload logo.");
+      }
+    } catch {
+      notifyError("Network error while uploading logo.");
+    } finally {
+      setIsUploadingLogo(false);
     }
   }
 
@@ -750,6 +890,10 @@ export default function CustomAdminPanelPage() {
       role: "Growth & Performance Lead",
       mentored: "500+",
       image: "",
+      brandMetric: "",
+      specialty: "",
+      focus: "",
+      isLocked: false,
     });
     setShowManualTutorUrl(false);
     setIsTutorDragActive(false);
@@ -758,7 +902,17 @@ export default function CustomAdminPanelPage() {
 
   function openEditTutorModal(t: TutorItem) {
     setEditingTutor(t);
-    setTutorForm({ ...t });
+    setTutorForm({
+      id: t.id,
+      name: t.name,
+      role: t.role,
+      mentored: t.mentored,
+      image: t.image || "",
+      brandMetric: t.brandMetric || "",
+      specialty: t.specialty || "",
+      focus: t.focus || "",
+      isLocked: Boolean(t.isLocked),
+    });
     setShowManualTutorUrl(false);
     setIsTutorDragActive(false);
     setIsTutorModalOpen(true);
@@ -766,12 +920,12 @@ export default function CustomAdminPanelPage() {
 
   async function handleTutorImageUpload(file: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!isValidImageFile(file)) {
       notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      notifyError("Image size exceeds 8MB limit.");
+    if (file.size > 10 * 1024 * 1024) {
+      notifyError("Image size exceeds 10MB limit.");
       return;
     }
 
@@ -797,7 +951,7 @@ export default function CustomAdminPanelPage() {
         notifyError(data.error || "Failed to upload image.");
       }
     } catch {
-      notifyError("Network error while uploading photo.");
+      notifyError("Photo upload error.");
     } finally {
       setIsUploadingTutorImage(false);
       setIsTutorDragActive(false);
@@ -857,6 +1011,79 @@ export default function CustomAdminPanelPage() {
     }
   }
 
+  async function handleToggleTutorLock(id: string) {
+    const target = tutors.find((t) => t.id === id);
+    const newLockState = !target?.isLocked;
+    const updated = tutors.map((t) =>
+      t.id === id ? { ...t, isLocked: newLockState } : t
+    );
+    setTutors(updated);
+
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-pin": getStoredPin() },
+        body: JSON.stringify({ type: "tutors", data: updated }),
+      });
+      if (res.ok) {
+        notifySuccess(
+          newLockState
+            ? `Locked "${target?.name}" (Shows Coming Soon mode)`
+            : `Unlocked "${target?.name}" (Actual profile revealed)`
+        );
+      } else {
+        notifyError("Failed to update mentor lock state.");
+      }
+    } catch {
+      notifyError("Network error updating lock state.");
+    }
+  }
+
+  async function handleLockAllTutors(lockState: boolean) {
+    const updated = tutors.map((t) => ({ ...t, isLocked: lockState }));
+    setTutors(updated);
+
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-pin": getStoredPin() },
+        body: JSON.stringify({ type: "tutors", data: updated }),
+      });
+      if (res.ok) {
+        notifySuccess(
+          lockState
+            ? "All mentor blocks locked (Showing Coming Soon)"
+            : "All mentor blocks unlocked (Revealing actual content)"
+        );
+      } else {
+        notifyError("Failed to update mentor blocks.");
+      }
+    } catch {
+      notifyError("Network error updating mentor blocks.");
+    }
+  }
+
+  async function handleSaveMentorsSection(e: React.FormEvent) {
+    e.preventDefault();
+    setIsSavingMentorsSection(true);
+    try {
+      const res = await fetch("/api/admin/content", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "x-admin-pin": getStoredPin() },
+        body: JSON.stringify({ type: "home", data: homeContent }),
+      });
+      if (res.ok) {
+        notifySuccess("Mentors section settings saved!");
+      } else {
+        notifyError("Failed to save mentors section settings.");
+      }
+    } catch {
+      notifyError("Network error saving mentors section.");
+    } finally {
+      setIsSavingMentorsSection(false);
+    }
+  }
+
   // Testimonial Management Handlers
   function openNewTestimonialModal() {
     setEditingTestimonial(null);
@@ -883,12 +1110,12 @@ export default function CustomAdminPanelPage() {
 
   async function handleTestimonialImageUpload(file: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!isValidImageFile(file)) {
       notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      notifyError("Image size exceeds 8MB limit.");
+    if (file.size > 10 * 1024 * 1024) {
+      notifyError("Image size exceeds 10MB limit.");
       return;
     }
 
@@ -1151,12 +1378,12 @@ export default function CustomAdminPanelPage() {
 
   async function handleBlogImageUpload(file: File) {
     if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    if (!isValidImageFile(file)) {
       notifyError("Please select a valid image file (PNG, JPG, WEBP, or SVG).");
       return;
     }
-    if (file.size > 8 * 1024 * 1024) {
-      notifyError("Image size exceeds 8MB limit.");
+    if (file.size > 10 * 1024 * 1024) {
+      notifyError("Image size exceeds 10MB limit.");
       return;
     }
 
@@ -2038,17 +2265,41 @@ export default function CustomAdminPanelPage() {
                   <p className="mt-1 text-[11px] text-[#5A4A5A]">Displayed in the header when no image logo is set.</p>
                 </div>
 
-                <div>
-                  <label className="text-xs font-bold text-[#0B0B0F]">Logo Image URL (Optional)</label>
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <label className="text-xs font-bold text-[#0B0B0F]">Logo Image (Optional)</label>
+                    <button
+                      type="button"
+                      onClick={() => logoFileInputRef.current?.click()}
+                      disabled={isUploadingLogo}
+                      className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer disabled:opacity-50"
+                    >
+                      <Upload className="h-3 w-3" />
+                      <span>{isUploadingLogo ? "Uploading..." : "Upload Logo"}</span>
+                    </button>
+                  </div>
+
+                  <input
+                    ref={logoFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleLogoImageUpload(f);
+                      e.target.value = "";
+                    }}
+                  />
+
                   <input
                     type="text"
-                    placeholder="https://your-domain.com/logo.png"
+                    placeholder="https://your-domain.com/logo.png or /logo.png"
                     value={generalSettings.logoImage || ""}
                     onChange={(e) => setGeneralSettings({ ...generalSettings, logoImage: e.target.value })}
-                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                    className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
-                  <p className="mt-1 text-[11px] text-[#5A4A5A]">
-                    Provide a direct URL to your logo (SVG or PNG). Leave empty to use text logo.
+                  <p className="text-[11px] text-[#5A4A5A]">
+                    Upload a file or provide a direct URL to your logo (SVG or PNG). Leave empty to use text logo.
                   </p>
                 </div>
 
@@ -2283,6 +2534,120 @@ export default function CustomAdminPanelPage() {
                         />
                       </div>
                     ))}
+                  </div>
+                </div>
+
+                {/* Hero Visual Artwork (Desktop & Mobile) */}
+                <div className="border-t border-[#3B0D3B]/10 pt-5 space-y-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-[#0B0B0F]">Hero Visual Artwork</h3>
+                    <p className="text-xs text-[#5A4A5A]">
+                      Upload custom visual illustrations or artwork for the hero section.
+                    </p>
+                  </div>
+
+                  {/* Hidden File Inputs */}
+                  <input
+                    ref={desktopHeroFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleDesktopHeroImageUpload(f);
+                      e.target.value = "";
+                    }}
+                  />
+                  <input
+                    ref={mobileHeroFileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const f = e.target.files?.[0];
+                      if (f) handleMobileHeroImageUpload(f);
+                      e.target.value = "";
+                    }}
+                  />
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Desktop Hero Image */}
+                    <div className="rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/60 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-[#0B0B0F]">Desktop Hero Artwork</label>
+                        <button
+                          type="button"
+                          onClick={() => desktopHeroFileInputRef.current?.click()}
+                          disabled={isUploadingDesktopHero}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer disabled:opacity-50"
+                        >
+                          <Upload className="h-3 w-3" />
+                          <span>{isUploadingDesktopHero ? "Uploading..." : "Upload File"}</span>
+                        </button>
+                      </div>
+
+                      <input
+                        type="text"
+                        value={homeContent.hero.desktopImage || ""}
+                        onChange={(e) =>
+                          setHomeContent({
+                            ...homeContent,
+                            hero: { ...homeContent.hero, desktopImage: e.target.value },
+                          })
+                        }
+                        placeholder="/images/maiiin.webp or https://..."
+                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                      />
+
+                      {/* Desktop Image Preview */}
+                      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#3B0D3B]/10 bg-white flex items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={homeContent.hero.desktopImage || "/images/maiiin.webp"}
+                          alt="Desktop Hero Preview"
+                          className="h-full w-full object-contain p-1"
+                        />
+                      </div>
+                    </div>
+
+                    {/* Mobile Hero Image */}
+                    <div className="rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/60 p-4 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <label className="text-xs font-bold text-[#0B0B0F]">Mobile Hero Artwork</label>
+                        <button
+                          type="button"
+                          onClick={() => mobileHeroFileInputRef.current?.click()}
+                          disabled={isUploadingMobileHero}
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer disabled:opacity-50"
+                        >
+                          <Upload className="h-3 w-3" />
+                          <span>{isUploadingMobileHero ? "Uploading..." : "Upload File"}</span>
+                        </button>
+                      </div>
+
+                      <input
+                        type="text"
+                        value={homeContent.hero.mobileImage || ""}
+                        onChange={(e) =>
+                          setHomeContent({
+                            ...homeContent,
+                            hero: { ...homeContent.hero, mobileImage: e.target.value },
+                          })
+                        }
+                        placeholder="/images/mainnnn-bg.webp or https://..."
+                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                      />
+
+                      {/* Mobile Image Preview */}
+                      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#3B0D3B]/10 bg-white flex items-center justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={homeContent.hero.mobileImage || "/images/mainnnn-bg.webp"}
+                          alt="Mobile Hero Preview"
+                          className="h-full w-full object-contain p-1"
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -2715,22 +3080,287 @@ export default function CustomAdminPanelPage() {
           {/* TAB: TUTORS & MENTORS MANAGER                             */}
           {/* ========================================================= */}
           {activeTab === "tutors" && (
-            <div className="space-y-6">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div className="space-y-8">
+              {/* Mentors Section Header & Configuration */}
+              <div className="rounded-2xl border border-[#3B0D3B]/15 bg-white p-5 sm:p-6 shadow-xs space-y-5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#3B0D3B]/10 pb-4">
+                  <div>
+                    <h3 className="text-sm sm:text-base font-bold text-[#0B0B0F] flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-[#3B0D3B]" />
+                      <span>Mentors Section Header &amp; Guarantee</span>
+                    </h3>
+                    <p className="text-xs text-[#5A4A5A] mt-0.5">
+                      Configure the headline, narrative, highlight badges, and guarantee banner of the mentorship section.
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleSaveMentorsSection}
+                    disabled={isSavingMentorsSection}
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-sm cursor-pointer transition-all disabled:opacity-50 self-start sm:self-auto"
+                  >
+                    {isSavingMentorsSection ? (
+                      <RefreshCw className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <Save className="h-3.5 w-3.5" />
+                    )}
+                    <span>{isSavingMentorsSection ? "Saving..." : "Save Section Settings"}</span>
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Section Eyebrow</label>
+                    <input
+                      type="text"
+                      value={homeContent.mentors?.eyebrow || ""}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            eyebrow: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder="e.g. PRACTITIONER MENTORSHIP"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Section Main Title</label>
+                    <input
+                      type="text"
+                      value={homeContent.mentors?.title || ""}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            title: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder="e.g. Taught by people still doing the work."
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                    />
+                  </div>
+
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-bold text-[#0B0B0F]">Section Description</label>
+                    <textarea
+                      rows={2}
+                      value={homeContent.mentors?.description || ""}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            description: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder="Every tutor runs active accounts and active brands..."
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all resize-none"
+                    />
+                  </div>
+
+                  {/* Highlight Chips */}
+                  <div className="md:col-span-2 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <label className="text-xs font-bold text-[#0B0B0F]">
+                        Key Highlights Badges (Shown below title)
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const currentChips = homeContent.mentors?.highlightChips || [
+                            "100% Active Account Operators",
+                            "1:1 Real Budget Defenses",
+                            "Verified Career Outcomes",
+                          ];
+                          setHomeContent((prev) => ({
+                            ...prev,
+                            mentors: {
+                              ...(prev.mentors || {}),
+                              highlightChips: [...currentChips, "New Highlight Badge"],
+                            },
+                          }));
+                        }}
+                        className="text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer inline-flex items-center gap-1"
+                      >
+                        <Plus className="h-3 w-3" /> Add Badge
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                      {(homeContent.mentors?.highlightChips || [
+                        "100% Active Account Operators",
+                        "1:1 Real Budget Defenses",
+                        "Verified Career Outcomes",
+                      ]).map((chip, idx) => (
+                        <div key={idx} className="flex items-center gap-1.5">
+                          <input
+                            type="text"
+                            value={chip}
+                            onChange={(e) => {
+                              const newChips = [...(homeContent.mentors?.highlightChips || [
+                                "100% Active Account Operators",
+                                "1:1 Real Budget Defenses",
+                                "Verified Career Outcomes",
+                              ])];
+                              newChips[idx] = e.target.value;
+                              setHomeContent((prev) => ({
+                                ...prev,
+                                mentors: {
+                                  ...(prev.mentors || {}),
+                                  highlightChips: newChips,
+                                },
+                              }));
+                            }}
+                            className="flex-1 rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-1.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                          />
+                          {(homeContent.mentors?.highlightChips?.length || 0) > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const newChips = (homeContent.mentors?.highlightChips || []).filter(
+                                  (_, i) => i !== idx
+                                );
+                                setHomeContent((prev) => ({
+                                  ...prev,
+                                  mentors: {
+                                    ...(prev.mentors || {}),
+                                    highlightChips: newChips,
+                                  },
+                                }));
+                              }}
+                              className="p-1.5 text-[#5A4A5A] hover:text-red-600 rounded-lg hover:bg-red-50 transition-colors cursor-pointer"
+                              title="Delete Badge"
+                            >
+                              <X className="h-3.5 w-3.5" />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Bottom Guarantee Banner */}
+                  <div>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Bottom Guarantee Prefix</label>
+                    <input
+                      type="text"
+                      value={homeContent.mentors?.guaranteeHighlight || ""}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            guaranteeHighlight: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder="e.g. Zero Academic Theory:"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-xs font-bold text-[#0B0B0F]">Bottom Guarantee Narrative</label>
+                    <input
+                      type="text"
+                      value={homeContent.mentors?.guaranteeText || ""}
+                      onChange={(e) =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            guaranteeText: e.target.value,
+                          },
+                        }))
+                      }
+                      placeholder="e.g. Every mentor actively manages enterprise budgets..."
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                    />
+                  </div>
+
+                  {/* Section-wide Coming Soon toggle */}
+                  <div className="md:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/70">
+                    <div className="flex items-center gap-2.5">
+                      <div className={cn("flex h-8 w-8 items-center justify-center rounded-lg shadow-2xs", homeContent.mentors?.isLocked ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700")}>
+                        {homeContent.mentors?.isLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                      </div>
+                      <div>
+                        <p className="text-xs font-bold text-[#0B0B0F]">
+                          {homeContent.mentors?.isLocked ? "Section Locked (All blocks show Coming Soon)" : "Section Active (Profiles displayed)"}
+                        </p>
+                        <p className="text-[10px] text-[#5A4A5A]">
+                          When locked, all mentor blocks on the live website automatically switch to &apos;Coming Soon&apos; mode.
+                        </p>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setHomeContent((prev) => ({
+                          ...prev,
+                          mentors: {
+                            ...(prev.mentors || {}),
+                            isLocked: !prev.mentors?.isLocked,
+                          },
+                        }))
+                      }
+                      className={cn(
+                        "px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer shadow-xs self-start sm:self-auto",
+                        homeContent.mentors?.isLocked
+                          ? "bg-amber-600 text-white hover:bg-amber-500"
+                          : "bg-[#3B0D3B] text-white hover:bg-[#2A082A]"
+                      )}
+                    >
+                      {homeContent.mentors?.isLocked ? "Unlock Section" : "Lock Entire Section"}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Individual Mentor Profiles Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-2">
                 <div>
-                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Mentors &amp; Faculty Tutors</h2>
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Mentors &amp; Faculty Profiles</h2>
                   <p className="text-xs sm:text-sm text-[#5A4A5A]">
-                    Manage instructors, mentors, photos, and roles displayed across the website.
+                    Manage individual instructors, lock/unlock blocks, photos, credentials, and bio quotes.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={openNewTutorModal}
-                  className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2.5 text-xs font-bold text-white shadow-md cursor-pointer transition-all self-start sm:self-auto"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Add Mentor</span>
-                </button>
+                <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+                  <button
+                    type="button"
+                    onClick={() => handleLockAllTutors(true)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-amber-600/30 bg-amber-50 hover:bg-amber-100 px-3 py-2 text-xs font-bold text-amber-800 shadow-xs cursor-pointer transition-all"
+                    title="Lock all mentor blocks to show Coming Soon"
+                  >
+                    <Lock className="h-3.5 w-3.5 text-amber-700" />
+                    <span>Lock All</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleLockAllTutors(false)}
+                    className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-600/30 bg-emerald-50 hover:bg-emerald-100 px-3 py-2 text-xs font-bold text-emerald-800 shadow-xs cursor-pointer transition-all"
+                    title="Unlock all mentor blocks to reveal actual content"
+                  >
+                    <Unlock className="h-3.5 w-3.5 text-emerald-700" />
+                    <span>Unlock All</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={openNewTutorModal}
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-md cursor-pointer transition-all"
+                  >
+                    <Plus className="h-4 w-4" />
+                    <span>Add Mentor</span>
+                  </button>
+                </div>
               </div>
 
               {tutors.length === 0 ? (
@@ -2778,12 +3408,7 @@ export default function CustomAdminPanelPage() {
                         </>
                       )}
 
-                      {/* Top-Right Mentored Badge */}
-                      <span className="absolute top-2.5 right-2.5 rounded-full bg-black/60 border border-white/15 px-2 py-0.5 text-[10px] font-semibold text-white backdrop-blur-md z-20 shadow-sm">
-                        {tutor.mentored}
-                      </span>
-
-                      {/* Top-Left Action Buttons: Edit & Delete */}
+                      {/* Top-Left Action Buttons: Edit, Lock/Unlock & Delete */}
                       <div className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5">
                         <button
                           type="button"
@@ -2801,6 +3426,23 @@ export default function CustomAdminPanelPage() {
                           type="button"
                           onClick={(e) => {
                             e.stopPropagation();
+                            handleToggleTutorLock(tutor.id);
+                          }}
+                          className={cn(
+                            "h-7 px-2.5 rounded-lg border text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer backdrop-blur-md",
+                            tutor.isLocked
+                              ? "bg-amber-600 hover:bg-amber-500 text-white border-amber-400/40"
+                              : "bg-black/75 hover:bg-[#3B0D3B] text-white border-white/15"
+                          )}
+                          title={tutor.isLocked ? "Click to unlock and reveal actual mentor profile" : "Click to lock and display Coming Soon"}
+                        >
+                          {tutor.isLocked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
+                          <span>{tutor.isLocked ? "Locked" : "Live"}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
                             handleDeleteTutor(tutor.id);
                           }}
                           className="h-7 w-7 rounded-lg bg-black/75 hover:bg-red-600 text-white border border-white/15 backdrop-blur-md flex items-center justify-center transition-all shadow-md hover:scale-105 cursor-pointer"
@@ -2810,13 +3452,21 @@ export default function CustomAdminPanelPage() {
                         </button>
                       </div>
 
+                      {/* Top-Right Coming Soon Indicator if locked */}
+                      {tutor.isLocked && (
+                        <span className="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 rounded-md bg-amber-600/90 border border-amber-400/40 px-2 py-0.5 text-[10px] font-bold text-white shadow-md backdrop-blur-md">
+                          <Lock className="h-2.5 w-2.5" />
+                          Coming Soon
+                        </span>
+                      )}
+
                       {/* Click whole card to edit */}
                       <div
                         onClick={() => openEditTutorModal(tutor)}
                         className="absolute inset-0 z-10 cursor-pointer"
                       />
 
-                      {/* Bottom Gradient Overlay: Name & Role */}
+                      {/* Bottom Gradient Overlay: Name & Role & Credential */}
                       <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3.5 pt-12 z-15 pointer-events-none">
                         <p className="text-xs sm:text-sm font-bold text-white leading-tight truncate">
                           {tutor.name}
@@ -2824,6 +3474,11 @@ export default function CustomAdminPanelPage() {
                         <p className="text-[11px] text-white/75 mt-0.5 truncate">
                           {tutor.role}
                         </p>
+                        {tutor.brandMetric && (
+                          <p className="text-[10px] font-bold text-[#F5EDE0] mt-1 truncate">
+                            {tutor.brandMetric}
+                          </p>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -4017,6 +4672,42 @@ export default function CustomAdminPanelPage() {
             </div>
 
             <form onSubmit={handleSaveTutor} className="space-y-4">
+              {/* Lock / Unlock Toggle for Mentor */}
+              <div className="flex items-center justify-between rounded-xl border border-[#3B0D3B]/15 bg-white p-3.5 shadow-2xs">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={cn(
+                      "flex h-8 w-8 items-center justify-center rounded-lg",
+                      tutorForm.isLocked ? "bg-amber-100 text-amber-700" : "bg-emerald-100 text-emerald-700"
+                    )}
+                  >
+                    {tutorForm.isLocked ? <Lock className="h-4 w-4" /> : <Unlock className="h-4 w-4" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#0B0B0F]">
+                      {tutorForm.isLocked ? "Locked (Coming Soon Mode)" : "Live (Profile Revealed)"}
+                    </p>
+                    <p className="text-[10px] text-[#5A4A5A]">
+                      {tutorForm.isLocked
+                        ? "Shows 'Coming Soon' by default on the website until unlocked."
+                        : "Reveals actual photo, name, credentials, and quote."}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setTutorForm((prev) => ({ ...prev, isLocked: !prev.isLocked }))}
+                  className={cn(
+                    "px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer",
+                    tutorForm.isLocked
+                      ? "bg-amber-600 text-white hover:bg-amber-500"
+                      : "bg-[#3B0D3B] text-white hover:bg-[#2A082A]"
+                  )}
+                >
+                  {tutorForm.isLocked ? "Unlock Profile" : "Lock Profile"}
+                </button>
+              </div>
+
               <div>
                 <label className="text-xs font-bold text-[#0B0B0F]">Mentor Full Name</label>
                 <input
@@ -4050,6 +4741,42 @@ export default function CustomAdminPanelPage() {
                   placeholder="e.g. 500+ or 1,200+"
                   className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-[#0B0B0F]">Credential / Metric Highlight</label>
+                <input
+                  type="text"
+                  value={tutorForm.brandMetric || ""}
+                  onChange={(e) => setTutorForm({ ...tutorForm, brandMetric: e.target.value })}
+                  placeholder="e.g. ₹10Cr+ Ad Spend Managed, Ex-Amex Lead, or 3.8x Avg ROAS"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                />
+                <p className="text-[10px] text-[#5A4A5A] mt-1">Displayed as the verified credential badge on the mentor card.</p>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-[#0B0B0F]">Domain Specialty / Area</label>
+                <input
+                  type="text"
+                  value={tutorForm.specialty || ""}
+                  onChange={(e) => setTutorForm({ ...tutorForm, specialty: e.target.value })}
+                  placeholder="e.g. Funnel Economics &amp; Scaling, Paid Acquisition, Brand Strategy"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                />
+                <p className="text-[10px] text-[#5A4A5A] mt-1">Displayed at the bottom footer of the mentor card.</p>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-[#0B0B0F]">Practitioner Bio Quote / Execution Focus</label>
+                <textarea
+                  rows={2}
+                  value={tutorForm.focus || ""}
+                  onChange={(e) => setTutorForm({ ...tutorForm, focus: e.target.value })}
+                  placeholder="e.g. Direct-response unit economics and turning raw campaign data into profitable spend."
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all resize-none"
+                />
+                <p className="text-[10px] text-[#5A4A5A] mt-1">Displayed as the practitioner quote on the mentor card.</p>
               </div>
 
               <div className="space-y-2">

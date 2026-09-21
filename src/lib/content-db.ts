@@ -204,6 +204,7 @@ export interface CourseItem {
     salary?: string;
     description?: string;
   }>;
+  metaKeywords?: string[];
 }
 
 export type ProgramItem = CourseItem;
@@ -617,6 +618,7 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
             actionHref: d.actionHref || d.href || `/categories/${d.id}`,
             tags: Array.isArray(d.tags) && d.tags.length > 0 ? d.tags : ["All"],
             order: typeof d.order === "number" ? d.order : 999,
+            metaKeywords: Array.isArray(d.metaKeywords) ? d.metaKeywords : undefined,
           };
         });
         return mapped.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));

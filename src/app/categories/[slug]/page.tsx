@@ -61,6 +61,46 @@ export function generateStaticParams() {
   return uniqueSlugs.map((slug) => ({ slug }));
 }
 
+const NEW_AGE_ONLINE_KEYWORDS = [
+  "digital marketing classes near me",
+  "search engine optimization in digital marketing",
+  "digital marketing institute near me",
+  "digital marketing certificate programs",
+  "marketing courses online with certificate",
+  "digital marketing online certification course",
+  "advanced digital marketing course",
+  "digital marketing course with placement",
+  "best online digital marketing courses in india",
+  "digital marketing classes online",
+  "study digital marketing online",
+  "best digital marketing courses",
+  "best online marketing courses",
+  "good digital marketing courses",
+  "top digital marketing courses",
+  "digital marketing certification course",
+  "certificate in digital marketing course",
+  "marketing strategy course",
+  "professional certificate in digital marketing",
+  "digital marketing course online",
+  "marketing courses online",
+  "online marketing classes",
+  "marketing digital course online",
+  "online marketing online course",
+  "fundamentals of digital marketing",
+  "learn digital marketing",
+  "digital marketing course online india",
+  "best online digital marketing courses",
+  "learn digital marketing online",
+  "digital marketing courses",
+  "digital marketing classes",
+  "digital marketing training courses",
+  "diploma in digital marketing",
+  "ai in marketing course",
+  "digital marketing for students",
+  "accredited digital marketing courses",
+  "best online courses for marketing professionals",
+];
+
 export async function generateMetadata({
   params,
 }: {
@@ -70,9 +110,20 @@ export async function generateMetadata({
   const meta = await resolveCategoryMeta(slug);
   if (!meta) return {};
 
+  const isNewAgeOnline =
+    slug === "digital-marketing" ||
+    slug === "new-age-dm" ||
+    meta.dbCourse?.id === "digital-marketing" ||
+    meta.label.toLowerCase().includes("new age digital marketing");
+
   return {
     title: `${meta.label} | TREQO`,
     description: `Explore TREQO's ${meta.label} track, live mentorship, practical deliverables, and verified career portfolios.`,
+    ...(isNewAgeOnline
+      ? { keywords: NEW_AGE_ONLINE_KEYWORDS }
+      : meta.dbCourse?.metaKeywords
+      ? { keywords: meta.dbCourse.metaKeywords }
+      : {}),
   };
 }
 

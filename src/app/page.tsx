@@ -16,6 +16,22 @@ import FinalCta from "@/components/home/FinalCta";
 import Footer from "@/components/footer/Footer";
 import InstagramVideoPopup from "@/components/common/InstagramVideoPopup";
 import { getHomePageContent, getGeneralSettings, getTutors, getCourses } from "@/lib/cms";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  keywords: [
+    "digital marketing course near me",
+    "digital marketing courses in Hyderabad",
+    "Online marketing classes",
+    "Best Digital marketing course in Hyderabad",
+    "Digital marketing course fee",
+    "online digital marketing course with certificate",
+    "learn digital marketing online",
+    "new age digital marketing course",
+    "performance marketing course",
+    "digital marketing course with placement",
+  ],
+};
 
 export const dynamic = "force-dynamic";
 

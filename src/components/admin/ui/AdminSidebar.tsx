@@ -186,6 +186,13 @@ export default function AdminSidebar({
           badgeVariant: "solid",
         },
         {
+          id: "pageDescriptions",
+          label: "Page Meta Descriptions",
+          icon: FileText,
+          badge: "SEO",
+          badgeVariant: "solid",
+        },
+        {
           id: "layout",
           label: "Layout & SEO Meta",
           icon: Globe,

@@ -26,6 +26,7 @@ interface Props {
   initialPages?: PageSeoItem[];
   adminPin: string;
   onSaved?: (updatedPages: PageSeoItem[]) => void;
+  onSwitchToDescriptions?: () => void;
 }
 
 const NEW_AGE_ONLINE_37_KEYWORDS = [
@@ -100,6 +101,7 @@ export default function AdminPageKeywordsTab({
   initialPages = [],
   adminPin,
   onSaved,
+  onSwitchToDescriptions,
 }: Props) {
   const [pages, setPages] = useState<PageSeoItem[]>(() => {
     if (initialPages && initialPages.length > 0) return initialPages;
@@ -304,14 +306,25 @@ export default function AdminPageKeywordsTab({
           </div>
         </div>
 
-        <div className="flex items-center gap-3 self-start sm:self-auto">
+        <div className="flex flex-wrap items-center gap-2.5 self-start sm:self-auto">
+          {onSwitchToDescriptions && (
+            <button
+              type="button"
+              onClick={onSwitchToDescriptions}
+              className="inline-flex items-center gap-1.5 rounded-xl border border-[#3B0D3B]/20 bg-white hover:bg-[#FAF5EE] px-3.5 py-2.5 text-xs font-bold text-[#3B0D3B] shadow-2xs transition-all cursor-pointer"
+            >
+              <FileText className="h-4 w-4" />
+              <span>Switch to Meta Descriptions</span>
+            </button>
+          )}
+
           <button
             type="button"
             onClick={() => setIsAddPageModalOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl border border-[#3B0D3B]/20 bg-white hover:bg-[#FAF5EE] px-4 py-2.5 text-xs font-bold text-[#3B0D3B] shadow-2xs transition-all cursor-pointer"
+            className="inline-flex items-center gap-2 rounded-xl border border-stone-200 bg-white hover:bg-stone-50 px-3.5 py-2.5 text-xs font-bold text-stone-700 shadow-2xs transition-all cursor-pointer"
           >
             <Plus className="h-4 w-4" />
-            <span>Add Custom Route</span>
+            <span>Add Route</span>
           </button>
 
           <button

@@ -18,12 +18,18 @@ import {
   Scale,
   UserCheck,
 } from "lucide-react";
+import { getPageSeoByPath } from "@/lib/content-db";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | TREQO: Digital Personal Data Protection",
-  description:
-    "How Treqo School of Modern Learning Pvt. Ltd. collects, processes, stores, and protects your personal data in compliance with the Digital Personal Data Protection Act (DPDPA), 2023.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const pageSeo = await getPageSeoByPath("/privacy");
+  return {
+    title: pageSeo?.title || pageSeo?.metaTitle || "Privacy Policy | TREQO: Digital Personal Data Protection",
+    description:
+      pageSeo?.metaDescription ||
+      "How Treqo School of Modern Learning Pvt. Ltd. collects, processes, stores, and protects your personal data in compliance with the Digital Personal Data Protection Act (DPDPA), 2023.",
+    ...(pageSeo?.metaKeywords && pageSeo.metaKeywords.length > 0 ? { keywords: pageSeo.metaKeywords } : {}),
+  };
+}
 
 const sections = [
   { id: "s1", title: "1. Introduction & Scope" },

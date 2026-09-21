@@ -197,6 +197,14 @@ export default function CommandPalette({
         onSelect: () => onSelectTab("pageKeywords"),
       },
       {
+        id: "nav-page-descriptions",
+        category: "Navigation",
+        title: "Page-Wise Meta Description Manager",
+        subtitle: "Optimize Google search snippets, CTR & meta descriptions",
+        icon: <FileText className="h-4 w-4 text-[#3B0D3B]" />,
+        onSelect: () => onSelectTab("pageDescriptions"),
+      },
+      {
         id: "nav-layout",
         category: "Navigation",
         title: "Layout & SEO Meta",

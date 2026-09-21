@@ -66,6 +66,7 @@ import AdminSixDecisionsTab from "@/components/admin/AdminSixDecisionsTab";
 import AdminFooterTab from "@/components/admin/AdminFooterTab";
 import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
 import AdminPageKeywordsTab from "@/components/admin/AdminPageKeywordsTab";
+import AdminPageDescriptionsTab from "@/components/admin/AdminPageDescriptionsTab";
 import AdminCourseEditor from "@/components/admin/AdminCourseEditor";
 import AdminSidebar from "@/components/admin/ui/AdminSidebar";
 import AdminHeader from "@/components/admin/ui/AdminHeader";
@@ -91,6 +92,7 @@ const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
   faqs: { title: "Frequently Asked Questions", breadcrumb: "Content & Marketing" },
   hero: { title: "Hero & Key Metrics", breadcrumb: "Content & Marketing" },
   pageKeywords: { title: "Page-Wise SEO & Keywords", breadcrumb: "System & Settings" },
+  pageDescriptions: { title: "Page-Wise Meta Descriptions", breadcrumb: "System & Settings" },
   banner: { title: "Announcement Banner", breadcrumb: "Content & Marketing" },
   alerts: { title: "Email Notifications & Alerts", breadcrumb: "System & Settings" },
   forms: { title: "Form Titles & Modals", breadcrumb: "System & Settings" },
@@ -177,6 +179,7 @@ export default function CustomAdminPanelPage() {
     | "faqs"
     | "blogs"
     | "pageKeywords"
+    | "pageDescriptions"
   >("overview");
 
   const [currentTime, setCurrentTime] = useState("11:48 am IST");
@@ -3922,9 +3925,25 @@ export default function CustomAdminPanelPage() {
             <AdminPageKeywordsTab
               initialPages={pageSeo}
               adminPin={getStoredPin()}
+              onSwitchToDescriptions={() => setActiveTab("pageDescriptions")}
               onSaved={(updated) => {
                 setPageSeo(updated);
                 notifySuccess("All page-wise keywords and SEO settings saved successfully!");
+              }}
+            />
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB: PAGE-WISE META DESCRIPTION MANAGER                   */}
+          {/* ========================================================= */}
+          {activeTab === "pageDescriptions" && (
+            <AdminPageDescriptionsTab
+              initialPages={pageSeo}
+              adminPin={getStoredPin()}
+              onSwitchToKeywords={() => setActiveTab("pageKeywords")}
+              onSaved={(updated) => {
+                setPageSeo(updated);
+                notifySuccess("All page-wise meta descriptions saved successfully!");
               }}
             />
           )}

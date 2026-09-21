@@ -15,12 +15,18 @@ import {
   GraduationCap,
   Sparkles,
 } from "lucide-react";
+import { getPageSeoByPath } from "@/lib/content-db";
 
-export const metadata: Metadata = {
-  title: "Terms & Conditions | TREQO: Student Agreement & Service Terms",
-  description:
-    "Legally enforceable terms and conditions governing enrollment, admissions, cohorts, fee plans, intellectual property, and platform use at Treqo School of Modern Learning Pvt. Ltd.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const pageSeo = await getPageSeoByPath("/terms");
+  return {
+    title: pageSeo?.title || pageSeo?.metaTitle || "Terms & Conditions | TREQO: Student Agreement & Service Terms",
+    description:
+      pageSeo?.metaDescription ||
+      "Legally enforceable terms and conditions governing enrollment, admissions, cohorts, fee plans, intellectual property, and platform use at Treqo School of Modern Learning Pvt. Ltd.",
+    ...(pageSeo?.metaKeywords && pageSeo.metaKeywords.length > 0 ? { keywords: pageSeo.metaKeywords } : {}),
+  };
+}
 
 const parts = [
   { id: "part-1", title: "Part I: Preliminary & Definitions" },

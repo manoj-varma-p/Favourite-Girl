@@ -172,11 +172,12 @@ export default function AdminAiBotTab({
   async function handleApplyAction(msgId: string, action: any) {
     setApplyingActionId(msgId);
     try {
+      const pin = getEffectivePin();
       const res = await fetch("/api/admin/ai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-pin": adminPin,
+          "x-admin-pin": pin,
         },
         body: JSON.stringify({
           action: "apply_action",
@@ -189,6 +190,11 @@ export default function AdminAiBotTab({
         setMessages((prev) =>
           prev.map((m) => (m.id === msgId ? { ...m, actionApplied: true } : m))
         );
+
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new CustomEvent("treqo_data_updated", { detail: action }));
+        }
+
         const confirmMsg: Message = {
           id: `confirm-${Date.now()}`,
           role: "model",

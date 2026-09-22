@@ -1276,6 +1276,14 @@ export default function CustomAdminPanelPage() {
     }
   }, [isAuthenticated]);
 
+  useEffect(() => {
+    function handleDataUpdated() {
+      loadAllData();
+    }
+    window.addEventListener("treqo_data_updated", handleDataUpdated);
+    return () => window.removeEventListener("treqo_data_updated", handleDataUpdated);
+  }, []);
+
   // Handle Authentication
   function handleLogin(e: React.FormEvent) {
     e.preventDefault();

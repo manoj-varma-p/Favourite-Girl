@@ -1,7 +1,7 @@
 [
   {
     "id": "mohit-goel",
-    "name": "Mohit Goel",
+    "name": "Vali Sayyad",
     "role": "Founder & Marketing Head",
     "mentored": "1.3k+",
     "image": "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.png",
@@ -12,7 +12,7 @@
   },
   {
     "id": "deeptika-bajaj",
-    "name": "Deeptika Bajaj",
+    "name": "Lokesh Dama",
     "role": "Growth Marketing Lead",
     "mentored": "423+",
     "image": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.png",
@@ -23,7 +23,7 @@
   },
   {
     "id": "megha-punjabi",
-    "name": "Megha Punjabi",
+    "name": "Durga Sai",
     "role": "American Express",
     "mentored": "236+",
     "image": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.png",
@@ -41,7 +41,7 @@
     "brandMetric": "Enterprise Analytics",
     "focus": "Full-funnel attribution models, clean tracking setups, and defensible ROI reporting.",
     "specialty": "Attribution & Data-Driven Growth",
-    "isLocked": true
+    "isLocked": false
   },
   {
     "id": "prateek-narang",

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAuthorizedRequest } from "@/lib/admin-auth";
 import { askGemini, getLiveAdminContext } from "@/lib/ai-assistant";
 import {
@@ -113,6 +114,156 @@ export async function POST(req: NextRequest) {
           success: true,
           applied: true,
           message: "Six Decisions updated successfully!",
+        });
+      }
+
+      if (
+        type === "mentor" ||
+        type === "mentors" ||
+        type === "tutor" ||
+        type === "tutors" ||
+        type === "lock_mentor" ||
+        type === "unlock_mentor"
+      ) {
+        const tutors = await getTutorsFromDb();
+        let updatedTutors = [...tutors];
+        const forceLock = type === "lock_mentor" ? true : type === "unlock_mentor" ? false : undefined;
+
+        if (payload?.all || payload?.lockAll || payload?.unlockAll) {
+          const lockState = payload.lockAll ? true : payload.unlockAll ? false : payload.isLocked ?? forceLock ?? false;
+          updatedTutors = updatedTutors.map((t) => ({ ...t, isLocked: Boolean(lockState) }));
+        } else {
+          const targetName = (payload?.name || "").toLowerCase().trim();
+          const targetId = (payload?.id || "").toLowerCase().trim();
+          const targetIdx = typeof payload?.index === "number" ? payload.index : -1;
+
+          let foundIdx = -1;
+          if (targetId) {
+            foundIdx = updatedTutors.findIndex((t) => t.id?.toLowerCase() === targetId);
+          }
+          if (foundIdx < 0 && targetName) {
+            foundIdx = updatedTutors.findIndex(
+              (t) =>
+                t.name.toLowerCase().includes(targetName) ||
+                targetName.includes(t.name.toLowerCase())
+            );
+          }
+          if (foundIdx < 0 && targetIdx >= 0 && targetIdx < updatedTutors.length) {
+            foundIdx = targetIdx;
+          }
+
+          if (foundIdx >= 0) {
+            const current = updatedTutors[foundIdx];
+            const newLockState =
+              forceLock !== undefined
+                ? forceLock
+                : payload?.isLocked !== undefined
+                ? Boolean(payload.isLocked)
+                : current.isLocked;
+
+            updatedTutors[foundIdx] = {
+              ...current,
+              ...payload,
+              isLocked: newLockState,
+            };
+          } else {
+            return NextResponse.json({
+              success: false,
+              error: `Could not find mentor matching '${payload?.name || payload?.id || "specified name"}'`,
+            });
+          }
+        }
+
+        await saveTutorsToDb(updatedTutors);
+        try {
+          revalidatePath("/", "layout");
+        } catch {}
+
+        const isNowLocked = payload?.isLocked ?? forceLock;
+        return NextResponse.json({
+          success: true,
+          applied: true,
+          message: isNowLocked === false
+            ? `Successfully unlocked mentor profile!`
+            : isNowLocked === true
+            ? `Successfully locked mentor profile!`
+            : `Mentor details updated successfully!`,
+        });
+      }
+
+      if (
+        type === "course" ||
+        type === "courses" ||
+        type === "program" ||
+        type === "programs" ||
+        type === "lock_course" ||
+        type === "unlock_course"
+      ) {
+        const courses = await getCoursesFromDb();
+        let updatedCourses = [...courses];
+        const forceLock = type === "lock_course" ? true : type === "unlock_course" ? false : undefined;
+
+        if (payload?.all || payload?.lockAll || payload?.unlockAll) {
+          const lockState = payload.lockAll ? true : payload.unlockAll ? false : payload.isLocked ?? forceLock ?? false;
+          updatedCourses = updatedCourses.map((c) => ({ ...c, isLocked: Boolean(lockState) }));
+        } else {
+          const targetName = (payload?.title || payload?.name || "").toLowerCase().trim();
+          const targetId = (payload?.id || "").toLowerCase().trim();
+          const targetSlug = (payload?.slug || "").toLowerCase().trim();
+
+          let foundIdx = -1;
+          if (targetId) {
+            foundIdx = updatedCourses.findIndex((c) => c.id?.toLowerCase() === targetId);
+          }
+          if (foundIdx < 0 && targetSlug) {
+            foundIdx = updatedCourses.findIndex(
+              (c) => c.id?.toLowerCase() === targetSlug || c.href?.toLowerCase().includes(targetSlug)
+            );
+          }
+          if (foundIdx < 0 && targetName) {
+            foundIdx = updatedCourses.findIndex(
+              (c) =>
+                c.title.toLowerCase().includes(targetName) ||
+                targetName.includes(c.title.toLowerCase())
+            );
+          }
+
+          if (foundIdx >= 0) {
+            const current = updatedCourses[foundIdx];
+            const newLockState =
+              forceLock !== undefined
+                ? forceLock
+                : payload?.isLocked !== undefined
+                ? Boolean(payload.isLocked)
+                : current.isLocked;
+
+            updatedCourses[foundIdx] = {
+              ...current,
+              ...payload,
+              isLocked: newLockState,
+            };
+          } else {
+            return NextResponse.json({
+              success: false,
+              error: `Could not find course matching '${payload?.title || payload?.id || "specified track"}'`,
+            });
+          }
+        }
+
+        await saveCoursesToDb(updatedCourses);
+        try {
+          revalidatePath("/", "layout");
+        } catch {}
+
+        const isNowLocked = payload?.isLocked ?? forceLock;
+        return NextResponse.json({
+          success: true,
+          applied: true,
+          message: isNowLocked === false
+            ? `Course successfully unlocked!`
+            : isNowLocked === true
+            ? `Course locked (Coming Soon)!`
+            : `Course updated successfully!`,
         });
       }
 

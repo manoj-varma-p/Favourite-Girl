@@ -188,14 +188,50 @@ export default function AdminCertificationsTab({
 
       const resData = await res.json();
       if (res.ok && resData.url) {
-        setData((prev) => ({
-          ...prev,
+        const updatedCertifications = {
+          ...data,
           treqoCertificateImage: resData.url,
-        }));
-        setStatusMsg({
-          type: "success",
-          text: "Certificate image uploaded successfully!",
-        });
+        };
+        setData(updatedCertifications);
+
+        // Auto-save immediately to database so user doesn't need to manually click save
+        try {
+          const getRes = await fetch("/api/admin/content", {
+            headers: { "x-admin-pin": adminPin },
+          });
+          const current = await getRes.json();
+          const updatedHome = {
+            ...(current.homeContent || {}),
+            certifications: updatedCertifications,
+          };
+
+          const saveRes = await fetch("/api/admin/content", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "x-admin-pin": adminPin,
+            },
+            body: JSON.stringify({ type: "home", data: updatedHome }),
+          });
+
+          if (saveRes.ok) {
+            setStatusMsg({
+              type: "success",
+              text: "Certificate uploaded and published to website!",
+            });
+            onSaved(updatedCertifications);
+          } else {
+            setStatusMsg({
+              type: "success",
+              text: "Uploaded! Click 'Save Certifications' below to publish.",
+            });
+          }
+        } catch {
+          setStatusMsg({
+            type: "success",
+            text: "Uploaded! Click 'Save Certifications' below to publish.",
+          });
+        }
       } else {
         setStatusMsg({
           type: "error",
@@ -520,6 +556,7 @@ export default function AdminCertificationsTab({
                       src={data.treqoCertificateImage}
                       alt="Certificate Preview"
                       fill
+                      unoptimized
                       className="object-contain p-2"
                     />
                   ) : (

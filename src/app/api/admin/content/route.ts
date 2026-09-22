@@ -100,6 +100,12 @@ export async function POST(req: NextRequest) {
       }
     } else if (type === "home") {
       await saveHomePageContentToDb(data);
+      try {
+        revalidatePath("/", "layout");
+        revalidatePath("/");
+      } catch (e) {
+        console.warn("Revalidate error (non-fatal):", e);
+      }
     } else if (type === "courses") {
       await saveCoursesToDb(data);
     } else if (type === "tutors") {

@@ -535,7 +535,12 @@ export async function getHomePageContentFromDb(): Promise<HomePageContent> {
           govCerts: doc.govCerts || localData.govCerts,
           sixDecisions: doc.sixDecisions || localData.sixDecisions,
           mentors: doc.mentors || localData.mentors,
-          certifications: doc.certifications || localData.certifications,
+          certifications: doc.certifications
+            ? {
+                ...localData.certifications,
+                ...doc.certifications,
+              }
+            : localData.certifications,
         };
       }
     }

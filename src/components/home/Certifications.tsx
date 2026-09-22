@@ -233,6 +233,7 @@ export default function CertificationSection({ content }: { content?: Certificat
                   src={certificateImage}
                   alt={content?.treqoTitle ? `${content.treqoTitle} Official Certificate` : "TREQO Official Certificate of Completion in Digital Marketing"}
                   fill
+                  unoptimized
                   sizes="(max-width: 1024px) 100vw, 550px"
                   className="object-contain drop-shadow-md"
                   priority

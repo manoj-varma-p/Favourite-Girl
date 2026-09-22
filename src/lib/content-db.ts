@@ -121,14 +121,22 @@ export interface GovCertsContent {
   }>;
 }
 
+export interface DecisionItem {
+  num: string;
+  title: string;
+  description: string;
+  protocolTag?: string;
+  statusTag?: string;
+  standardWay?: string;
+  treqoEnforcement?: string;
+}
+
 export interface SixDecisionsContent {
+  eyebrow?: string;
   title: string;
   subtitle?: string;
-  decisions: Array<{
-    num: string;
-    title: string;
-    description: string;
-  }>;
+  footerNote?: string;
+  decisions: DecisionItem[];
 }
 
 export interface HeroContent {

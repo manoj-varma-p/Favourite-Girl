@@ -4,44 +4,68 @@ import { useState } from "react";
 import Container from "@/components/ui/Container";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, XCircle, ShieldCheck, ChevronLeft, ChevronRight, Terminal } from "lucide-react";
-import type { SixDecisionsContent } from "@/lib/content-db";
+import type { SixDecisionsContent, DecisionItem } from "@/lib/content-db";
 
-const defaultDecisions = [
+const defaultDecisions: DecisionItem[] = [
   {
     num: "01",
     title: "70% doing",
     description:
       "The ratio is enforced, not aspirational. Every phase closes on a live problem, and theory alone doesn't clear it.",
+    protocolTag: "Enforced 70/30 Operating Ratio",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "80% passive lectures, multiple-choice quizzes, and pre-recorded videos with zero real-world feedback.",
+    treqoEnforcement: "70% hands-on campaign execution. If your ad tests don't generate real data, you cannot pass the phase.",
   },
   {
     num: "02",
     title: "Clients with something to lose",
     description:
       "You work on brands with real customers to disappoint. Fictional case studies teach confidence about risk you never carried.",
+    protocolTag: "Live Brand Account Access",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "Toy datasets, simulated mock businesses, and hypothetical case studies where failure has zero cost.",
+    treqoEnforcement: "You manage active ad spend for real partner businesses where poor decisions cost real brand money.",
   },
   {
     num: "03",
     title: "A fixed sequence",
     description:
       "You can't position a brand you haven't understood. No à-la-carte modules the order is the curriculum.",
+    protocolTag: "Non-Negotiable Linear Order",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "À-la-carte electives that let students skip hard analytics, unit economics, or attribution models.",
+    treqoEnforcement: "A non-negotiable linear sequence: you master campaign analysis and economics before touching Ads Manager.",
   },
   {
     num: "04",
     title: "AI from phase one",
     description:
       "In the workflow from the start, not bolted on as a final module nobody remembers.",
+    protocolTag: "AI-Native Daily Workflow",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "Tacked on as an optional bonus module or theoretical lecture on ChatGPT prompting at the end of the course.",
+    treqoEnforcement: "Integrated into your daily workflow from day one: AI video scripting, hook variation, and audience mining.",
   },
   {
     num: "05",
     title: "Defended out loud",
     description:
       "Your numbers, your logic, your revenue plan pushed on in front of people. That's the interview rehearsal.",
+    protocolTag: "Live Boardroom Defense",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "Submitting written PDF reports or slide decks that hiring panels never look at and mentors never critique.",
+    treqoEnforcement: "You stand up in our class and defend your live campaign CAC, ROAS, and revenue model out loud to founders.",
   },
   {
     num: "06",
     title: "50 seats, capped",
     description:
       "Small enough that there's nowhere to hide, and small enough that we know what you're bad at by week three.",
+    protocolTag: "Strict 50-Seat Cap",
+    statusTag: "NON-NEGOTIABLE",
+    standardWay: "Massive 1,000+ student automated cohorts where instructors don't know your name or strengths.",
+    treqoEnforcement: "Strictly capped at 50 seats per cohort. Tutors know your exact weaknesses and campaign blindspots by week three.",
   },
 ];
 
@@ -89,6 +113,12 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
   const [activeIndex, setActiveIndex] = useState(0);
 
   const title = content?.title || "Six decisions that make Treqo different.";
+  const eyebrow = content?.eyebrow || "WHY TREQO";
+  const subtitle =
+    content?.subtitle ||
+    "Most marketing programs teach theory from slides. We made six deliberate structural choices to run this as an active agency residency.";
+  const footerNote = content?.footerNote || "Enforced on every cohort since Batch 1.";
+
   const decisions =
     content?.decisions && content.decisions.length > 0
       ? content.decisions
@@ -97,6 +127,11 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
   const currentItem = decisions[activeIndex] || decisions[0];
   const currentDetail =
     DECISION_DETAILS[currentItem.num] || DECISION_DETAILS["01"];
+
+  const protocolTag = currentItem.protocolTag || currentDetail?.protocolTag || "Operating Standard";
+  const statusTag = currentItem.statusTag || "NON-NEGOTIABLE";
+  const standardWay = currentItem.standardWay || currentDetail?.standardWay || "";
+  const treqoEnforcement = currentItem.treqoEnforcement || currentDetail?.treqoEnforcement || "";
 
   function handlePrev() {
     setActiveIndex((prev) => (prev - 1 + decisions.length) % decisions.length);
@@ -116,13 +151,13 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
         <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
           <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-1 text-[11px] font-black uppercase tracking-[0.18em] text-[#E8D8E8] shadow-2xs">
             <span className="h-1.5 w-1.5 rounded-full bg-[#C084FC] animate-pulse" />
-            WHY TREQO
+            {eyebrow}
           </span>
           <h2 className="mt-3.5 text-2xl sm:text-3xl md:text-4xl lg:text-[2.65rem] font-black leading-[1.12] tracking-tight text-white sm:whitespace-nowrap">
             {title}
           </h2>
           <p className="mt-3 text-sm sm:text-base leading-relaxed text-[#C8B8C8] font-normal max-w-xl mx-auto">
-            Most marketing programs teach theory from slides. We made six deliberate structural choices to run this as an active agency residency.
+            {subtitle}
           </p>
         </div>
 
@@ -192,13 +227,13 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
                   </span>
                   <span className="text-[#A898A8]">•</span>
                   <span className="text-[#E8D8E8] font-bold">
-                    {currentDetail.protocolTag}
+                    {protocolTag}
                   </span>
                 </div>
 
                 <span className="inline-flex items-center gap-1.5 text-[#C084FC] text-[11px] font-bold">
                   <ShieldCheck className="w-3.5 h-3.5" />
-                  NON-NEGOTIABLE
+                  {statusTag}
                 </span>
               </div>
 
@@ -221,7 +256,7 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
                     The Standard Way
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-[#FCD34D]/90 font-medium">
-                    {currentDetail.standardWay}
+                    {standardWay}
                   </p>
                 </div>
 
@@ -232,7 +267,7 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
                     The Treqo Standard
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-white/95 font-medium">
-                    {currentDetail.treqoEnforcement}
+                    {treqoEnforcement}
                   </p>
                 </div>
               </div>
@@ -241,7 +276,7 @@ export default function SixDecisions({ content }: { content?: SixDecisionsConten
             {/* Console Footer Controls */}
             <div className="mt-8 pt-5 border-t border-white/10 flex items-center justify-between">
               <span className="text-xs font-mono text-[#A898A8]">
-                Enforced on every cohort since Batch 1.
+                {footerNote}
               </span>
 
               <div className="flex items-center gap-2">

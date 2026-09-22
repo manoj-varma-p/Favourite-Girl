@@ -173,37 +173,64 @@
     ]
   },
   "sixDecisions": {
+    "eyebrow": "WHY TREQO",
     "title": "Six decisions that make Treqo different.",
+    "subtitle": "Most marketing programs teach theory from slides. We made six deliberate structural choices to run this as an active agency residency.",
+    "footerNote": "Enforced on every cohort since Batch 1.",
     "decisions": [
       {
         "num": "01",
         "title": "70% doing",
-        "description": "The ratio is enforced, not aspirational. Every phase closes on a live problem, and theory alone doesn't clear it."
+        "description": "The ratio is enforced, not aspirational. Every phase closes on a live problem, and theory alone doesn't clear it.",
+        "protocolTag": "Enforced 70/30 Operating Ratio",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "80% passive lectures, multiple-choice quizzes, and pre-recorded videos with zero real-world feedback.",
+        "treqoEnforcement": "70% hands-on campaign execution. If your ad tests don't generate real data, you cannot pass the phase."
       },
       {
         "num": "02",
         "title": "Clients with something to lose",
-        "description": "You work on brands with real customers to disappoint. Fictional case studies teach confidence about risk you never carried."
+        "description": "You work on brands with real customers to disappoint. Fictional case studies teach confidence about risk you never carried.",
+        "protocolTag": "Live Brand Account Access",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "Toy datasets, simulated mock businesses, and hypothetical case studies where failure has zero cost.",
+        "treqoEnforcement": "You manage active ad spend for real partner businesses where poor decisions cost real brand money."
       },
       {
         "num": "03",
         "title": "A fixed sequence",
-        "description": "You can't position a brand you haven't understood. No à-la-carte modules the order is the curriculum."
+        "description": "You can't position a brand you haven't understood. No à-la-carte modules the order is the curriculum.",
+        "protocolTag": "Non-Negotiable Linear Order",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "À-la-carte electives that let students skip hard analytics, unit economics, or attribution models.",
+        "treqoEnforcement": "A non-negotiable linear sequence: you master campaign analysis and economics before touching Ads Manager."
       },
       {
         "num": "04",
         "title": "AI from phase one",
-        "description": "In the workflow from the start, not bolted on as a final module nobody remembers."
+        "description": "In the workflow from the start, not bolted on as a final module nobody remembers.",
+        "protocolTag": "AI-Native Daily Workflow",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "Tacked on as an optional bonus module or theoretical lecture on ChatGPT prompting at the end of the course.",
+        "treqoEnforcement": "Integrated into your daily workflow from day one: AI video scripting, hook variation, and audience mining."
       },
       {
         "num": "05",
         "title": "Defended out loud",
-        "description": "Your numbers, your logic, your revenue plan pushed on in front of people. That's the interview rehearsal."
+        "description": "Your numbers, your logic, your revenue plan pushed on in front of people. That's the interview rehearsal.",
+        "protocolTag": "Live Boardroom Defense",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "Submitting written PDF reports or slide decks that hiring panels never look at and mentors never critique.",
+        "treqoEnforcement": "You stand up in our class and defend your live campaign CAC, ROAS, and revenue model out loud to founders."
       },
       {
         "num": "06",
         "title": "50 seats, capped",
-        "description": "Small enough that there's nowhere to hide, and small enough that we know what you're bad at by week three."
+        "description": "Small enough that there's nowhere to hide, and small enough that we know what you're bad at by week three.",
+        "protocolTag": "Strict 50-Seat Cap",
+        "statusTag": "NON-NEGOTIABLE",
+        "standardWay": "Massive 1,000+ student automated cohorts where instructors don't know your name or strengths.",
+        "treqoEnforcement": "Strictly capped at 50 seats per cohort. Tutors know your exact weaknesses and campaign blindspots by week three."
       }
     ]
   },

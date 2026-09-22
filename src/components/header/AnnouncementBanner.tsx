@@ -1,12 +1,13 @@
 import Link from "next/link";
-import { navigationSettings } from "@/lib/cms-client";
+import { getNavigationSettingsFromDb } from "@/lib/content-db";
 import { announcementBannerData } from "@/data/navigation";
 
-export default function AnnouncementBanner() {
-  const badge = navigationSettings.bannerBadge || announcementBannerData.badge;
-  const text = navigationSettings.bannerText || announcementBannerData.text;
-  const linkText = navigationSettings.bannerLinkText || announcementBannerData.linkText;
-  const linkHref = navigationSettings.bannerLinkHref || announcementBannerData.linkHref;
+export default async function AnnouncementBanner() {
+  const navSettings = await getNavigationSettingsFromDb();
+  const badge = navSettings.bannerBadge || announcementBannerData.badge;
+  const text = navSettings.bannerText || announcementBannerData.text;
+  const linkText = navSettings.bannerLinkText || announcementBannerData.linkText;
+  const linkHref = navSettings.bannerLinkHref || announcementBannerData.linkHref;
 
   return (
     <div className="hidden sm:block w-full bg-[#0B0B0F] border-b border-[#5A2A5A]/30 py-2 px-4 text-center text-xs sm:text-sm text-white">

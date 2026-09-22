@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import Container from "@/components/ui/Container";
 import DesktopHeader from "./DesktopHeader";
 import MobileHeader from "./MobileHeader";
-import AnnouncementBanner from "./AnnouncementBanner";
 import { cn } from "@/lib/utils";
 
 interface HeaderProps {
   variant?: "hero" | "standard";
+  banner?: ReactNode;
 }
 
-export default function Header({ variant = "standard" }: HeaderProps) {
+export default function Header({ variant = "standard", banner }: HeaderProps) {
   const [pastHero, setPastHero] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const ticking = useRef(false);
@@ -53,7 +54,7 @@ export default function Header({ variant = "standard" }: HeaderProps) {
   if (variant === "standard") {
     return (
       <>
-        <AnnouncementBanner />
+        {banner ?? null}
         <header role="banner" className="sticky top-0 z-50 w-full bg-[#FDFAF6]/95 backdrop-blur-md border-b border-[#F5EDE0] shadow-xs">
           <div className="w-full">
             <Container>

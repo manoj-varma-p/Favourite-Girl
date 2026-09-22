@@ -1,10 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 import { promises as fs } from "fs";
 import path from "path";
+import { v2 as cloudinary } from "cloudinary";
 
 import { isAuthorizedRequest } from "@/lib/admin-auth";
 
 const ALLOWED_EXTENSIONS = new Set([".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif", ".avif", ".ico"]);
+
+// Check if Cloudinary is configured
+function isCloudinaryConfigured(): boolean {
+  return Boolean(
+    process.env.CLOUDINARY_CLOUD_NAME &&
+    process.env.CLOUDINARY_API_KEY &&
+    process.env.CLOUDINARY_API_SECRET
+  );
+}
+
+// Check if we're running on Vercel (read-only filesystem)
+function isVercel(): boolean {
+  return Boolean(process.env.VERCEL || process.env.VERCEL_ENV);
+}
 
 export async function POST(req: NextRequest) {
   if (!isAuthorizedRequest(req)) {
@@ -25,7 +40,6 @@ export async function POST(req: NextRequest) {
     const isImageMime = Boolean(file.type && file.type.startsWith("image/"));
     const hasImageExt = ALLOWED_EXTENSIONS.has(ext.toLowerCase());
 
-    // Validate mime type or extension (handles Windows cases where mime is octet-stream/empty)
     if (!isImageMime && !hasImageExt) {
       return NextResponse.json({ error: "Only image files (PNG, JPG, WEBP, SVG, GIF, AVIF) are allowed." }, { status: 400 });
     }
@@ -36,6 +50,59 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "File size exceeds 8MB limit." }, { status: 400 });
     }
 
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    // --- Path 1: Upload to Cloudinary (works on Vercel) ---
+    if (isCloudinaryConfigured()) {
+      cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+      });
+
+      const sanitizedName = file.name
+        .replace(ext, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9_-]/g, "-")
+        .slice(0, 40);
+
+      const uploadResult = await new Promise<{ secure_url: string }>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: `treqo/${folder}`,
+            public_id: `${sanitizedName}-${Date.now()}`,
+            resource_type: "image",
+            overwrite: false,
+          },
+          (error, result) => {
+            if (error || !result) reject(error || new Error("Cloudinary upload failed"));
+            else resolve(result as { secure_url: string });
+          }
+        );
+        uploadStream.end(buffer);
+      });
+
+      return NextResponse.json({
+        success: true,
+        url: uploadResult.secure_url,
+        fileName: file.name,
+        size: file.size,
+      });
+    }
+
+    // --- Path 2: Vercel without Cloudinary — not supported ---
+    if (isVercel()) {
+      return NextResponse.json(
+        {
+          error:
+            "Image uploads are not configured on this deployment. Please add CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET to your Vercel environment variables, or use 'Enter Image URL' to paste an image URL instead.",
+        },
+        { status: 503 }
+      );
+    }
+
+    // --- Path 3: Local development — save to disk ---
     const sanitizedBase = file.name
       .replace(ext, "")
       .toLowerCase()
@@ -47,9 +114,6 @@ export async function POST(req: NextRequest) {
     await fs.mkdir(targetDir, { recursive: true });
 
     const filePath = path.join(targetDir, uniqueFilename);
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
-
     await fs.writeFile(filePath, buffer);
 
     const publicUrl = `/uploads/${folder}/${uniqueFilename}`;
@@ -74,6 +138,11 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  // On Vercel without local disk, return empty list
+  if (isVercel() && !isCloudinaryConfigured()) {
+    return NextResponse.json({ success: true, files: [] });
+  }
+
   try {
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
     await fs.mkdir(uploadsDir, { recursive: true });
@@ -94,8 +163,8 @@ export async function GET(req: NextRequest) {
             list.push(...nested);
           } else if (entry.isFile()) {
             if (entry.name === ".gitkeep") continue;
-            const ext = path.extname(entry.name).toLowerCase();
-            if ([".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"].includes(ext)) {
+            const fileExt = path.extname(entry.name).toLowerCase();
+            if ([".png", ".jpg", ".jpeg", ".webp", ".svg", ".gif"].includes(fileExt)) {
               const stat = await fs.stat(fullPath);
               list.push({
                 url: `/uploads/${rel.replace(/\\/g, "/")}`,

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ArrowRight, Clock, Star } from "lucide-react";
 import Header from "@/components/header/Header";
+import AnnouncementBanner from "@/components/header/AnnouncementBanner";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
@@ -227,7 +228,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-[#1A0A1A]">
-      <Header variant="standard" />
+      <Header variant="standard" banner={<AnnouncementBanner />} />
 
       <main className="flex-1 pb-16 lg:pb-0">
 

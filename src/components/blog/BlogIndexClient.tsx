@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Header from "@/components/header/Header";
@@ -11,9 +12,10 @@ import type { BlogPost } from "@/data/blogs";
 
 interface BlogIndexClientProps {
   posts: BlogPost[];
+  banner?: ReactNode;
 }
 
-export default function BlogIndexClient({ posts }: BlogIndexClientProps) {
+export default function BlogIndexClient({ posts, banner }: BlogIndexClientProps) {
   const [previewPost, setPreviewPost] = useState<BlogPost | null>(null);
   const [newsletterEmail, setNewsletterEmail] = useState<string>("");
   const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "loading" | "subscribed">("idle");
@@ -32,7 +34,7 @@ export default function BlogIndexClient({ posts }: BlogIndexClientProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-[#1A0A1A]">
-      <Header variant="standard" />
+      <Header variant="standard" banner={banner} />
 
       <main className="flex-1 pb-16 sm:pb-20">
         {/* Top Hero Section */}

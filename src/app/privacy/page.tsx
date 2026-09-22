@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Header from "@/components/header/Header";
+import AnnouncementBanner from "@/components/header/AnnouncementBanner";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
 import {
@@ -50,7 +51,7 @@ const sections = [
 export default function PrivacyPolicyPage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#FDFAF6]">
-      <Header variant="standard" />
+      <Header variant="standard" banner={<AnnouncementBanner />} />
 
       {/* Hero Header */}
       <section className="relative overflow-hidden bg-[#0B0B0F] py-16 sm:py-20 text-white">

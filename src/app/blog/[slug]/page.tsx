@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import Header from "@/components/header/Header";
+import AnnouncementBanner from "@/components/header/AnnouncementBanner";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
 import BlogCard from "@/components/blog/BlogCard";
@@ -56,7 +57,7 @@ export default async function BlogPostPage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-[#1A0A1A]">
-      <Header variant="standard" />
+      <Header variant="standard" banner={<AnnouncementBanner />} />
 
       <main className="flex-1 pb-16 sm:pb-20">
         <article>

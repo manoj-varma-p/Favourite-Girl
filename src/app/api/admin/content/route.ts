@@ -93,6 +93,11 @@ export async function POST(req: NextRequest) {
       }
     } else if (type === "navigation") {
       await saveNavigationSettingsToDb(data);
+      try {
+        revalidatePath("/", "layout");
+      } catch (e) {
+        console.warn("Revalidate error (non-fatal):", e);
+      }
     } else if (type === "home") {
       await saveHomePageContentToDb(data);
     } else if (type === "courses") {

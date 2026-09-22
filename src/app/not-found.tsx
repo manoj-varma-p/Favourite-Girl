@@ -1,13 +1,14 @@
 import Link from "next/link";
 import { BookOpen, Compass, Home } from "lucide-react";
 import Header from "@/components/header/Header";
+import AnnouncementBanner from "@/components/header/AnnouncementBanner";
 import Footer from "@/components/footer/Footer";
 import Container from "@/components/ui/Container";
 
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col bg-[#FDFAF6] text-slate-900">
-      <Header variant="standard" />
+      <Header variant="standard" banner={<AnnouncementBanner />} />
 
       <main className="flex-1 flex items-center justify-center py-16 sm:py-24">
         <Container className="max-w-2xl text-center">

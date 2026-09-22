@@ -41,7 +41,7 @@
     "brandMetric": "Enterprise Analytics",
     "focus": "Full-funnel attribution models, clean tracking setups, and defensible ROI reporting.",
     "specialty": "Attribution & Data-Driven Growth",
-    "isLocked": false
+    "isLocked": true
   },
   {
     "id": "prateek-narang",

@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, X, Bot, Maximize2 } from "lucide-react";
+import { Sparkles, X, Maximize2 } from "lucide-react";
 import AdminAiBotTab from "./AdminAiBotTab";
-import { cn } from "@/lib/utils";
 
 interface Props {
   adminPin: string;
@@ -16,88 +15,65 @@ export default function AdminFloatingAiWidget({ adminPin, currentTab, onNavigate
 
   return (
     <>
-      {/* Floating Trigger Button (Bottom Right) */}
+      {/* Compact Floating Trigger Button */}
       {!isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-2">
+        <div className="fixed bottom-5 right-5 z-40">
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            aria-label="Open AI Copilot"
-            className="group relative flex items-center gap-2.5 rounded-full bg-gradient-to-r from-[#3B0D3B] to-[#1A0A1A] p-3.5 sm:px-5 sm:py-3.5 text-white shadow-2xl transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(192,132,252,0.4)] border border-white/20 cursor-pointer"
+            aria-label="Open Assistant"
+            className="flex items-center gap-2 rounded-full bg-[#1F1E1B] hover:bg-[#34302C] text-white px-3.5 py-2.5 shadow-lg border border-black/10 transition-all hover:scale-105 cursor-pointer"
           >
-            <div className="relative">
-              <Sparkles className="h-5 w-5 text-[#C084FC] animate-pulse" />
-              <span className="absolute -top-1 -right-1 flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" />
-              </span>
-            </div>
-            <div className="hidden sm:flex flex-col items-start text-left">
-              <span className="text-xs font-black tracking-tight leading-none text-white">
-                Treqo AI Copilot
-              </span>
-              <span className="text-[10px] text-[#C8B8C8] font-medium leading-tight mt-0.5">
-                Gemini 3.6 • Read, Write & Fix
-              </span>
-            </div>
+            <Sparkles className="h-4 w-4 text-[#D8D2C7]" />
+            <span className="text-xs font-medium tracking-tight">Assistant</span>
           </button>
         </div>
       )}
 
-      {/* Drawer Modal Backdrop & Window */}
+      {/* Reduced-Size Floating Card (No full-screen dark backdrop) */}
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-200">
-          <div className="relative w-full max-w-2xl bg-[#FDFAF6] h-full shadow-2xl flex flex-col border-l border-[#3B0D3B]/15 animate-in slide-in-from-right duration-300">
-            {/* Drawer Header Controls */}
-            <div className="flex items-center justify-between px-5 py-3.5 bg-white border-b border-[#3B0D3B]/10">
-              <div className="flex items-center gap-2.5">
-                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-[#3B0D3B] text-[#C084FC]">
-                  <Bot className="h-4 w-4" />
-                </div>
-                <div>
-                  <h3 className="text-xs font-black uppercase tracking-wider text-[#1A0A1A]">
-                    Treqo AI Operations Assistant
-                  </h3>
-                  <p className="text-[11px] text-[#5A4A5A]">
-                    Context: <strong className="capitalize text-[#3B0D3B]">{currentTab} Tab</strong>
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-1.5">
-                <button
-                  type="button"
-                  title="Switch to full-page tab"
-                  onClick={() => {
-                    setIsOpen(false);
-                    onNavigateTab("aiBot");
-                  }}
-                  className="p-2 rounded-xl text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#1A0A1A] transition-colors cursor-pointer"
-                >
-                  <Maximize2 className="h-4 w-4" />
-                </button>
-                <button
-                  type="button"
-                  title="Close Assistant"
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 rounded-xl text-[#5A4A5A] hover:bg-[#FAF5EE] hover:text-[#1A0A1A] transition-colors cursor-pointer"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
+        <div className="fixed bottom-5 right-5 z-50 w-[92vw] sm:w-[390px] h-[520px] max-h-[84vh] bg-[#FAF9F5] rounded-2xl shadow-2xl border border-[#E8E5DE] flex flex-col overflow-hidden animate-in fade-in slide-in-from-bottom-2 duration-200">
+          {/* Minimal Window Header */}
+          <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-[#E8E5DE]">
+            <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1F1E1B]">
+              <Sparkles className="h-3.5 w-3.5 text-[#8C827A]" />
+              <span>Assistant</span>
             </div>
 
-            {/* AI Assistant Body */}
-            <div className="flex-1 p-4 overflow-hidden">
-              <AdminAiBotTab
-                adminPin={adminPin}
-                currentTab={currentTab}
-                onNavigateTab={(tab) => {
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                title="Expand to full page"
+                onClick={() => {
                   setIsOpen(false);
-                  onNavigateTab(tab);
+                  onNavigateTab("aiBot");
                 }}
-              />
+                className="p-1 rounded-md text-[#8C827A] hover:text-[#1F1E1B] hover:bg-[#EFECE6] transition-colors cursor-pointer"
+              >
+                <Maximize2 className="h-3.5 w-3.5" />
+              </button>
+              <button
+                type="button"
+                title="Close"
+                onClick={() => setIsOpen(false)}
+                className="p-1 rounded-md text-[#8C827A] hover:text-[#1F1E1B] hover:bg-[#EFECE6] transition-colors cursor-pointer"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
             </div>
+          </div>
+
+          {/* Compact Assistant Body */}
+          <div className="flex-1 overflow-hidden">
+            <AdminAiBotTab
+              adminPin={adminPin}
+              currentTab={currentTab}
+              isCompact={true}
+              onNavigateTab={(tab) => {
+                setIsOpen(false);
+                onNavigateTab(tab);
+              }}
+            />
           </div>
         </div>
       )}

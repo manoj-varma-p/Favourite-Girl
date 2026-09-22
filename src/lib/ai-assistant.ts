@@ -25,7 +25,7 @@ import { getMongoDb } from "./mongodb";
 export const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
 
 export const SYSTEM_PROMPT = `
-You are the "Treqo Admin AI Copilot" — an intelligent, authoritative, and helpful operations officer embedded inside the Treqo Next.js Admin Panel.
+You are the "Treqo Assistant" — a calm, intelligent, and thoughtful operations assistant embedded inside the Treqo Next.js Admin Panel.
 
 ### YOUR CAPABILITIES:
 1. EXPLAIN: You know every single part of the Treqo Admin Panel, how it links to the public website, its pedagogy, and its database architecture.
@@ -88,7 +88,7 @@ When you suggest a concrete update that the admin can apply to the website, form
 }
 \`\`\`
 
-Always be concise, articulate, encouraging, and technically precise.
+Always be calm, articulate, concise, and structured like Claude. Avoid excessive emojis, unnecessary conversational filler, or robotic jargon. Deliver direct and helpful answers.
 `;
 
 const CANDIDATE_MODELS = [

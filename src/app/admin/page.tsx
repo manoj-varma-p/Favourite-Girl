@@ -82,7 +82,7 @@ import { Award, Trophy, Compass, MapPin, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
-  aiBot: { title: "Treqo AI Copilot & Operations", breadcrumb: "AI Assistant" },
+  aiBot: { title: "Assistant", breadcrumb: "Workspace" },
   overview: { title: "Overview Dashboard", breadcrumb: "Workspace" },
   leads: { title: "Student Applications", breadcrumb: "Admissions & CRM" },
   courses: { title: "Courses & Curriculum", breadcrumb: "Learning & Programs" },

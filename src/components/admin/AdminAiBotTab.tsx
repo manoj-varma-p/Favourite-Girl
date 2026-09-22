@@ -1,27 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import {
-  Sparkles,
-  Send,
-  Bot,
-  User,
-  RotateCcw,
-  CheckCircle2,
-  AlertCircle,
-  ArrowRight,
-  Database,
-  Cpu,
-  Layers,
-  Wand2,
-  Terminal,
-  HelpCircle,
-  Search,
-  ExternalLink,
-  ShieldCheck,
-  Check,
-  Zap,
-} from "lucide-react";
+import { ArrowUp, RotateCcw, X, Check, ArrowRight, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -37,62 +17,41 @@ interface Props {
   adminPin: string;
   currentTab?: string;
   onNavigateTab?: (tabId: string) => void;
+  isCompact?: boolean;
 }
 
-const QUICK_PROMPTS = [
-  {
-    label: "Explain Active Tab",
-    icon: HelpCircle,
-    prompt: "Can you explain how this section works, how it connects to the frontend, and what best practices I should follow?",
-  },
-  {
-    label: "Generate 20 SEO Keywords",
-    icon: Search,
-    prompt: "Generate 20 high-intent, location-tailored SEO keywords for the New Age Digital Marketing course (/categories/digital-marketing) in India.",
-  },
-  {
-    label: "Why didn't my changes show on Vercel?",
-    icon: AlertCircle,
-    prompt: "I saved changes in the admin panel, but they are not appearing on my live Vercel website. Can you diagnose why and tell me exactly how to resolve this?",
-  },
-  {
-    label: "Draft Announcement Banner",
-    icon: Wand2,
-    prompt: "Draft a high-converting announcement banner for Batch 2 enrollments with badge, headline, and link CTA, and format it as an action so I can apply it.",
-  },
-  {
-    label: "Explain Mentor Lock / Unlock",
-    icon: ShieldCheck,
-    prompt: "Why are some mentors blurred with a lock icon on the website? How does the mentor lock/unlock feature work and how do I manage it?",
-  },
-  {
-    label: "Audit Page SEO Matrix",
-    icon: Layers,
-    prompt: "Audit the SEO setup across my courses and landing pages. What pages need attention and how should I optimize their meta descriptions?",
-  },
+const SUGGESTIONS = [
+  "Explain this section and best practices",
+  "Generate SEO keywords for Digital Marketing",
+  "Diagnose why changes didn't appear on Vercel",
+  "How do locked mentors and courses work?",
 ];
 
-export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNavigateTab }: Props) {
+export default function AdminAiBotTab({
+  adminPin,
+  currentTab = "overview",
+  onNavigateTab,
+  isCompact = false,
+}: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [diagnostics, setDiagnostics] = useState<any>(null);
   const [applyingActionId, setApplyingActionId] = useState<string | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Load chat history from localStorage
+  // Load chat history
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("treqo_admin_ai_chat_v1");
+      const stored = localStorage.getItem("treqo_admin_ai_chat_v2");
       if (stored) {
         setMessages(JSON.parse(stored));
       } else {
-        // Welcome message
         setMessages([
           {
-            id: "welcome-1",
+            id: "welcome",
             role: "model",
-            content: `👋 **Welcome to the Treqo Admin AI Copilot!**\n\nI am powered by **Google Gemini 3.6 Flash** and have complete operational knowledge of your entire admin panel, MongoDB database, SEO matrix, and Next.js frontend.\n\n### Here is what I can do for you right now:\n* 📘 **Explain Every Part:** Ask about any tab, workflow, curriculum structure, or settings.\n* 🛠️ **Resolve Issues:** Troubleshoot Vercel deployments, MongoDB sync, mentor lock states, and PIN auth.\n* 🔍 **Read & Audit:** Inspect live SEO keywords, courses, leads, and site configuration.\n* ✨ **Generate Content:** Create high-volume SEO keywords, compelling meta descriptions, curriculum modules, and blog drafts.\n* ⚡ **Live Execution (Write):** When I suggest updates (like new SEO keywords or banner changes), I can provide an **Apply Changes** card so you can update the site with 1 click!\n\nWhat would you like to explore or update today?`,
+            content: "How can I help you with Treqo today?",
             timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
           },
         ]);
@@ -106,7 +65,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
   useEffect(() => {
     if (messages.length > 0) {
       try {
-        localStorage.setItem("treqo_admin_ai_chat_v1", JSON.stringify(messages.slice(-30)));
+        localStorage.setItem("treqo_admin_ai_chat_v2", JSON.stringify(messages.slice(-25)));
       } catch {
         // ignore
       }
@@ -118,31 +77,8 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
-  // Load diagnostics once on mount
-  useEffect(() => {
-    async function loadDiag() {
-      try {
-        const res = await fetch("/api/admin/ai", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-admin-pin": adminPin,
-          },
-          body: JSON.stringify({ action: "diagnostics" }),
-        });
-        const data = await res.json();
-        if (data.success && data.diagnostics) {
-          setDiagnostics(data.diagnostics);
-        }
-      } catch (e) {
-        console.warn("Diagnostics fetch failed:", e);
-      }
-    }
-    loadDiag();
-  }, [adminPin]);
-
-  async function handleSend(customText?: string) {
-    const textToSend = (customText || input).trim();
+  async function handleSend(text?: string) {
+    const textToSend = (text || input).trim();
     if (!textToSend || isLoading) return;
 
     const userMessage: Message = {
@@ -158,7 +94,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
     setIsLoading(true);
 
     try {
-      const historyPayload = newMessages.slice(-8).map((m) => ({
+      const historyForApi = newMessages.map((m) => ({
         role: m.role,
         content: m.content,
       }));
@@ -171,7 +107,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
         },
         body: JSON.stringify({
           message: textToSend,
-          history: historyPayload,
+          history: historyForApi.slice(-8),
           currentTab,
         }),
       });
@@ -179,31 +115,31 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
       const data = await res.json();
 
       if (res.ok && data.success) {
-        const modelMessage: Message = {
+        const botMessage: Message = {
           id: `model-${Date.now()}`,
           role: "model",
-          content: data.reply,
+          content: data.reply || "Done.",
           proposedAction: data.proposedAction,
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
-        setMessages((prev) => [...prev, modelMessage]);
+        setMessages((prev) => [...prev, botMessage]);
       } else {
-        const errorMessage: Message = {
+        const errorMsg: Message = {
           id: `model-${Date.now()}`,
           role: "model",
-          content: `⚠️ **AI Service Error:** ${data.error || "Unable to reach Gemini API. Please verify your connection."}`,
+          content: data.error || "Unable to reach the assistant right now. Please try again.",
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
-        setMessages((prev) => [...prev, errorMessage]);
+        setMessages((prev) => [...prev, errorMsg]);
       }
     } catch {
-      const errorMessage: Message = {
+      const errorMsg: Message = {
         id: `model-${Date.now()}`,
         role: "model",
-        content: "⚠️ **Network Error:** Could not contact the AI backend service.",
+        content: "Network error. Please check your connection.",
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      setMessages((prev) => [...prev, errorMsg]);
     } finally {
       setIsLoading(false);
     }
@@ -229,62 +165,58 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
         setMessages((prev) =>
           prev.map((m) => (m.id === msgId ? { ...m, actionApplied: true } : m))
         );
-        // Add confirmation message
-        const confirmationMsg: Message = {
+        const confirmMsg: Message = {
           id: `confirm-${Date.now()}`,
           role: "model",
-          content: `✅ **Action Executed Successfully!**\n\n${data.message || "The changes have been saved to your database and local backup files."}`,
+          content: data.message || "Changes applied successfully.",
           timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         };
-        setMessages((prev) => [...prev, confirmationMsg]);
+        setMessages((prev) => [...prev, confirmMsg]);
       } else {
-        alert(data.error || "Failed to execute action.");
+        alert(data.error || "Failed to execute update.");
       }
-    } catch (e) {
-      alert("Network error applying action.");
+    } catch {
+      alert("Network error applying update.");
     } finally {
       setApplyingActionId(null);
     }
   }
 
   function handleClearChat() {
-    if (confirm("Clear AI conversation history?")) {
-      localStorage.removeItem("treqo_admin_ai_chat_v1");
-      setMessages([
-        {
-          id: "welcome-clean",
-          role: "model",
-          content: "Conversation history cleared. Ready for your next command or question!",
-          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-        },
-      ]);
-    }
+    localStorage.removeItem("treqo_admin_ai_chat_v2");
+    setMessages([
+      {
+        id: "welcome",
+        role: "model",
+        content: "How can I help you with Treqo today?",
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
   }
 
-  // Simple markdown renderer for bold, code blocks, lists
+  // Clean, elegant text formatting
   function renderFormattedText(text: string) {
-    // Remove action code blocks from standard display to keep clean
     const cleaned = text.replace(/```action[\s\S]*?```/g, "").trim();
 
     return cleaned.split("\n").map((line, idx) => {
       if (line.startsWith("### ")) {
         return (
-          <h4 key={idx} className="font-black text-[#1A0A1A] text-sm mt-3 mb-1">
+          <h4 key={idx} className="font-semibold text-[#1F1E1B] text-sm mt-3 mb-1">
             {line.replace("### ", "")}
           </h4>
         );
       }
       if (line.startsWith("## ")) {
         return (
-          <h3 key={idx} className="font-black text-[#1A0A1A] text-base mt-3 mb-1">
+          <h3 key={idx} className="font-semibold text-[#1F1E1B] text-base mt-3 mb-1">
             {line.replace("## ", "")}
           </h3>
         );
       }
       if (line.startsWith("* ") || line.startsWith("- ")) {
         return (
-          <div key={idx} className="flex items-start gap-2 ml-2 my-0.5 text-xs sm:text-sm">
-            <span className="text-[#3B0D3B] font-black">•</span>
+          <div key={idx} className="flex items-start gap-2 ml-1 my-0.5 text-xs sm:text-sm text-[#2D2A26]">
+            <span className="text-[#8C827A]">•</span>
             <span>{formatInlineMarkdown(line.slice(2))}</span>
           </div>
         );
@@ -293,7 +225,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
         return <div key={idx} className="h-1.5" />;
       }
       return (
-        <p key={idx} className="text-xs sm:text-sm leading-relaxed my-0.5">
+        <p key={idx} className="text-xs sm:text-sm leading-relaxed text-[#2D2A26] my-0.5">
           {formatInlineMarkdown(line)}
         </p>
       );
@@ -305,7 +237,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
     return parts.map((part, i) => {
       if (part.startsWith("**") && part.endsWith("**")) {
         return (
-          <strong key={i} className="font-bold text-[#1A0A1A]">
+          <strong key={i} className="font-semibold text-[#1F1E1B]">
             {part.slice(2, -2)}
           </strong>
         );
@@ -314,7 +246,7 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
         return (
           <code
             key={i}
-            className="rounded bg-[#3B0D3B]/10 px-1 py-0.5 font-mono text-[11px] text-[#3B0D3B] font-bold"
+            className="rounded bg-[#EFECE6] px-1.5 py-0.5 font-mono text-[11px] text-[#3F3934]"
           >
             {part.slice(1, -1)}
           </code>
@@ -325,210 +257,130 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
   }
 
   return (
-    <div className="flex flex-col h-[calc(100vh-140px)] min-h-[600px] space-y-4">
-      {/* Top Header Control Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-2xl border border-[#3B0D3B]/10 shadow-xs">
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#3B0D3B] to-[#1A0A1A] text-white shadow-md">
-            <Sparkles className="h-5 w-5 text-[#C084FC] animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg sm:text-xl font-black text-[#1A0A1A] tracking-tight">
-                Treqo AI Copilot
-              </h2>
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 border border-emerald-200 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                Gemini 3.6 Flash Active
-              </span>
-            </div>
-            <p className="text-xs text-[#5A4A5A]">
-              Trained operations officer with live read, write, and generation capabilities across the entire Treqo system.
-            </p>
-          </div>
+    <div
+      className={cn(
+        "flex flex-col h-full bg-[#FAF9F5] text-[#1F1E1B]",
+        isCompact ? "p-3 sm:p-4" : "max-w-3xl mx-auto w-full p-4 sm:p-6"
+      )}
+    >
+      {/* Header Bar */}
+      <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold tracking-tight text-[#1F1E1B]">
+            Assistant
+          </span>
+          <span className="text-[11px] text-[#8C827A]">
+            • {currentTab}
+          </span>
         </div>
 
-        {/* Live Diagnostics Pills */}
-        <div className="flex flex-wrap items-center gap-2">
-          {diagnostics && (
-            <div className="hidden md:flex items-center gap-2 text-[11px] font-medium text-[#5A4A5A] bg-[#FAF5EE] px-3 py-1.5 rounded-xl border border-[#3B0D3B]/10">
-              <Database className="h-3 w-3 text-[#3B0D3B]" />
-              <span>MongoDB: <strong className="text-[#1A0A1A]">{diagnostics.mongoStatus}</strong></span>
-              <span className="text-[#3B0D3B]/30">•</span>
-              <span>Courses: <strong className="text-[#1A0A1A]">{diagnostics.coursesCount}</strong></span>
-              <span className="text-[#3B0D3B]/30">•</span>
-              <span>Mentors: <strong className="text-[#1A0A1A]">{diagnostics.tutorsCount}</strong></span>
-            </div>
-          )}
-
-          <div className="inline-flex items-center gap-1.5 text-xs font-bold text-[#3B0D3B] bg-[#3B0D3B]/10 px-3 py-1.5 rounded-xl border border-[#3B0D3B]/15">
-            <Terminal className="h-3.5 w-3.5" />
-            <span className="capitalize">{currentTab} Tab Active</span>
-          </div>
-
-          <button
-            type="button"
-            onClick={handleClearChat}
-            title="Reset conversation"
-            className="p-2 rounded-xl border border-gray-200 hover:bg-gray-50 text-gray-600 transition-colors cursor-pointer"
-          >
-            <RotateCcw className="h-4 w-4" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={handleClearChat}
+          title="Clear chat"
+          className="p-1 rounded-md text-[#8C827A] hover:text-[#1F1E1B] hover:bg-[#EFECE6] transition-colors cursor-pointer"
+        >
+          <RotateCcw className="h-3.5 w-3.5" />
+        </button>
       </div>
 
-      {/* Quick Prompt Recommendation Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-        <span className="text-[11px] font-black uppercase tracking-wider text-[#8C6A8C] shrink-0 flex items-center gap-1 mr-1">
-          <Zap className="h-3 w-3 text-[#C084FC]" /> Quick Tasks:
-        </span>
-        {QUICK_PROMPTS.map((q, idx) => {
-          const Icon = q.icon;
-          return (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => handleSend(q.prompt)}
-              disabled={isLoading}
-              className="inline-flex items-center gap-1.5 rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-1.5 text-xs font-bold text-[#1A0A1A] shadow-2xs hover:border-[#3B0D3B] hover:bg-[#FAF5EE] transition-all shrink-0 cursor-pointer disabled:opacity-50"
-            >
-              <Icon className="h-3.5 w-3.5 text-[#3B0D3B]" />
-              <span>{q.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Main Conversation Stream */}
-      <div className="flex-1 overflow-y-auto rounded-2xl border border-[#3B0D3B]/10 bg-[#FAF5EE]/60 p-4 sm:p-6 space-y-4 shadow-inner">
+      {/* Messages Stream */}
+      <div className="flex-1 overflow-y-auto py-4 space-y-4 pr-1">
         {messages.map((m) => {
           const isUser = m.role === "user";
 
           return (
             <div
               key={m.id}
-              className={cn("flex gap-3 max-w-[90%] sm:max-w-[80%]", isUser ? "ml-auto flex-row-reverse" : "mr-auto")}
+              className={cn("flex flex-col", isUser ? "items-end" : "items-start")}
             >
-              {/* Avatar */}
-              <div
-                className={cn(
-                  "flex h-8 w-8 shrink-0 items-center justify-center rounded-xl text-xs font-black shadow-xs",
-                  isUser
-                    ? "bg-[#3B0D3B] text-white"
-                    : "bg-gradient-to-br from-[#1A0A1A] to-[#3B0D3B] text-[#C084FC]"
-                )}
-              >
-                {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-              </div>
+              {isUser ? (
+                <div className="max-w-[85%] rounded-2xl bg-[#EFECE6] px-4 py-2.5 text-xs sm:text-sm text-[#1F1E1B] whitespace-pre-wrap leading-relaxed">
+                  {m.content}
+                </div>
+              ) : (
+                <div className="max-w-[95%] sm:max-w-[90%] space-y-2">
+                  <div className="text-xs sm:text-sm leading-relaxed text-[#2D2A26]">
+                    {renderFormattedText(m.content)}
+                  </div>
 
-              {/* Bubble */}
-              <div className="flex flex-col gap-1.5">
-                <div
-                  className={cn(
-                    "rounded-2xl p-4 sm:p-5 shadow-xs text-sm leading-relaxed",
-                    isUser
-                      ? "bg-[#3B0D3B] text-white rounded-tr-xs"
-                      : "bg-white text-[#2A1A2A] border border-[#3B0D3B]/10 rounded-tl-xs"
-                  )}
-                >
-                  {isUser ? (
-                    <p className="whitespace-pre-wrap">{m.content}</p>
-                  ) : (
-                    <div className="space-y-1">{renderFormattedText(m.content)}</div>
-                  )}
-
-                  {/* Interactive Action Proposal Card */}
-                  {m.proposedAction && !isUser && (
-                    <div className="mt-4 rounded-xl border border-[#3B0D3B]/20 bg-[#FAF5EE] p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 text-xs font-black uppercase tracking-wider text-[#3B0D3B]">
-                          <Wand2 className="h-3.5 w-3.5 text-[#C084FC]" />
-                          Suggested Live Action: {m.proposedAction.type}
-                        </span>
+                  {/* Clean Action Card */}
+                  {m.proposedAction && (
+                    <div className="mt-2.5 rounded-xl border border-[#E8E5DE] bg-white p-3 shadow-xs space-y-2">
+                      <div className="flex items-center justify-between text-xs font-medium text-[#1F1E1B]">
+                        <span>{m.proposedAction.label || `Update ${m.proposedAction.type}`}</span>
                         {m.actionApplied && (
-                          <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-full">
-                            <Check className="h-3 w-3" /> Applied to Site
+                          <span className="inline-flex items-center gap-1 text-[11px] text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                            <Check className="h-3 w-3" /> Applied
                           </span>
                         )}
                       </div>
 
-                      <p className="text-xs font-bold text-[#1A0A1A]">
-                        {m.proposedAction.label || "Click below to execute this change directly on your website:"}
-                      </p>
-
-                      <pre className="p-2.5 rounded-lg bg-[#14141A] text-[#C084FC] text-[11px] font-mono overflow-x-auto max-h-36">
-                        {JSON.stringify(m.proposedAction.payload, null, 2)}
-                      </pre>
-
-                      <button
-                        type="button"
-                        onClick={() => handleApplyAction(m.id, m.proposedAction)}
-                        disabled={m.actionApplied || applyingActionId === m.id}
-                        className={cn(
-                          "w-full inline-flex items-center justify-center gap-2 rounded-xl py-2.5 text-xs font-bold transition-all shadow-xs cursor-pointer",
-                          m.actionApplied
-                            ? "bg-emerald-600 text-white cursor-default opacity-80"
-                            : "bg-[#3B0D3B] hover:bg-[#2A082A] text-white"
-                        )}
-                      >
-                        {applyingActionId === m.id ? (
-                          <span>Executing live update...</span>
-                        ) : m.actionApplied ? (
-                          <>
-                            <CheckCircle2 className="h-4 w-4" />
-                            <span>Successfully Applied</span>
-                          </>
-                        ) : (
-                          <>
-                            <ArrowRight className="h-4 w-4" />
-                            <span>Apply This Action to Live Website</span>
-                          </>
-                        )}
-                      </button>
+                      {!m.actionApplied && (
+                        <button
+                          type="button"
+                          onClick={() => handleApplyAction(m.id, m.proposedAction)}
+                          disabled={applyingActionId === m.id}
+                          className="w-full inline-flex items-center justify-center gap-1.5 rounded-lg bg-[#1F1E1B] hover:bg-[#333] text-white py-1.5 px-3 text-xs font-medium transition-colors cursor-pointer disabled:opacity-50"
+                        >
+                          {applyingActionId === m.id ? (
+                            "Applying..."
+                          ) : (
+                            <>
+                              <span>Apply to website</span>
+                              <ArrowRight className="h-3.5 w-3.5" />
+                            </>
+                          )}
+                        </button>
+                      )}
                     </div>
                   )}
                 </div>
-
-                <span
-                  className={cn(
-                    "text-[10px] text-[#8C6A8C] px-1 font-mono",
-                    isUser ? "text-right" : "text-left"
-                  )}
-                >
-                  {m.timestamp}
-                </span>
-              </div>
+              )}
             </div>
           );
         })}
 
+        {/* Minimal Claude Loading Dots */}
         {isLoading && (
-          <div className="flex gap-3 mr-auto max-w-[80%]">
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#1A0A1A] to-[#3B0D3B] text-[#C084FC] shadow-xs">
-              <Bot className="h-4 w-4" />
-            </div>
-            <div className="rounded-2xl rounded-tl-xs p-4 bg-white border border-[#3B0D3B]/10 shadow-xs flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-[#3B0D3B] animate-bounce" />
-              <div className="h-2 w-2 rounded-full bg-[#C084FC] animate-bounce [animation-delay:0.2s]" />
-              <div className="h-2 w-2 rounded-full bg-[#3B0D3B] animate-bounce [animation-delay:0.4s]" />
-              <span className="text-xs text-[#5A4A5A] ml-2 font-medium">Gemini is reasoning & compiling response...</span>
-            </div>
+          <div className="flex items-center gap-1.5 py-2 text-[#8C827A]">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#8C827A] animate-pulse" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#8C827A] animate-pulse [animation-delay:0.2s]" />
+            <span className="h-1.5 w-1.5 rounded-full bg-[#8C827A] animate-pulse [animation-delay:0.4s]" />
           </div>
         )}
 
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input Form Bar */}
+      {/* Suggestion Chips (Only if conversation is fresh) */}
+      {messages.length <= 1 && (
+        <div className="pb-3 flex flex-wrap gap-1.5">
+          {SUGGESTIONS.map((s, idx) => (
+            <button
+              key={idx}
+              type="button"
+              onClick={() => handleSend(s)}
+              disabled={isLoading}
+              className="text-[11px] text-[#6E6760] bg-white hover:bg-[#EFECE6] hover:text-[#1F1E1B] border border-[#E8E5DE] rounded-full px-3 py-1 transition-colors cursor-pointer"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Input Box (Claude Style) */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
           handleSend();
         }}
-        className="flex items-center gap-2.5 bg-white p-2.5 sm:p-3 rounded-2xl border border-[#3B0D3B]/15 shadow-sm"
+        className="relative bg-white rounded-2xl border border-[#E0DDD5] shadow-xs focus-within:border-[#8C827A] transition-colors p-1.5 flex items-end gap-2"
       >
         <textarea
-          rows={1}
+          ref={textareaRef}
+          rows={isCompact ? 1 : 2}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -537,17 +389,22 @@ export default function AdminAiBotTab({ adminPin, currentTab = "overview", onNav
               handleSend();
             }
           }}
-          placeholder={`Ask anything about ${currentTab}, generate SEO keywords, diagnose sync, or request live updates...`}
-          className="flex-1 bg-transparent px-3 py-2 text-xs sm:text-sm text-[#1A0A1A] placeholder:text-[#8C6A8C] focus:outline-none resize-none max-h-32"
+          placeholder="Reply to Assistant..."
+          className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-[#1F1E1B] placeholder:text-[#A39E96] focus:outline-none resize-none max-h-32"
         />
 
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-3 text-xs font-bold text-white shadow-xs transition-all cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed shrink-0"
+          aria-label="Send message"
+          className={cn(
+            "h-8 w-8 rounded-full flex items-center justify-center transition-colors shrink-0 mb-0.5 mr-0.5 cursor-pointer",
+            input.trim() && !isLoading
+              ? "bg-[#1F1E1B] text-white hover:bg-[#383430]"
+              : "bg-[#EFECE6] text-[#A39E96] cursor-not-allowed"
+          )}
         >
-          <Send className="h-4 w-4" />
-          <span className="hidden sm:inline">Send</span>
+          <ArrowUp className="h-4 w-4" />
         </button>
       </form>
     </div>

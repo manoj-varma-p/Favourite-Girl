@@ -201,6 +201,7 @@ export default function ExecutionProof({ content }: { content?: ExecutionProofCo
                           src={photo}
                           alt={item.name}
                           fill
+                          unoptimized
                           sizes="240px"
                           className="object-cover object-top"
                         />
@@ -281,6 +282,7 @@ export default function ExecutionProof({ content }: { content?: ExecutionProofCo
                         src={photo}
                         alt={item.name}
                         fill
+                        unoptimized
                         sizes="(max-width: 640px) 160px, (max-width: 1024px) 50vw, 25vw"
                         className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
                       />
@@ -406,6 +408,7 @@ export default function ExecutionProof({ content }: { content?: ExecutionProofCo
                         alt={item.name}
                         width={160}
                         height={48}
+                        unoptimized
                         className={cn(
                           "max-h-9 sm:max-h-10 w-auto max-w-[90%] object-contain transition-transform duration-200 group-hover:scale-110",
                           item.name !== "TCS" && !logoSrc.includes("dark-") && "brightness-0 opacity-80"

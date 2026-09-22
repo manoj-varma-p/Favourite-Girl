@@ -312,6 +312,7 @@ export default function AdminPlacementsTab({ initialData, adminPin, onSaved }: P
                           src={item.photoUrl}
                           alt={item.name}
                           fill
+                          unoptimized
                           sizes="100px"
                           className="object-cover"
                         />

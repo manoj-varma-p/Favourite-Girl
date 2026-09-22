@@ -229,6 +229,7 @@ export default function AdminGovCertsTab({ initialData, adminPin, onSaved }: Pro
                       alt={cert.label}
                       width={180}
                       height={90}
+                      unoptimized
                       className="max-h-20 w-auto object-contain"
                     />
                   ) : (

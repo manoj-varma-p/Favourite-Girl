@@ -77,6 +77,7 @@ export function GovCertSection({ content }: { content?: GovCertsContent }) {
                         alt={certs[currentIndex].label}
                         width={200}
                         height={70}
+                        unoptimized
                         className="h-11 w-auto max-w-[170px] object-contain mx-auto"
                       />
                     </div>
@@ -118,6 +119,7 @@ export function GovCertSection({ content }: { content?: GovCertsContent }) {
                       alt={cert.label}
                       width={200}
                       height={80}
+                      unoptimized
                       className="h-11 sm:h-12 lg:h-13 w-auto max-w-[130px] sm:max-w-[155px] object-contain"
                     />
                   </div>

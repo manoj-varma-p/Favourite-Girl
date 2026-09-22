@@ -420,6 +420,7 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
                         src={program.image}
                         alt={program.title}
                         fill
+                        unoptimized
                         sizes="(max-width: 640px) 300px, 420px"
                         className="h-full w-full object-cover transition-transform duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-105"
                       />

@@ -97,12 +97,12 @@ export default function AdminSidebar({
 
   const navGroups: NavGroupConfig[] = [
     {
-      groupTitle: "ASSISTANT",
+      groupTitle: "TREQO BOT",
       items: [
         {
           id: "aiBot",
-          label: "Assistant",
-          icon: Sparkles,
+          label: "Treqo Bot",
+          icon: Bot,
         },
       ],
     },

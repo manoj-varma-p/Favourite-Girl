@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Sparkles, X, Maximize2 } from "lucide-react";
+import { Bot, X, Maximize2 } from "lucide-react";
 import AdminAiBotTab from "./AdminAiBotTab";
 
 interface Props {
@@ -21,11 +21,11 @@ export default function AdminFloatingAiWidget({ adminPin, currentTab, onNavigate
           <button
             type="button"
             onClick={() => setIsOpen(true)}
-            aria-label="Open Assistant"
+            aria-label="Open Treqo Bot"
             className="flex items-center gap-2 rounded-full bg-[#1F1E1B] hover:bg-[#34302C] text-white px-3.5 py-2.5 shadow-lg border border-black/10 transition-all hover:scale-105 cursor-pointer"
           >
-            <Sparkles className="h-4 w-4 text-[#D8D2C7]" />
-            <span className="text-xs font-medium tracking-tight">Assistant</span>
+            <Bot className="h-4 w-4 text-[#D8D2C7]" />
+            <span className="text-xs font-medium tracking-tight">Treqo Bot</span>
           </button>
         </div>
       )}
@@ -36,8 +36,8 @@ export default function AdminFloatingAiWidget({ adminPin, currentTab, onNavigate
           {/* Minimal Window Header */}
           <div className="flex items-center justify-between px-3.5 py-2.5 bg-white border-b border-[#E8E5DE]">
             <div className="flex items-center gap-1.5 text-xs font-semibold text-[#1F1E1B]">
-              <Sparkles className="h-3.5 w-3.5 text-[#8C827A]" />
-              <span>Assistant</span>
+              <Bot className="h-3.5 w-3.5 text-[#8C827A]" />
+              <span>Treqo Bot</span>
             </div>
 
             <div className="flex items-center gap-1">

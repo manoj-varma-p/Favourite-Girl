@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { ArrowUp, RotateCcw, X, Check, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowUp, RotateCcw, X, Check, ArrowRight, Bot } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -266,8 +266,9 @@ export default function AdminAiBotTab({
       {/* Header Bar */}
       <div className="flex items-center justify-between pb-3 border-b border-[#E8E5DE]">
         <div className="flex items-center gap-2">
+          <Bot className="h-4 w-4 text-[#8C827A]" />
           <span className="text-sm font-semibold tracking-tight text-[#1F1E1B]">
-            Assistant
+            Treqo Bot
           </span>
           <span className="text-[11px] text-[#8C827A]">
             • {currentTab}
@@ -389,7 +390,7 @@ export default function AdminAiBotTab({
               handleSend();
             }
           }}
-          placeholder="Reply to Assistant..."
+          placeholder="Reply to Treqo Bot..."
           className="flex-1 bg-transparent px-3 py-1.5 text-xs sm:text-sm text-[#1F1E1B] placeholder:text-[#A39E96] focus:outline-none resize-none max-h-32"
         />
 

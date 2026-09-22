@@ -40,22 +40,45 @@ export default function AdminAiBotTab({
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  function getEffectivePin() {
+    if (adminPin) return adminPin;
+    if (typeof window !== "undefined") {
+      return sessionStorage.getItem("treqo_admin_pin") || "treqo2026";
+    }
+    return "treqo2026";
+  }
+
   // Load chat history
   useEffect(() => {
     try {
-      const stored = localStorage.getItem("treqo_admin_ai_chat_v2");
+      // Clean out older legacy cached errors
+      localStorage.removeItem("treqo_admin_ai_chat_v1");
+      localStorage.removeItem("treqo_admin_ai_chat_v2");
+      localStorage.removeItem("treqo_admin_ai_chat_v3");
+
+      const stored = localStorage.getItem("treqo_admin_ai_chat_v4");
       if (stored) {
-        setMessages(JSON.parse(stored));
-      } else {
-        setMessages([
-          {
-            id: "welcome",
-            role: "model",
-            content: "How can I help you with Treqo today?",
-            timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
-          },
-        ]);
+        const parsed: Message[] = JSON.parse(stored);
+        // Exclude stale error messages from past setup attempts
+        const clean = parsed.filter(
+          (m) =>
+            !m.content.toLowerCase().includes("invalid api key") &&
+            !m.content.toLowerCase().includes("not configured in .env")
+        );
+        if (clean.length > 0) {
+          setMessages(clean);
+          return;
+        }
       }
+
+      setMessages([
+        {
+          id: "welcome",
+          role: "model",
+          content: "How can I help you with Treqo today?",
+          timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ]);
     } catch {
       // ignore
     }
@@ -65,7 +88,7 @@ export default function AdminAiBotTab({
   useEffect(() => {
     if (messages.length > 0) {
       try {
-        localStorage.setItem("treqo_admin_ai_chat_v2", JSON.stringify(messages.slice(-25)));
+        localStorage.setItem("treqo_admin_ai_chat_v4", JSON.stringify(messages.slice(-25)));
       } catch {
         // ignore
       }
@@ -99,11 +122,12 @@ export default function AdminAiBotTab({
         content: m.content,
       }));
 
+      const pin = getEffectivePin();
       const res = await fetch("/api/admin/ai", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "x-admin-pin": adminPin,
+          "x-admin-pin": pin,
         },
         body: JSON.stringify({
           message: textToSend,
@@ -183,7 +207,10 @@ export default function AdminAiBotTab({
   }
 
   function handleClearChat() {
+    localStorage.removeItem("treqo_admin_ai_chat_v1");
     localStorage.removeItem("treqo_admin_ai_chat_v2");
+    localStorage.removeItem("treqo_admin_ai_chat_v3");
+    localStorage.removeItem("treqo_admin_ai_chat_v4");
     setMessages([
       {
         id: "welcome",

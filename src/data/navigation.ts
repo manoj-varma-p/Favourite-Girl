@@ -16,7 +16,7 @@ import type { MegaMenuData, NavItem } from "@/types/navigation";
 
 export const announcementBannerData = {
   badge: "BATCH 2 · 50 SEATS",
-  text: "Applications close on 25th September 2026.",
+  text: "Enrollments close on 4th October 2026.",
   linkText: "Explore the courses",
   linkHref: "/#courses",
 };

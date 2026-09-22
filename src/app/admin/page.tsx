@@ -260,7 +260,7 @@ export default function CustomAdminPanelPage() {
 
   const [navigationSettings, setNavigationSettings] = useState<NavigationSettings>({
     bannerBadge: "BATCH 2 · 50 SEATS",
-    bannerText: "Applications close on 25th September 2026.",
+    bannerText: "Enrollments close on 4th October 2026.",
     bannerLinkText: "Explore the courses",
     bannerLinkHref: "/#courses",
   });
@@ -2486,7 +2486,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={navigationSettings.bannerText}
                     onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerText: e.target.value })}
-                    placeholder="e.g. Applications close on 25th September 2026."
+                    placeholder="e.g. Enrollments close on 4th October 2026."
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>

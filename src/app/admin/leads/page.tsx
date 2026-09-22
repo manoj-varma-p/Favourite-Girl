@@ -23,6 +23,9 @@ import {
   LogOut,
   Mail,
   Phone,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import type { Lead } from "@/lib/leads-db";
 
@@ -56,6 +59,9 @@ export default function AdminLeadsPage() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCourse, setSelectedCourse] = useState("All");
+  const [leadsSortBy, setLeadsSortBy] = useState<
+    "newest" | "oldest" | "name-asc" | "name-desc" | "course-asc"
+  >("newest");
 
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -162,7 +168,7 @@ export default function AdminLeadsPage() {
   }, [leads]);
 
   const filteredLeads = useMemo(() => {
-    return leads.filter((lead) => {
+    const list = leads.filter((lead) => {
       if (selectedCourse !== "All" && lead.course !== selectedCourse) {
         return false;
       }
@@ -176,7 +182,26 @@ export default function AdminLeadsPage() {
         (lead.source && lead.source.toLowerCase().includes(q))
       );
     });
-  }, [leads, selectedCourse, searchQuery]);
+
+    return [...list].sort((a, b) => {
+      if (leadsSortBy === "newest") {
+        return new Date(b.submittedAt || 0).getTime() - new Date(a.submittedAt || 0).getTime();
+      }
+      if (leadsSortBy === "oldest") {
+        return new Date(a.submittedAt || 0).getTime() - new Date(b.submittedAt || 0).getTime();
+      }
+      if (leadsSortBy === "name-asc") {
+        return (a.name || "").localeCompare(b.name || "", undefined, { sensitivity: "base" });
+      }
+      if (leadsSortBy === "name-desc") {
+        return (b.name || "").localeCompare(a.name || "", undefined, { sensitivity: "base" });
+      }
+      if (leadsSortBy === "course-asc") {
+        return (a.course || "").localeCompare(b.course || "", undefined, { sensitivity: "base" });
+      }
+      return 0;
+    });
+  }, [leads, selectedCourse, searchQuery, leadsSortBy]);
 
   const todayCount = useMemo(() => {
     const today = new Date().toISOString().split("T")[0];
@@ -430,6 +455,25 @@ export default function AdminLeadsPage() {
                   </select>
                 </div>
               )}
+
+              <div className="relative sm:w-52">
+                <ArrowUpDown className="absolute left-3.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-[#5A4A5A] pointer-events-none" />
+                <select
+                  value={leadsSortBy}
+                  onChange={(e) =>
+                    setLeadsSortBy(
+                      e.target.value as "newest" | "oldest" | "name-asc" | "name-desc" | "course-asc"
+                    )
+                  }
+                  className="w-full appearance-none rounded-xl border border-[#3B0D3B]/15 bg-white pl-9 pr-8 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none cursor-pointer transition-all"
+                >
+                  <option value="newest">Sort: Newest First</option>
+                  <option value="oldest">Sort: Oldest First</option>
+                  <option value="name-asc">Sort: Name (A → Z)</option>
+                  <option value="name-desc">Sort: Name (Z → A)</option>
+                  <option value="course-asc">Sort: Program (A → Z)</option>
+                </select>
+              </div>
             </div>
 
             <div className="flex items-center gap-2">
@@ -451,11 +495,54 @@ export default function AdminLeadsPage() {
               <table className="w-full text-left text-xs text-[#0B0B0F]">
                 <thead className="bg-[#FAF5EE] text-[11px] font-bold uppercase tracking-wider text-[#5A4A5A] border-b border-[#3B0D3B]/10">
                   <tr>
-                    <th className="py-3 px-4">Student</th>
+                    <th
+                      onClick={() =>
+                        setLeadsSortBy(leadsSortBy === "name-asc" ? "name-desc" : "name-asc")
+                      }
+                      className="py-3 px-4 cursor-pointer select-none hover:text-[#3B0D3B] transition-colors"
+                      title="Click to sort by Name"
+                    >
+                      <div className="inline-flex items-center gap-1.5">
+                        <span>Student</span>
+                        {leadsSortBy === "name-asc" && <ArrowUp className="h-3 w-3 text-[#3B0D3B]" />}
+                        {leadsSortBy === "name-desc" && <ArrowDown className="h-3 w-3 text-[#3B0D3B]" />}
+                        {leadsSortBy !== "name-asc" && leadsSortBy !== "name-desc" && (
+                          <ArrowUpDown className="h-3 w-3 text-[#5A4A5A]/40" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-4">Contact</th>
-                    <th className="py-3 px-4">Selected Program</th>
+                    <th
+                      onClick={() => setLeadsSortBy("course-asc")}
+                      className="py-3 px-4 cursor-pointer select-none hover:text-[#3B0D3B] transition-colors"
+                      title="Click to sort by Program"
+                    >
+                      <div className="inline-flex items-center gap-1.5">
+                        <span>Selected Program</span>
+                        {leadsSortBy === "course-asc" ? (
+                          <ArrowUp className="h-3 w-3 text-[#3B0D3B]" />
+                        ) : (
+                          <ArrowUpDown className="h-3 w-3 text-[#5A4A5A]/40" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-4">Background</th>
-                    <th className="py-3 px-4">Submitted At</th>
+                    <th
+                      onClick={() =>
+                        setLeadsSortBy(leadsSortBy === "newest" ? "oldest" : "newest")
+                      }
+                      className="py-3 px-4 cursor-pointer select-none hover:text-[#3B0D3B] transition-colors"
+                      title="Click to sort by Date"
+                    >
+                      <div className="inline-flex items-center gap-1.5">
+                        <span>Submitted At</span>
+                        {leadsSortBy === "newest" && <ArrowDown className="h-3 w-3 text-[#3B0D3B]" />}
+                        {leadsSortBy === "oldest" && <ArrowUp className="h-3 w-3 text-[#3B0D3B]" />}
+                        {leadsSortBy !== "newest" && leadsSortBy !== "oldest" && (
+                          <ArrowUpDown className="h-3 w-3 text-[#5A4A5A]/40" />
+                        )}
+                      </div>
+                    </th>
                     <th className="py-3 px-4 text-right">Actions</th>
                   </tr>
                 </thead>

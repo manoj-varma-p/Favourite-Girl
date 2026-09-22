@@ -817,12 +817,12 @@ export async function reorderProgramsInDb(orderedIds: string[]): Promise<CourseI
 // 6. TUTORS / MENTORS
 // -----------------------------------------------------------------
 const DEFAULT_TUTOR_PHOTOS: Record<string, string> = {
-  "Mohit Goel": "/uploads/tutors/mohit-goel.jpg",
-  "Deeptika Bajaj": "/uploads/tutors/deeptika-bajaj.jpg",
-  "Megha Punjabi": "/uploads/tutors/megha-punjabi.jpg",
-  "Akshat Aggarwal": "/uploads/tutors/akshat-aggarwal.jpg",
-  "Prateek Narang": "/uploads/tutors/prateek-narang.jpg",
-  "Ritika Sharma": "/uploads/tutors/ritika-sharma.jpg",
+  "Mohit Goel": "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.png",
+  "Deeptika Bajaj": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.png",
+  "Megha Punjabi": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.png",
+  "Akshat Aggarwal": "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.png",
+  "Prateek Narang": "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.png",
+  "Ritika Sharma": "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.png",
 };
 
 const DEFAULT_TUTOR_INSIGHTS: Record<string, { brandMetric: string; focus: string; specialty: string }> = {

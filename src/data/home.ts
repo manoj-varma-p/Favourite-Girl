@@ -1315,12 +1315,12 @@ export const taughtByContent: TaughtByContent = {
 };
 
 export const tutors: TutorProfile[] = [
-  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+", image: "/uploads/tutors/mohit-goel.jpg" },
-  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+", image: "/uploads/tutors/deeptika-bajaj.jpg" },
-  { name: "Megha Punjabi", role: "American Express", mentored: "236+", image: "/uploads/tutors/megha-punjabi.jpg" },
-  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+", image: "/uploads/tutors/akshat-aggarwal.jpg" },
-  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+", image: "/uploads/tutors/prateek-narang.jpg" },
-  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+", image: "/uploads/tutors/ritika-sharma.jpg" },
+  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+", image: "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.png" },
+  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.png" },
+  { name: "Megha Punjabi", role: "American Express", mentored: "236+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.png" },
+  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.png" },
+  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.png" },
+  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.png" },
 ];
 
 export const certificatePreview: CertificatePreview = {

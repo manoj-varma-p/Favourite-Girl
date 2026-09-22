@@ -91,11 +91,21 @@ When you suggest a concrete update that the admin can apply to the website, form
 Always be concise, articulate, encouraging, and technically precise.
 `;
 
+const CANDIDATE_MODELS = [
+  "gemini-flash-lite-latest",
+  "gemini-3.5-flash-lite",
+  "gemini-3.7-flash",
+  "gemini-flash-latest",
+  "gemini-3.8-flash",
+];
+
 export async function askGemini(
   messages: Array<{ role: "user" | "model"; content: string }>,
   currentTab?: string
 ): Promise<{ text: string; proposedAction?: any }> {
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.6-flash:generateContent?key=${GEMINI_API_KEY}`;
+  if (!GEMINI_API_KEY) {
+    throw new Error("GEMINI_API_KEY is not configured in .env.local. Please add your key.");
+  }
 
   let contextualSystem = SYSTEM_PROMPT;
   if (currentTab) {
@@ -112,7 +122,7 @@ export async function askGemini(
       role: "model",
       parts: [
         {
-          text: "Understood. I am the Treqo Admin AI Copilot. I have full knowledge of the entire admin panel, database schema, SEO engine, and operations. How can I assist you today?",
+          text: "Understood. I am the Treqo Admin AI Copilot. I have full operational knowledge of the entire admin panel, database schema, SEO engine, and operations. How can I assist you today?",
         },
       ],
     },
@@ -122,42 +132,57 @@ export async function askGemini(
     })),
   ];
 
-  const res = await fetch(url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      contents,
-      generationConfig: {
-        temperature: 0.7,
-        maxOutputTokens: 2048,
-      },
-    }),
-  });
+  let lastError: Error | null = null;
 
-  if (!res.ok) {
-    const errorText = await res.text();
-    console.error("[Gemini API Error]:", errorText);
-    throw new Error(`Gemini API returned status ${res.status}: ${errorText}`);
-  }
-
-  const data = await res.json();
-  const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
-
-  // Extract optional action block if present
-  let proposedAction: any = null;
-  const actionMatch = rawText.match(/```action\s*([\s\S]*?)\s*```/);
-  if (actionMatch && actionMatch[1]) {
+  // Try candidate models in order of speed and availability
+  for (const modelName of CANDIDATE_MODELS) {
     try {
-      proposedAction = JSON.parse(actionMatch[1]);
-    } catch (e) {
-      console.warn("Failed to parse proposed action JSON:", e);
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`;
+      const res = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 2048,
+          },
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        const rawText =
+          data.candidates?.[0]?.content?.parts?.[0]?.text || "No response generated.";
+
+        // Extract optional action block if present
+        let proposedAction: any = null;
+        const actionMatch = rawText.match(/```action\s*([\s\S]*?)\s*```/);
+        if (actionMatch && actionMatch[1]) {
+          try {
+            proposedAction = JSON.parse(actionMatch[1]);
+          } catch (e) {
+            console.warn("Failed to parse proposed action JSON:", e);
+          }
+        }
+
+        return {
+          text: rawText,
+          proposedAction,
+        };
+      }
+
+      const errData = await res.json().catch(() => ({}));
+      const errMsg = errData?.error?.message || `HTTP ${res.status}`;
+      console.warn(`[Gemini Model ${modelName} failed (${res.status})]: ${errMsg}. Trying fallback model...`);
+      lastError = new Error(`Gemini (${modelName}): ${errMsg}`);
+    } catch (err: any) {
+      console.warn(`[Gemini Model ${modelName} network error]:`, err.message);
+      lastError = err;
     }
   }
 
-  return {
-    text: rawText,
-    proposedAction,
-  };
+  throw lastError || new Error("All Gemini model endpoints failed. Please check network connectivity.");
 }
 
 export async function getLiveAdminContext() {

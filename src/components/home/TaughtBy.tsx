@@ -269,22 +269,13 @@ export default function TaughtBy({ tutors: dynamicTutors, sectionContent }: Taug
                   <div className="relative w-full aspect-[1/1] overflow-hidden rounded-xl border border-[#3B0D3B]/10 bg-[#F5EDE0]/50 shadow-inner">
                     {isLocked ? (
                       <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#2D0B2D] via-[#1A0A1A] to-[#0D050D] p-4 text-center">
-                        {photo && (
-                          <Image
-                            src={photo}
-                            alt="Faculty member coming soon"
-                            fill
-                            sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
-                            className="object-cover object-top blur-md opacity-25 grayscale"
-                          />
-                        )}
                         <div className="relative z-10 flex flex-col items-center">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white shadow-lg backdrop-blur-md">
-                            <Lock className="h-5 w-5 text-amber-300" />
+                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white shadow-xl backdrop-blur-md">
+                            <Lock className="h-6 w-6 text-amber-300" />
                           </div>
-                          <span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-black/75 border border-white/20 px-3 py-0.5 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-sm">
+                          <span className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-md">
                             <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-                            Coming Soon
+                            COMING SOON
                           </span>
                         </div>
                       </div>
@@ -311,17 +302,17 @@ export default function TaughtBy({ tutors: dynamicTutors, sectionContent }: Taug
                           <h3 className="text-lg font-black text-[#1A0A1A] tracking-tight flex items-center gap-2">
                             <span>Faculty Profile</span>
                             <span className="rounded-md bg-amber-500/10 border border-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold text-amber-700">
-                              Locked
+                              Coming Soon
                             </span>
                           </h3>
                           <p className="text-xs font-semibold text-[#5A4A5A] mt-0.5 truncate">
-                            Practitioner Mentor · Announcing Soon
+                            Industry Practitioner · Announcing Soon
                           </p>
                         </div>
 
                         {/* Locked Credential Tag */}
-                        <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-[#3B0D3B]/25 bg-[#FAF5EE] px-2.5 py-1 text-[11px] font-bold text-[#3B0D3B]">
-                          <Lock className="h-3 w-3 opacity-70" />
+                        <div className="mt-2.5 inline-flex items-center gap-1.5 rounded-lg border border-dashed border-amber-500/30 bg-amber-500/5 px-2.5 py-1 text-[11px] font-bold text-amber-900">
+                          <Lock className="h-3 w-3 text-amber-700" />
                           Revealed Before Launch
                         </div>
 

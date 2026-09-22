@@ -68,6 +68,8 @@ import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
 import AdminPageKeywordsTab from "@/components/admin/AdminPageKeywordsTab";
 import AdminPageDescriptionsTab from "@/components/admin/AdminPageDescriptionsTab";
 import AdminCourseEditor from "@/components/admin/AdminCourseEditor";
+import AdminAiBotTab from "@/components/admin/AdminAiBotTab";
+import AdminFloatingAiWidget from "@/components/admin/AdminFloatingAiWidget";
 import AdminSidebar from "@/components/admin/ui/AdminSidebar";
 import AdminHeader from "@/components/admin/ui/AdminHeader";
 import CommandPalette from "@/components/admin/ui/CommandPalette";
@@ -80,6 +82,7 @@ import { Award, Trophy, Compass, MapPin, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
+  aiBot: { title: "Treqo AI Copilot & Operations", breadcrumb: "AI Assistant" },
   overview: { title: "Overview Dashboard", breadcrumb: "Workspace" },
   leads: { title: "Student Applications", breadcrumb: "Admissions & CRM" },
   courses: { title: "Courses & Curriculum", breadcrumb: "Learning & Programs" },
@@ -159,8 +162,9 @@ export default function CustomAdminPanelPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Tabs: overview | leads | courses | tutors | alerts | forms | layout | branding | banner | hero | whyTreqqo | placements | govCerts | sixDecisions | footer | faqs | blogs
+  // Tabs: overview | leads | courses | tutors | alerts | forms | layout | branding | banner | hero | whyTreqqo | placements | govCerts | sixDecisions | footer | faqs | blogs | aiBot
   const [activeTab, setActiveTab] = useState<
+    | "aiBot"
     | "overview"
     | "leads"
     | "courses"
@@ -3919,6 +3923,17 @@ export default function CustomAdminPanelPage() {
           )}
 
           {/* ========================================================= */}
+          {/* TAB: TREQO AI COPILOT & OPERATIONS OFFICER                */}
+          {/* ========================================================= */}
+          {activeTab === "aiBot" && (
+            <AdminAiBotTab
+              adminPin={getStoredPin()}
+              currentTab={activeTab}
+              onNavigateTab={(tab) => setActiveTab(tab as any)}
+            />
+          )}
+
+          {/* ========================================================= */}
           {/* TAB: PAGE-WISE SEO & KEYWORD MANAGER                      */}
           {/* ========================================================= */}
           {activeTab === "pageKeywords" && (
@@ -5077,6 +5092,13 @@ export default function CustomAdminPanelPage() {
           </div>
         </div>
       )}
+
+      {/* Floating Treqo AI Operations Assistant */}
+      <AdminFloatingAiWidget
+        adminPin={getStoredPin()}
+        currentTab={activeTab}
+        onNavigateTab={(tab) => setActiveTab(tab as any)}
+      />
     </div>
   );
 }

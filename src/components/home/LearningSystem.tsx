@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Clock, ChevronLeft, ChevronRight, Check, ArrowRight } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, Check, ArrowRight, Lock } from "lucide-react";
 import Container from "@/components/ui/Container";
 import { useApplyModal } from "@/context/ApplyModalContext";
 import { cn } from "@/lib/utils";
@@ -396,36 +396,19 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
                   {/* Card Image Header with Badge Overlay */}
                   {program.isLocked ? (
                     <div
-                      onClick={() => openApplyModal(program.title)}
-                      className="relative h-44 sm:h-48 lg:h-52 w-full overflow-hidden bg-slate-900 cursor-pointer shrink-0"
+                      onClick={() => openApplyModal("Upcoming Program Track")}
+                      className="relative h-44 sm:h-48 lg:h-52 w-full overflow-hidden bg-gradient-to-br from-[#1F0A1F] via-[#120712] to-[#0A050A] p-4 flex flex-col items-center justify-center text-center cursor-pointer shrink-0 border-b border-white/10"
                       role="button"
                       tabIndex={0}
-                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openApplyModal(program.title); }}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openApplyModal("Upcoming Program Track"); }}
                     >
-                      <Image
-                        src={program.image}
-                        alt={program.title}
-                        fill
-                        sizes="(max-width: 640px) 300px, 420px"
-                        className="h-full w-full object-cover transition-transform duration-500 opacity-60 grayscale-[40%]"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
-
-                      {/* Batch / Status Badge Overlay on Image (Top Right) */}
-                      <div className="absolute top-3 right-3 z-10">
-                        <span className="inline-flex items-center gap-1 rounded-lg bg-black/75 backdrop-blur-md border border-white/15 px-2.5 py-1 text-[10px] font-black tracking-wide text-slate-200 uppercase shadow-md">
-                          <Clock className="h-2.5 w-2.5" />
-                          <span>COMING SOON</span>
-                        </span>
+                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white shadow-xl backdrop-blur-md">
+                        <Lock className="h-7 w-7 text-amber-300" />
                       </div>
-
-                      {/* Coming Soon Overlay */}
-                      {/* <div className="absolute inset-0 bg-slate-950/40 backdrop-blur-[1.5px] flex items-center justify-center">
-                        <div className="flex items-center gap-1.5 rounded-full bg-slate-900/90 border border-slate-700 px-3.5 py-1.5 text-xs font-bold text-white shadow-xl backdrop-blur-md">
-                          <Clock className="h-3.5 w-3.5 text-slate-300" />
-                          <span>Coming Soon</span>
-                        </div>
-                      </div> */}
+                      <div className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-md">
+                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                        COMING SOON
+                      </div>
                     </div>
                   ) : (
                     <Link
@@ -452,77 +435,127 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
                   )}
 
                   {/* Card Content */}
-                  <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
-                    <div>
-                      {/* Highlighted Title with consistent equal height alignment */}
-                      <div className=" flex items-start">
-                        <h3 className="text-base sm:text-lg font-black tracking-tight text-[#1A0A1A] group-hover:text-[#5A2A5A] transition-colors leading-snug line-clamp-2">
-                          {program.isLocked ? (
-                            <button
-                              type="button"
-                              onClick={() => openApplyModal(program.title)}
-                              className="text-left font-black text-[#1A0A1A] hover:text-[#5A2A5A] transition-colors cursor-pointer"
-                            >
-                              {program.title}
-                            </button>
-                          ) : (
+                  {program.isLocked ? (
+                    <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        <div className="flex items-start">
+                          <h3 className="text-base sm:text-lg font-black tracking-tight text-[#1A0A1A] leading-snug">
+                            Upcoming Program Track
+                          </h3>
+                        </div>
+
+                        {/* Duration and Mode Section */}
+                        <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/5 p-2.5">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
+                              Status
+                            </span>
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-amber-800">
+                              Announcing Soon
+                            </span>
+                          </div>
+                          <div className="flex flex-col border-l border-amber-500/20 pl-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
+                              Format
+                            </span>
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-amber-800">
+                              Live Online
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Coming soon teaser points */}
+                        <ul className="mt-3.5 space-y-2.5">
+                          <li className="flex items-start gap-2.5">
+                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
+                              <Lock className="h-3 w-3" />
+                            </span>
+                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
+                              Curriculum syllabus & live projects under wraps
+                            </span>
+                          </li>
+                          <li className="flex items-start gap-2.5">
+                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
+                              <Lock className="h-3 w-3" />
+                            </span>
+                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
+                              Practitioner mentors & company defense revealing soon
+                            </span>
+                          </li>
+                          <li className="flex items-start gap-2.5">
+                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
+                              <Lock className="h-3 w-3" />
+                            </span>
+                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
+                              Early-access waitlist priority for next batch
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+
+                      <div className="mt-3 pt-2.5 border-t border-slate-200/80">
+                        <button
+                          type="button"
+                          onClick={() => openApplyModal("Upcoming Program Track")}
+                          className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-50 hover:bg-amber-100/70 py-2 px-3 text-xs sm:text-[13px] font-bold text-amber-900 transition-all cursor-pointer active:scale-[0.98]"
+                        >
+                          <Clock className="h-3.5 w-3.5 text-amber-700" />
+                          <span>Notify Me When Open</span>
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
+                      <div>
+                        {/* Highlighted Title with consistent equal height alignment */}
+                        <div className=" flex items-start">
+                          <h3 className="text-base sm:text-lg font-black tracking-tight text-[#1A0A1A] group-hover:text-[#5A2A5A] transition-colors leading-snug line-clamp-2">
                             <Link
                               href={program.actionHref}
                               className="font-black text-[#1A0A1A] hover:text-[#5A2A5A] transition-colors"
                             >
                               {program.title}
                             </Link>
-                          )}
-                        </h3>
+                          </h3>
+                        </div>
+
+                        {/* Duration and Mode Section */}
+                        <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-slate-50/90 p-2.5">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                              Duration
+                            </span>
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-[#3B0D3B]">
+                              {duration}
+                            </span>
+                          </div>
+                          <div className="flex flex-col border-l border-slate-200 pl-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                              Mode
+                            </span>
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-[#3B0D3B]">
+                              {mode}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Points with checkmarks */}
+                        <ul className="mt-3.5 space-y-2.5">
+                          {points.map((pt, idx) => (
+                            <li key={idx} className="flex items-start gap-2.5">
+                              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3B0D3B]/10 text-[#3B0D3B]">
+                                <Check className="h-3.5 w-3.5 stroke-[2.5]" />
+                              </span>
+                              <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-700">
+                                {pt}
+                              </span>
+                            </li>
+                          ))}
+                        </ul>
                       </div>
 
-                      {/* Duration and Mode Section */}
-                      <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-slate-200 bg-slate-50/90 p-2.5">
-                        <div className="flex flex-col">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            Duration
-                          </span>
-                          <span className="mt-0.5 text-xs sm:text-[13px] font-black text-[#3B0D3B]">
-                            {duration}
-                          </span>
-                        </div>
-                        <div className="flex flex-col border-l border-slate-200 pl-3">
-                          <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                            Mode
-                          </span>
-                          <span className="mt-0.5 text-xs sm:text-[13px] font-black text-[#3B0D3B]">
-                            {mode}
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Points with checkmarks */}
-                      <ul className="mt-3.5 space-y-2.5">
-                        {points.map((pt, idx) => (
-                          <li key={idx} className="flex items-start gap-2.5">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[#3B0D3B]/10 text-[#3B0D3B]">
-                              <Check className="h-3.5 w-3.5 stroke-[2.5]" />
-                            </span>
-                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-700">
-                              {pt}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Bottom Block: Action Button */}
-                    <div className="mt-3 pt-2.5 border-t border-slate-200/80">
-                      {program.isLocked ? (
-                        <button
-                          type="button"
-                          onClick={() => openApplyModal(program.title)}
-                          className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-slate-300 bg-white py-2 px-3 text-xs sm:text-[13px] font-bold text-slate-700 hover:bg-slate-50 hover:text-[#3B0D3B] transition-all cursor-pointer active:scale-[0.98]"
-                        >
-                          <Clock className="h-3.5 w-3.5 text-slate-500" />
-                          <span>Get notified when open</span>
-                        </button>
-                      ) : (
+                      {/* Bottom Block: Action Button */}
+                      <div className="mt-3 pt-2.5 border-t border-slate-200/80">
                         <Link
                           href={program.actionHref}
                           className="glossy-shine w-full flex items-center justify-center gap-1.5 rounded-xl bg-[#3B0D3B] hover:bg-[#2B052B] py-2 px-3 text-xs sm:text-[13px] font-bold text-white shadow-md shadow-[#3B0D3B]/20 hover:shadow-lg transition-all active:scale-[0.98] group/btn"
@@ -530,9 +563,9 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
                           <span>View course</span>
                           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/btn:translate-x-1" />
                         </Link>
-                      )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </div>
               );
             })}

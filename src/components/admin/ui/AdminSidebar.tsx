@@ -23,6 +23,7 @@ import {
   Layers,
   X,
   Search,
+  Bot,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -95,6 +96,18 @@ export default function AdminSidebar({
   };
 
   const navGroups: NavGroupConfig[] = [
+    {
+      groupTitle: "AI ASSISTANT",
+      items: [
+        {
+          id: "aiBot",
+          label: "Treqo AI Copilot",
+          icon: Bot,
+          badge: "Gemini",
+          badgeVariant: "pulse",
+        },
+      ],
+    },
     {
       groupTitle: "WORKSPACE",
       items: [

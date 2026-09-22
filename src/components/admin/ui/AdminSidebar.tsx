@@ -24,6 +24,7 @@ import {
   X,
   Search,
   Bot,
+  ShieldCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -156,6 +157,11 @@ export default function AdminSidebar({
           id: "govCerts",
           label: "Gov Certifications",
           icon: Award,
+        },
+        {
+          id: "certifications",
+          label: "Program Certifications",
+          icon: ShieldCheck,
         },
       ],
     },

@@ -1,19 +1,12 @@
-"use client";
-
 import React from "react";
 import Image from "next/image";
 import { ShieldCheck } from "lucide-react";
 import Container from "@/components/ui/Container";
+import type { CertificationsContent, CertItem } from "@/lib/content-db";
 
 /* ─────────────────────────────────────────────
    CERTIFICATE DATA, grouped by provider
 ───────────────────────────────────────────── */
-interface CertItem {
-  name: string;
-  provider: "SEMrush" | "HubSpot" | "Google" | "Meta";
-  color: string;
-  price?: string;
-}
 
 const semrush: CertItem[] = [
   { name: "PPC Fundamentals",   provider: "SEMrush", color: "#FF642D" },
@@ -141,12 +134,36 @@ function VerticalInfiniteCol({
   );
 }
 
+const defaultProviderBadges = [
+  { name: "Google", color: "#4285F4", count: "8 certs" },
+  { name: "Meta",   color: "#0082FB", count: "6 certs" },
+  { name: "HubSpot",color: "#FF7A59", count: "6 certs" },
+  { name: "SEMrush",color: "#FF642D", count: "4 certs" },
+];
+
 /* ─────────────────────────────────────────────
    MAIN SECTION (LIGHT THEME & SINGLE VIEWPORT)
 ───────────────────────────────────────────── */
-export default function CertificationSection() {
-  const col1Certs = [...google, ...meta];
-  const col2Certs = [...hubspot, ...semrush];
+export default function CertificationSection({ content }: { content?: CertificationsContent }) {
+  // Determine cert cards
+  const allIndustryCerts = content?.industryCerts && content.industryCerts.length > 0
+    ? content.industryCerts
+    : [...google, ...meta, ...hubspot, ...semrush];
+
+  // Distribute into 2 columns
+  const half = Math.ceil(allIndustryCerts.length / 2);
+  const col1Certs = allIndustryCerts.slice(0, half);
+  const col2Certs = allIndustryCerts.slice(half);
+
+  const providerBadges = content?.providerBadges && content.providerBadges.length > 0
+    ? content.providerBadges
+    : defaultProviderBadges;
+
+  const treqoTags = content?.treqoTags && content.treqoTags.length > 0
+    ? content.treqoTags
+    : ["Live Spend Defense", "Verified ROAS", "Agency Capstone"];
+
+  const certificateImage = content?.treqoCertificateImage || "/images/treqo-official-certificate.png";
 
   return (
     <section
@@ -159,15 +176,15 @@ export default function CertificationSection() {
         <div className="text-center mb-6 sm:mb-8">
           <h2 className="m-0 mb-2 leading-tight tracking-tight text-[#1A0A1A]">
             <span className="block text-2xl sm:text-3xl lg:text-[2.65rem] font-black">
-              Credentials Built For The{" "}
+              {content?.eyebrow || "Credentials Built For The"}{" "}
               <span className="italic font-serif font-black text-[#5A2A5A]">
-                Real Market
+                {content?.eyebrowHighlight || "Real Market"}
               </span>
             </span>
           </h2>
 
           <p className="text-xs sm:text-sm text-[#5A4A5A] max-w-xl mx-auto leading-relaxed font-medium">
-            Graduate with official revenue capstone validation, plus 30+ industry credentials recruiters actively search for.
+            {content?.description || "Graduate with official revenue capstone validation, plus 30+ industry credentials recruiters actively search for."}
           </p>
         </div>
 
@@ -180,46 +197,41 @@ export default function CertificationSection() {
               <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white px-3 py-0.5 mb-2 shadow-2xs">
                 <ShieldCheck size={12} className="text-[#3B0D3B]" />
                 <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3B0D3B]">
-                  CAPSTONE REVENUE PROOF
+                  {content?.treqoBadge || "CAPSTONE REVENUE PROOF"}
                 </span>
               </div>
 
               <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-[#1A0A1A] leading-tight">
-                TREQO Certification
+                {content?.treqoTitle || "TREQO Certification"}
               </h3>
 
               <p className="text-xs sm:text-sm text-[#5A4A5A] m-0 leading-relaxed font-medium">
-                Awarded on completion of your capstone project: a real campaign, built &amp; launched with real numbers attached.
+                {content?.treqoDescription || "Awarded on completion of your capstone project: a real campaign, built & launched with real numbers attached."}
               </p>
 
               {/* Provider Badges Row to match height & alignment with right side */}
               <div className="flex items-center gap-2 mt-3 flex-wrap">
-                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
-                  <span className="text-[10px] font-extrabold text-[#3B0D3B]">Live Spend Defense</span>
-                </div>
-                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
-                  <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
-                  <span className="text-[10px] font-extrabold text-[#3B0D3B]">Verified ROAS</span>
-                </div>
-                <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
-                  <span className="text-[10px] font-extrabold text-[#5A4A5A]">Agency Capstone</span>
-                </div>
+                {treqoTags.map((tag, idx) => (
+                  <div key={idx} className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-[#3B0D3B]/15 bg-white shadow-2xs">
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#0CA30C]" />
+                    <span className="text-[10px] font-extrabold text-[#3B0D3B]">{tag}</span>
+                  </div>
+                ))}
               </div>
             </div>
 
             {/* Certificate Container: Matching height with Right Marquee */}
             <div className="relative flex h-[460px] sm:h-[500px] lg:h-[520px] w-full flex-col items-center justify-center rounded-2xl border border-[#3B0D3B]/15 bg-white/70 p-4 shadow-sm backdrop-blur-xs">
               <a
-                href="/images/treqo-official-certificate.png"
+                href={certificateImage}
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Click to view full-resolution certificate"
                 className="relative h-full w-full block transition-transform duration-300 hover:scale-[1.01] cursor-zoom-in"
               >
                 <Image
-                  src="/images/treqo-official-certificate.png"
-                  alt="TREQO Official Certificate of Completion in Digital Marketing"
+                  src={certificateImage}
+                  alt={content?.treqoTitle ? `${content.treqoTitle} Official Certificate` : "TREQO Official Certificate of Completion in Digital Marketing"}
                   fill
                   sizes="(max-width: 1024px) 100vw, 550px"
                   className="object-contain drop-shadow-md"
@@ -230,7 +242,7 @@ export default function CertificationSection() {
 
             {/* Sub-caption below certificate */}
             <p className="text-[11px] text-[#5A4A5A] text-center mt-2.5 m-0 leading-relaxed font-medium">
-              Verifiable credential directly reviewed by placement hiring managers.
+              {content?.treqoCaption || "Verifiable credential directly reviewed by placement hiring managers."}
             </p>
           </div>
 
@@ -241,26 +253,21 @@ export default function CertificationSection() {
               <div className="inline-flex items-center gap-1.5 rounded-full border border-[#3B0D3B]/15 bg-white px-3 py-0.5 mb-2 shadow-2xs">
                 <ShieldCheck size={12} className="text-[#3B0D3B]" />
                 <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#3B0D3B]">
-                  GLOBAL CREDENTIALS
+                  {content?.industryBadge || "GLOBAL CREDENTIALS"}
                 </span>
               </div>
 
               <h3 className="m-0 mb-1.5 text-xl sm:text-2xl font-black text-[#1A0A1A] leading-tight">
-                Other Industry Certification
+                {content?.industryTitle || "Other Industry Certification"}
               </h3>
 
               <p className="text-xs sm:text-sm text-[#5A4A5A] m-0 leading-relaxed font-medium">
-                From Google &amp; Meta to HubSpot &amp; SEMrush, graduate with 30+ credentials recruiters look for.
+                {content?.industryDescription || "From Google & Meta to HubSpot & SEMrush, graduate with 30+ credentials recruiters look for."}
               </p>
 
               {/* Provider Badges Row */}
               <div className="flex items-center gap-2 mt-3 flex-wrap">
-                {[
-                  { name: "Google", color: "#4285F4", count: "8 certs" },
-                  { name: "Meta",   color: "#0082FB", count: "6 certs" },
-                  { name: "HubSpot",color: "#FF7A59", count: "6 certs" },
-                  { name: "SEMrush",color: "#FF642D", count: "4 certs" },
-                ].map((p) => (
+                {providerBadges.map((p) => (
                   <div
                     key={p.name}
                     className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs border border-slate-200 bg-white shadow-2xs"
@@ -293,7 +300,7 @@ export default function CertificationSection() {
 
             {/* Sub-caption below marquee */}
             <p className="text-[11px] text-[#5A4A5A] text-center mt-2.5 m-0 leading-relaxed font-medium">
-              All 30+ exam vouchers and preparation guides included with tuition.
+              {content?.industryCaption || "All 30+ exam vouchers and preparation guides included with tuition."}
             </p>
           </div>
         </div>

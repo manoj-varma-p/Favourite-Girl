@@ -164,6 +164,7 @@ export interface HomePageContent {
   govCerts?: GovCertsContent;
   sixDecisions?: SixDecisionsContent;
   mentors?: MentorsSectionContent;
+  certifications?: CertificationsContent;
 }
 
 export interface MentorsSectionContent {
@@ -174,6 +175,37 @@ export interface MentorsSectionContent {
   guaranteeHighlight?: string;
   guaranteeText?: string;
   isLocked?: boolean;
+}
+
+export interface CertItem {
+  name: string;
+  provider: "SEMrush" | "HubSpot" | "Google" | "Meta" | string;
+  color?: string;
+  price?: string;
+}
+
+export interface ProviderBadgeItem {
+  name: string;
+  color: string;
+  count: string;
+}
+
+export interface CertificationsContent {
+  eyebrow?: string;
+  eyebrowHighlight?: string;
+  description?: string;
+  treqoBadge?: string;
+  treqoTitle?: string;
+  treqoDescription?: string;
+  treqoTags?: string[];
+  treqoCertificateImage?: string;
+  treqoCaption?: string;
+  industryBadge?: string;
+  industryTitle?: string;
+  industryDescription?: string;
+  industryCaption?: string;
+  providerBadges?: ProviderBadgeItem[];
+  industryCerts?: CertItem[];
 }
 
 import type { CoursePhaseGroup } from "@/types/home";
@@ -503,6 +535,7 @@ export async function getHomePageContentFromDb(): Promise<HomePageContent> {
           govCerts: doc.govCerts || localData.govCerts,
           sixDecisions: doc.sixDecisions || localData.sixDecisions,
           mentors: doc.mentors || localData.mentors,
+          certifications: doc.certifications || localData.certifications,
         };
       }
     }

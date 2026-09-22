@@ -245,5 +245,174 @@
     ],
     "guaranteeHighlight": "Zero Academic Theory:",
     "guaranteeText": "Every mentor actively manages enterprise budgets, live client acquisition accounts, and direct-response campaigns."
+  },
+  "certifications": {
+    "eyebrow": "Credentials Built For The",
+    "eyebrowHighlight": "Real Market",
+    "description": "Graduate with official revenue capstone validation, plus 30+ industry credentials recruiters actively search for.",
+    "treqoBadge": "CAPSTONE REVENUE PROOF",
+    "treqoTitle": "TREQO Certification",
+    "treqoDescription": "Awarded on completion of your capstone project: a real campaign, built & launched with real numbers attached.",
+    "treqoTags": [
+      "Live Spend Defense",
+      "Verified ROAS",
+      "Agency Capstone"
+    ],
+    "treqoCertificateImage": "/uploads/certs/treqo-official-certificate-1790072107752-irnn.png",
+    "treqoCaption": "Verifiable credential directly reviewed by placement hiring managers.",
+    "industryBadge": "GLOBAL CREDENTIALS",
+    "industryTitle": "Other Industry Certification",
+    "industryDescription": "From Google & Meta to HubSpot & SEMrush, graduate with 30+ credentials recruiters look for.",
+    "industryCaption": "All 30+ exam vouchers and preparation guides included with tuition.",
+    "providerBadges": [
+      {
+        "name": "Google",
+        "color": "#4285F4",
+        "count": "8 certs"
+      },
+      {
+        "name": "Meta",
+        "color": "#0082FB",
+        "count": "6 certs"
+      },
+      {
+        "name": "HubSpot",
+        "color": "#FF7A59",
+        "count": "6 certs"
+      },
+      {
+        "name": "SEMrush",
+        "color": "#FF642D",
+        "count": "4 certs"
+      }
+    ],
+    "industryCerts": [
+      {
+        "name": "Google My Business",
+        "provider": "Google",
+        "color": "#34A853"
+      },
+      {
+        "name": "Google Analytics (GA4)",
+        "provider": "Google",
+        "color": "#4285F4"
+      },
+      {
+        "name": "Google Ads Shopping",
+        "provider": "Google",
+        "color": "#EA4335"
+      },
+      {
+        "name": "Performance Max",
+        "provider": "Google",
+        "color": "#FBBC04"
+      },
+      {
+        "name": "Google Ads Video",
+        "provider": "Google",
+        "color": "#EA4335"
+      },
+      {
+        "name": "Google Ads Display",
+        "provider": "Google",
+        "color": "#34A853"
+      },
+      {
+        "name": "Fundamentals of Digital Mkt",
+        "provider": "Google",
+        "color": "#4285F4"
+      },
+      {
+        "name": "Google Ads Search",
+        "provider": "Google",
+        "color": "#FBBC04"
+      },
+      {
+        "name": "Community Manager",
+        "provider": "Meta",
+        "price": "$99",
+        "color": "#0082FB"
+      },
+      {
+        "name": "Creative Strategy Pro",
+        "provider": "Meta",
+        "price": "$150",
+        "color": "#0082FB"
+      },
+      {
+        "name": "Media Planning Pro",
+        "provider": "Meta",
+        "price": "$150",
+        "color": "#0082FB"
+      },
+      {
+        "name": "Marketing Science Pro",
+        "provider": "Meta",
+        "price": "$150",
+        "color": "#0082FB"
+      },
+      {
+        "name": "Digital Marketing Assoc.",
+        "provider": "Meta",
+        "price": "$99",
+        "color": "#0082FB"
+      },
+      {
+        "name": "Media Buying Pro",
+        "provider": "Meta",
+        "price": "$150",
+        "color": "#0082FB"
+      },
+      {
+        "name": "SEO Certification",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "Digital Marketing",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "Social Media Marketing",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "Email Marketing",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "Inbound Marketing",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "Content Marketing",
+        "provider": "HubSpot",
+        "color": "#FF7A59"
+      },
+      {
+        "name": "PPC Fundamentals",
+        "provider": "SEMrush",
+        "color": "#FF642D"
+      },
+      {
+        "name": "SEO Fundamentals",
+        "provider": "SEMrush",
+        "color": "#FF642D"
+      },
+      {
+        "name": "Social Media",
+        "provider": "SEMrush",
+        "color": "#FF642D"
+      },
+      {
+        "name": "Content Marketing",
+        "provider": "SEMrush",
+        "color": "#FF642D"
+      }
+    ]
   }
 }

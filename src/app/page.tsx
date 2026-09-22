@@ -74,7 +74,7 @@ export default async function Home() {
         <WhyTreqqo content={homeContent.whyTreqqo} />
         <ExecutionProof content={homeContent.executionProof} />
         <TaughtBy tutors={tutors} sectionContent={homeContent.mentors} />
-        <Certifications />
+        <Certifications content={homeContent.certifications} />
         <SixDecisions content={homeContent.sixDecisions} />
         <FaqSection />
         <FinalCta />

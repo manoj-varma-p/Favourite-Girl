@@ -65,6 +65,7 @@ import { defaultFormSettings } from "@/types/forms";
 import AdminWhyTreqqoTab from "@/components/admin/AdminWhyTreqqoTab";
 import AdminPlacementsTab from "@/components/admin/AdminPlacementsTab";
 import AdminGovCertsTab from "@/components/admin/AdminGovCertsTab";
+import AdminCertificationsTab from "@/components/admin/AdminCertificationsTab";
 import AdminSixDecisionsTab from "@/components/admin/AdminSixDecisionsTab";
 import AdminFooterTab from "@/components/admin/AdminFooterTab";
 import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
@@ -93,6 +94,7 @@ const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
   whyTreqqo: { title: "CEO Challenge & Defense", breadcrumb: "Learning & Programs" },
   placements: { title: "Batch Placements", breadcrumb: "Learning & Programs" },
   govCerts: { title: "Accreditations & Certificates", breadcrumb: "Credentials & Compliance" },
+  certifications: { title: "Program Certifications", breadcrumb: "Credentials & Compliance" },
   sixDecisions: { title: "Six Decisions Framework", breadcrumb: "Credentials & Compliance" },
   blogs: { title: "Articles & Insights", breadcrumb: "Content & Marketing" },
   faqs: { title: "Frequently Asked Questions", breadcrumb: "Content & Marketing" },
@@ -181,6 +183,7 @@ export default function CustomAdminPanelPage() {
     | "whyTreqqo"
     | "placements"
     | "govCerts"
+    | "certifications"
     | "sixDecisions"
     | "footer"
     | "faqs"
@@ -3992,6 +3995,17 @@ export default function CustomAdminPanelPage() {
               initialData={homeContent.govCerts}
               adminPin={getStoredPin()}
               onSaved={(updated) => setHomeContent((prev) => ({ ...prev, govCerts: updated }))}
+            />
+          )}
+
+          {/* ========================================================= */}
+          {/* TAB: PROGRAM CERTIFICATIONS (TREQO & INDUSTRY)            */}
+          {/* ========================================================= */}
+          {activeTab === "certifications" && (
+            <AdminCertificationsTab
+              initialData={homeContent.certifications}
+              adminPin={getStoredPin()}
+              onSaved={(updated) => setHomeContent((prev) => ({ ...prev, certifications: updated }))}
             />
           )}
 

@@ -19,6 +19,7 @@ import {
   ExternalLink,
   Download,
   Plus,
+  ShieldCheck,
 } from "lucide-react";
 import type { Lead } from "@/lib/leads-db";
 import type { CourseItem } from "@/lib/content-db";
@@ -155,6 +156,14 @@ export default function CommandPalette({
         subtitle: "MSME, DPIIT, Startup India credentials",
         icon: <Award className="h-4 w-4 text-[#3B0D3B]" />,
         onSelect: () => onSelectTab("govCerts"),
+      },
+      {
+        id: "nav-certs",
+        category: "Navigation",
+        title: "Program Certifications",
+        subtitle: "TREQO Capstone & Industry Marquee Credentials",
+        icon: <ShieldCheck className="h-4 w-4 text-[#3B0D3B]" />,
+        onSelect: () => onSelectTab("certifications"),
       },
       {
         id: "nav-blogs",

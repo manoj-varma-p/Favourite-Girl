@@ -29,8 +29,19 @@ export default function HeroActions({
     openApplyModal("Book a Demo");
   };
 
-  const primaryLabel = primaryCtaLabel || heroContent.primaryCta.label || "Apply for Batch 2";
-  const primaryHref = primaryCtaHref || heroContent.primaryCta.href || "#apply";
+  const handlePrimaryClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (primaryHref === "#courses" || primaryHref === "/#courses" || primaryHref.endsWith("#courses")) {
+      const el = document.getElementById("courses");
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth" });
+        window.history.pushState(null, "", "#courses");
+      }
+    }
+  };
+
+  const primaryLabel = primaryCtaLabel || heroContent.primaryCta.label || "Browse Courses";
+  const primaryHref = primaryCtaHref || heroContent.primaryCta.href || "#courses";
   const secondaryLabel = secondaryCtaLabel || "Book a demo";
   const videoLabel = watchVideoLabel || "Watch Video";
 
@@ -38,6 +49,7 @@ export default function HeroActions({
     <div className="flex flex-wrap items-center justify-start gap-3.5 w-full sm:w-auto">
       <Link
         href={primaryHref}
+        onClick={handlePrimaryClick}
         className="glossy-shine inline-flex items-center justify-center rounded-xl bg-[#3B0D3B] px-6 py-3.5 text-sm sm:text-base font-bold text-[#FDFAF6] shadow-lg shadow-[#3B0D3B]/25 hover:bg-[#2B052B] active:scale-[0.98] transition-all"
       >
         {primaryLabel}

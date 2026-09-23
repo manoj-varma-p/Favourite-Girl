@@ -63,7 +63,7 @@ export const heroContent: HeroContentData = {
     "Plan A or Plan B: pay less now, or pay once and keep the rest",
   ],
   featurePills: [],
-  primaryCta: { label: "Browse the 7 courses", href: "/#courses" },
+  primaryCta: { label: "Browse Courses", href: "#courses" },
   secondaryCta: { label: "Book a demo", href: "#apply" },
 };
 

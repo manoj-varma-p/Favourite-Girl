@@ -10,7 +10,7 @@
     "desktopImage": "/images/maiiin.webp",
     "mobileImage": "/images/mainnnn-bg.webp",
     "primaryCtaLabel": "Browse Courses",
-    "primaryCtaHref": "#apply",
+    "primaryCtaHref": "#courses",
     "secondaryCtaLabel": "Book a demo",
     "watchVideoLabel": "Watch Video"
   },

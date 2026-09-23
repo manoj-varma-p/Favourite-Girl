@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, Sparkles, ShieldCheck, ArrowRight, Download } from "lucide-react";
+import { Check } from "lucide-react";
 import ApplyButton from "@/components/common/ApplyButton";
 import DownloadCurriculumButton from "@/components/common/DownloadCurriculumButton";
 import { cn } from "@/lib/utils";
@@ -248,68 +248,51 @@ export default function CoursePerksBox({
       id="perks"
       className={cn("scroll-mt-28 sm:scroll-mt-32", className)}
     >
-      <div className="relative overflow-hidden rounded-3xl border border-[#3B0D3B]/15 bg-gradient-to-br from-white via-[#FDFAF6] to-[#F5EDE0]/60 p-6 sm:p-8 lg:p-10 shadow-[0_16px_40px_-20px_rgba(59,13,59,0.12)]">
-        {/* Subtle Ambient Decorative Glow */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-[#3B0D3B]/[0.06] blur-3xl"
-        />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-emerald-500/[0.05] blur-3xl"
-        />
-
-        {/* Section Header */}
-        <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-[#EBDDC8]/80 pb-6 sm:pb-8">
+      <div className="relative overflow-hidden rounded-2xl border border-[#3B0D3B]/15 bg-gradient-to-br from-white via-[#FDFAF6] to-[#F5EDE0]/50 p-4 sm:p-5 lg:p-6 shadow-sm">
+        {/* Section Header (Compact, no pill badge) */}
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#EBDDC8]/70 pb-3 sm:pb-4">
           <div>
-            <div className="inline-flex items-center gap-2 rounded-full bg-[#3B0D3B]/[0.07] px-3.5 py-1 text-[11px] font-bold tracking-wider text-[#3B0D3B] uppercase">
-              <Sparkles className="h-3.5 w-3.5 text-[#3B0D3B]" />
-              <span>ALL-INCLUSIVE CURRICULUM</span>
-            </div>
-            <h2 className="mt-3 text-2xl sm:text-3xl font-black tracking-tight text-[#1A0A1A]">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-[#1A0A1A]">
               Everything Included in{" "}
               <span className="text-[#3B0D3B]">{courseTitle}</span>
             </h2>
-            <p className="mt-2 text-xs sm:text-sm text-[#5A4A5A] max-w-2xl leading-relaxed">
-              Zero hidden fees, zero software surcharges. When you join, you receive complete access to the full operational ecosystem required to launch and scale your career.
+            <p className="mt-0.5 text-xs text-[#5A4A5A]">
+              Zero hidden fees. Complete access to live ad budgets, tools, certifications, and 1:1 mentorship.
             </p>
           </div>
 
-          <div className="hidden sm:flex items-center gap-2 rounded-2xl bg-emerald-50 border border-emerald-200/90 px-4 py-2.5 self-start md:self-auto shrink-0 shadow-2xs">
-            <ShieldCheck className="h-5 w-5 text-emerald-600" />
-            <div>
-              <p className="text-[11px] font-bold text-emerald-900 leading-none">100% Guaranteed Inclusions</p>
-              <p className="text-[10px] text-emerald-700 mt-0.5 leading-none">All tools &amp; perks included in tuition</p>
-            </div>
+          <div className="inline-flex items-center gap-1.5 self-start sm:self-auto rounded-lg bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 text-[11px] font-bold text-emerald-800 shrink-0">
+            <Check className="h-3.5 w-3.5 text-emerald-600 stroke-[3]" />
+            <span>100% In-Curriculum</span>
           </div>
         </div>
 
-        {/* Perks Grid with Prominent Tick Marks */}
-        <div className="relative z-10 mt-6 sm:mt-8 grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+        {/* Compact Perks Grid with Clean Tick Marks */}
+        <div className="relative z-10 mt-3 sm:mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-2.5">
           {items.map((item, idx) => (
             <div
               key={idx}
-              className="group relative flex items-start gap-3.5 rounded-2xl border border-[#F5EDE0] bg-white/90 p-4 sm:p-4.5 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#3B0D3B]/30 hover:bg-white hover:shadow-md hover:shadow-[#3B0D3B]/5"
+              className="group relative flex items-start gap-2.5 rounded-xl border border-[#F5EDE0] bg-white/95 px-3 py-2.5 transition-all duration-150 hover:border-[#3B0D3B]/25 hover:bg-white hover:shadow-xs"
             >
               {/* Tick Mark Badge */}
-              <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/30 transition-all duration-200 group-hover:scale-110 group-hover:bg-emerald-600 group-hover:text-white shadow-xs">
-                <Check className="h-4 w-4 stroke-[2.75]" />
+              <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-50 text-emerald-600 border border-emerald-500/30 transition-transform duration-150 group-hover:scale-105 shadow-2xs mt-0.5">
+                <Check className="h-3 w-3 stroke-[3]" />
               </div>
 
               {/* Perk Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-sm sm:text-[15px] font-bold text-[#1A0A1A] leading-snug group-hover:text-[#3B0D3B] transition-colors">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h3 className="text-xs sm:text-[13px] font-bold text-[#1A0A1A] leading-snug group-hover:text-[#3B0D3B] transition-colors">
                     {item.title}
                   </h3>
                   {item.tag && (
-                    <span className="inline-flex items-center rounded-full bg-[#FAF5EE] border border-[#EBDDC8]/90 px-2 py-0.5 text-[10px] font-semibold text-[#5A4A5A] uppercase tracking-wide">
+                    <span className="inline-flex items-center rounded-md bg-[#FAF5EE] border border-[#EBDDC8]/80 px-1.5 py-0.2 text-[9px] font-semibold text-[#5A4A5A] uppercase tracking-wide">
                       {item.tag}
                     </span>
                   )}
                 </div>
                 {item.description && (
-                  <p className="mt-1 text-xs text-[#5A4A5A] leading-relaxed">
+                  <p className="mt-0.5 text-[11px] text-[#5A4A5A] leading-relaxed line-clamp-2">
                     {item.description}
                   </p>
                 )}
@@ -318,38 +301,27 @@ export default function CoursePerksBox({
           ))}
         </div>
 
-        {/* Bottom Banner Callout with Actions */}
-        <div className="relative z-10 mt-8 rounded-2xl bg-gradient-to-r from-[#1A0A1A] to-[#2B0D2B] p-5 sm:p-6 text-white shadow-lg flex flex-col sm:flex-row items-center justify-between gap-5">
-          <div className="text-center sm:text-left">
-            <div className="flex items-center justify-center sm:justify-start gap-2">
-              <span className="flex h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-              <p className="text-xs font-bold uppercase tracking-wider text-emerald-300">
-                Cohort Admissions Open
-              </p>
-            </div>
-            <p className="mt-1 text-base sm:text-lg font-black text-[#FDFAF6]">
-              Ready to claim your seat in the next batch?
-            </p>
-            <p className="mt-0.5 text-xs text-white/70">
-              Limited seats per cohort to guarantee personalized 1:1 mentor attention.
-            </p>
-          </div>
+        {/* Slim, Compact Footer Action */}
+        <div className="relative z-10 mt-3.5 pt-3 border-t border-[#EBDDC8]/70 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+          <p className="text-[11px] sm:text-xs text-[#5A4A5A] text-center sm:text-left">
+            All tools, licenses, and ad spends are included in your program fee.
+          </p>
 
-          <div className="flex flex-wrap items-center justify-center gap-2.5 shrink-0 w-full sm:w-auto">
+          <div className="flex items-center gap-2 shrink-0">
             <ApplyButton
               courseName={courseTitle}
               size="md"
-              className="w-full sm:w-auto font-bold shadow-md bg-white hover:bg-slate-100 text-[#1A0A1A]"
+              className="font-bold text-xs py-2 px-3.5 shadow-xs"
             >
               {isLocked ? "Get Notified" : "Apply for Batch"}
             </ApplyButton>
 
             <DownloadCurriculumButton
               courseName={courseTitle}
-              size="md"
-              className="w-full sm:w-auto font-semibold border-white/20 bg-white/10 text-white hover:bg-white/20"
+              size="sm"
+              className="text-xs font-semibold"
             >
-              Download Syllabus
+              Syllabus
             </DownloadCurriculumButton>
           </div>
         </div>

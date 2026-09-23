@@ -282,6 +282,7 @@ export interface CourseItem {
     description?: string;
   }>;
   metaKeywords?: string[];
+  perks?: Array<{ title: string; description: string; tag?: string } | string>;
 }
 
 export type ProgramItem = CourseItem;

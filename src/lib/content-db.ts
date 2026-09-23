@@ -477,10 +477,21 @@ export async function savePageSeoSettingsToDb(items: PageSeoItem[]): Promise<voi
   }
 }
 
+import { formatCourseSlug, syncPageSeoWithCourses } from "./seo-utils";
+export { formatCourseSlug, syncPageSeoWithCourses };
+
 export async function getPageSeoByPath(pagePath: string): Promise<PageSeoItem | null> {
   const pages = await getPageSeoSettingsFromDb();
   const clean = pagePath.endsWith("/") && pagePath !== "/" ? pagePath.slice(0, -1) : pagePath;
-  return pages.find((p) => p.path === clean || p.path === pagePath || p.id === pagePath || p.id === clean.replace(/^\/categories\//, "")) || null;
+  const targetSlug = formatCourseSlug(clean);
+
+  return (
+    pages.find((p) => {
+      if (p.path === clean || p.path === pagePath || p.id === pagePath) return true;
+      if (targetSlug && (formatCourseSlug(p.path) === targetSlug || formatCourseSlug(p.id) === targetSlug)) return true;
+      return false;
+    }) || null
+  );
 }
 
 // -----------------------------------------------------------------
@@ -797,18 +808,21 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
 }
 
 export async function saveCoursesToDb(courses: CourseItem[]): Promise<void> {
-  // Ensure order & lock states are normalized
+  // Ensure order, canonical slugs & lock states are normalized
   const orderedCourses = courses.map((c, idx) => {
     const isLocked = Boolean(c.isLocked);
+    const cleanSlug = formatCourseSlug(c.href) || formatCourseSlug(c.id);
+    const canonicalPath = `/categories/${cleanSlug}`;
     return {
       ...c,
+      id: c.id || cleanSlug,
       isLocked,
       actionText: isLocked ? "Get notified →" : (c.actionText && !c.actionText.toLowerCase().includes("notif") ? c.actionText : "View course →"),
       badge: isLocked ? "COMING SOON" : (c.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (c.badge || "BATCH 2 · OPEN")),
       badgeVariant: isLocked ? "gray" : (c.badgeVariant || "blue"),
       applyCta: isLocked ? "Notify Me When Open" : (c.applyCta === "Notify Me When Open" ? "Apply for Batch 2" : (c.applyCta || "Apply for Batch 2")),
-      actionHref: c.actionHref || c.href || `/categories/${c.id}`,
-      href: c.href || `/categories/${c.id}`,
+      actionHref: canonicalPath,
+      href: canonicalPath,
       order: typeof c.order === "number" ? c.order : idx + 1,
     };
   });
@@ -836,6 +850,15 @@ export async function saveCoursesToDb(courses: CourseItem[]): Promise<void> {
     } else {
       await db.collection("courses").deleteMany({});
     }
+  }
+
+  // Automatically sync course names, slugs, and paths into Page SEO
+  try {
+    const currentSeo = await getPageSeoSettingsFromDb();
+    const syncedSeo = syncPageSeoWithCourses(currentSeo, orderedCourses);
+    await savePageSeoSettingsToDb(syncedSeo);
+  } catch (err) {
+    console.warn("Auto-sync page SEO with courses error:", err);
   }
 }
 

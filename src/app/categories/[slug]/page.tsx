@@ -21,47 +21,90 @@ import CoursePerksBox from "@/components/category/CoursePerksBox";
 import { learningSystemCourses } from "@/data/home";
 import { megaMenuData } from "@/data/navigation";
 import { getCoursesFromDb, getPageSeoByPath, type CourseItem } from "@/lib/content-db";
+import { formatCourseSlug } from "@/lib/seo-utils";
 import { cn } from "@/lib/utils";
+
+export const dynamic = "force-dynamic";
+export const dynamicParams = true;
+export const revalidate = 0;
 
 const categoryLinks = megaMenuData.columns.find((column) => column.title === "Learn by Category")?.links ?? [];
 
 function getCourse(slug: string) {
-  return learningSystemCourses.find((course) => course.href === `/categories/${slug}`);
+  const targetSlug = formatCourseSlug(slug);
+  return learningSystemCourses.find((course) => formatCourseSlug(course.href) === targetSlug);
 }
 
 async function resolveCategoryMeta(slug: string, preloadedCourses?: CourseItem[]) {
-  const dbCourses = preloadedCourses || (await getCoursesFromDb());
-  const dbCourse = dbCourses.find(
-    (c) =>
-      c.id === slug ||
-      c.href?.endsWith(`/${slug}`) ||
-      (slug === "digital-marketing" && (c.id === "digital-marketing" || c.id === "new-age-dm"))
-  );
+  const targetSlug = formatCourseSlug(slug);
+  const dbCourses = preloadedCourses || (await getCoursesFromDb().catch(() => []));
+
+  // 1. Try matching from DB courses first
+  const dbCourse = dbCourses.find((c) => {
+    const idSlug = formatCourseSlug(c.id);
+    const hrefSlug = formatCourseSlug(c.href);
+    const actionHrefSlug = formatCourseSlug(c.actionHref || "");
+    return (
+      idSlug === targetSlug ||
+      hrefSlug === targetSlug ||
+      actionHrefSlug === targetSlug ||
+      (targetSlug === "digital-marketing" && (idSlug === "digital-marketing" || idSlug === "new-age-dm"))
+    );
+  });
+
   if (dbCourse) {
+    const canonicalSlug = formatCourseSlug(dbCourse.href) || formatCourseSlug(dbCourse.id) || targetSlug;
     return {
       label: dbCourse.title,
-      href: dbCourse.href || `/categories/${slug}`,
+      href: `/categories/${canonicalSlug}`,
       icon: undefined as any,
       dbCourse,
     };
   }
 
-  const link = categoryLinks.find((link) => link.href === `/categories/${slug}`);
-  if (link) return { label: link.label, href: link.href, icon: (link as any).icon, dbCourse: undefined };
+  // 2. Try matching categoryLinks from navigation menu
+  const link = categoryLinks.find((l) => formatCourseSlug(l.href) === targetSlug);
+  if (link) {
+    return {
+      label: link.label,
+      href: `/categories/${formatCourseSlug(link.href)}`,
+      icon: (link as any).icon,
+      dbCourse: undefined,
+    };
+  }
+
+  // 3. Try matching static learningSystemCourses
   const course = getCourse(slug);
-  if (course) return { label: course.title, href: course.href, icon: undefined as any, dbCourse: undefined };
+  if (course) {
+    return {
+      label: course.title,
+      href: `/categories/${formatCourseSlug(course.href)}`,
+      icon: undefined as any,
+      dbCourse: undefined,
+    };
+  }
+
   return null;
 }
 
-export function generateStaticParams() {
-  const courseSlugs = learningSystemCourses.map((c) => ({
-    slug: c.href.replace("/categories/", ""),
-  }));
-  const categorySlugs = categoryLinks.map((link) => ({
-    slug: link.href.replace("/categories/", ""),
-  }));
-  const uniqueSlugs = Array.from(new Set([...courseSlugs.map((s) => s.slug), ...categorySlugs.map((s) => s.slug)]));
-  return uniqueSlugs.map((slug) => ({ slug }));
+export async function generateStaticParams() {
+  try {
+    const dbCourses = await getCoursesFromDb().catch(() => []);
+    const dbSlugs = dbCourses.map((c) => ({
+      slug: formatCourseSlug(c.href) || formatCourseSlug(c.id),
+    }));
+    const courseSlugs = learningSystemCourses.map((c) => ({
+      slug: formatCourseSlug(c.href),
+    }));
+    const categorySlugs = categoryLinks.map((link) => ({
+      slug: formatCourseSlug(link.href),
+    }));
+    const all = [...dbSlugs, ...courseSlugs, ...categorySlugs].filter((s) => Boolean(s.slug));
+    const uniqueSlugs = Array.from(new Set(all.map((item) => item.slug))).map((slug) => ({ slug }));
+    return uniqueSlugs;
+  } catch {
+    return learningSystemCourses.map((c) => ({ slug: formatCourseSlug(c.href) }));
+  }
 }
 
 const NEW_AGE_ONLINE_KEYWORDS = [

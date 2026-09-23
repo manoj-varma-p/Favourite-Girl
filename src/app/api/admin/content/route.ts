@@ -115,6 +115,12 @@ export async function POST(req: NextRequest) {
       }
     } else if (type === "courses") {
       await saveCoursesToDb(data);
+      try {
+        revalidatePath("/", "layout");
+        revalidatePath("/categories/[slug]", "page");
+      } catch (e) {
+        console.warn("Revalidate error (non-fatal):", e);
+      }
     } else if (type === "tutors") {
       await saveTutorsToDb(data);
     } else if (type === "testimonials") {

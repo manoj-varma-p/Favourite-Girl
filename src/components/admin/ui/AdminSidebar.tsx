@@ -222,11 +222,6 @@ export default function AdminSidebar({
           icon: Settings,
         },
         {
-          id: "forms",
-          label: "Form Titles & Modals",
-          icon: FileText,
-        },
-        {
           id: "alerts",
           label: "Email Alerts",
           icon: Mail,

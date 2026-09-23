@@ -52,6 +52,7 @@ import {
 } from "lucide-react";
 import type { Lead } from "@/lib/leads-db";
 import type { BlogPost } from "@/data/blogs";
+import { syncPageSeoWithCourses, formatCourseSlug } from "@/lib/seo-utils";
 import type {
   GeneralSettings,
   LayoutSettings,
@@ -408,6 +409,12 @@ export default function CustomAdminPanelPage() {
 
   // 3. Courses State
   const [courses, setCourses] = useState<CourseItem[]>([]);
+
+  // Derived Page SEO synchronized immediately with courses in real-time
+  const effectivePageSeo = useMemo(() => {
+    return syncPageSeoWithCourses(pageSeo, courses);
+  }, [pageSeo, courses]);
+
   const [isCourseModalOpen, setIsCourseModalOpen] = useState(false);
   const [editingCourse, setEditingCourse] = useState<CourseItem | null>(null);
   const [courseForm, setCourseForm] = useState<CourseItem>({
@@ -3164,6 +3171,7 @@ export default function CustomAdminPanelPage() {
                 onSaved={(updatedList, savedCourse) => {
                   setCourses(updatedList);
                   setCourseInStudio(savedCourse);
+                  setPageSeo((prev) => syncPageSeoWithCourses(prev, updatedList));
                   notifySuccess(`Course "${savedCourse.title}" saved successfully!`);
                 }}
               />
@@ -4303,7 +4311,7 @@ export default function CustomAdminPanelPage() {
           {/* ========================================================= */}
           {activeTab === "pageKeywords" && (
             <AdminPageKeywordsTab
-              initialPages={pageSeo}
+              initialPages={effectivePageSeo}
               adminPin={getStoredPin()}
               onSwitchToDescriptions={() => setActiveTab("pageDescriptions")}
               onSaved={(updated) => {
@@ -4318,7 +4326,7 @@ export default function CustomAdminPanelPage() {
           {/* ========================================================= */}
           {activeTab === "pageDescriptions" && (
             <AdminPageDescriptionsTab
-              initialPages={pageSeo}
+              initialPages={effectivePageSeo}
               adminPin={getStoredPin()}
               onSwitchToKeywords={() => setActiveTab("pageKeywords")}
               onSaved={(updated) => {

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   FileText,
   Search,
@@ -43,6 +43,25 @@ export default function AdminPageDescriptionsTab({
     if (initialPages && initialPages.length > 0) return initialPages;
     return [];
   });
+
+  // Keep pages state immediately in sync when parent initialPages updates (e.g. course title or slug renamed)
+  useEffect(() => {
+    if (initialPages && initialPages.length > 0) {
+      setPages((current) => {
+        if (!current || current.length === 0) return initialPages;
+        return initialPages.map((initP) => {
+          const local = current.find((c) => c.id === initP.id || c.path === initP.path);
+          if (!local) return initP;
+          return {
+            ...local,
+            name: initP.name, // Immediately reflected!
+            path: initP.path, // Immediately reflected!
+            title: local.title && !local.title.endsWith("| TREQO") ? local.title : initP.title,
+          };
+        });
+      });
+    }
+  }, [initialPages]);
 
   const [selectedPageId, setSelectedPageId] = useState<string>(() => {
     return initialPages[0]?.id || "home";

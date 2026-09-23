@@ -29,6 +29,7 @@ import {
   Globe,
   Compass,
 } from "lucide-react";
+import { formatCourseSlug } from "@/lib/seo-utils";
 import type {
   CourseItem,
   CoursePhasesData,
@@ -184,10 +185,22 @@ export default function AdminCourseEditor({
     setStatusMsg(null);
 
     try {
-      const updatedList = allCourses.map((c) => (c.id === course.id ? course : c));
+      const cleanSlug = formatCourseSlug(course.href) || formatCourseSlug(course.id) || formatCourseSlug(course.title);
+      const canonicalPath = `/categories/${cleanSlug}`;
+
+      const normalizedCourse: CourseItem = {
+        ...course,
+        id: course.id || cleanSlug,
+        href: canonicalPath,
+        actionHref: canonicalPath,
+      };
+
+      const updatedList = allCourses.map((c) =>
+        (c.id === normalizedCourse.id || c.href === normalizedCourse.href ? normalizedCourse : c)
+      );
       // If course is new and not in list yet, append it
-      if (!allCourses.some((c) => c.id === course.id)) {
-        updatedList.push(course);
+      if (!updatedList.some((c) => c.id === normalizedCourse.id)) {
+        updatedList.push(normalizedCourse);
       }
 
       const res = await fetch("/api/admin/content", {
@@ -197,8 +210,9 @@ export default function AdminCourseEditor({
       });
 
       if (res.ok) {
-        setStatusMsg({ type: "success", text: `"${course.title}" saved successfully!` });
-        onSaved(updatedList, course);
+        setCourse(normalizedCourse);
+        setStatusMsg({ type: "success", text: `"${normalizedCourse.title}" saved successfully!` });
+        onSaved(updatedList, normalizedCourse);
       } else {
         setStatusMsg({ type: "error", text: "Failed to save course changes." });
       }
@@ -688,16 +702,46 @@ export default function AdminCourseEditor({
                     />
                   </div>
                   <div>
-                    <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
-                      Course URL Slug:
-                    </label>
-                    <input
-                      type="text"
-                      value={course.href}
-                      onChange={(e) => setCourse({ ...course, href: e.target.value })}
-                      placeholder="/categories/digital-marketing"
-                      className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 text-xs font-semibold text-slate-800 focus:bg-white focus:border-[#3B0D3B] focus:outline-none"
-                    />
+                    <div className="flex items-center justify-between">
+                      <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
+                        Course URL Slug:
+                      </label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const auto = formatCourseSlug(course.title);
+                          if (auto) {
+                            setCourse({
+                              ...course,
+                              href: `/categories/${auto}`,
+                              actionHref: `/categories/${auto}`,
+                            });
+                          }
+                        }}
+                        className="text-[10px] text-[#3B0D3B] hover:underline font-semibold flex items-center gap-1 cursor-pointer"
+                        title="Generate clean URL slug from Course Title"
+                      >
+                        <Sparkles className="h-3 w-3" />
+                        Auto-generate
+                      </button>
+                    </div>
+                    <div className="mt-1 flex items-center rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 focus-within:bg-white focus-within:border-[#3B0D3B] transition-colors">
+                      <span className="text-xs font-mono text-slate-400 select-none shrink-0">/categories/</span>
+                      <input
+                        type="text"
+                        value={formatCourseSlug(course.href) || formatCourseSlug(course.id)}
+                        onChange={(e) => {
+                          const clean = formatCourseSlug(e.target.value);
+                          setCourse({
+                            ...course,
+                            href: clean ? `/categories/${clean}` : "",
+                            actionHref: clean ? `/categories/${clean}` : "",
+                          });
+                        }}
+                        placeholder="new-age-digital-marketing"
+                        className="w-full text-xs font-semibold font-mono text-slate-800 bg-transparent focus:outline-none pl-1"
+                      />
+                    </div>
                   </div>
                 </div>
 

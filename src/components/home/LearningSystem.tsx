@@ -120,7 +120,13 @@ function mapCourseToProgramCard(c: any): ProgramCard {
   const actionText = isLocked
     ? "Get notified →"
     : (c.actionText && !c.actionText.toLowerCase().includes("notif") ? c.actionText : "View course →");
-  const targetHref = c.actionHref || c.href || `/categories/${c.id}`;
+  const cleanSlug = (c.href || c.actionHref || c.id || "")
+    .toLowerCase()
+    .trim()
+    .replace(/^\/+/, "")
+    .replace(/^categories\//, "")
+    .replace(/\/+$/, "");
+  const targetHref = `/categories/${cleanSlug || c.id}`;
 
   return {
     id: c.id,

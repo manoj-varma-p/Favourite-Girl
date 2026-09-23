@@ -3,6 +3,15 @@ import { addLead } from "@/lib/leads-db";
 import { getAlertSettingsFromDb } from "@/lib/content-db";
 import { sendEmailViaResend } from "@/lib/email-service";
 
+function escapeHtml(str: string): string {
+  return String(str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json().catch(() => null);
@@ -19,6 +28,21 @@ export async function POST(request: Request) {
     const course = typeof body.course === "string" ? body.course.trim().slice(0, 100) : "New Age Digital Marketing";
     const background = typeof body.background === "string" ? body.background.trim().slice(0, 150) : "General Inquiry";
     const source = typeof body.source === "string" ? body.source.trim().slice(0, 100) : "Website Form";
+
+    // Extract Origin Page and URL
+    const refererHeader = request.headers.get("referer") || "";
+    let originPage = typeof body.page === "string" && body.page.trim() ? body.page.trim().slice(0, 200) : "";
+    const originUrl = typeof body.pageUrl === "string" && body.pageUrl.trim() ? body.pageUrl.trim().slice(0, 500) : refererHeader;
+
+    if (!originPage && refererHeader) {
+      try {
+        const parsed = new URL(refererHeader);
+        originPage = parsed.pathname || "/";
+      } catch {}
+    }
+    if (!originPage) {
+      originPage = "/";
+    }
 
     // Validate Name
     if (!name || name.length < 2 || name.length > 100) {
@@ -54,6 +78,8 @@ export async function POST(request: Request) {
       course,
       background,
       source,
+      page: originPage,
+      pageUrl: originUrl,
     });
 
     console.log("[DB] Lead saved successfully:", savedLead);
@@ -61,7 +87,7 @@ export async function POST(request: Request) {
     // Check and trigger SMS & Email alerts configured in Admin Panel
     try {
       const alertConfig = await getAlertSettingsFromDb();
-      const alertMessage = `📢 New Treqo Student Application!\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nCourse: ${course}\nBackground: ${background}\nDate: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`;
+      const alertMessage = `📢 New Treqo Student Application!\nName: ${name}\nPhone: ${phone}\nEmail: ${email}\nCourse: ${course}\nOrigin Page: ${originPage}\nSource: ${source}\nBackground: ${background}\nDate: ${new Date().toLocaleString("en-IN", { timeZone: "Asia/Kolkata" })}`;
 
       // 1. Dispatch SMS Alerts to configured numbers
       if (alertConfig.smsAlertsEnabled && alertConfig.notifyPhones) {
@@ -116,27 +142,31 @@ export async function POST(request: Request) {
               <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
                 <tr>
                   <td style="padding: 8px 0; color: #777; width: 130px;">Student Name:</td>
-                  <td style="padding: 8px 0; color: #111; font-weight: bold; font-size: 16px;">${name}</td>
+                  <td style="padding: 8px 0; color: #111; font-weight: bold; font-size: 16px;">${escapeHtml(name)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #777;">Phone:</td>
-                  <td style="padding: 8px 0; color: #111; font-weight: bold;"><a href="tel:${phone}" style="color: #012A22;">${phone}</a></td>
+                  <td style="padding: 8px 0; color: #111; font-weight: bold;"><a href="tel:${escapeHtml(phone)}" style="color: #012A22;">${escapeHtml(phone)}</a></td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #777;">Email:</td>
-                  <td style="padding: 8px 0; color: #111; font-weight: bold;"><a href="mailto:${email}" style="color: #012A22;">${email}</a></td>
+                  <td style="padding: 8px 0; color: #111; font-weight: bold;"><a href="mailto:${escapeHtml(email)}" style="color: #012A22;">${escapeHtml(email)}</a></td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #777;">Target Track:</td>
-                  <td style="padding: 8px 0; color: #012A22; font-weight: bold;">${course}</td>
+                  <td style="padding: 8px 0; color: #012A22; font-weight: bold;">${escapeHtml(course)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #777;">Background:</td>
-                  <td style="padding: 8px 0; color: #333;">${background}</td>
+                  <td style="padding: 8px 0; color: #333;">${escapeHtml(background)}</td>
                 </tr>
                 <tr>
                   <td style="padding: 8px 0; color: #777;">Submission Source:</td>
-                  <td style="padding: 8px 0; color: #555;">${source}</td>
+                  <td style="padding: 8px 0; color: #555;">${escapeHtml(source)}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; color: #777;">Origin Page:</td>
+                  <td style="padding: 8px 0; color: #012A22; font-weight: bold;">${escapeHtml(originPage)}</td>
                 </tr>
               </table>
             </div>

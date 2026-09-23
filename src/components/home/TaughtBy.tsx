@@ -267,30 +267,44 @@ export default function TaughtBy({ tutors: dynamicTutors, sectionContent }: Taug
                 <div>
                   {/* Top: Portrait area */}
                   <div className="relative w-full aspect-[1/1] overflow-hidden rounded-xl border border-[#3B0D3B]/10 bg-[#F5EDE0]/50 shadow-inner">
-                    {isLocked ? (
-                      <div className="relative flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#2D0B2D] via-[#1A0A1A] to-[#0D050D] p-4 text-center">
-                        <div className="relative z-10 flex flex-col items-center">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white shadow-xl backdrop-blur-md">
-                            <Lock className="h-6 w-6 text-amber-300" />
+                    {photo ? (
+                      <div className="relative h-full w-full">
+                        <Image
+                          src={photo}
+                          alt={tutor.name}
+                          fill
+                          unoptimized
+                          sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
+                          className={cn(
+                            "object-cover object-top transition-transform duration-500",
+                            isLocked ? "opacity-75" : "group-hover:scale-105"
+                          )}
+                        />
+                        {isLocked && (
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/20 flex flex-col items-center justify-center p-3 text-center">
+                            <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-black/60 border border-white/20 text-white shadow-xl backdrop-blur-md">
+                              <Lock className="h-5 w-5 text-amber-300" />
+                            </div>
+                            <span className="mt-2.5 inline-flex items-center gap-1.5 rounded-full bg-black/85 border border-white/20 px-3 py-0.5 text-[9px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-md">
+                              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                              COMING SOON
+                            </span>
                           </div>
-                          <span className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-md">
-                            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-                            COMING SOON
-                          </span>
-                        </div>
+                        )}
                       </div>
-                    ) : photo ? (
-                      <Image
-                        src={photo}
-                        alt={tutor.name}
-                        fill
-                        unoptimized
-                        sizes="(max-width: 640px) 85vw, (max-width: 1024px) 50vw, 25vw"
-                        className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                      />
                     ) : (
-                      <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#3B0D3B] to-[#1A1A1E] text-white text-3xl font-black">
-                        {initials(tutor.name)}
+                      <div className="relative flex h-full w-full items-center justify-center bg-gradient-to-br from-[#3B0D3B] to-[#1A1A1E] text-white text-3xl font-black">
+                        <span className={cn(isLocked && "opacity-75")}>{initials(tutor.name)}</span>
+                        {isLocked && (
+                          <div className="absolute inset-0 bg-black/50 flex flex-col items-center justify-center p-3 text-center">
+                            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 border border-white/20 text-white shadow-xl backdrop-blur-md">
+                              <Lock className="h-5 w-5 text-amber-300" />
+                            </div>
+                            <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-2.5 py-0.5 text-[9px] font-black uppercase tracking-wider text-white">
+                              COMING SOON
+                            </span>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -350,31 +364,6 @@ export default function TaughtBy({ tutors: dynamicTutors, sectionContent }: Taug
                       </>
                     )}
                   </div>
-                </div>
-
-                {/* Footer */}
-                <div className="mt-4 pt-3 border-t border-[#3B0D3B]/10 flex items-center justify-between text-xs text-[#5A4A5A] font-semibold">
-                  {isLocked ? (
-                    <>
-                      <span className="truncate max-w-[140px] font-bold text-[#5A4A5A]/70 text-[11px]">
-                        Classified Track
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-amber-700 shrink-0 font-bold text-[11px]">
-                        <Lock className="w-3 h-3 text-amber-600" />
-                        Coming Soon
-                      </span>
-                    </>
-                  ) : (
-                    <>
-                      <span className="truncate max-w-[140px] font-bold text-[#3B0D3B]/80 text-[11px]">
-                        {specialty}
-                      </span>
-                      <span className="inline-flex items-center gap-1 text-[#0CA30C] shrink-0 font-bold text-[11px]">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Verified
-                      </span>
-                    </>
-                  )}
                 </div>
               </div>
             );

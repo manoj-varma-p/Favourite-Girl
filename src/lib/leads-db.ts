@@ -10,6 +10,8 @@ export interface Lead {
   course: string;
   background: string;
   source: string;
+  page?: string;
+  pageUrl?: string;
   submittedAt: string;
 }
 
@@ -80,6 +82,8 @@ export async function addLead(leadData: Omit<Lead, "id" | "submittedAt">): Promi
     course: leadData.course.trim() || "New Age Digital Marketing",
     background: leadData.background?.trim() || "General Inquiry",
     source: leadData.source?.trim() || "Website Form",
+    page: leadData.page?.trim() || "/",
+    pageUrl: leadData.pageUrl?.trim() || "",
     submittedAt: new Date().toISOString(),
   };
 
@@ -115,6 +119,8 @@ export async function getLeads(): Promise<Lead[]> {
           course: d.course,
           background: d.background,
           source: d.source,
+          page: d.page || (d.source?.includes("Hero") ? "/" : "/"),
+          pageUrl: d.pageUrl || "",
           submittedAt: d.submittedAt,
         }));
       }
@@ -125,7 +131,11 @@ export async function getLeads(): Promise<Lead[]> {
 
   // Fallback to file storage
   const fileLeads = loadLeadsFromFile();
-  memoryLeads = fileLeads;
+  memoryLeads = fileLeads.map((l) => ({
+    ...l,
+    page: l.page || (l.source?.includes("Hero") ? "/" : "/"),
+    pageUrl: l.pageUrl || "",
+  }));
   return memoryLeads;
 }
 
@@ -133,7 +143,7 @@ export async function deleteLead(id: string): Promise<boolean> {
   const collection = await getMongoCollection();
   if (collection) {
     try {
-      await collection.deleteOne({ id });
+      await collection.deleteOne({ $or: [{ id }, { _id: id as unknown as undefined }] });
     } catch (err) {
       console.error("[MongoDB Delete Error]:", err);
     }

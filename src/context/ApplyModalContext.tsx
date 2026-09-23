@@ -44,10 +44,38 @@ export function ApplyModalProvider({ children }: { children: ReactNode }) {
       .catch(() => {});
   }, []);
 
+const courseSlugMap: Record<string, string> = {
+  "digital-marketing": "New Age Digital Marketing",
+  "fundamentals": "Fundamentals of Digital Marketing",
+  "4m-program": "New Age Digital Marketing (On Campus)",
+  "pgdm": "Treqo PGDM in Modern Marketing",
+  "founder-semester": "The Founder Semester",
+  "performance-growth": "Performance & Growth Specialist",
+  "brand-strategy": "Executive Growth & Brand Strategy",
+  "ai-first-marketing": "AI-First Performance Marketing",
+  "creative-strategy": "Creative Strategy & High-Converting Content",
+  "marketing-analytics": "Marketing Analytics & Attribution",
+  "social-growth": "Social Media & Community Growth",
+  "martech": "MarTech, Automation & Funnel Architecture",
+};
+
+function detectCourseFromUrl(): string | undefined {
+  if (typeof window === "undefined") return undefined;
+  const path = window.location.pathname;
+  if (path.startsWith("/categories/")) {
+    const slug = path.replace(/^\/categories\//, "").replace(/\/.*$/, "").trim();
+    if (courseSlugMap[slug]) return courseSlugMap[slug];
+    return slug
+      .split("-")
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+      .join(" ");
+  }
+  return undefined;
+}
+
   function openApplyModal(course?: string) {
-    if (course) {
-      setCourseName(course);
-    }
+    const targetCourse = course || detectCourseFromUrl() || "New Age Digital Marketing";
+    setCourseName(targetCourse);
     setIsOpen(true);
   }
 
@@ -56,9 +84,8 @@ export function ApplyModalProvider({ children }: { children: ReactNode }) {
   }
 
   function openCurriculumModal(course?: string, pdfUrl?: string) {
-    if (course) {
-      setCurriculumCourse(course);
-    }
+    const targetCourse = course || detectCourseFromUrl() || "New Age Digital Marketing";
+    setCurriculumCourse(targetCourse);
     if (pdfUrl) {
       setCurriculumPdfUrl(pdfUrl);
     } else {

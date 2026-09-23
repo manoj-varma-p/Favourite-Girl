@@ -83,20 +83,6 @@ const defaultPrograms: ProgramCard[] = [
     isLocked: true,
   },
   {
-    id: "campus-edition",
-    image: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=800&q=80",
-    previewLabel: "STUDENT AT DESK",
-    badge: { text: "COMING SOON", variant: "gray" },
-    meta: "4 months · Online",
-    title: "Campus Edition",
-    description:
-      "The flagship, timed to run alongside a BBA or MBA without colliding with your semester exams.",
-    actionText: "Get notified →",
-    actionHref: "/categories/campus-edition",
-    tags: ["All", "Students"],
-    isLocked: true,
-  },
-  {
     id: "founder-semester",
     image: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
     previewLabel: "FOUNDER PITCH SESSION",
@@ -176,11 +162,6 @@ const COURSE_POINTS_MAP: Record<string, string[]> = {
     "12-Month Marketing diploma",
     "Media mix & attribution",
     "Direct leadership placement pipeline",
-  ],
-  "campus-edition": [
-    "Engineered to run alongside BBA / MBA schedules",
-    "Live brand portfolio before graduation",
-    "Zero collision with semester exam calendars",
   ],
   "founder-semester": [
     "Zero-to-one CAC, LTV & unit economics playbooks",
@@ -337,7 +318,7 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
         {/* Section Heading */}
         <div className="flex flex-col items-start max-w-2xl">
           <h2 className="text-3xl sm:text-4xl lg:text-[2.6rem] font-black leading-[1.12] tracking-tight text-[#1A0A1A]">
-            Seven Programs.
+            Six Programs.
           </h2>
           <p className="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed">
             Choose the course that matches your vision.
@@ -394,111 +375,104 @@ export default function LearningSystem({ initialPrograms }: LearningSystemProps 
                   )}
                 >
                   {/* Card Image Header with Badge Overlay */}
-                  {program.isLocked ? (
-                    <div
-                      onClick={() => openApplyModal("Upcoming Program Track")}
-                      className="relative h-44 sm:h-48 lg:h-52 w-full overflow-hidden bg-gradient-to-br from-[#1F0A1F] via-[#120712] to-[#0A050A] p-4 flex flex-col items-center justify-center text-center cursor-pointer shrink-0 border-b border-white/10"
-                      role="button"
-                      tabIndex={0}
-                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") openApplyModal("Upcoming Program Track"); }}
-                    >
-                      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/10 border border-white/20 text-white shadow-xl backdrop-blur-md">
-                        <Lock className="h-7 w-7 text-amber-300" />
-                      </div>
-                      <div className="mt-3.5 inline-flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-3.5 py-1 text-[10px] font-black uppercase tracking-wider text-white backdrop-blur-md shadow-md">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
-                        COMING SOON
-                      </div>
-                    </div>
-                  ) : (
-                    <Link
-                      href={program.actionHref}
-                      className="relative h-44 sm:h-48 lg:h-52 w-full overflow-hidden bg-slate-900 block group/img shrink-0"
-                      title={`View ${program.title} course`}
-                    >
-                      <Image
-                        src={program.image}
-                        alt={program.title}
-                        fill
-                        unoptimized
-                        sizes="(max-width: 640px) 300px, 420px"
-                        className="h-full w-full object-cover transition-transform duration-500 opacity-90 group-hover:opacity-100 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20" />
+                  <Link
+                    href={program.actionHref}
+                    className="relative h-44 sm:h-48 lg:h-52 w-full overflow-hidden bg-slate-950 block group/img shrink-0"
+                    title={`View ${program.title} course`}
+                  >
+                    <Image
+                      src={program.image}
+                      alt={program.title}
+                      fill
+                      unoptimized
+                      sizes="(max-width: 640px) 300px, 420px"
+                      className={cn(
+                        "h-full w-full object-cover transition-transform duration-500",
+                        program.isLocked
+                          ? "opacity-75"
+                          : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
+                      )}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/30" />
 
-                      {/* Batch Badge Overlay on Image (Top Right) */}
-                      <div className="absolute top-3 right-3 z-10">
+                    {/* Badge Overlay on Image (Top Right) */}
+                    <div className="absolute top-3 right-3 z-10">
+                      {program.isLocked ? (
+                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-black/85 border border-white/25 px-2.5 py-1 text-[10px] font-black tracking-wide text-white uppercase shadow-md backdrop-blur-md">
+                          <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                          COMING SOON
+                        </span>
+                      ) : (
                         <span className="inline-flex items-center rounded-lg bg-[#3B0D3B] border border-white/25 px-2.5 py-1 text-[10px] font-black tracking-wide text-white uppercase shadow-md backdrop-blur-md">
                           {program.badge.text}
                         </span>
+                      )}
+                    </div>
+
+                    {/* Top Left Lock indicator if locked */}
+                    {program.isLocked && (
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-flex items-center gap-1 rounded-md bg-black/70 border border-white/20 px-2 py-0.5 text-[10px] font-bold text-amber-300 backdrop-blur-xs">
+                          <Lock className="h-3 w-3" />
+                          <span>Locked</span>
+                        </span>
                       </div>
-                    </Link>
-                  )}
+                    )}
+                  </Link>
 
                   {/* Card Content */}
                   {program.isLocked ? (
                     <div className="p-3.5 sm:p-4 flex-1 flex flex-col justify-between">
                       <div>
-                        <div className="flex items-start">
-                          <h3 className="text-base sm:text-lg font-black tracking-tight text-[#1A0A1A] leading-snug">
-                            Upcoming Program Track
+                        {/* Course Title with Lock Indicator */}
+                        <div className="flex items-start justify-between gap-2">
+                          <h3 className="text-base sm:text-lg font-black tracking-tight text-[#1A0A1A] leading-snug line-clamp-2">
+                            <Link
+                              href={program.actionHref}
+                              className="font-black text-[#1A0A1A] hover:text-[#5A2A5A] transition-colors"
+                            >
+                              {program.title}
+                            </Link>
                           </h3>
                         </div>
 
-                        {/* Duration and Mode Section */}
-                        <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-dashed border-amber-500/30 bg-amber-500/5 p-2.5">
+                        {/* Duration and Mode Section - Locked state */}
+                        <div className="mt-3 grid grid-cols-2 gap-2 rounded-xl border border-slate-200/90 bg-slate-50/80 p-2.5 opacity-80">
                           <div className="flex flex-col">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
-                              Status
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                              Duration
                             </span>
-                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-amber-800">
-                              Announcing Soon
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-bold text-slate-700">
+                              {duration}
                             </span>
                           </div>
-                          <div className="flex flex-col border-l border-amber-500/20 pl-3">
-                            <span className="text-[10px] font-bold uppercase tracking-wider text-amber-800/70">
-                              Format
+                          <div className="flex flex-col border-l border-slate-200 pl-3">
+                            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                              Mode
                             </span>
-                            <span className="mt-0.5 text-xs sm:text-[13px] font-black text-amber-800">
-                              Live Online
+                            <span className="mt-0.5 text-xs sm:text-[13px] font-bold text-slate-700">
+                              {mode}
                             </span>
                           </div>
                         </div>
 
-                        {/* Coming soon teaser points */}
-                        <ul className="mt-3.5 space-y-2.5">
-                          <li className="flex items-start gap-2.5">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
-                              <Lock className="h-3 w-3" />
-                            </span>
-                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
-                              Curriculum syllabus & live projects under wraps
-                            </span>
-                          </li>
-                          <li className="flex items-start gap-2.5">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
-                              <Lock className="h-3 w-3" />
-                            </span>
-                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
-                              Practitioner mentors & company defense revealing soon
-                            </span>
-                          </li>
-                          <li className="flex items-start gap-2.5">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-500/15 text-amber-700">
-                              <Lock className="h-3 w-3" />
-                            </span>
-                            <span className="text-xs sm:text-[13px] leading-snug font-medium text-slate-600">
-                              Early-access waitlist priority for next batch
-                            </span>
-                          </li>
-                        </ul>
+                        {/* Locked Curriculum Teaser Banner */}
+                        <div className="mt-3 rounded-xl border border-dashed border-amber-500/30 bg-amber-50/60 p-2.5 flex items-center gap-2.5">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg bg-amber-500/15 text-amber-800">
+                            <Lock className="h-3 w-3" />
+                          </span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[11px] font-bold text-amber-950 leading-tight">Curriculum Details Locked</p>
+                            <p className="text-[10px] text-amber-800/80 truncate">Announcing soon · Waitlist open</p>
+                          </div>
+                        </div>
                       </div>
 
                       <div className="mt-3 pt-2.5 border-t border-slate-200/80">
                         <button
                           type="button"
-                          onClick={() => openApplyModal("Upcoming Program Track")}
-                          className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-50 hover:bg-amber-100/70 py-2 px-3 text-xs sm:text-[13px] font-bold text-amber-900 transition-all cursor-pointer active:scale-[0.98]"
+                          onClick={() => openApplyModal(program.title)}
+                          className="w-full flex items-center justify-center gap-1.5 rounded-xl border border-amber-500/30 bg-amber-50 hover:bg-amber-100/80 py-2 px-3 text-xs sm:text-[13px] font-bold text-amber-900 transition-all cursor-pointer active:scale-[0.98]"
                         >
                           <Clock className="h-3.5 w-3.5 text-amber-700" />
                           <span>Notify Me When Open</span>

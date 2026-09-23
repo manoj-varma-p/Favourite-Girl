@@ -9,6 +9,8 @@ import {
   Menu,
   Bell,
   Sparkles,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -19,6 +21,8 @@ interface AdminHeaderProps {
   onRefreshData?: () => void;
   isRefreshing?: boolean;
   onToggleMobileMenu?: () => void;
+  theme?: "light" | "dark";
+  onToggleTheme?: () => void;
 }
 
 export default function AdminHeader({
@@ -28,6 +32,8 @@ export default function AdminHeader({
   onRefreshData,
   isRefreshing = false,
   onToggleMobileMenu,
+  theme = "light",
+  onToggleTheme,
 }: AdminHeaderProps) {
   return (
     <header className="sticky top-0 z-20 h-16 bg-[#FDFAF6]/90 backdrop-blur-md border-b border-[#3B0D3B]/10 px-4 sm:px-6 flex items-center justify-between gap-4">
@@ -82,6 +88,23 @@ export default function AdminHeader({
             <RefreshCw
               className={cn("h-4 w-4", isRefreshing && "animate-spin text-[#3B0D3B]")}
             />
+          </button>
+        )}
+
+        {/* Theme Toggle Button (Light / Dark) */}
+        {onToggleTheme && (
+          <button
+            type="button"
+            onClick={onToggleTheme}
+            className="p-2 rounded-lg border border-[#3B0D3B]/10 bg-white text-[#5A4A5A] hover:text-[#3B0D3B] hover:border-[#3B0D3B]/30 transition-all shadow-2xs cursor-pointer flex items-center justify-center"
+            title={theme === "dark" ? "Switch to Light Theme" : "Switch to Dark Theme"}
+            aria-label="Toggle admin color theme"
+          >
+            {theme === "dark" ? (
+              <Sun className="h-4 w-4 text-amber-400 hover:rotate-45 transition-transform" />
+            ) : (
+              <Moon className="h-4 w-4 text-[#3B0D3B]" />
+            )}
           </button>
         )}
 

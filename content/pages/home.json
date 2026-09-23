@@ -8,7 +8,11 @@
     ],
     "description": "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
     "desktopImage": "/images/maiiin.webp",
-    "mobileImage": "/images/mainnnn-bg.webp"
+    "mobileImage": "/images/mainnnn-bg.webp",
+    "primaryCtaLabel": "Browse Courses",
+    "primaryCtaHref": "#apply",
+    "secondaryCtaLabel": "Book a demo",
+    "watchVideoLabel": "Watch Video"
   },
   "stats": [
     {
@@ -84,14 +88,14 @@
         "description": "A business without a path to revenue is just an expensive idea."
       }
     ],
+    "banner": {
+      "title": "Phase 4 is a wall, not a checkpoint.",
+      "description": "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry."
+    },
     "methodCard": {
       "tag": "METHOD · 4:5 PORTRAIT",
       "title": "STUDENT DEFENDING NUMBERS TO A PANEL",
       "image": ""
-    },
-    "banner": {
-      "title": "Phase 4 is a wall, not a checkpoint.",
-      "description": "Idea clarity is graded pass or rework. No partial credit, no parallel track. Nobody carries a weak idea into execution least of all the students in a hurry."
     }
   },
   "executionProof": {
@@ -103,25 +107,25 @@
         "tag": "FOUNDER",
         "name": "Somu Shekar",
         "description": "Never went job-hunting. Co-founded Gesture Co while still in the course.",
-        "photoUrl": "/uploads/alumni/somu-shekar.jpg"
+        "photoUrl": "/api/admin/upload?id=alumni-1790147665856-qarp-chatgpt-image-sep-23--2026--12_43_12-pm.png"
       },
       {
         "tag": "FOUNDER",
         "name": "Subhani",
         "description": "Turned his capstone into a company. Founded JASS Media.",
-        "photoUrl": "/uploads/alumni/subhani.jpg"
+        "photoUrl": "/api/admin/upload?id=alumni-1790147671107-d8ka-chatgpt-image-sep-23--2026--12_43_12-pm.png"
       },
       {
         "tag": "PLACED IN 30 DAYS",
         "name": "Dikshtha",
         "description": "At Bristle Tech within a month of finishing.",
-        "photoUrl": "/uploads/alumni/dikshtha.jpg"
+        "photoUrl": "/api/admin/upload?id=alumni-1790147696470-8vrr-chatgpt-image-sep-23--2026--12_44_08-pm.png"
       },
       {
         "tag": "HIRED ON PORTFOLIO",
         "name": "Harshit",
         "description": "Placed at TCS on the strength of the work, not the résumé.",
-        "photoUrl": "/uploads/alumni/harshit.jpg"
+        "photoUrl": "/api/admin/upload?id=alumni-1790147679221-vogn-chatgpt-image-sep-23--2026--12_43_12-pm.png"
       }
     ],
     "metrics": [
@@ -147,7 +151,8 @@
         "name": "Bristle Tech",
         "logo": "/images/bristletech.png"
       }
-    ]
+    ],
+    "story": "That ₹5L came out of Gesture Co's Diwali campaign briefed, built, run and reported by students who hadn't graduated yet. Batch 2 gets measured against it."
   },
   "govCerts": {
     "eyebrow": "Officially Recognised",
@@ -258,7 +263,7 @@
       "Verified ROAS",
       "Agency Capstone"
     ],
-    "treqoCertificateImage": "/uploads/certs/treqo-official-certificate-1790072107752-irnn.png",
+    "treqoCertificateImage": "/api/admin/upload?id=certs-1790074338666-tw8d-treqo-official-certificate.png",
     "treqoCaption": "Verifiable credential directly reviewed by placement hiring managers.",
     "industryBadge": "GLOBAL CREDENTIALS",
     "industryTitle": "Other Industry Certification",

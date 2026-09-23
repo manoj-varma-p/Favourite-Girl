@@ -145,6 +145,10 @@ export interface HeroContent {
   description: string;
   desktopImage?: string;
   mobileImage?: string;
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  watchVideoLabel?: string;
 }
 
 export interface HomePageContent {
@@ -227,6 +231,22 @@ export interface CourseChallenge {
   rules?: string[];
 }
 
+export interface CourseCareerRoleItem {
+  title: string;
+  description?: string;
+}
+
+export interface CourseProofData {
+  heading?: string;
+  description?: string;
+  stats?: Array<{ value: string; label: string }>;
+}
+
+export interface CourseFaqItem {
+  question: string;
+  answer: string;
+}
+
 export interface CourseItem {
   id: string;
   title: string;
@@ -253,6 +273,9 @@ export interface CourseItem {
   order?: number;
   phases?: CoursePhasesData;
   challenge?: CourseChallenge;
+  careerRoles?: CourseCareerRoleItem[];
+  proof?: CourseProofData;
+  faqs?: CourseFaqItem[];
   careerOutcomes?: Array<{
     role: string;
     salary?: string;
@@ -732,6 +755,11 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
             actionHref: d.actionHref || d.href || `/categories/${d.id}`,
             tags: Array.isArray(d.tags) && d.tags.length > 0 ? d.tags : ["All"],
             order: typeof d.order === "number" ? d.order : 999,
+            phases: d.phases,
+            challenge: d.challenge,
+            careerRoles: d.careerRoles,
+            proof: d.proof,
+            faqs: d.faqs,
             metaKeywords: Array.isArray(d.metaKeywords) ? d.metaKeywords : undefined,
           };
         });
@@ -793,11 +821,19 @@ export async function saveCoursesToDb(courses: CourseItem[]): Promise<void> {
 
   const db = await getMongoDb();
   if (db) {
-    await db.collection("courses").deleteMany({});
     if (orderedCourses.length > 0) {
-      await db
-        .collection("courses")
-        .insertMany(orderedCourses.map((c) => ({ ...c, _id: c.id as unknown as undefined })));
+      const currentIds = orderedCourses.map((c) => c.id);
+      const operations = orderedCourses.map((c) => ({
+        updateOne: {
+          filter: { _id: c.id as unknown as undefined },
+          update: { $set: { ...c, _id: c.id as unknown as undefined } },
+          upsert: true,
+        },
+      }));
+      await db.collection("courses").bulkWrite(operations);
+      await db.collection("courses").deleteMany({ _id: { $nin: currentIds } } as any);
+    } else {
+      await db.collection("courses").deleteMany({});
     }
   }
 }
@@ -957,9 +993,19 @@ export async function saveTutorsToDb(tutors: TutorItem[]): Promise<void> {
 
   const db = await getMongoDb();
   if (db) {
-    await db.collection("tutors").deleteMany({});
     if (tutors.length > 0) {
-      await db.collection("tutors").insertMany(tutors.map((t) => ({ ...t, _id: t.id as unknown as undefined })));
+      const currentIds = tutors.map((t) => t.id);
+      const operations = tutors.map((t) => ({
+        updateOne: {
+          filter: { _id: t.id as unknown as undefined },
+          update: { $set: { ...t, _id: t.id as unknown as undefined } },
+          upsert: true,
+        },
+      }));
+      await db.collection("tutors").bulkWrite(operations);
+      await db.collection("tutors").deleteMany({ _id: { $nin: currentIds } } as any);
+    } else {
+      await db.collection("tutors").deleteMany({});
     }
   }
 }
@@ -1009,9 +1055,19 @@ export async function saveTestimonialsToDb(testimonials: TestimonialItem[]): Pro
 
   const db = await getMongoDb();
   if (db) {
-    await db.collection("testimonials").deleteMany({});
     if (testimonials.length > 0) {
-      await db.collection("testimonials").insertMany(testimonials.map((t) => ({ ...t, _id: t.id as unknown as undefined })));
+      const currentIds = testimonials.map((t) => t.id);
+      const operations = testimonials.map((t) => ({
+        updateOne: {
+          filter: { _id: t.id as unknown as undefined },
+          update: { $set: { ...t, _id: t.id as unknown as undefined } },
+          upsert: true,
+        },
+      }));
+      await db.collection("testimonials").bulkWrite(operations);
+      await db.collection("testimonials").deleteMany({ _id: { $nin: currentIds } } as any);
+    } else {
+      await db.collection("testimonials").deleteMany({});
     }
   }
 }

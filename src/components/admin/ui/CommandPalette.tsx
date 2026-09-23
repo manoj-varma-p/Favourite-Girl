@@ -70,33 +70,6 @@ export default function CommandPalette({
     }
   }, [isOpen]);
 
-  // Global keydown for CMD+K / CTRL+K handled by parent or window
-  useEffect(() => {
-    function handleKeyDown(e: KeyboardEvent) {
-      if (!isOpen) return;
-
-      if (e.key === "Escape") {
-        e.preventDefault();
-        onClose();
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev < filteredItems.length - 1 ? prev + 1 : 0));
-      } else if (e.key === "ArrowUp") {
-        e.preventDefault();
-        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredItems.length - 1));
-      } else if (e.key === "Enter") {
-        e.preventDefault();
-        if (filteredItems[selectedIndex]) {
-          filteredItems[selectedIndex].onSelect();
-          onClose();
-        }
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, selectedIndex]);
-
   // Base list of commands
   const allItems: CommandItem[] = useMemo(() => {
     const list: CommandItem[] = [
@@ -301,6 +274,33 @@ export default function CommandPalette({
       )
       .slice(0, 20);
   }, [allItems, query]);
+
+  // Global keydown for CMD+K / CTRL+K handled by parent or window
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (!isOpen) return;
+
+      if (e.key === "Escape") {
+        e.preventDefault();
+        onClose();
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev < filteredItems.length - 1 ? prev + 1 : 0));
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setSelectedIndex((prev) => (prev > 0 ? prev - 1 : filteredItems.length - 1));
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (filteredItems[selectedIndex]) {
+          filteredItems[selectedIndex].onSelect();
+          onClose();
+        }
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, selectedIndex, filteredItems, onClose]);
 
   if (!isOpen) return null;
 

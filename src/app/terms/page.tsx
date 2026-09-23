@@ -174,7 +174,7 @@ export default function TermsAndConditionsPage() {
                           </tr>
                           <tr className="bg-slate-50/60">
                             <td className="py-2.5 px-4 font-bold text-slate-900">Programs &amp; Tracks</td>
-                            <td className="py-2.5 px-4 text-slate-600">All educational offerings by Treqo: New Age Digital Marketing Flagship (On Campus &amp; Online), Treqo PGDM, Campus Edition, Founder Semester, and Performance Growth Specialist.</td>
+                            <td className="py-2.5 px-4 text-slate-600">All educational offerings by Treqo: New Age Digital Marketing Flagship (On Campus &amp; Online), Treqo PGDM, Founder Semester, and Performance Growth Specialist.</td>
                           </tr>
                           <tr>
                             <td className="py-2.5 px-4 font-bold text-slate-900">CEO Challenge / Capstone</td>

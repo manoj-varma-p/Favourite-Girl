@@ -64,6 +64,12 @@ export default function ApplyModal() {
       return;
     }
 
+    const currentOriginPage = typeof window !== "undefined" ? window.location.pathname : "/";
+    const currentOriginUrl = typeof window !== "undefined" ? window.location.href : "";
+    const appliedCourse = isBookDemo
+      ? `${selectedCourse || courseName || "New Age Digital Marketing"} (Live Demo)`
+      : (selectedCourse || courseName || "New Age Digital Marketing");
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/apply", {
@@ -73,9 +79,11 @@ export default function ApplyModal() {
           name,
           email,
           phone,
-          course: isBookDemo ? "New Age Digital Marketing (Live Demo)" : selectedCourse,
+          course: appliedCourse,
           background,
           source: isBookDemo ? "Book a Demo Pop-up" : "Apply for Batch 2 Modal",
+          page: currentOriginPage,
+          pageUrl: currentOriginUrl,
         }),
       });
 
@@ -251,9 +259,10 @@ export default function ApplyModal() {
                   className="w-full appearance-none rounded-xl border border-slate-200 bg-white px-4 py-3 pr-10 text-sm font-medium text-slate-900 focus:border-[#3B0D3B] focus:outline-none focus:ring-2 focus:ring-[#3B0D3B]/20 transition-all cursor-pointer"
                 >
                   <option value="Student">Student</option>
-                  <option value="Recent Graduate">Recent Graduate</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Graduate">Graduate</option>
+                  <option value="Business Holder">Business Founder</option>
                   <option value="Working Professional">Working Professional</option>
-                  <option value="Aspiring Business Founder">Aspiring Business Founder</option>
                 </select>
                 <ChevronDown
                   className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500"

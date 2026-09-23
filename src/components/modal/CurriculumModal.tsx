@@ -52,6 +52,9 @@ export default function CurriculumModal() {
       return;
     }
 
+    const currentOriginPage = typeof window !== "undefined" ? window.location.pathname : "/";
+    const currentOriginUrl = typeof window !== "undefined" ? window.location.href : "";
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/apply", {
@@ -63,6 +66,8 @@ export default function CurriculumModal() {
           phone,
           course: curriculumCourse,
           source: "Curriculum Download Form",
+          page: currentOriginPage,
+          pageUrl: currentOriginUrl,
         }),
       });
 

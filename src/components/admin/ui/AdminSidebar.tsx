@@ -23,8 +23,9 @@ import {
   Layers,
   X,
   Search,
-  Bot,
   ShieldCheck,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -55,6 +56,8 @@ interface AdminSidebarProps {
   emailAlertsActive?: boolean;
   isOpenMobile?: boolean;
   onCloseMobile?: () => void;
+  theme?: "light" | "dark";
+  onToggleTheme?: () => void;
 }
 
 export default function AdminSidebar({
@@ -69,6 +72,8 @@ export default function AdminSidebar({
   emailAlertsActive = false,
   isOpenMobile = false,
   onCloseMobile,
+  theme = "light",
+  onToggleTheme,
 }: AdminSidebarProps) {
   // Collapsed state persisted in localStorage
   const [isCollapsed, setIsCollapsed] = useState(false);
@@ -97,16 +102,6 @@ export default function AdminSidebar({
   };
 
   const navGroups: NavGroupConfig[] = [
-    {
-      groupTitle: "TREQO BOT",
-      items: [
-        {
-          id: "aiBot",
-          label: "Treqo Bot",
-          icon: Bot,
-        },
-      ],
-    },
     {
       groupTitle: "WORKSPACE",
       items: [
@@ -168,6 +163,13 @@ export default function AdminSidebar({
     {
       groupTitle: "CONTENT & MARKETING",
       items: [
+        {
+          id: "hero",
+          label: "Homepage Hero",
+          icon: Sparkles,
+          badge: "Home",
+          badgeVariant: "solid",
+        },
         {
           id: "blogs",
           label: "Blog Articles",
@@ -270,19 +272,6 @@ export default function AdminSidebar({
           </button>
         )}
 
-        {/* Desktop Collapse Toggle */}
-        <button
-          type="button"
-          onClick={toggleCollapse}
-          className="hidden md:flex p-1.5 text-[#5A4A5A] hover:text-[#3B0D3B] hover:bg-[#F5EDE0] rounded-lg transition-colors cursor-pointer"
-          title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-        >
-          {isCollapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <ChevronLeft className="h-4 w-4" />
-          )}
-        </button>
       </div>
 
       {/* 2. Navigation Items List */}
@@ -393,14 +382,32 @@ export default function AdminSidebar({
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={onLogout}
-            className="p-1.5 text-[#5A4A5A] hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer shrink-0"
-            title="Sign Out"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
+          <div className="flex items-center gap-1 shrink-0">
+            {onToggleTheme && (
+              <button
+                type="button"
+                onClick={onToggleTheme}
+                className="p-1.5 text-[#5A4A5A] hover:text-[#3B0D3B] hover:bg-[#FAF5EE] rounded-lg transition-colors cursor-pointer"
+                title={theme === "dark" ? "Switch to Light Theme" : "Switch to Dark Theme"}
+                aria-label="Toggle color theme"
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-4 w-4 text-amber-400" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={onLogout}
+              className="p-1.5 text-[#5A4A5A] hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
+              title="Sign Out"
+            >
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     </div>

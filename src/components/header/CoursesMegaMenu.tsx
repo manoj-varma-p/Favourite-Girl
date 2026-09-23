@@ -72,18 +72,7 @@ const coursesData = [
     iconColor: "text-[#8C6A8C]",
     isLocked: true,
   },
-  {
-    id: "campus-edition",
-    title: "Campus Edition",
-    href: "/categories/campus-edition",
-    badge: "COMING SOON",
-    badgeColor: "bg-[#1A1A1E] text-slate-300 border border-white/10",
-    duration: "6 months · On Campus",
-    description: "Runs alongside your BBA/MBA without colliding with exams.",
-    icon: Zap,
-    iconColor: "text-[#3987E5]",
-    isLocked: true,
-  },
+
   {
     id: "founder-semester",
     title: "The Founder Semester",

@@ -26,6 +26,9 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Globe,
+  X,
+  MessageSquare,
 } from "lucide-react";
 import type { Lead } from "@/lib/leads-db";
 
@@ -67,6 +70,7 @@ export default function AdminLeadsPage() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [deletingLead, setDeletingLead] = useState<Lead | null>(null);
+  const [selectedLeadForDetail, setSelectedLeadForDetail] = useState<Lead | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
   function getStoredPin(): string {
@@ -109,7 +113,7 @@ export default function AdminLeadsPage() {
     }
   }, [isAuthenticated, loadLeads]);
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setAuthError("");
     const trimmed = pinInput.trim();
@@ -119,13 +123,31 @@ export default function AdminLeadsPage() {
       return;
     }
 
-    if (trimmed === ADMIN_PIN || trimmed === DEFAULT_PIN) {
-      sessionStorage.setItem("treqo_admin_auth", "true");
-      sessionStorage.setItem("treqo_admin_pin", trimmed);
-      setUnlocked(true);
-      setPinInput("");
-    } else {
-      setAuthError("Incorrect PIN. Access denied.");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: trimmed }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", trimmed);
+        setUnlocked(true);
+        setPinInput("");
+        setAuthError("");
+      } else {
+        setAuthError(data.error || "Incorrect PIN. Access denied.");
+      }
+    } catch {
+      if (trimmed === ADMIN_PIN || trimmed === DEFAULT_PIN) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", trimmed);
+        setUnlocked(true);
+        setPinInput("");
+      } else {
+        setAuthError("Authentication service error. Access denied.");
+      }
     }
   }
 
@@ -515,10 +537,10 @@ export default function AdminLeadsPage() {
                     <th
                       onClick={() => setLeadsSortBy("course-asc")}
                       className="py-3 px-4 cursor-pointer select-none hover:text-[#3B0D3B] transition-colors"
-                      title="Click to sort by Program"
+                      title="Click to sort by Course"
                     >
                       <div className="inline-flex items-center gap-1.5">
-                        <span>Selected Program</span>
+                        <span>Applied Course</span>
                         {leadsSortBy === "course-asc" ? (
                           <ArrowUp className="h-3 w-3 text-[#3B0D3B]" />
                         ) : (
@@ -526,7 +548,8 @@ export default function AdminLeadsPage() {
                         )}
                       </div>
                     </th>
-                    <th className="py-3 px-4">Background</th>
+                    <th className="py-3 px-4">Origin Page</th>
+                    <th className="py-3 px-4">Background &amp; Source</th>
                     <th
                       onClick={() =>
                         setLeadsSortBy(leadsSortBy === "newest" ? "oldest" : "newest")
@@ -549,7 +572,7 @@ export default function AdminLeadsPage() {
                 <tbody className="divide-y divide-[#3B0D3B]/10">
                   {filteredLeads.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-10 text-center text-[#5A4A5A]">
+                      <td colSpan={7} className="py-10 text-center text-[#5A4A5A]">
                         No student applications match your query.
                       </td>
                     </tr>
@@ -563,38 +586,80 @@ export default function AdminLeadsPage() {
                         <td className="py-3.5 px-4 space-y-0.5">
                           <div className="flex items-center gap-1.5 text-[#0B0B0F]">
                             <Mail className="h-3 w-3 text-[#5A4A5A]" />
-                            <a href={`mailto:${lead.email}`} className="hover:underline">
+                            <a href={`mailto:${lead.email}`} className="hover:underline font-mono text-xs">
                               {lead.email}
                             </a>
                           </div>
                           <div className="flex items-center gap-1.5 text-[#5A4A5A] text-[11px]">
                             <Phone className="h-3 w-3 text-[#5A4A5A]" />
-                            <a href={`tel:${lead.phone}`} className="hover:underline">
+                            <a href={`tel:${lead.phone}`} className="hover:underline font-mono">
                               {lead.phone}
                             </a>
                           </div>
                         </td>
                         <td className="py-3.5 px-4">
-                          <span className="rounded-md bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 px-2 py-0.5 text-[10px] font-bold text-[#3B0D3B]">
-                            {lead.course || "General Admission"}
-                          </span>
+                          <div className="inline-flex items-center gap-1.5 rounded-lg bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 px-2.5 py-1 text-xs font-bold text-[#3B0D3B]">
+                            <GraduationCap className="h-3.5 w-3.5 shrink-0" />
+                            <span>{lead.course || "New Age Digital Marketing"}</span>
+                          </div>
                         </td>
-                        <td className="py-3.5 px-4 max-w-xs">
-                          <div className="truncate text-[#0B0B0F]">{lead.background || "—"}</div>
-                          <div className="text-[10px] text-[#5A4A5A]">{lead.source || ""}</div>
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={lead.pageUrl || lead.page || "/"}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FAF5EE] border border-[#3B0D3B]/15 text-[#0B0B0F] hover:text-[#3B0D3B] hover:bg-[#F5EDE0] hover:border-[#3B0D3B]/30 font-medium text-xs transition-colors group cursor-pointer max-w-[180px]"
+                            title={`View lead source page: ${lead.page || "/"}`}
+                          >
+                            <Globe className="h-3.5 w-3.5 shrink-0 text-[#8C6A8C] group-hover:text-[#3B0D3B]" />
+                            <span className="font-mono truncate">{lead.page || "/"}</span>
+                            <ExternalLink className="h-3 w-3 opacity-50 group-hover:opacity-100 shrink-0" />
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4 max-w-xs space-y-1">
+                          <div className="truncate text-[#0B0B0F] font-medium">{lead.background || "General Inquiry"}</div>
+                          <div>
+                            <span className="text-[10px] text-[#5A4A5A] bg-[#FAF5EE] px-2 py-0.5 rounded-md border border-[#3B0D3B]/10 font-medium inline-block">
+                              {lead.source || "Website Form"}
+                            </span>
+                          </div>
                         </td>
                         <td className="py-3.5 px-4 whitespace-nowrap text-[11px] text-[#5A4A5A]">
                           {lead.submittedAt ? new Date(lead.submittedAt).toLocaleString("en-IN") : "—"}
                         </td>
                         <td className="py-3.5 px-4 text-right">
-                          <button
-                            type="button"
-                            onClick={() => setDeletingLead(lead)}
-                            className="p-1.5 text-[#5A4A5A] hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors cursor-pointer"
-                            title="Delete applicant"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </button>
+                          <div className="flex items-center justify-end gap-1.5">
+                            <button
+                              type="button"
+                              onClick={() => setSelectedLeadForDetail(lead)}
+                              className="p-1.5 text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] border border-[#3B0D3B]/15 rounded-lg transition-colors cursor-pointer"
+                              title="View Full Profile"
+                            >
+                              <Eye className="h-3.5 w-3.5" />
+                            </button>
+                            <a
+                              href={`mailto:${lead.email}`}
+                              className="p-1.5 text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] border border-[#3B0D3B]/15 rounded-lg transition-colors cursor-pointer"
+                              title="Email Student"
+                            >
+                              <Mail className="h-3.5 w-3.5" />
+                            </a>
+                            <a
+                              href={`tel:${lead.phone}`}
+                              className="p-1.5 text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] border border-[#3B0D3B]/15 rounded-lg transition-colors cursor-pointer"
+                              title="Call Student"
+                            >
+                              <Phone className="h-3.5 w-3.5" />
+                            </a>
+                            <button
+                              type="button"
+                              onClick={() => setDeletingLead(lead)}
+                              className="p-1.5 text-red-600 hover:text-white hover:bg-red-600 border border-red-200 bg-white rounded-lg transition-colors cursor-pointer shadow-2xs"
+                              title="Delete applicant"
+                            >
+                              <Trash2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))
@@ -605,6 +670,121 @@ export default function AdminLeadsPage() {
           </div>
         </main>
       </div>
+
+      {/* Lead Details Modal */}
+      {selectedLeadForDetail && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-in fade-in">
+          <div className="relative w-full max-w-lg rounded-3xl bg-white border border-[#3B0D3B]/15 p-6 sm:p-8 shadow-2xl space-y-6">
+            <div className="flex items-center justify-between border-b border-[#3B0D3B]/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-[#3B0D3B] text-white font-bold flex items-center justify-center text-sm">
+                  {selectedLeadForDetail.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-[#0B0B0F]">{selectedLeadForDetail.name}</h3>
+                  <p className="text-xs text-[#5A4A5A]">Student Applicant ID: {selectedLeadForDetail.id}</p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedLeadForDetail(null)}
+                className="p-1.5 text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] rounded-xl transition-colors cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4 text-xs">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                  <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Email Address</div>
+                  <a href={`mailto:${selectedLeadForDetail.email}`} className="font-bold text-[#3B0D3B] hover:underline break-all">
+                    {selectedLeadForDetail.email}
+                  </a>
+                </div>
+                <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                  <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Phone Number</div>
+                  <a href={`tel:${selectedLeadForDetail.phone}`} className="font-bold text-[#3B0D3B] hover:underline">
+                    {selectedLeadForDetail.phone}
+                  </a>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-[#3B0D3B]/5 p-4 border border-[#3B0D3B]/20 space-y-1">
+                <div className="text-[10px] font-bold text-[#3B0D3B] uppercase tracking-wide flex items-center gap-1.5">
+                  <GraduationCap className="h-3.5 w-3.5" />
+                  <span>Applied Course / Program</span>
+                </div>
+                <div className="font-black text-[#0B0B0F] text-base">{selectedLeadForDetail.course || "New Age Digital Marketing"}</div>
+              </div>
+
+              <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                <div className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wide flex items-center gap-1.5">
+                  <Globe className="h-3.5 w-3.5" />
+                  <span>Origin Page (Where Form was Filled)</span>
+                </div>
+                <div>
+                  <a
+                    href={selectedLeadForDetail.pageUrl || selectedLeadForDetail.page || "/"}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-flex items-center gap-1.5 font-bold font-mono text-[#3B0D3B] hover:underline"
+                  >
+                    <span>{selectedLeadForDetail.page || "/"}</span>
+                    <ExternalLink className="h-3.5 w-3.5" />
+                  </a>
+                </div>
+              </div>
+
+              <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Educational / Professional Background</div>
+                <div className="text-[#0B0B0F] font-medium leading-relaxed">
+                  {selectedLeadForDetail.background || "No background details specified."}
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                  <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Form Source</div>
+                  <div className="font-semibold text-[#0B0B0F]">{selectedLeadForDetail.source || "Website Form"}</div>
+                </div>
+                <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                  <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Submitted At</div>
+                  <div className="font-semibold text-[#0B0B0F]">
+                    {new Date(selectedLeadForDetail.submittedAt).toLocaleString("en-US")}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 pt-2">
+              <a
+                href={`https://wa.me/${selectedLeadForDetail.phone.replace(/\D/g, "")}`}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 font-bold text-xs hover:bg-emerald-100 transition-colors"
+              >
+                <MessageSquare className="h-3.5 w-3.5" />
+                <span>WhatsApp</span>
+              </a>
+              <a
+                href={`tel:${selectedLeadForDetail.phone}`}
+                className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#3B0D3B]/20 font-bold text-xs text-[#3B0D3B] hover:bg-[#FAF5EE] transition-colors"
+              >
+                <Phone className="h-3.5 w-3.5" />
+                <span>Call</span>
+              </a>
+              <a
+                href={`mailto:${selectedLeadForDetail.email}`}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl bg-[#3B0D3B] text-white font-bold text-xs hover:bg-[#2A082A] shadow-md transition-colors"
+              >
+                <Mail className="h-3.5 w-3.5" />
+                <span>Send Email</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {deletingLead && (

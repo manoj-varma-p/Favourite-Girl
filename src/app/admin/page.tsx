@@ -46,6 +46,9 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Sun,
+  Moon,
+  Video,
 } from "lucide-react";
 import type { Lead } from "@/lib/leads-db";
 import type { BlogPost } from "@/data/blogs";
@@ -72,8 +75,6 @@ import AdminLayoutMetaTab from "@/components/admin/AdminLayoutMetaTab";
 import AdminPageKeywordsTab from "@/components/admin/AdminPageKeywordsTab";
 import AdminPageDescriptionsTab from "@/components/admin/AdminPageDescriptionsTab";
 import AdminCourseEditor from "@/components/admin/AdminCourseEditor";
-import AdminAiBotTab from "@/components/admin/AdminAiBotTab";
-import AdminFloatingAiWidget from "@/components/admin/AdminFloatingAiWidget";
 import AdminSidebar from "@/components/admin/ui/AdminSidebar";
 import AdminHeader from "@/components/admin/ui/AdminHeader";
 import CommandPalette from "@/components/admin/ui/CommandPalette";
@@ -86,7 +87,6 @@ import { Award, Trophy, Compass, MapPin, Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TAB_TITLES: Record<string, { title: string; breadcrumb: string }> = {
-  aiBot: { title: "Treqo Bot", breadcrumb: "Workspace" },
   overview: { title: "Overview Dashboard", breadcrumb: "Workspace" },
   leads: { title: "Student Applications", breadcrumb: "Admissions & CRM" },
   courses: { title: "Courses & Curriculum", breadcrumb: "Learning & Programs" },
@@ -155,6 +155,33 @@ export default function CustomAdminPanelPage() {
   const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedLeadForDetail, setSelectedLeadForDetail] = useState<Lead | null>(null);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
+
+  // Theme Mode: "light" | "dark" (persisted in localStorage)
+  const [adminTheme, setAdminTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("treqo_admin_theme");
+      if (stored === "light" || stored === "dark") {
+        setAdminTheme(stored);
+      }
+    } catch {
+      // ignore
+    }
+  }, []);
+
+  const toggleAdminTheme = () => {
+    setAdminTheme((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem("treqo_admin_theme", next);
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -167,9 +194,8 @@ export default function CustomAdminPanelPage() {
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, []);
 
-  // Tabs: overview | leads | courses | tutors | alerts | forms | layout | branding | banner | hero | whyTreqqo | placements | govCerts | sixDecisions | footer | faqs | blogs | aiBot
+  // Tabs: overview | leads | courses | tutors | alerts | forms | layout | branding | banner | hero | whyTreqqo | placements | govCerts | sixDecisions | footer | faqs | blogs
   const [activeTab, setActiveTab] = useState<
-    | "aiBot"
     | "overview"
     | "leads"
     | "courses"
@@ -262,7 +288,7 @@ export default function CustomAdminPanelPage() {
   const [pageSeo, setPageSeo] = useState<PageSeoItem[]>([]);
 
   const [navigationSettings, setNavigationSettings] = useState<NavigationSettings>({
-    bannerBadge: "BATCH 2 · 50 SEATS",
+    bannerBadge: "BATCH 2 Ã‚Â· 50 SEATS",
     bannerText: "Enrollments close on 4th October 2026.",
     bannerLinkText: "Explore the courses",
     bannerLinkHref: "/#courses",
@@ -270,7 +296,7 @@ export default function CustomAdminPanelPage() {
 
   const [homeContent, setHomeContent] = useState<HomePageContent>({
     hero: {
-      eyebrow: "COHORT ADMISSIONS OPEN · 2026",
+      eyebrow: "COHORT ADMISSIONS OPEN Ã‚Â· 2026",
       headlineLines: ["Leave with Skills", "you can implement.", "Not just a certificate"],
       description:
         "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
@@ -320,7 +346,7 @@ export default function CustomAdminPanelPage() {
       },
     },
     executionProof: {
-      eyebrow: "BATCH 1 · ALREADY HAPPENED",
+      eyebrow: "BATCH 1 Ã‚Â· ALREADY HAPPENED",
       title: "Four names. All checkable.",
       description:
         "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
@@ -346,13 +372,13 @@ export default function CustomAdminPanelPage() {
         {
           tag: "HIRED ON PORTFOLIO",
           name: "Harshit",
-          description: "Placed at TCS on the strength of the work, not the résumé.",
+          description: "Placed at TCS on the strength of the work, not the rÃƒÂ©sumÃƒÂ©.",
           photoUrl: "/uploads/alumni/harshit.jpg",
         },
       ],
       metrics: [
         { value: "100%", label: "of Batch 1 placed or founding" },
-        { value: "₹5L+", label: "earned for a client, mid-course" },
+        { value: "Ã¢â€šÂ¹5L+", label: "earned for a client, mid-course" },
       ],
       companies: [
         { name: "Gesture Co", logo: "/images/dark-gesture.png" },
@@ -388,20 +414,20 @@ export default function CustomAdminPanelPage() {
     id: "",
     title: "",
     href: "",
-    badge: "BATCH 2 · OPEN",
-    duration: "4 months · Online",
+    badge: "BATCH 2 Ã‚Â· OPEN",
+    duration: "4 months Ã‚Â· Online",
     description: "",
     isFlagship: false,
     isLocked: false,
-    batch: "Batch 2 · Sep 2026",
-    feeTotal: "₹55,000",
-    feeEmi: "₹4,583 / month",
+    batch: "Batch 2 Ã‚Â· Sep 2026",
+    feeTotal: "Ã¢â€šÂ¹55,000",
+    feeEmi: "Ã¢â€šÂ¹4,583 / month",
     curriculumPdf: "/treqo-curriculum.pdf",
     overview: "",
     applyCta: "Apply for Batch 2",
     syllabusCta: "Download Curriculum",
     image: "",
-    previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
+    previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
   });
   const [courseSearch, setCourseSearch] = useState("");
   const [courseFilter, setCourseFilter] = useState<"all" | "open" | "locked">("all");
@@ -590,10 +616,10 @@ export default function CustomAdminPanelPage() {
       return {
         ...c,
         isLocked: newLockState,
-        actionText: newLockState ? "Get notified →" : "View course →",
+        actionText: newLockState ? "Get notified Ã¢â€ â€™" : "View course Ã¢â€ â€™",
         badge: newLockState
           ? "COMING SOON"
-          : (c.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (c.badge || "BATCH 2 · OPEN")),
+          : (c.badge === "COMING SOON" ? "BATCH 2 Ã‚Â· OPEN" : (c.badge || "BATCH 2 Ã‚Â· OPEN")),
         badgeVariant: (newLockState
           ? "gray"
           : (c.badgeVariant === "gray" ? "blue" : (c.badgeVariant || "blue"))) as CourseItem["badgeVariant"],
@@ -632,20 +658,20 @@ export default function CustomAdminPanelPage() {
       id: `course-${Date.now()}`,
       title: "",
       href: "/categories/new-track",
-      badge: "BATCH 2 · OPEN",
-      duration: "4 months · Online",
+      badge: "BATCH 2 Ã‚Â· OPEN",
+      duration: "4 months Ã‚Â· Online",
       description: "",
       isFlagship: false,
       isLocked: false,
-      batch: "Batch 2 · Sep 2026",
-      feeTotal: "₹55,000",
-      feeEmi: "₹4,583 / month",
+      batch: "Batch 2 Ã‚Â· Sep 2026",
+      feeTotal: "Ã¢â€šÂ¹55,000",
+      feeEmi: "Ã¢â€šÂ¹4,583 / month",
       curriculumPdf: "/treqo-curriculum.pdf",
       overview: "",
       applyCta: "Apply for Batch 2",
       syllabusCta: "Download Curriculum",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-      previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
+      previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
     });
     setShowManualCourseUrl(false);
     setIsCourseDragActive(false);
@@ -661,22 +687,22 @@ export default function CustomAdminPanelPage() {
       id: `course-${Date.now()}`,
       title: "New Curriculum Track",
       href: `/categories/track-${Date.now()}`,
-      badge: "BATCH 2 · OPEN",
+      badge: "BATCH 2 Ã‚Â· OPEN",
       badgeVariant: "blue",
-      duration: "4 months · Online",
-      meta: "4 months · Online",
+      duration: "4 months Ã‚Â· Online",
+      meta: "4 months Ã‚Â· Online",
       description: "Hands-on growth architecture with real client budgets, verified live campaigns, and mentor reviews.",
       isFlagship: false,
       isLocked: false,
-      batch: "Batch 2 · Sep 2026",
-      feeTotal: "₹55,000",
-      feeEmi: "₹4,583 / month",
+      batch: "Batch 2 Ã‚Â· Sep 2026",
+      feeTotal: "Ã¢â€šÂ¹55,000",
+      feeEmi: "Ã¢â€šÂ¹4,583 / month",
       curriculumPdf: "/treqo-curriculum.pdf",
       overview: "Graduates and early-career marketers wanting verifiable execution proof.\nWorking professionals seeking high-trajectory marketing roles.\nFounders scaling their own customer acquisition.",
       applyCta: "Apply for Batch 2",
       syllabusCta: "Download Curriculum",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-      previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
+      previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
     };
     setCourseInStudio(newCourse);
   }
@@ -1288,15 +1314,37 @@ export default function CustomAdminPanelPage() {
   }, []);
 
   // Handle Authentication
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
-    if (pinInput.trim() === ADMIN_PIN || pinInput.trim() === DEFAULT_PIN) {
-      sessionStorage.setItem("treqo_admin_auth", "true");
-      sessionStorage.setItem("treqo_admin_pin", pinInput.trim());
-      setUnlocked(true);
-      setAuthError("");
-    } else {
-      setAuthError("Invalid passcode. Please enter the authorized Treqo PIN.");
+    const enteredPin = pinInput.trim();
+    if (!enteredPin) {
+      setAuthError("Please enter your admin passcode.");
+      return;
+    }
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: enteredPin }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", enteredPin);
+        setUnlocked(true);
+        setAuthError("");
+      } else {
+        setAuthError(data.error || "Invalid passcode. Please enter the authorized Treqo PIN.");
+      }
+    } catch {
+      if (enteredPin === ADMIN_PIN || enteredPin === DEFAULT_PIN) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", enteredPin);
+        setUnlocked(true);
+        setAuthError("");
+      } else {
+        setAuthError("Authentication service error. Please check connectivity.");
+      }
     }
   }
 
@@ -1562,7 +1610,6 @@ export default function CustomAdminPanelPage() {
 
   // Leads Actions
   async function handleDeleteLead(id: string) {
-    if (!confirm("Are you sure you want to delete this applicant lead?")) return;
     try {
       const res = await fetch(`/api/leads?id=${id}`, {
         method: "DELETE",
@@ -1620,9 +1667,28 @@ export default function CustomAdminPanelPage() {
   // -------------------------------------------------------------
   if (!isAuthenticated) {
     return (
-      <div className={`min-h-screen flex flex-col justify-between bg-[#FDFAF6] text-[#0B0B0F] p-6 sm:p-10 ${plusJakarta.className}`}>
-        {/* Top Spacer */}
-        <div className="w-full h-8" />
+      <div className={`min-h-screen flex flex-col justify-between ${adminTheme === "dark" ? "admin-dark bg-[#0B0B0F] text-[#F3F4F6]" : "bg-[#FDFAF6] text-[#0B0B0F]"} p-6 sm:p-10 transition-colors duration-200 ${plusJakarta.className}`}>
+        {/* Top Spacer with Quick Theme Toggle */}
+        <div className="w-full flex justify-end">
+          <button
+            type="button"
+            onClick={toggleAdminTheme}
+            className="p-2 rounded-xl border border-[#3B0D3B]/10 bg-white text-[#5A4A5A] hover:text-[#3B0D3B] transition-all shadow-xs cursor-pointer flex items-center gap-1.5 text-xs font-bold"
+            title={adminTheme === "dark" ? "Switch to Light Theme" : "Switch to Dark Theme"}
+          >
+            {adminTheme === "dark" ? (
+              <>
+                <Sun className="h-4 w-4 text-amber-400" />
+                <span>Light</span>
+              </>
+            ) : (
+              <>
+                <Moon className="h-4 w-4 text-[#3B0D3B]" />
+                <span>Dark</span>
+              </>
+            )}
+          </button>
+        </div>
 
         {/* Centered Minimalist Form */}
         <div className="w-full max-w-[420px] mx-auto my-auto bg-white border border-[#3B0D3B]/10 rounded-3xl p-8 sm:p-10 shadow-xl shadow-[#3B0D3B]/5 space-y-7">
@@ -1662,7 +1728,7 @@ export default function CustomAdminPanelPage() {
                   autoFocus
                   value={pinInput}
                   onChange={(e) => setPinInput(e.target.value)}
-                  placeholder="••••••••"
+                  placeholder="Enter your passcode"
                   className="w-full bg-transparent px-3 py-3.5 text-sm text-[#0B0B0F] placeholder:text-slate-400 focus:outline-none font-medium"
                 />
                 <button
@@ -1691,7 +1757,7 @@ export default function CustomAdminPanelPage() {
             href="/"
             className="text-xs font-semibold text-[#5A4A5A] hover:text-[#3B0D3B] transition-colors"
           >
-            ← Return to public website
+            Ã¢â€ Â Return to public website
           </Link>
         </div>
       </div>
@@ -1702,7 +1768,7 @@ export default function CustomAdminPanelPage() {
   // 2. AUTHENTICATED MASTER CONSOLE
   // -------------------------------------------------------------
   return (
-    <div className={`min-h-screen bg-[#FDFAF6] text-[#0B0B0F] flex ${plusJakarta.className}`}>
+    <div className={`min-h-screen ${adminTheme === "dark" ? "admin-dark bg-[#0B0B0F] text-[#F3F4F6]" : "bg-[#FDFAF6] text-[#0B0B0F]"} flex transition-colors duration-200 ${plusJakarta.className}`}>
       {/* Toast Feedback Messages */}
       {saveMessage && (
         <div className="fixed top-5 right-5 z-50 flex items-center gap-2 rounded-xl bg-white border border-[#3B0D3B]/20 px-4 py-3 text-xs font-bold text-[#0B0B0F] shadow-2xl animate-in fade-in slide-in-from-top-3">
@@ -1730,6 +1796,8 @@ export default function CustomAdminPanelPage() {
         emailAlertsActive={alertSettings.emailAlertsEnabled}
         isOpenMobile={isMobileMenuOpen}
         onCloseMobile={() => setIsMobileMenuOpen(false)}
+        theme={adminTheme}
+        onToggleTheme={toggleAdminTheme}
       />
 
       {/* 2. COMMAND PALETTE (CMD+K) */}
@@ -1754,6 +1822,8 @@ export default function CustomAdminPanelPage() {
           onRefreshData={loadAllData}
           isRefreshing={loadingLeads}
           onToggleMobileMenu={() => setIsMobileMenuOpen(true)}
+          theme={adminTheme}
+          onToggleTheme={toggleAdminTheme}
         />
 
         {/* Main Content Workspace */}
@@ -1789,7 +1859,7 @@ export default function CustomAdminPanelPage() {
                     onClick={() => setActiveTab("leads")}
                     className="rounded-2xl bg-white text-[#3B0D3B] px-5 py-3 text-xs font-black hover:bg-[#FAF5EE] transition-all shadow-md active:scale-95 cursor-pointer"
                   >
-                    View All CRM Leads →
+                    View All CRM Leads Ã¢â€ â€™
                   </button>
                 </div>
 
@@ -1873,16 +1943,16 @@ export default function CustomAdminPanelPage() {
                       id: "",
                       title: "",
                       description: "",
-                      badge: "BATCH 2 · OPEN",
-                      duration: "4 months · Online",
+                      badge: "BATCH 2 Ã‚Â· OPEN",
+                      duration: "4 months Ã‚Â· Online",
                       href: "/courses/",
                       image: "",
-                      previewLabel: "CLASSROOM · SESSIONS",
+                      previewLabel: "CLASSROOM Ã‚Â· SESSIONS",
                       isLocked: false,
                       isFlagship: false,
-                      batch: "Batch 2 · Sep 2026",
-                      feeTotal: "₹55,000",
-                      feeEmi: "₹4,583 / month",
+                      batch: "Batch 2 Ã‚Â· Sep 2026",
+                      feeTotal: "Ã¢â€šÂ¹55,000",
+                      feeEmi: "Ã¢â€šÂ¹4,583 / month",
                       applyCta: "Apply for Batch 2",
                       syllabusCta: "Download Curriculum",
                       curriculumPdf: "/treqo-curriculum.pdf",
@@ -1965,7 +2035,7 @@ export default function CustomAdminPanelPage() {
                     onClick={() => setActiveTab("leads")}
                     className="text-xs font-bold text-[#3B0D3B] hover:underline cursor-pointer"
                   >
-                    View all in CRM ({leads.length}) →
+                    View all in CRM ({leads.length}) Ã¢â€ â€™
                   </button>
                 </div>
 
@@ -1984,7 +2054,7 @@ export default function CustomAdminPanelPage() {
                           </div>
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-[#0B0B0F] truncate">{lead.name}</div>
-                            <div className="text-[11px] text-[#5A4A5A] truncate">{lead.email} · {lead.phone}</div>
+                            <div className="text-[11px] text-[#5A4A5A] truncate">{lead.email} Ã‚Â· {lead.phone}</div>
                           </div>
                         </div>
 
@@ -2089,9 +2159,9 @@ export default function CustomAdminPanelPage() {
                     >
                       <option value="newest">Sort: Newest First</option>
                       <option value="oldest">Sort: Oldest First</option>
-                      <option value="name-asc">Sort: Name (A → Z)</option>
-                      <option value="name-desc">Sort: Name (Z → A)</option>
-                      <option value="course-asc">Sort: Course (A → Z)</option>
+                      <option value="name-asc">Sort: Name (A Ã¢â€ â€™ Z)</option>
+                      <option value="name-desc">Sort: Name (Z Ã¢â€ â€™ A)</option>
+                      <option value="course-asc">Sort: Course (A Ã¢â€ â€™ Z)</option>
                     </select>
                   </div>
                 </div>
@@ -2129,10 +2199,10 @@ export default function CustomAdminPanelPage() {
                           <th
                             onClick={() => setLeadsSortBy("course-asc")}
                             className="px-5 py-3.5 font-bold cursor-pointer select-none hover:text-[#3B0D3B] transition-colors"
-                            title="Click to sort by Track"
+                            title="Click to sort by Course"
                           >
                             <div className="inline-flex items-center gap-1.5">
-                              <span>Enrolled Track</span>
+                              <span>Applied Course</span>
                               {leadsSortBy === "course-asc" ? (
                                 <ArrowUp className="h-3 w-3 text-[#3B0D3B]" />
                               ) : (
@@ -2140,8 +2210,8 @@ export default function CustomAdminPanelPage() {
                               )}
                             </div>
                           </th>
-                          <th className="px-5 py-3.5 font-bold">Background / Education</th>
-                          <th className="px-5 py-3.5 font-bold">Source</th>
+                          <th className="px-5 py-3.5 font-bold">Origin Page</th>
+                          <th className="px-5 py-3.5 font-bold">Background &amp; Source</th>
                           <th
                             onClick={() =>
                               setLeadsSortBy(leadsSortBy === "newest" ? "oldest" : "newest")
@@ -2196,15 +2266,31 @@ export default function CustomAdminPanelPage() {
                               </div>
                             </td>
                             <td className="px-5 py-4">
-                              <StatusBadge status="active" label={lead.course} />
-                            </td>
-                            <td className="px-5 py-4 text-[#5A4A5A] text-xs">
-                              {lead.background || "—"}
+                              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#3B0D3B]/10 border border-[#3B0D3B]/20 text-[#3B0D3B] font-bold text-xs">
+                                <GraduationCap className="h-3.5 w-3.5 shrink-0" />
+                                <span>{lead.course || "New Age Digital Marketing"}</span>
+                              </div>
                             </td>
                             <td className="px-5 py-4">
-                              <span className="text-[11px] text-[#5A4A5A] bg-[#FAF5EE] px-2 py-0.5 rounded-md border border-[#3B0D3B]/10 font-medium">
-                                {lead.source || "Website Form"}
-                              </span>
+                              <a
+                                href={lead.pageUrl || lead.page || "/"}
+                                target="_blank"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FAF5EE] border border-[#3B0D3B]/15 text-[#0B0B0F] hover:text-[#3B0D3B] hover:bg-[#F5EDE0] hover:border-[#3B0D3B]/30 font-medium text-xs transition-colors group cursor-pointer max-w-[200px]"
+                                title={`View lead source page: ${lead.page || "/"}`}
+                              >
+                                <Globe className="h-3.5 w-3.5 shrink-0 text-[#8C6A8C] group-hover:text-[#3B0D3B]" />
+                                <span className="font-mono truncate">{lead.page || "/"}</span>
+                                <ExternalLink className="h-3 w-3 opacity-50 group-hover:opacity-100 shrink-0" />
+                              </a>
+                            </td>
+                            <td className="px-5 py-4 space-y-1">
+                              <div className="text-xs text-[#0B0B0F] font-medium">{lead.background || "General Inquiry"}</div>
+                              <div>
+                                <span className="text-[10px] text-[#5A4A5A] bg-[#FAF5EE] px-2 py-0.5 rounded-md border border-[#3B0D3B]/10 font-medium inline-block">
+                                  {lead.source || "Website Form"}
+                                </span>
+                              </div>
                             </td>
                             <td className="px-5 py-4 text-[#5A4A5A] text-xs whitespace-nowrap">
                               <div className="font-semibold text-[#0B0B0F]">
@@ -2222,31 +2308,38 @@ export default function CustomAdminPanelPage() {
                               </div>
                             </td>
                             <td className="px-5 py-4 text-right">
-                              <DropdownMenu
-                                items={[
-                                  {
-                                    label: "View Full Profile",
-                                    icon: Eye,
-                                    onSelect: () => setSelectedLeadForDetail(lead),
-                                  },
-                                  {
-                                    label: "Email Student",
-                                    icon: Mail,
-                                    href: `mailto:${lead.email}`,
-                                  },
-                                  {
-                                    label: "Call Student",
-                                    icon: Phone,
-                                    href: `tel:${lead.phone}`,
-                                  },
-                                  {
-                                    label: "Delete Record",
-                                    icon: Trash2,
-                                    onSelect: () => handleDeleteLead(lead.id),
-                                    destructive: true,
-                                  },
-                                ]}
-                              />
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  type="button"
+                                  onClick={() => setSelectedLeadForDetail(lead)}
+                                  className="p-1.5 rounded-lg border border-[#3B0D3B]/15 bg-white text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
+                                  title="View Full Profile"
+                                >
+                                  <Eye className="h-3.5 w-3.5" />
+                                </button>
+                                <a
+                                  href={`mailto:${lead.email}`}
+                                  className="p-1.5 rounded-lg border border-[#3B0D3B]/15 bg-white text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
+                                  title="Email Student"
+                                >
+                                  <Mail className="h-3.5 w-3.5" />
+                                </a>
+                                <a
+                                  href={`tel:${lead.phone}`}
+                                  className="p-1.5 rounded-lg border border-[#3B0D3B]/15 bg-white text-[#5A4A5A] hover:text-[#0B0B0F] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
+                                  title="Call Student"
+                                >
+                                  <Phone className="h-3.5 w-3.5" />
+                                </a>
+                                <button
+                                  type="button"
+                                  onClick={() => setLeadToDelete(lead)}
+                                  className="p-1.5 rounded-lg border border-red-200 bg-white text-red-600 hover:text-white hover:bg-red-600 transition-colors cursor-pointer shadow-2xs"
+                                  title="Delete Record"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))}
@@ -2295,13 +2388,34 @@ export default function CustomAdminPanelPage() {
                         </div>
                       </div>
 
-                      <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
-                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Applied Track</div>
-                        <div className="font-bold text-[#0B0B0F] text-sm">{selectedLeadForDetail.course}</div>
+                      <div className="rounded-2xl bg-[#3B0D3B]/5 p-4 border border-[#3B0D3B]/20 space-y-1">
+                        <div className="text-[10px] font-bold text-[#3B0D3B] uppercase tracking-wide flex items-center gap-1.5">
+                          <GraduationCap className="h-3.5 w-3.5" />
+                          <span>Applied Course / Program</span>
+                        </div>
+                        <div className="font-black text-[#0B0B0F] text-base">{selectedLeadForDetail.course || "New Age Digital Marketing"}</div>
                       </div>
 
                       <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
-                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Educational Background</div>
+                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wide flex items-center gap-1.5">
+                          <Globe className="h-3.5 w-3.5" />
+                          <span>Origin Page (Where Form was Filled)</span>
+                        </div>
+                        <div>
+                          <a
+                            href={selectedLeadForDetail.pageUrl || selectedLeadForDetail.page || "/"}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 font-bold font-mono text-[#3B0D3B] hover:underline"
+                          >
+                            <span>{selectedLeadForDetail.page || "/"}</span>
+                            <ExternalLink className="h-3.5 w-3.5" />
+                          </a>
+                        </div>
+                      </div>
+
+                      <div className="rounded-2xl bg-[#FAF5EE]/60 p-4 border border-[#3B0D3B]/10 space-y-1">
+                        <div className="text-[10px] font-bold text-[#8C6A8C] uppercase">Educational / Professional Background</div>
                         <div className="text-[#0B0B0F] font-medium leading-relaxed">
                           {selectedLeadForDetail.background || "No background details specified."}
                         </div>
@@ -2323,6 +2437,15 @@ export default function CustomAdminPanelPage() {
 
                     <div className="flex items-center justify-end gap-3 pt-2">
                       <a
+                        href={`https://wa.me/${selectedLeadForDetail.phone.replace(/\D/g, "")}`}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-emerald-300 bg-emerald-50 text-emerald-800 font-bold text-xs hover:bg-emerald-100 transition-colors"
+                      >
+                        <MessageSquare className="h-3.5 w-3.5" />
+                        <span>WhatsApp</span>
+                      </a>
+                      <a
                         href={`tel:${selectedLeadForDetail.phone}`}
                         className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-[#3B0D3B]/20 font-bold text-xs text-[#3B0D3B] hover:bg-[#FAF5EE] transition-colors"
                       >
@@ -2336,6 +2459,49 @@ export default function CustomAdminPanelPage() {
                         <Mail className="h-3.5 w-3.5" />
                         <span>Send Email</span>
                       </a>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Lead Delete Confirmation Modal */}
+              {leadToDelete && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs animate-in fade-in duration-150">
+                  <div className="relative w-full max-w-md rounded-3xl bg-white border border-[#3B0D3B]/15 p-6 sm:p-7 shadow-2xl space-y-4">
+                    <div className="flex items-center gap-3.5">
+                      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-red-100 text-red-600">
+                        <Trash2 className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <h3 className="text-base font-bold text-[#0B0B0F]">Delete Applicant Record</h3>
+                        <p className="text-xs text-[#5A4A5A]">This action will permanently delete this lead from CRM.</p>
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl border border-[#3B0D3B]/10 bg-[#FAF5EE] p-3.5 text-xs text-[#0B0B0F] space-y-1.5">
+                      <p><span className="font-bold text-[#5A4A5A]">Student:</span> {leadToDelete.name}</p>
+                      <p><span className="font-bold text-[#5A4A5A]">Email:</span> {leadToDelete.email}</p>
+                      <p><span className="font-bold text-[#5A4A5A]">Course:</span> {leadToDelete.course}</p>
+                    </div>
+
+                    <div className="flex items-center justify-end gap-2.5 pt-2 border-t border-[#3B0D3B]/10">
+                      <button
+                        type="button"
+                        onClick={() => setLeadToDelete(null)}
+                        className="px-4 py-2 rounded-xl border border-[#3B0D3B]/15 text-xs font-semibold text-[#5A4A5A] hover:bg-[#FAF5EE] transition-colors cursor-pointer"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        type="button"
+                        onClick={async () => {
+                          await handleDeleteLead(leadToDelete.id);
+                          setLeadToDelete(null);
+                        }}
+                        className="px-4 py-2 rounded-xl bg-red-600 text-white text-xs font-bold hover:bg-red-700 transition-colors shadow-sm cursor-pointer"
+                      >
+                        Delete Record
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -2486,7 +2652,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={navigationSettings.bannerBadge}
                     onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerBadge: e.target.value })}
-                    placeholder="e.g. BATCH 2 · 50 SEATS"
+                    placeholder="e.g. BATCH 2 Ã‚Â· 50 SEATS"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
@@ -2552,232 +2718,313 @@ export default function CustomAdminPanelPage() {
           )}
 
           {/* ========================================================= */}
-          {/* TAB 4: HERO & COPY                                        */}
+          {/* TAB 4: HERO — VISUAL WYSIWYG EDITOR                       */}
           {/* ========================================================= */}
           {activeTab === "hero" && (
-            <div className="max-w-3xl space-y-6">
-              <div>
-                <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Homepage Hero &amp; Copy</h2>
-                <p className="text-xs sm:text-sm text-[#5A4A5A]">
-                  Directly edit the primary headline lines, eyebrow badge, and stats counters.
-                </p>
-              </div>
-
-              <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-5 shadow-sm">
+            <div className="space-y-5 max-w-5xl">
+              {/* Toolbar */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div>
-                  <label className="text-xs font-bold text-[#0B0B0F]">Eyebrow Badge</label>
-                  <input
-                    type="text"
-                    value={homeContent.hero.eyebrow}
-                    onChange={(e) =>
-                      setHomeContent({
-                        ...homeContent,
-                        hero: { ...homeContent.hero, eyebrow: e.target.value },
-                      })
-                    }
-                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
-                  />
+                  <h2 className="text-xl sm:text-2xl font-black text-[#0B0B0F] tracking-tight">Homepage Hero Editor</h2>
+                  <p className="text-xs text-[#5A4A5A] mt-0.5">Click any text to edit it directly. Upload images by clicking the image areas. Save when done.</p>
                 </div>
-
-                <div>
-                  <label className="text-xs font-bold text-[#0B0B0F]">Headline Lines (Stacked)</label>
-                  <div className="space-y-2 mt-1.5">
-                    {homeContent.hero.headlineLines.map((line, idx) => (
-                      <input
-                        key={idx}
-                        type="text"
-                        value={line}
-                        onChange={(e) => {
-                          const newLines = [...homeContent.hero.headlineLines];
-                          newLines[idx] = e.target.value;
-                          setHomeContent({
-                            ...homeContent,
-                            hero: { ...homeContent.hero, headlineLines: newLines },
-                          });
-                        }}
-                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
-                      />
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <label className="text-xs font-bold text-[#0B0B0F]">Description Text</label>
-                  <textarea
-                    rows={3}
-                    value={homeContent.hero.description}
-                    onChange={(e) =>
-                      setHomeContent({
-                        ...homeContent,
-                        hero: { ...homeContent.hero, description: e.target.value },
-                      })
-                    }
-                    className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-4 text-sm font-medium text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
-                  />
-                </div>
-
-                {/* Stats Counters */}
-                <div>
-                  <label className="text-xs font-bold text-[#0B0B0F]">Hero Stats Counters</label>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-1.5">
-                    {homeContent.stats.map((stat, idx) => (
-                      <div key={idx} className="rounded-2xl border border-[#3B0D3B]/10 bg-[#FAF5EE]/60 p-3.5 space-y-2">
-                        <input
-                          type="text"
-                          value={stat.value}
-                          onChange={(e) => {
-                            const newStats = [...homeContent.stats];
-                            newStats[idx] = { ...newStats[idx], value: e.target.value };
-                            setHomeContent({ ...homeContent, stats: newStats });
-                          }}
-                          placeholder="e.g. 100%"
-                          className="w-full rounded-lg border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-xs font-bold text-[#3B0D3B]"
-                        />
-                        <input
-                          type="text"
-                          value={stat.label}
-                          onChange={(e) => {
-                            const newStats = [...homeContent.stats];
-                            newStats[idx] = { ...newStats[idx], label: e.target.value };
-                            setHomeContent({ ...homeContent, stats: newStats });
-                          }}
-                          placeholder="Label"
-                          className="w-full rounded-lg border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-xs text-[#5A4A5A]"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Hero Visual Artwork (Desktop & Mobile) */}
-                <div className="border-t border-[#3B0D3B]/10 pt-5 space-y-4">
-                  <div>
-                    <h3 className="text-sm font-bold text-[#0B0B0F]">Hero Visual Artwork</h3>
-                    <p className="text-xs text-[#5A4A5A]">
-                      Upload custom visual illustrations or artwork for the hero section.
-                    </p>
-                  </div>
-
-                  {/* Hidden File Inputs */}
-                  <input
-                    ref={desktopHeroFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleDesktopHeroImageUpload(f);
-                      e.target.value = "";
-                    }}
-                  />
-                  <input
-                    ref={mobileHeroFileInputRef}
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                    onChange={(e) => {
-                      const f = e.target.files?.[0];
-                      if (f) handleMobileHeroImageUpload(f);
-                      e.target.value = "";
-                    }}
-                  />
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {/* Desktop Hero Image */}
-                    <div className="rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/60 p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <label className="text-xs font-bold text-[#0B0B0F]">Desktop Hero Artwork</label>
-                        <button
-                          type="button"
-                          onClick={() => desktopHeroFileInputRef.current?.click()}
-                          disabled={isUploadingDesktopHero}
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer disabled:opacity-50"
-                        >
-                          <Upload className="h-3 w-3" />
-                          <span>{isUploadingDesktopHero ? "Uploading..." : "Upload File"}</span>
-                        </button>
-                      </div>
-
-                      <input
-                        type="text"
-                        value={homeContent.hero.desktopImage || ""}
-                        onChange={(e) =>
-                          setHomeContent({
-                            ...homeContent,
-                            hero: { ...homeContent.hero, desktopImage: e.target.value },
-                          })
-                        }
-                        placeholder="/images/maiiin.webp or https://..."
-                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
-                      />
-
-                      {/* Desktop Image Preview */}
-                      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#3B0D3B]/10 bg-white flex items-center justify-center">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={homeContent.hero.desktopImage || "/images/maiiin.webp"}
-                          alt="Desktop Hero Preview"
-                          className="h-full w-full object-contain p-1"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Mobile Hero Image */}
-                    <div className="rounded-2xl border border-[#3B0D3B]/15 bg-[#FAF5EE]/60 p-4 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <label className="text-xs font-bold text-[#0B0B0F]">Mobile Hero Artwork</label>
-                        <button
-                          type="button"
-                          onClick={() => mobileHeroFileInputRef.current?.click()}
-                          disabled={isUploadingMobileHero}
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B] hover:underline cursor-pointer disabled:opacity-50"
-                        >
-                          <Upload className="h-3 w-3" />
-                          <span>{isUploadingMobileHero ? "Uploading..." : "Upload File"}</span>
-                        </button>
-                      </div>
-
-                      <input
-                        type="text"
-                        value={homeContent.hero.mobileImage || ""}
-                        onChange={(e) =>
-                          setHomeContent({
-                            ...homeContent,
-                            hero: { ...homeContent.hero, mobileImage: e.target.value },
-                          })
-                        }
-                        placeholder="/images/mainnnn-bg.webp or https://..."
-                        className="w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-2 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
-                      />
-
-                      {/* Mobile Image Preview */}
-                      <div className="relative aspect-[16/9] w-full rounded-xl overflow-hidden border border-[#3B0D3B]/10 bg-white flex items-center justify-center">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={homeContent.hero.mobileImage || "/images/mainnnn-bg.webp"}
-                          alt="Mobile Hero Preview"
-                          className="h-full w-full object-contain p-1"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="pt-2">
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    disabled={isSavingForms}
+                    onClick={(e) => handleSaveForms(e as unknown as React.FormEvent)}
+                    className="inline-flex items-center gap-2 rounded-xl border border-[#3B0D3B]/20 bg-white hover:bg-[#FAF5EE] px-4 py-2 text-xs font-bold text-[#3B0D3B] shadow-sm active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                  >
+                    <Save className="h-3.5 w-3.5" />
+                    <span>{isSavingForms ? "Saving..." : "Save Form"}</span>
+                  </button>
                   <button
                     type="button"
                     disabled={isSaving}
                     onClick={() => saveHeroContent(homeContent)}
-                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-5 py-2 text-xs font-bold text-white shadow-md active:scale-95 transition-all cursor-pointer disabled:opacity-50"
                   >
-                    <Save className="h-4 w-4" />
-                    <span>{isSaving ? "Saving..." : "Save Hero Changes"}</span>
+                    <Save className="h-3.5 w-3.5" />
+                    <span>{isSaving ? "Saving..." : "Publish Changes"}</span>
                   </button>
                 </div>
               </div>
+
+              {/* WYSIWYG Hero Preview */}
+              <div className="rounded-3xl border-2 border-dashed border-[#3B0D3B]/15 overflow-hidden bg-[#FDFAF6] shadow-lg">
+
+                {/* Edit hint bar */}
+                <div className="flex items-center gap-2 bg-[#3B0D3B]/5 border-b border-[#3B0D3B]/10 px-4 py-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#3B0D3B] animate-pulse" />
+                  <span className="text-[10px] font-bold text-[#3B0D3B] uppercase tracking-wider">Live Edit Mode — Click any element below to edit</span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-0 min-h-[500px]">
+
+                  {/* LEFT: Text Content */}
+                  <div className="p-8 sm:p-10 flex flex-col justify-center space-y-5">
+
+                    {/* Eyebrow Badge */}
+                    <div className="inline-flex items-center gap-2 self-start rounded-full border border-[#3B0D3B]/15 bg-white/90 px-3.5 py-1 shadow-xs">
+                      <span className="h-2 w-2 rounded-full bg-[#0CA30C]" />
+                      <span
+                        contentEditable
+                        suppressContentEditableWarning
+                        onBlur={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, eyebrow: e.currentTarget.textContent || "" } })}
+                        className="text-xs font-extrabold text-[#1A0A1A] outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded px-0.5 min-w-[60px] focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all"
+                        title="Click to edit eyebrow badge"
+                      >
+                        {homeContent.hero.eyebrow}
+                      </span>
+                    </div>
+
+                    {/* Headline Lines */}
+                    <div className="space-y-0.5">
+                      {homeContent.hero.headlineLines.map((line, idx) => (
+                        <div key={idx} className="group flex items-start gap-2">
+                          <span
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => {
+                              const newLines = [...homeContent.hero.headlineLines];
+                              newLines[idx] = e.currentTarget.textContent || "";
+                              setHomeContent({ ...homeContent, hero: { ...homeContent.hero, headlineLines: newLines } });
+                            }}
+                            className={`text-3xl font-black leading-tight outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded px-1 block min-w-[100px] focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all ${idx === homeContent.hero.headlineLines.length - 1 ? "text-[#5A2A5A]" : "text-[#1A0A1A]"}`}
+                            title="Click to edit headline"
+                          >
+                            {line}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const newLines = homeContent.hero.headlineLines.filter((_, i) => i !== idx);
+                              setHomeContent({ ...homeContent, hero: { ...homeContent.hero, headlineLines: newLines } });
+                            }}
+                            className="opacity-0 group-hover:opacity-100 mt-2 p-1 text-red-400 hover:text-red-600 hover:bg-red-50 rounded transition-all cursor-pointer shrink-0"
+                            title="Remove line"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, headlineLines: [...homeContent.hero.headlineLines, "New line"] } })}
+                        className="inline-flex items-center gap-1 text-[11px] font-bold text-[#3B0D3B]/50 hover:text-[#3B0D3B] cursor-pointer mt-1 transition-colors"
+                      >
+                        <Plus className="h-3 w-3" /> Add line
+                      </button>
+                    </div>
+
+                    {/* Description */}
+                    <p
+                      contentEditable
+                      suppressContentEditableWarning
+                      onBlur={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, description: e.currentTarget.textContent || "" } })}
+                      className="text-sm leading-relaxed text-[#5A4A5A] outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded-lg px-2 py-1 min-h-[48px] focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all"
+                      title="Click to edit description"
+                    >
+                      {homeContent.hero.description}
+                    </p>
+
+                    {/* CTA Buttons */}
+                    <div className="flex flex-wrap gap-3">
+                      {/* Primary */}
+                      <div className="group relative">
+                        <div className="rounded-xl bg-[#3B0D3B] px-5 py-3 text-sm font-bold text-white shadow-lg">
+                          <span
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, primaryCtaLabel: e.currentTarget.textContent || "" } })}
+                            className="outline-none cursor-text"
+                            title="Click to edit primary button label"
+                          >
+                            {homeContent.hero.primaryCtaLabel || "Browse Courses"}
+                          </span>
+                        </div>
+                        <div className="absolute -bottom-5 left-0 right-0 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <input
+                            type="text"
+                            value={homeContent.hero.primaryCtaHref || ""}
+                            onChange={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, primaryCtaHref: e.target.value } })}
+                            placeholder="link href"
+                            className="w-full text-[10px] border border-[#3B0D3B]/20 rounded px-2 py-0.5 bg-white text-[#3B0D3B] focus:outline-none"
+                          />
+                        </div>
+                      </div>
+
+                      {/* Secondary */}
+                      <div className="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-[#1A0A1A]">
+                        <span
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, secondaryCtaLabel: e.currentTarget.textContent || "" } })}
+                          className="outline-none cursor-text"
+                          title="Click to edit secondary button label"
+                        >
+                          {homeContent.hero.secondaryCtaLabel || "Book a demo"}
+                        </span>
+                      </div>
+
+                      {/* Watch Video */}
+                      <div className="rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-xs font-bold text-[#1A0A1A] flex items-center gap-2">
+                        <Video className="h-3.5 w-3.5 text-[#3B0D3B]" />
+                        <span
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => setHomeContent({ ...homeContent, hero: { ...homeContent.hero, watchVideoLabel: e.currentTarget.textContent || "" } })}
+                          className="outline-none cursor-text"
+                          title="Click to edit watch video label"
+                        >
+                          {homeContent.hero.watchVideoLabel || "Watch Video"}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2 border-t border-[#3B0D3B]/8">
+                      {homeContent.stats.map((stat, idx) => (
+                        <div key={idx} className="space-y-0.5">
+                          <div
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => {
+                              const s = [...homeContent.stats];
+                              s[idx] = { ...s[idx], value: e.currentTarget.textContent || "" };
+                              setHomeContent({ ...homeContent, stats: s });
+                            }}
+                            className="text-xl font-black text-[#3B0D3B] outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded px-1 focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all"
+                            title="Click to edit stat value"
+                          >
+                            {stat.value}
+                          </div>
+                          <div
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => {
+                              const s = [...homeContent.stats];
+                              s[idx] = { ...s[idx], label: e.currentTarget.textContent || "" };
+                              setHomeContent({ ...homeContent, stats: s });
+                            }}
+                            className="text-[10px] font-bold text-[#5A4A5A] outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded px-1 focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all"
+                            title="Click to edit stat label"
+                          >
+                            {stat.label}
+                          </div>
+                          <div
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => {
+                              const s = [...homeContent.stats];
+                              s[idx] = { ...s[idx], detail: e.currentTarget.textContent || "" };
+                              setHomeContent({ ...homeContent, stats: s });
+                            }}
+                            className="text-[9px] text-[#8C6A8C] outline-none cursor-text hover:bg-[#3B0D3B]/5 rounded px-1 focus:bg-[#3B0D3B]/8 focus:ring-1 focus:ring-[#3B0D3B]/20 transition-all"
+                            title="Click to edit stat detail"
+                          >
+                            {stat.detail}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* RIGHT: Images + Application Form */}
+                  <div className="p-6 flex flex-col gap-4 bg-[#FAF5EE]/40 border-l border-[#3B0D3B]/8">
+
+                    {/* Desktop Image */}
+                    <div className="relative group rounded-2xl overflow-hidden border border-[#3B0D3B]/10 bg-white aspect-[16/10]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={homeContent.hero.desktopImage || "/images/maiiin.webp"}
+                        alt="Desktop Hero"
+                        className="w-full h-full object-contain p-2"
+                      />
+                      <div className="absolute inset-0 bg-[#3B0D3B]/0 group-hover:bg-[#3B0D3B]/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => desktopHeroFileInputRef.current?.click()}
+                          disabled={isUploadingDesktopHero}
+                          className="inline-flex items-center gap-2 bg-white rounded-xl px-4 py-2 text-xs font-bold text-[#3B0D3B] shadow-lg cursor-pointer hover:bg-[#FAF5EE] transition-all"
+                        >
+                          <Upload className="h-3.5 w-3.5" />
+                          {isUploadingDesktopHero ? "Uploading..." : "Replace Desktop Image"}
+                        </button>
+                      </div>
+                      <span className="absolute top-2 left-2 text-[9px] font-bold text-[#3B0D3B]/50 bg-white/80 rounded px-1.5 py-0.5">DESKTOP</span>
+                    </div>
+
+                    {/* Mobile Image */}
+                    <div className="relative group rounded-2xl overflow-hidden border border-[#3B0D3B]/10 bg-white aspect-[16/7]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={homeContent.hero.mobileImage || "/images/mainnnn-bg.webp"}
+                        alt="Mobile Hero"
+                        className="w-full h-full object-contain p-2"
+                      />
+                      <div className="absolute inset-0 bg-[#3B0D3B]/0 group-hover:bg-[#3B0D3B]/40 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                        <button
+                          type="button"
+                          onClick={() => mobileHeroFileInputRef.current?.click()}
+                          disabled={isUploadingMobileHero}
+                          className="inline-flex items-center gap-2 bg-white rounded-xl px-4 py-2 text-xs font-bold text-[#3B0D3B] shadow-lg cursor-pointer hover:bg-[#FAF5EE] transition-all"
+                        >
+                          <Upload className="h-3.5 w-3.5" />
+                          {isUploadingMobileHero ? "Uploading..." : "Replace Mobile Image"}
+                        </button>
+                      </div>
+                      <span className="absolute top-2 left-2 text-[9px] font-bold text-[#3B0D3B]/50 bg-white/80 rounded px-1.5 py-0.5">MOBILE</span>
+                    </div>
+
+                    {/* Application Form Preview */}
+                    <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                      <div className="border-b border-slate-100 bg-slate-50/80 px-4 py-3">
+                        <p
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => setFormSettings({ ...formSettings, heroFormTitle: e.currentTarget.textContent || "" })}
+                          className="text-sm font-black text-slate-900 outline-none cursor-text hover:bg-slate-100 rounded px-1 transition-all"
+                          title="Click to edit form title"
+                        >
+                          {formSettings.heroFormTitle || "Fast Track Application"}
+                        </p>
+                        <p
+                          contentEditable
+                          suppressContentEditableWarning
+                          onBlur={(e) => setFormSettings({ ...formSettings, heroFormSubtitle: e.currentTarget.textContent || "" })}
+                          className="mt-0.5 text-xs text-slate-500 outline-none cursor-text hover:bg-slate-100 rounded px-1 transition-all"
+                          title="Click to edit form subtitle"
+                        >
+                          {formSettings.heroFormSubtitle || "Live cohort starts soon · Limited seats"}
+                        </p>
+                      </div>
+                      <div className="px-4 py-3 space-y-2">
+                        <div className="h-8 rounded-lg bg-slate-100 text-[10px] text-slate-400 flex items-center px-3">Full name</div>
+                        <div className="h-8 rounded-lg bg-slate-100 text-[10px] text-slate-400 flex items-center px-3">Email address</div>
+                        <div className="h-8 rounded-lg bg-slate-100 text-[10px] text-slate-400 flex items-center px-3">WhatsApp number</div>
+                        <div className="rounded-xl bg-[#3B0D3B] px-4 py-2 text-center text-xs font-bold text-white cursor-text">
+                          <span
+                            contentEditable
+                            suppressContentEditableWarning
+                            onBlur={(e) => setFormSettings({ ...formSettings, heroFormButtonText: e.currentTarget.textContent || "" })}
+                            className="outline-none"
+                            title="Click to edit button text"
+                          >
+                            {formSettings.heroFormButtonText || "Apply for Batch 2"}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Hidden File Inputs */}
+              <input ref={desktopHeroFileInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleDesktopHeroImageUpload(f); e.target.value = ""; }} />
+              <input ref={mobileHeroFileInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) handleMobileHeroImageUpload(f); e.target.value = ""; }} />
             </div>
           )}
-
           {/* ========================================================= */}
           {/* TAB 5: FAQ MANAGER                                        */}
           {/* ========================================================= */}
@@ -2864,7 +3111,7 @@ export default function CustomAdminPanelPage() {
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3">
                       <div>
                         <div className="text-[11px] text-[#5A4A5A]">
-                          {blog.publishedAt} · {blog.readTime}
+                          {blog.publishedAt} Ã‚Â· {blog.readTime}
                         </div>
                         <h3 className="mt-1 font-bold text-base text-[#0B0B0F] line-clamp-2">{blog.title}</h3>
                         <p className="mt-2 text-xs text-[#5A4A5A] line-clamp-2 leading-relaxed">{blog.excerpt}</p>
@@ -3015,7 +3262,7 @@ export default function CustomAdminPanelPage() {
                             src={course.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80"}
                             alt={course.title}
                             className={`h-full w-full object-cover transition-transform duration-500 ${course.isLocked
-                              ? "opacity-60 grayscale-[35%]"
+                              ? "opacity-75"
                               : "opacity-90 group-hover:opacity-100 group-hover:scale-105"
                               }`}
                           />
@@ -3092,7 +3339,7 @@ export default function CustomAdminPanelPage() {
                                 <StatusBadge status="active" label={course.badge || "OPEN"} />
                               )}
                               <span className="text-xs font-semibold text-[#5A4A5A]">
-                                {course.duration || course.meta || "4 months · Online"}
+                                {course.duration || course.meta || "4 months Ã‚Â· Online"}
                               </span>
                             </div>
 
@@ -3113,7 +3360,7 @@ export default function CustomAdminPanelPage() {
                                   Batch
                                 </span>
                                 <span className="font-bold text-[#0B0B0F] truncate block mt-0.5">
-                                  {course.batch || "Batch 2 · Sep 2026"}
+                                  {course.batch || "Batch 2 Ã‚Â· Sep 2026"}
                                 </span>
                               </div>
                               <div className="rounded-2xl bg-[#FAF5EE]/60 p-2.5 border border-[#3B0D3B]/10">
@@ -3121,7 +3368,7 @@ export default function CustomAdminPanelPage() {
                                   Fee &amp; EMI
                                 </span>
                                 <span className="font-bold text-[#3B0D3B] truncate block mt-0.5">
-                                  {course.feeTotal || "₹55,000"} {course.feeEmi ? `(${course.feeEmi})` : ""}
+                                  {course.feeTotal || "Ã¢â€šÂ¹55,000"} {course.feeEmi ? `(${course.feeEmi})` : ""}
                                 </span>
                               </div>
                             </div>
@@ -3158,7 +3405,7 @@ export default function CustomAdminPanelPage() {
                                 onClick={() => openCourseStudio(course)}
                                 className="text-xs sm:text-sm font-bold text-[#3B0D3B] hover:text-[#2A082A] transition-colors inline-flex items-center gap-1 cursor-pointer"
                               >
-                                <span>Studio →</span>
+                                <span>Studio Ã¢â€ â€™</span>
                               </button>
                             </div>
                           </div>
@@ -3520,20 +3767,8 @@ export default function CustomAdminPanelPage() {
                         </>
                       )}
 
-                      {/* Top-Left Action Buttons: Edit, Lock/Unlock & Delete */}
-                      <div className="absolute top-2.5 left-2.5 z-20 flex items-center gap-1.5">
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openEditTutorModal(tutor);
-                          }}
-                          className="h-7 px-2.5 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/15 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer"
-                          title="Edit Mentor"
-                        >
-                          <Edit3 className="h-3 w-3" />
-                          <span>Edit</span>
-                        </button>
+                      {/* Top-Left Action: Lock / Unlock Toggle Button (z-30 ensures it is always in front) */}
+                      <div className="absolute top-2.5 left-2.5 z-30">
                         <button
                           type="button"
                           onClick={(e) => {
@@ -3541,15 +3776,31 @@ export default function CustomAdminPanelPage() {
                             handleToggleTutorLock(tutor.id);
                           }}
                           className={cn(
-                            "h-7 px-2.5 rounded-lg border text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer backdrop-blur-md",
+                            "h-7 px-2.5 rounded-xl border text-[11px] font-black flex items-center gap-1.5 transition-all shadow-lg hover:scale-105 cursor-pointer backdrop-blur-md",
                             tutor.isLocked
-                              ? "bg-amber-600 hover:bg-amber-500 text-white border-amber-400/40"
-                              : "bg-black/75 hover:bg-[#3B0D3B] text-white border-white/15"
+                              ? "bg-amber-500 hover:bg-amber-400 text-black border-amber-300 ring-2 ring-amber-400/40"
+                              : "bg-black/75 hover:bg-[#3B0D3B] text-white border-white/20"
                           )}
                           title={tutor.isLocked ? "Click to unlock and reveal actual mentor profile" : "Click to lock and display Coming Soon"}
                         >
-                          {tutor.isLocked ? <Lock className="h-3 w-3" /> : <Unlock className="h-3 w-3" />}
-                          <span>{tutor.isLocked ? "Locked" : "Live"}</span>
+                          {tutor.isLocked ? <Unlock className="h-3.5 w-3.5" /> : <Lock className="h-3.5 w-3.5" />}
+                          <span>{tutor.isLocked ? "Unlock" : "Live"}</span>
+                        </button>
+                      </div>
+
+                      {/* Top-Right Actions: Edit & Delete (z-30) */}
+                      <div className="absolute top-2.5 right-2.5 z-30 flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openEditTutorModal(tutor);
+                          }}
+                          className="h-7 px-2 rounded-lg bg-black/75 hover:bg-[#3B0D3B] text-white border border-white/20 backdrop-blur-md text-[11px] font-bold flex items-center gap-1 transition-all shadow-md hover:scale-105 cursor-pointer"
+                          title="Edit Mentor"
+                        >
+                          <Edit3 className="h-3 w-3" />
+                          <span className="hidden sm:inline">Edit</span>
                         </button>
                         <button
                           type="button"
@@ -3557,29 +3808,31 @@ export default function CustomAdminPanelPage() {
                             e.stopPropagation();
                             handleDeleteTutor(tutor.id);
                           }}
-                          className="h-7 w-7 rounded-lg bg-black/75 hover:bg-red-600 text-white border border-white/15 backdrop-blur-md flex items-center justify-center transition-all shadow-md hover:scale-105 cursor-pointer"
+                          className="h-7 w-7 rounded-lg bg-black/75 hover:bg-red-600 text-white border border-white/20 backdrop-blur-md flex items-center justify-center transition-all shadow-md hover:scale-105 cursor-pointer"
                           title="Delete Mentor"
                         >
                           <Trash2 className="h-3 w-3" />
                         </button>
                       </div>
 
-                      {/* Top-Right Coming Soon Indicator if locked */}
+                      {/* Center Coming Soon Indicator if locked (pointer-events-none so it doesn't block clicks) */}
                       {tutor.isLocked && (
-                        <span className="absolute top-2.5 right-2.5 z-20 inline-flex items-center gap-1 rounded-md bg-amber-600/90 border border-amber-400/40 px-2 py-0.5 text-[10px] font-bold text-white shadow-md backdrop-blur-md">
-                          <Lock className="h-2.5 w-2.5" />
-                          Coming Soon
-                        </span>
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[0.5px] z-15 flex flex-col items-center justify-center pointer-events-none p-3 text-center">
+                          <span className="inline-flex items-center gap-1.5 rounded-full bg-black/85 border border-amber-400/40 px-3 py-1 text-[10px] font-black uppercase tracking-wider text-amber-300 shadow-xl backdrop-blur-md">
+                            <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                            Coming Soon
+                          </span>
+                        </div>
                       )}
 
-                      {/* Click whole card to edit */}
+                      {/* Click whole card to edit (z-10 beneath action buttons) */}
                       <div
                         onClick={() => openEditTutorModal(tutor)}
                         className="absolute inset-0 z-10 cursor-pointer"
                       />
 
                       {/* Bottom Gradient Overlay: Name & Role & Credential */}
-                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3.5 pt-12 z-15 pointer-events-none">
+                      <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent p-3.5 pt-12 z-20 pointer-events-none">
                         <p className="text-xs sm:text-sm font-bold text-white leading-tight truncate">
                           {tutor.name}
                         </p>
@@ -3590,6 +3843,19 @@ export default function CustomAdminPanelPage() {
                           <p className="text-[10px] font-bold text-[#F5EDE0] mt-1 truncate">
                             {tutor.brandMetric}
                           </p>
+                        )}
+                        {tutor.isLocked && (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleToggleTutorLock(tutor.id);
+                            }}
+                            className="mt-1.5 text-[10px] font-black text-amber-300 hover:text-white flex items-center gap-1 pointer-events-auto cursor-pointer underline underline-offset-2"
+                          >
+                            <Unlock className="h-3 w-3" />
+                            <span>Click to Unlock Profile</span>
+                          </button>
                         )}
                       </div>
                     </div>
@@ -3637,7 +3903,7 @@ export default function CustomAdminPanelPage() {
                       Email Alert Dispatch: {alertSettings.emailAlertsEnabled ? "Active" : "Paused"}
                     </h3>
                     <p className="text-xs text-[#5A4A5A]">
-                      {alertSettings.emailAlertsEnabled ? "✓ Instant Student Lead Alerts Active" : "✗ Email Alerts Paused"}
+                      {alertSettings.emailAlertsEnabled ? "Ã¢Å“â€œ Instant Student Lead Alerts Active" : "Ã¢Å“â€” Email Alerts Paused"}
                     </p>
                   </div>
                 </div>
@@ -3663,7 +3929,7 @@ export default function CustomAdminPanelPage() {
                   <div className="font-semibold">{testAlertResult}</div>
                   {testAlertResult.includes("Resend Sandbox Restriction") && (
                     <div className="mt-2.5 text-[11px] text-rose-700 leading-relaxed border-t border-rose-200 pt-2">
-                      💡 <strong>Why this happens:</strong> Resend&apos;s free development sandbox (<code>onboarding@resend.dev</code>) only delivers to the Resend account owner&apos;s email (<code>plmanojvarma@gmail.com</code>).
+                      Ã°Å¸â€™Â¡ <strong>Why this happens:</strong> Resend&apos;s free development sandbox (<code>onboarding@resend.dev</code>) only delivers to the Resend account owner&apos;s email (<code>plmanojvarma@gmail.com</code>).
                       <br />
                       <strong>To send to other emails:</strong> You can either test with <code>plmanojvarma@gmail.com</code>, or add and verify your custom domain (e.g. <code>treqo.org</code>) at{" "}
                       <a
@@ -3719,7 +3985,7 @@ export default function CustomAdminPanelPage() {
                       When a student submits any application or syllabus form, their full details will be emailed to these inboxes immediately.
                     </p>
                     <p className="text-[11px] text-amber-800 mt-1.5 bg-amber-50 border border-amber-200 p-2.5 rounded-xl leading-relaxed">
-                      ⚠️ <strong>Resend Free Sandbox Note:</strong> While using <code>onboarding@resend.dev</code>, Resend only allows delivery to the account owner (<code>plmanojvarma@gmail.com</code>). To receive leads on other emails, verify your domain at Resend.com.
+                      Ã¢Å¡Â Ã¯Â¸Â <strong>Resend Free Sandbox Note:</strong> While using <code>onboarding@resend.dev</code>, Resend only allows delivery to the account owner (<code>plmanojvarma@gmail.com</code>). To receive leads on other emails, verify your domain at Resend.com.
                     </p>
                   </div>
 
@@ -3803,7 +4069,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={formSettings.heroFormSubtitle || ""}
                       onChange={(e) => setFormSettings({ ...formSettings, heroFormSubtitle: e.target.value })}
-                      placeholder="e.g. Live cohort starts soon · Limited seats"
+                      placeholder="e.g. Live cohort starts soon Ã‚Â· Limited seats"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
@@ -4031,16 +4297,6 @@ export default function CustomAdminPanelPage() {
             />
           )}
 
-          {/* ========================================================= */}
-          {/* TAB: TREQO AI COPILOT & OPERATIONS OFFICER                */}
-          {/* ========================================================= */}
-          {activeTab === "aiBot" && (
-            <AdminAiBotTab
-              adminPin={getStoredPin()}
-              currentTab={activeTab}
-              onNavigateTab={(tab) => setActiveTab(tab as any)}
-            />
-          )}
 
           {/* ========================================================= */}
           {/* TAB: PAGE-WISE SEO & KEYWORD MANAGER                      */}
@@ -4165,7 +4421,7 @@ export default function CustomAdminPanelPage() {
                       <FolderOpen className="h-3 w-3 text-[#3B0D3B]" />
                       Browse Media
                     </button>
-                    <span className="text-[#3B0D3B]/20 text-xs">·</span>
+                    <span className="text-[#3B0D3B]/20 text-xs">Ã‚Â·</span>
                     <button
                       type="button"
                       onClick={() => setShowManualBlogUrl(!showManualBlogUrl)}
@@ -4603,7 +4859,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.previewLabel || ""}
                     onChange={(e) => setCourseForm({ ...courseForm, previewLabel: e.target.value })}
-                    placeholder="e.g. CLASSROOM · CEO CHALLENGE REVIEW"
+                    placeholder="e.g. CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
@@ -4616,7 +4872,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.badge}
                     onChange={(e) => setCourseForm({ ...courseForm, badge: e.target.value })}
-                    placeholder="e.g. BATCH 2 · OPEN"
+                    placeholder="e.g. BATCH 2 Ã‚Â· OPEN"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
@@ -4627,7 +4883,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.duration}
                     onChange={(e) => setCourseForm({ ...courseForm, duration: e.target.value })}
-                    placeholder="e.g. 4 months · Online"
+                    placeholder="e.g. 4 months Ã‚Â· Online"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
@@ -4669,7 +4925,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.batch || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, batch: e.target.value })}
-                      placeholder="e.g. Batch 2 · Sep 2026"
+                      placeholder="e.g. Batch 2 Ã‚Â· Sep 2026"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -4693,7 +4949,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.feeTotal || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeTotal: e.target.value })}
-                      placeholder="e.g. ₹55,000"
+                      placeholder="e.g. Ã¢â€šÂ¹55,000"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -4704,7 +4960,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.feeEmi || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeEmi: e.target.value })}
-                      placeholder="e.g. ₹4,583 / month"
+                      placeholder="e.g. Ã¢â€šÂ¹4,583 / month"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -4777,7 +5033,7 @@ export default function CustomAdminPanelPage() {
                   />
                   <div>
                     <span className="text-xs font-bold text-[#0B0B0F] block">Lock Course</span>
-                    <span className="text-[10px] text-[#5A4A5A]">Shows &quot;🔒 Locked&quot; badge</span>
+                    <span className="text-[10px] text-[#5A4A5A]">Shows &quot;Ã°Å¸â€â€™ Locked&quot; badge</span>
                   </div>
                 </label>
 
@@ -4877,7 +5133,7 @@ export default function CustomAdminPanelPage() {
                   type="text"
                   value={tutorForm.brandMetric || ""}
                   onChange={(e) => setTutorForm({ ...tutorForm, brandMetric: e.target.value })}
-                  placeholder="e.g. ₹10Cr+ Ad Spend Managed, Ex-Amex Lead, or 3.8x Avg ROAS"
+                  placeholder="e.g. Ã¢â€šÂ¹10Cr+ Ad Spend Managed, Ex-Amex Lead, or 3.8x Avg ROAS"
                   className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
                 <p className="text-[10px] text-[#5A4A5A] mt-1">Displayed as the verified credential badge on the mentor card.</p>
@@ -5049,6 +5305,28 @@ export default function CustomAdminPanelPage() {
                 )}
               </div>
 
+              {/* Mentor Lock / Unlock Status Toggle */}
+              <div className="pt-1">
+                <label className="flex items-center gap-3 p-3.5 rounded-xl border border-[#3B0D3B]/15 bg-white cursor-pointer hover:bg-[#FAF5EE]/50 transition-colors">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(tutorForm.isLocked)}
+                    onChange={(e) => setTutorForm({ ...tutorForm, isLocked: e.target.checked })}
+                    className="h-4 w-4 rounded border-[#3B0D3B]/20 text-[#3B0D3B] accent-[#3B0D3B] focus:ring-[#3B0D3B]"
+                  />
+                  <div>
+                    <span className="text-xs font-bold text-[#0B0B0F] block">
+                      {tutorForm.isLocked ? "Ã°Å¸â€â€™ Lock Mentor (Coming Soon Mode)" : "Ã°Å¸â€â€œ Mentor Profile Active (Live)"}
+                    </span>
+                    <span className="text-[10px] text-[#5A4A5A]">
+                      {tutorForm.isLocked
+                        ? "Check to lock this mentor. Uncheck to unlock and reveal real photo & bio on website."
+                        : "Active on website. Check this box if you want to temporarily hide real credentials."}
+                    </span>
+                  </div>
+                </label>
+              </div>
+
               <div className="pt-3 flex items-center justify-end gap-3 border-t border-[#3B0D3B]/10">
                 <button
                   type="button"
@@ -5201,13 +5479,6 @@ export default function CustomAdminPanelPage() {
           </div>
         </div>
       )}
-
-      {/* Floating Treqo AI Operations Assistant */}
-      <AdminFloatingAiWidget
-        adminPin={getStoredPin()}
-        currentTab={activeTab}
-        onNavigateTab={(tab) => setActiveTab(tab as any)}
-      />
     </div>
   );
 }

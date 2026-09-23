@@ -48,17 +48,26 @@ export async function GET(request: Request) {
 
   // Export as CSV for one-click Excel download
   if (format === "csv") {
-    const csvHeaders = "Timestamp,Full Name,Email,Phone,Course,Background,Source\n";
+    const sanitizeCsvCell = (raw: string | undefined | null): string => {
+      if (!raw) return '""';
+      const str = String(raw).trim();
+      // Neutralize formula triggers in Excel, LibreOffice, and Google Sheets
+      const safeStr = /^[=+\-@\t\r]/.test(str) ? `'${str}` : str;
+      return `"${safeStr.replace(/"/g, '""')}"`;
+    };
+
+    const csvHeaders = "Timestamp,Full Name,Email,Phone,Applied Course,Origin Page,Source,Background\n";
     const csvRows = leads
       .map((l) =>
         [
           `"${new Date(l.submittedAt).toLocaleString("en-IN")}"`,
-          `"${l.name.replace(/"/g, '""')}"`,
-          `"${l.email.replace(/"/g, '""')}"`,
-          `"${l.phone.replace(/"/g, '""')}"`,
-          `"${l.course.replace(/"/g, '""')}"`,
-          `"${l.background.replace(/"/g, '""')}"`,
-          `"${l.source.replace(/"/g, '""')}"`,
+          sanitizeCsvCell(l.name),
+          sanitizeCsvCell(l.email),
+          sanitizeCsvCell(l.phone),
+          sanitizeCsvCell(l.course),
+          sanitizeCsvCell(l.page || "/"),
+          sanitizeCsvCell(l.source),
+          sanitizeCsvCell(l.background),
         ].join(",")
       )
       .join("\n");

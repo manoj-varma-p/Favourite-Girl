@@ -131,7 +131,12 @@ export default async function Hero() {
 
           {/* Action Buttons */}
           <div className="mt-7">
-            <HeroActions />
+            <HeroActions
+              primaryCtaLabel={hero.primaryCtaLabel}
+              primaryCtaHref={hero.primaryCtaHref}
+              secondaryCtaLabel={hero.secondaryCtaLabel}
+              watchVideoLabel={hero.watchVideoLabel}
+            />
           </div>
 
           {/* Mobile/Tablet view of the hero artwork */}

@@ -294,3 +294,96 @@ select:disabled {
       rgba(1, 42, 34, 0.03) 80%,
       transparent 100%);
 }
+
+/* ---------------------------------------------------------------------
+ * ADMIN PANEL DARK THEME SYSTEM (.admin-dark)
+ * Completely isolated from frontend customer-facing pages.
+ * ------------------------------------------------------------------- */
+.admin-dark {
+  background-color: #0B0B0F !important;
+  color: #F3F4F6 !important;
+  color-scheme: dark;
+}
+
+.admin-dark header {
+  background-color: rgba(14, 14, 20, 0.95) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-dark .admin-sidebar-surface,
+.admin-dark aside > div {
+  background-color: #0E0E14 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #E5E7EB !important;
+}
+
+.admin-dark .bg-white {
+  background-color: #15151E !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #F3F4F6 !important;
+}
+
+.admin-dark .bg-\[\#FDFAF6\],
+.admin-dark .bg-\[\#FAF5EE\],
+.admin-dark .bg-\[\#FAF5EE\]\/30,
+.admin-dark .bg-\[\#FAF5EE\]\/40,
+.admin-dark .bg-\[\#FAF5EE\]\/50,
+.admin-dark .bg-\[\#FAF5EE\]\/60,
+.admin-dark .bg-\[\#FAF5EE\]\/70,
+.admin-dark .bg-\[\#FAF5EE\]\/90,
+.admin-dark .bg-\[\#F5EDE0\] {
+  background-color: #12121A !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-dark .bg-\[\#FDFAF6\]\/90 {
+  background-color: rgba(14, 14, 20, 0.95) !important;
+}
+
+.admin-dark .bg-slate-50,
+.admin-dark .bg-slate-50\/70,
+.admin-dark .bg-slate-50\/80,
+.admin-dark .bg-slate-50\/90 {
+  background-color: #181824 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-dark input:not([type="checkbox"]):not([type="radio"]),
+.admin-dark select,
+.admin-dark textarea {
+  background-color: #181824 !important;
+  color: #F9FAFB !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+.admin-dark input::placeholder,
+.admin-dark textarea::placeholder {
+  color: rgba(156, 163, 175, 0.5) !important;
+}
+
+.admin-dark .text-\[\#0B0B0F\],
+.admin-dark .text-\[\#1A0A1A\],
+.admin-dark .text-slate-900,
+.admin-dark .text-slate-950 {
+  color: #F9FAFB !important;
+}
+
+.admin-dark .text-\[\#5A4A5A\],
+.admin-dark .text-\[\#8C6A8C\],
+.admin-dark .text-slate-600,
+.admin-dark .text-slate-700 {
+  color: #9CA3AF !important;
+}
+
+.admin-dark .border-\[\#3B0D3B\]\/10,
+.admin-dark .border-\[\#3B0D3B\]\/15,
+.admin-dark .border-\[\#3B0D3B\]\/20,
+.admin-dark .border-slate-200,
+.admin-dark .border-slate-300 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-dark .hover\:bg-\[\#FAF5EE\]:hover,
+.admin-dark .hover\:bg-\[\#F5EDE0\]:hover {
+  background-color: #222230 !important;
+}

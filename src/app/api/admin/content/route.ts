@@ -27,6 +27,13 @@ import {
 import { isAuthorizedRequest } from "@/lib/admin-auth";
 
 export async function GET(req: NextRequest) {
+  if (!isAuthorizedRequest(req)) {
+    return NextResponse.json(
+      { error: "Unauthorized. Administrator credentials required." },
+      { status: 401 }
+    );
+  }
+
   try {
     const [settings, layoutSettings, navigation, homeContent, blogs, courses, tutors, testimonials, alerts, forms, pageSeo] =
       await Promise.all([

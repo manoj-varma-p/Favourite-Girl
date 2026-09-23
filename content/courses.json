@@ -82,7 +82,7 @@
     "curriculumPdf": "/treqo-curriculum.pdf",
     "applyCta": "Notify Me When Open",
     "syllabusCta": "Download Curriculum",
-    "image": "/api/admin/upload?id=courses-1790070237722-cw7s-fundamentals-of-digital-marketing-2.png",
+    "image": "/uploads/courses/the-girl-image-jpg-1790157147911-9sbz.jpeg",
     "previewLabel": "SELF-PACED MODULE SCREEN",
     "actionText": "Get notified →",
     "actionHref": "/categories/fundamentals",
@@ -110,7 +110,7 @@
     "curriculumPdf": "/treqo-curriculum.pdf",
     "applyCta": "Apply for Batch 2",
     "syllabusCta": "Download Curriculum",
-    "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
+    "image": "/uploads/courses/performance---growth-specialis-1790157166679-t2h1.png",
     "previewLabel": "MADHAPUR STUDIO FLOOR",
     "actionText": "View course →",
     "actionHref": "/categories/4m-program",
@@ -138,7 +138,7 @@
     "curriculumPdf": "/treqo-curriculum.pdf",
     "applyCta": "Notify Me When Open",
     "syllabusCta": "Download Curriculum",
-    "image": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
+    "image": "/uploads/courses/treqo-pgdm-in-modern-marketing-1790157135486-roy8.png",
     "previewLabel": "COHORT SESSION",
     "actionText": "Get notified →",
     "actionHref": "/categories/pgdm",
@@ -147,33 +147,6 @@
       "PG"
     ],
     "order": 4
-  },
-  {
-    "id": "campus-edition",
-    "title": "Campus Edition",
-    "href": "/categories/campus-edition",
-    "badge": "COMING SOON",
-    "badgeVariant": "gray",
-    "duration": "4 months · Online",
-    "meta": "4 months · Online",
-    "description": "The flagship, timed to run alongside a BBA or MBA without colliding with your semester exams.",
-    "isFlagship": false,
-    "isLocked": true,
-    "batch": "Online · Coming Soon",
-    "feeTotal": "₹45,000",
-    "feeEmi": "₹3,750 / month",
-    "curriculumPdf": "/treqo-curriculum.pdf",
-    "applyCta": "Notify Me When Open",
-    "syllabusCta": "Download Curriculum",
-    "image": "/uploads/courses/campus-edition-1790068784962-3efh.png",
-    "previewLabel": "STUDENT AT DESK",
-    "actionText": "Get notified →",
-    "actionHref": "/categories/campus-edition",
-    "tags": [
-      "All",
-      "Students"
-    ],
-    "order": 5
   },
   {
     "id": "founder-semester",
@@ -192,7 +165,7 @@
     "curriculumPdf": "/treqo-curriculum.pdf",
     "applyCta": "Notify Me When Open",
     "syllabusCta": "Download Curriculum",
-    "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
+    "image": "/uploads/courses/the-founder-semester--1--1790157072350-rphv.png",
     "previewLabel": "FOUNDER PITCH SESSION",
     "actionText": "Get notified →",
     "actionHref": "/categories/founder-semester",
@@ -201,7 +174,7 @@
       "Short",
       "Flagship"
     ],
-    "order": 6
+    "order": 5
   },
   {
     "id": "performance-growth",
@@ -220,7 +193,7 @@
     "curriculumPdf": "/treqo-curriculum.pdf",
     "applyCta": "Notify Me When Open",
     "syllabusCta": "Download Curriculum",
-    "image": "/uploads/courses/performance---growth-specialis-1790072891836-rl56.png",
+    "image": "/uploads/courses/new-age-digital-marketing--on--1790157246249-vk30.png",
     "previewLabel": "LIVE MEDIA DASHBOARD",
     "actionText": "Get notified →",
     "actionHref": "/categories/performance-growth",
@@ -228,6 +201,6 @@
       "All",
       "Short"
     ],
-    "order": 7
+    "order": 6
   }
 ]

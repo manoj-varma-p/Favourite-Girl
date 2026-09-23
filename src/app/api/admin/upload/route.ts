@@ -57,7 +57,8 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File | null;
-    const folder = (formData.get("folder") as string) || "general";
+    const rawFolder = (formData.get("folder") as string) || "general";
+    const folder = rawFolder.replace(/[^a-zA-Z0-9_-]/g, "") || "general";
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
@@ -105,7 +106,11 @@ export async function POST(req: NextRequest) {
         .replace(/[^a-z0-9_-]/g, "-")
         .slice(0, 30);
       const uniqueFilename = `${sanitizedBase}-${Date.now()}-${Math.random().toString(36).slice(2, 6)}${ext}`;
-      const targetDir = path.join(process.cwd(), "public", "uploads", folder);
+      const baseUploads = path.join(process.cwd(), "public", "uploads");
+      const targetDir = path.join(baseUploads, folder);
+      if (!targetDir.startsWith(baseUploads)) {
+        return NextResponse.json({ error: "Invalid upload directory target." }, { status: 400 });
+      }
       await fs.mkdir(targetDir, { recursive: true });
       await fs.writeFile(path.join(targetDir, uniqueFilename), buffer);
       return NextResponse.json({
@@ -151,13 +156,22 @@ export async function GET(req: NextRequest) {
       }
       const mimeType = match[1];
       const imageBuffer = Buffer.from(match[2], "base64");
+
+      const responseHeaders: Record<string, string> = {
+        "Content-Type": mimeType,
+        "Cache-Control": "public, max-age=31536000, immutable",
+        "Content-Length": imageBuffer.length.toString(),
+        "X-Content-Type-Options": "nosniff",
+      };
+
+      if (mimeType.toLowerCase().includes("svg")) {
+        // Prevent stored XSS via SVG scripts
+        responseHeaders["Content-Security-Policy"] = "default-src 'none'; style-src 'unsafe-inline'";
+      }
+
       return new NextResponse(imageBuffer, {
         status: 200,
-        headers: {
-          "Content-Type": mimeType,
-          "Cache-Control": "public, max-age=31536000, immutable",
-          "Content-Length": imageBuffer.length.toString(),
-        },
+        headers: responseHeaders,
       });
     } catch (err) {
       console.error("[Upload GET serve error]:", err);
@@ -238,5 +252,59 @@ export async function GET(req: NextRequest) {
   } catch (error) {
     console.error("[Upload List Error]:", error);
     return NextResponse.json({ error: "Failed to list uploaded files." }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  if (!isAuthorizedRequest(req)) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  try {
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("id");
+    const filePath = searchParams.get("path");
+
+    if (!id && !filePath) {
+      return NextResponse.json({ error: "Provide either 'id' or 'path' to delete." }, { status: 400 });
+    }
+
+    let deletedMongo = false;
+    let deletedDisk = false;
+
+    // Delete from MongoDB
+    if (id) {
+      const db = await getMongoDb();
+      if (db) {
+        const res = await db.collection("uploads").deleteOne({ _id: id as unknown as undefined });
+        deletedMongo = res.deletedCount > 0;
+      }
+    }
+
+    // Delete from local disk
+    if (filePath) {
+      const baseUploads = path.join(process.cwd(), "public");
+      const normalized = path.normalize(filePath).replace(/^(\.\.[\/\\])+/, "");
+      const fullPath = path.join(baseUploads, normalized);
+
+      if (fullPath.startsWith(path.join(process.cwd(), "public", "uploads"))) {
+        try {
+          await fs.unlink(fullPath);
+          deletedDisk = true;
+        } catch {
+          // file may not exist on disk
+        }
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: "Media asset deleted successfully",
+      deletedMongo,
+      deletedDisk,
+    });
+  } catch (error) {
+    console.error("[Upload DELETE Error]:", error);
+    return NextResponse.json({ error: "Failed to delete file." }, { status: 500 });
   }
 }

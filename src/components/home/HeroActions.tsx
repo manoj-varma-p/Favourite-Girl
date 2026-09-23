@@ -5,7 +5,19 @@ import { Video } from "lucide-react";
 import { heroContent } from "@/data/home";
 import { useApplyModal } from "@/context/ApplyModalContext";
 
-export default function HeroActions() {
+interface HeroActionsProps {
+  primaryCtaLabel?: string;
+  primaryCtaHref?: string;
+  secondaryCtaLabel?: string;
+  watchVideoLabel?: string;
+}
+
+export default function HeroActions({
+  primaryCtaLabel,
+  primaryCtaHref,
+  secondaryCtaLabel,
+  watchVideoLabel,
+}: HeroActionsProps = {}) {
   const { openApplyModal } = useApplyModal();
 
   const handleOpenVideo = () => {
@@ -17,13 +29,18 @@ export default function HeroActions() {
     openApplyModal("Book a Demo");
   };
 
+  const primaryLabel = primaryCtaLabel || heroContent.primaryCta.label || "Apply for Batch 2";
+  const primaryHref = primaryCtaHref || heroContent.primaryCta.href || "#apply";
+  const secondaryLabel = secondaryCtaLabel || "Book a demo";
+  const videoLabel = watchVideoLabel || "Watch Video";
+
   return (
     <div className="flex flex-wrap items-center justify-start gap-3.5 w-full sm:w-auto">
       <Link
-        href={heroContent.primaryCta.href}
+        href={primaryHref}
         className="glossy-shine inline-flex items-center justify-center rounded-xl bg-[#3B0D3B] px-6 py-3.5 text-sm sm:text-base font-bold text-[#FDFAF6] shadow-lg shadow-[#3B0D3B]/25 hover:bg-[#2B052B] active:scale-[0.98] transition-all"
       >
-        {heroContent.primaryCta.label}
+        {primaryLabel}
       </Link>
 
       <button
@@ -31,7 +48,7 @@ export default function HeroActions() {
         onClick={handleBookDemo}
         className="glossy-shine inline-flex items-center justify-center rounded-xl border border-slate-300 bg-white px-6 py-3.5 text-sm sm:text-base font-semibold text-[#1A0A1A] shadow-xs transition-all hover:border-[#3B0D3B] hover:bg-slate-50 active:scale-[0.98] cursor-pointer"
       >
-        Book a demo
+        {secondaryLabel}
       </button>
 
       {/* Mobile-only inline trigger so mobile users can still watch the reel without any floating overlay */}
@@ -41,7 +58,7 @@ export default function HeroActions() {
         className="lg:hidden inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 bg-slate-50 px-4 py-3 text-xs sm:text-sm font-bold text-[#1A0A1A] shadow-xs hover:bg-slate-100 transition-all cursor-pointer"
       >
         <Video size={15} className="text-[#3B0D3B]" />
-        <span>Watch Video</span>
+        <span>{videoLabel}</span>
       </button>
     </div>
   );

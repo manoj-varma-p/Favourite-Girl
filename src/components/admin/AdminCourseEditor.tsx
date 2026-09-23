@@ -27,8 +27,16 @@ import {
   Search,
   Tag,
   Globe,
+  Compass,
 } from "lucide-react";
-import type { CourseItem, CoursePhasesData, CourseChallenge } from "@/lib/content-db";
+import type {
+  CourseItem,
+  CoursePhasesData,
+  CourseChallenge,
+  CourseCareerRoleItem,
+  CourseProofData,
+  CourseFaqItem,
+} from "@/lib/content-db";
 import type { CoursePhaseGroup } from "@/types/home";
 
 const NEW_AGE_ONLINE_37_KEYWORDS = [
@@ -117,7 +125,7 @@ export default function AdminCourseEditor({
 
   // Active section inside the editor studio
   const [activeStudioTab, setActiveStudioTab] = useState<
-    "hero" | "pricing" | "curriculum" | "challenge" | "audience" | "seo"
+    "hero" | "pricing" | "curriculum" | "challenge" | "careerRoles" | "proof" | "faqs" | "audience" | "seo"
   >("hero");
 
   // Keyword states
@@ -352,6 +360,124 @@ export default function AdminCourseEditor({
         "Founders and builders scaling their own direct-to-consumer and B2B ventures",
       ];
 
+  // Career Roles helpers
+  const DEFAULT_CAREER_ROLES: CourseCareerRoleItem[] = [
+    { title: "Performance Marketing Manager", description: "Google + Meta campaigns, ROAS optimisation, budget management, customer acquisition at scale." },
+    { title: "Growth Marketing Specialist", description: "Full-funnel ownership, experiment-driven, data-heavy. The startup rocket fuel role." },
+    { title: "Brand Strategist / Manager", description: "Brand identity, positioning, communication strategy for FMCG, luxury, consumer brands." },
+    { title: "SEO & Content Lead", description: "Organic traffic, content engines, editorial calendars. Compound visibility over time." },
+    { title: "Social Media Manager", description: "Brand presence across platforms. Strategy + execution + community + paid social." },
+    { title: "Digital Marketing Analyst", description: "GA4, Looker Studio, attribution, cohort analysis. Data marketing decisions." },
+    { title: "CRM & Lifecycle Marketing", description: "Retention, automated email & WhatsApp funnels, churn prevention & LTV expansion." },
+    { title: "Marketplace & E-com Lead", description: "Amazon, Flipkart, Shopify store scaling, catalog health & marketplace ads." },
+  ];
+
+  const careerRolesList: CourseCareerRoleItem[] =
+    course.careerRoles && course.careerRoles.length > 0 ? course.careerRoles : DEFAULT_CAREER_ROLES;
+
+  function updateCareerRole(index: number, updated: Partial<CourseCareerRoleItem>) {
+    const list = [...careerRolesList];
+    list[index] = { ...list[index], ...updated };
+    setCourse({ ...course, careerRoles: list });
+  }
+
+  function addCareerRole() {
+    const newRole: CourseCareerRoleItem = {
+      title: "New Career Role",
+      description: "Hands-on role responsibilities, key competencies, and agency expectations.",
+    };
+    setCourse({ ...course, careerRoles: [...careerRolesList, newRole] });
+  }
+
+  function removeCareerRole(index: number) {
+    const list = careerRolesList.filter((_, i) => i !== index);
+    setCourse({ ...course, careerRoles: list });
+  }
+
+  // Proof & Results helpers
+  const DEFAULT_PROOF: CourseProofData = {
+    heading: "Proof & Results",
+    description: "What our cohorts actually produced, not a projection.",
+    stats: [
+      { value: "30+", label: "Real brand campaigns shipped" },
+      { value: "16+", label: "Industries covered" },
+      { value: "12", label: "Phases, zero filler" },
+      { value: "6", label: "Months, cohort to portfolio" },
+    ],
+  };
+
+  const proofData: CourseProofData = course.proof || DEFAULT_PROOF;
+
+  function updateProofHeading(heading: string) {
+    setCourse({ ...course, proof: { ...proofData, heading } });
+  }
+
+  function updateProofDescription(description: string) {
+    setCourse({ ...course, proof: { ...proofData, description } });
+  }
+
+  function updateProofStat(index: number, updated: Partial<{ value: string; label: string }>) {
+    const stats = [...(proofData.stats || [])];
+    stats[index] = { ...stats[index], ...updated };
+    setCourse({ ...course, proof: { ...proofData, stats } });
+  }
+
+  function addProofStat() {
+    const stats = [...(proofData.stats || []), { value: "100%", label: "New Outcome Metric" }];
+    setCourse({ ...course, proof: { ...proofData, stats } });
+  }
+
+  function removeProofStat(index: number) {
+    const stats = (proofData.stats || []).filter((_, i) => i !== index);
+    setCourse({ ...course, proof: { ...proofData, stats } });
+  }
+
+  // Course FAQs helpers
+  const DEFAULT_FAQS: CourseFaqItem[] = [
+    {
+      question: "Do I need marketing experience to start?",
+      answer: "No. Phase 1 assumes zero background and gets you to working fluency before Phase 2 asks you to apply it.",
+    },
+    {
+      question: "Is this live or self-paced?",
+      answer: "Live. Sessions are scheduled and recorded, but the CEO Challenge and phase gates require you to show up and defend your work in real time.",
+    },
+    {
+      question: "What happens if I fail Phase 4?",
+      answer: "You rework it. Idea clarity is pass or rework, no partial credit, no parallel track. Most students rework once, and the second version is always sharper.",
+    },
+    {
+      question: "Is placement guaranteed?",
+      answer: "No, and anyone promising you that is selling something. We provide comprehensive career concierge, portfolio defense, and direct agency referrals.",
+    },
+    {
+      question: "What do I actually walk away with?",
+      answer: "A portfolio of 30+ real campaigns across 16+ industries, plus a verified certificate that links back to that work, not just a PDF.",
+    },
+  ];
+
+  const faqsList: CourseFaqItem[] =
+    course.faqs && course.faqs.length > 0 ? course.faqs : DEFAULT_FAQS;
+
+  function updateFaq(index: number, updated: Partial<CourseFaqItem>) {
+    const list = [...faqsList];
+    list[index] = { ...list[index], ...updated };
+    setCourse({ ...course, faqs: list });
+  }
+
+  function addFaq() {
+    const newFaq: CourseFaqItem = {
+      question: "Frequently Asked Question?",
+      answer: "Clear, detailed answer explaining this aspect of the program.",
+    };
+    setCourse({ ...course, faqs: [...faqsList, newFaq] });
+  }
+
+  function removeFaq(index: number) {
+    const list = faqsList.filter((_, i) => i !== index);
+    setCourse({ ...course, faqs: list });
+  }
+
   return (
     <div className="space-y-6">
       {/* Top Breadcrumb & Action Bar */}
@@ -448,8 +574,11 @@ export default function AdminCourseEditor({
           { id: "pricing", label: "2. Tuition & EMI Plans", icon: DollarSign },
           { id: "curriculum", label: "3. Curriculum & Phases", icon: Layers },
           { id: "challenge", label: "4. CEO Challenge", icon: Trophy },
-          { id: "audience", label: "5. Target Audience", icon: FileText },
-          { id: "seo", label: "6. SEO Meta Keywords", icon: Sliders },
+          { id: "careerRoles", label: "5. Career Roles", icon: Compass },
+          { id: "proof", label: "6. Proof & Results", icon: Award },
+          { id: "faqs", label: "7. Course FAQs", icon: HelpCircle },
+          { id: "audience", label: "8. Target Audience", icon: FileText },
+          { id: "seo", label: "9. SEO Meta Keywords", icon: Sliders },
         ].map((tab) => {
           const Icon = tab.icon;
           const isActive = activeStudioTab === tab.id;
@@ -668,9 +797,19 @@ export default function AdminCourseEditor({
                         <img
                           src={course.image}
                           alt={course.title}
-                          className="h-full w-full object-cover"
+                          className={`h-full w-full object-cover transition-opacity ${course.isLocked ? "opacity-75" : "opacity-100"}`}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+
+                        {/* Coming soon overlay when locked */}
+                        {course.isLocked && (
+                          <div className="absolute inset-0 bg-black/30 backdrop-blur-[0.5px] flex items-center justify-center pointer-events-none">
+                            <div className="flex items-center gap-1.5 rounded-full bg-black/80 border border-white/20 px-3.5 py-1.5 text-xs font-bold text-white shadow-xl backdrop-blur-md">
+                              <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                              <span>COMING SOON (Locked)</span>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Top Replace / Remove Pill */}
                         <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5">
@@ -983,6 +1122,302 @@ export default function AdminCourseEditor({
                 placeholder="Full funnel diagnostic&#10;Paid ad creative experimentation&#10;Live unit economics defense"
                 className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs text-[#0B0B0F] leading-relaxed focus:border-[#3B0D3B] focus:outline-none"
               />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* TAB 5: CAREER ROLES STUDIO                                */}
+      {/* ========================================================= */}
+      {activeStudioTab === "careerRoles" && (
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#3B0D3B]/10 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B]">
+                    <Compass className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-lg font-bold text-[#0B0B0F]">Career Outcomes &amp; Roles You Can Crack</h3>
+                </div>
+                <p className="text-xs text-[#5A4A5A] mt-1.5">
+                  Configure the target job roles and competencies shown on this course page. On mobile, these blocks automatically render as an interactive card scroll stack.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={addCareerRole}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all cursor-pointer self-start sm:self-auto shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Add Career Role</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {careerRolesList.map((role, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-slate-200/90 bg-[#FAF5EE]/40 p-4 sm:p-5 flex flex-col justify-between gap-3 group hover:border-[#3B0D3B]/30 transition-all shadow-2xs"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-white border border-slate-200 px-2 py-0.5 rounded-full">
+                      Role #{idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => removeCareerRole(idx)}
+                      className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                      title="Delete role"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-[11px] font-bold text-[#0B0B0F] block">Role Title</label>
+                      <input
+                        type="text"
+                        value={role.title}
+                        onChange={(e) => updateCareerRole(idx, { title: e.target.value })}
+                        placeholder="e.g. Performance Marketing Manager"
+                        className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3 py-2 text-xs font-bold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-[11px] font-bold text-[#0B0B0F] block">Role Summary &amp; Competencies</label>
+                      <textarea
+                        rows={2}
+                        value={role.description || ""}
+                        onChange={(e) => updateCareerRole(idx, { description: e.target.value })}
+                        placeholder="Google + Meta campaigns, ROAS optimisation, budget management..."
+                        className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-2.5 text-xs text-[#5A4A5A] focus:border-[#3B0D3B] focus:outline-none"
+                      />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={addCareerRole}
+                className="w-full rounded-2xl border-2 border-dashed border-[#3B0D3B]/20 hover:border-[#3B0D3B]/40 bg-[#FAF5EE]/30 hover:bg-[#FAF5EE] py-3 text-xs font-bold text-[#3B0D3B] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Another Career Role</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* TAB 6: PROOF & RESULTS STUDIO                             */}
+      {/* ========================================================= */}
+      {activeStudioTab === "proof" && (
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#3B0D3B]/10 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B]">
+                    <Award className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-lg font-bold text-[#0B0B0F]">Proof &amp; Results</h3>
+                </div>
+                <p className="text-xs text-[#5A4A5A] mt-1.5">
+                  Outcome metrics, placement benchmarks, and deliverables numbers displayed on the course page.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={addProofStat}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all cursor-pointer self-start sm:self-auto shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Add Metric Stat</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-bold text-[#0B0B0F]">Section Heading</label>
+                <input
+                  type="text"
+                  value={proofData.heading || "Proof & Results"}
+                  onChange={(e) => updateProofHeading(e.target.value)}
+                  placeholder="Proof & Results"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs font-bold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-[#0B0B0F]">Section Subtitle / Description</label>
+                <input
+                  type="text"
+                  value={proofData.description || ""}
+                  onChange={(e) => updateProofDescription(e.target.value)}
+                  placeholder="What our cohorts actually produced, not a projection."
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Stat Cards Grid */}
+            <div>
+              <label className="text-xs font-bold text-[#0B0B0F] block mb-3">Outcome Metric Badges (4 cards recommended)</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+                {(proofData.stats || []).map((stat, idx) => (
+                  <div
+                    key={idx}
+                    className="rounded-2xl border border-slate-200/90 bg-[#FAF5EE]/50 p-4 flex flex-col justify-between gap-3"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-bold text-[#3B0D3B] uppercase">Stat #{idx + 1}</span>
+                      <button
+                        type="button"
+                        onClick={() => removeProofStat(idx)}
+                        className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                        title="Delete stat"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div>
+                        <label className="text-[10px] font-bold text-[#5A4A5A] uppercase">Display Value</label>
+                        <input
+                          type="text"
+                          value={stat.value}
+                          onChange={(e) => updateProofStat(idx, { value: e.target.value })}
+                          placeholder="e.g. 30+ or ₹14.2L"
+                          className="mt-0.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-sm font-black text-[#3B0D3B] focus:border-[#3B0D3B] focus:outline-none"
+                        />
+                      </div>
+
+                      <div>
+                        <label className="text-[10px] font-bold text-[#5A4A5A] uppercase">Label / Description</label>
+                        <input
+                          type="text"
+                          value={stat.label}
+                          onChange={(e) => updateProofStat(idx, { label: e.target.value })}
+                          placeholder="Real brand campaigns shipped"
+                          className="mt-0.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-2.5 py-1.5 text-xs text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={addProofStat}
+                className="w-full rounded-2xl border-2 border-dashed border-[#3B0D3B]/20 hover:border-[#3B0D3B]/40 bg-[#FAF5EE]/30 hover:bg-[#FAF5EE] py-3 text-xs font-bold text-[#3B0D3B] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Another Metric Stat</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ========================================================= */}
+      {/* TAB 7: COURSE FAQS STUDIO                                 */}
+      {/* ========================================================= */}
+      {activeStudioTab === "faqs" && (
+        <div className="space-y-6">
+          <div className="rounded-3xl border border-[#3B0D3B]/10 bg-white p-6 sm:p-8 space-y-6 shadow-sm">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#3B0D3B]/10 pb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center h-8 w-8 rounded-xl bg-[#3B0D3B]/10 text-[#3B0D3B]">
+                    <HelpCircle className="h-4 w-4" />
+                  </span>
+                  <h3 className="text-lg font-bold text-[#0B0B0F]">Course FAQs (Accordion)</h3>
+                </div>
+                <p className="text-xs text-[#5A4A5A] mt-1.5">
+                  Frequently asked questions displayed on this specific course page accordion.
+                </p>
+              </div>
+
+              <button
+                type="button"
+                onClick={addFaq}
+                className="inline-flex items-center gap-2 rounded-xl bg-[#3B0D3B] hover:bg-[#2A082A] px-4 py-2 text-xs font-bold text-white shadow-xs transition-all cursor-pointer self-start sm:self-auto shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                <span>Add FAQ Item</span>
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {faqsList.map((faq, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-slate-200/90 bg-[#FAF5EE]/30 p-4 sm:p-5 space-y-3 shadow-2xs"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[10px] font-bold text-[#3B0D3B] uppercase tracking-wider bg-white border border-[#3B0D3B]/10 px-2 py-0.5 rounded-full">
+                      FAQ #{idx + 1 < 10 ? `0${idx + 1}` : idx + 1}
+                    </span>
+
+                    <button
+                      type="button"
+                      onClick={() => removeFaq(idx)}
+                      className="p-1 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                      title="Delete question"
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-bold text-[#0B0B0F] block">Question</label>
+                    <input
+                      type="text"
+                      value={faq.question}
+                      onChange={(e) => updateFaq(idx, { question: e.target.value })}
+                      placeholder="e.g. Do I need marketing experience to start?"
+                      className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-3.5 py-2 text-xs font-bold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-[11px] font-bold text-[#0B0B0F] block">Answer</label>
+                    <textarea
+                      rows={3}
+                      value={faq.answer}
+                      onChange={(e) => updateFaq(idx, { answer: e.target.value })}
+                      placeholder="Clear explanation..."
+                      className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-white p-3 text-xs text-[#0B0B0F] leading-relaxed focus:border-[#3B0D3B] focus:outline-none"
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-1">
+              <button
+                type="button"
+                onClick={addFaq}
+                className="w-full rounded-2xl border-2 border-dashed border-[#3B0D3B]/20 hover:border-[#3B0D3B]/40 bg-[#FAF5EE]/30 hover:bg-[#FAF5EE] py-3 text-xs font-bold text-[#3B0D3B] flex items-center justify-center gap-2 transition-all cursor-pointer"
+              >
+                <Plus className="h-4 w-4" />
+                <span>Add Another FAQ Question</span>
+              </button>
             </div>
           </div>
         </div>

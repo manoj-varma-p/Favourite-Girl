@@ -24,6 +24,9 @@ export default function HeroVisual() {
       return;
     }
 
+    const currentOriginPage = typeof window !== "undefined" ? window.location.pathname : "/";
+    const currentOriginUrl = typeof window !== "undefined" ? window.location.href : "";
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/apply", {
@@ -36,7 +39,9 @@ export default function HeroVisual() {
           course: "New Age Digital Marketing",
           background: position,
           position,
-          source: "Hero Application Form",
+          source: "Hero Direct Application",
+          page: currentOriginPage,
+          pageUrl: currentOriginUrl,
         }),
       });
 

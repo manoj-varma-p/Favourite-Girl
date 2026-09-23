@@ -3,12 +3,12 @@
 import { useState, type FormEvent } from "react";
 import {
   CheckCircle2,
-  ShieldCheck,
-  Sparkles,
   ArrowRight,
   User,
   Mail,
   Phone,
+  Briefcase,
+  ChevronDown,
 } from "lucide-react";
 
 interface CourseHeroFormProps {
@@ -23,6 +23,7 @@ export default function CourseHeroForm({
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("+91 ");
+  const [currentStatus, setCurrentStatus] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -37,6 +38,14 @@ export default function CourseHeroForm({
       return;
     }
 
+    if (!currentStatus) {
+      setError("Please select what you are currently doing.");
+      return;
+    }
+
+    const currentOriginPage = typeof window !== "undefined" ? window.location.pathname : "/";
+    const currentOriginUrl = typeof window !== "undefined" ? window.location.href : "";
+
     setSubmitting(true);
     try {
       const res = await fetch("/api/apply", {
@@ -47,8 +56,10 @@ export default function CourseHeroForm({
           email,
           phone,
           course: courseTitle,
-          background: "Applicant",
+          background: currentStatus,
           source: "Course Hero Right Form",
+          page: currentOriginPage,
+          pageUrl: currentOriginUrl,
         }),
       });
 
@@ -122,6 +133,7 @@ export default function CourseHeroForm({
                 setName("");
                 setEmail("");
                 setPhone("+91 ");
+                setCurrentStatus("");
                 setSubmitted(false);
               }}
               className="mt-6 inline-flex items-center justify-center rounded-full bg-[#3B0D3B] px-6 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md hover:bg-[#5A2A5A] active:scale-95 transition-all cursor-pointer"
@@ -193,6 +205,36 @@ export default function CourseHeroForm({
                   onChange={(e) => setPhone(e.target.value)}
                   placeholder="+91 98765 43210"
                   className="w-full rounded-xl border border-[#E2D8CC] bg-[#FDFAF6]/60 pl-10 pr-4 py-2.5 sm:py-3 text-sm text-[#1A0A1A] placeholder:text-[#9C8A9C] focus:border-[#3B0D3B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#3B0D3B]/10 transition-all shadow-2xs"
+                />
+              </div>
+            </div>
+
+            {/* Current Status Dropdown */}
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="hero-status" className="text-xs font-bold text-[#1A0A1A]">
+                What are you currently doing? <span className="text-rose-500">*</span>
+              </label>
+              <div className="relative">
+                <Briefcase className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C7A8C]" />
+                <select
+                  id="hero-status"
+                  required
+                  value={currentStatus}
+                  onChange={(e) => setCurrentStatus(e.target.value)}
+                  className="w-full appearance-none rounded-xl border border-[#E2D8CC] bg-[#FDFAF6]/60 pl-10 pr-10 py-2.5 sm:py-3 text-sm text-[#1A0A1A] focus:border-[#3B0D3B] focus:bg-white focus:outline-none focus:ring-4 focus:ring-[#3B0D3B]/10 transition-all shadow-2xs cursor-pointer"
+                >
+                  <option value="" disabled className="text-[#9C8A9C]">
+                    Select what you&apos;re currently doing
+                  </option>
+                  <option value="Student">Student</option>
+                  <option value="Undergraduate">Undergraduate</option>
+                  <option value="Graduate">Graduate</option>
+                  <option value="Business Founder">Business Founder</option>
+                  <option value="Working Professional">Working Professional</option>
+                </select>
+                <ChevronDown
+                  className="pointer-events-none absolute right-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-[#8C7A8C]"
+                  aria-hidden="true"
                 />
               </div>
             </div>

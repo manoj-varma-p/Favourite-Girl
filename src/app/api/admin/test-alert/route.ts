@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getAlertSettingsFromDb } from "@/lib/content-db";
 import { sendEmailViaResend } from "@/lib/email-service";
-
-const DEFAULT_PIN = "treqo2026";
-const ADMIN_PIN = process.env.NEXT_PUBLIC_ADMIN_PIN || DEFAULT_PIN;
-
-function isAuthorized(req: NextRequest): boolean {
-  const pin = req.headers.get("x-admin-pin");
-  return pin === ADMIN_PIN || pin === DEFAULT_PIN;
-}
+import { isAuthorizedRequest } from "@/lib/admin-auth";
 
 export async function POST(req: NextRequest) {
-  if (!isAuthorized(req)) {
+  if (!isAuthorizedRequest(req)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

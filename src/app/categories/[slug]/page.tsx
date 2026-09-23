@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { ArrowRight, Clock, Star } from "lucide-react";
+import { ArrowRight, Clock, Star, Lock } from "lucide-react";
 import Header from "@/components/header/Header";
 import AnnouncementBanner from "@/components/header/AnnouncementBanner";
 import Footer from "@/components/footer/Footer";
@@ -20,6 +20,7 @@ import CourseHeroForm from "@/components/category/CourseHeroForm";
 import { learningSystemCourses } from "@/data/home";
 import { megaMenuData } from "@/data/navigation";
 import { getCoursesFromDb, getPageSeoByPath, type CourseItem } from "@/lib/content-db";
+import { cn } from "@/lib/utils";
 
 const categoryLinks = megaMenuData.columns.find((column) => column.title === "Learn by Category")?.links ?? [];
 
@@ -194,7 +195,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
     phasesNavLabel: activeDetail.phasesNavLabel || masterDetail.phasesNavLabel,
     challengeNavLabel: activeDetail.challengeNavLabel || masterDetail.challengeNavLabel,
     challenge: dbCourse?.challenge ? { ...masterDetail.challenge, ...dbCourse.challenge } : (activeDetail.challenge || masterDetail.challenge),
-    proof: activeDetail.proof || masterDetail.proof,
+    careerRoles: dbCourse?.careerRoles && dbCourse.careerRoles.length > 0 ? dbCourse.careerRoles : undefined,
+    proof: dbCourse?.proof ? { ...activeDetail.proof, ...dbCourse.proof } : (activeDetail.proof || masterDetail.proof),
     fees: {
       ...activeDetail.fees,
       plans: activeDetail.fees.plans.map((p, idx) => {
@@ -207,7 +209,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         return p;
       }),
     },
-    faqs: activeDetail.faqs || masterDetail.faqs,
+    faqs: dbCourse?.faqs && dbCourse.faqs.length > 0 ? dbCourse.faqs : (activeDetail.faqs || masterDetail.faqs),
     overview: activeDetail.overview || masterDetail.overview,
     applyCtaLabel: isLocked ? "Notify Me When Open" : (dbCourse?.applyCta && dbCourse.applyCta !== "Notify Me When Open" ? dbCourse.applyCta : "Apply for Batch 2"),
     breakdownCtaLabel: dbCourse?.syllabusCta || activeDetail.breakdownCtaLabel || "Download Curriculum",
@@ -319,9 +321,6 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                         </span>
                         {detail.badge}
                       </span>
-                      <span className="inline-flex items-center rounded-full border border-[#E2D8CC] bg-white/90 px-3 py-1 text-[11px] font-semibold text-slate-700 shadow-2xs">
-                        {detail.batch}
-                      </span>
                     </>
                   )}
                 </div>
@@ -388,9 +387,24 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                     </div>
                   </div>
                   <span className="h-3.5 w-px bg-slate-300 hidden sm:inline-block" aria-hidden="true" />
-                  <span className="text-[11px] font-medium text-[#5A4A5A]">
-                    <span className="font-semibold text-[#1A0A1A]">450+ fellows</span> placed at partner brands & agencies
-                  </span>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100/90 bg-white px-3 py-1 text-[11px] shadow-2xs">
+                      <span className="font-bold text-[#1A73E8]">Google</span>
+                      <span className="font-medium text-slate-600">8 certs</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100/90 bg-white px-3 py-1 text-[11px] shadow-2xs">
+                      <span className="font-bold text-[#0064E0]">Meta</span>
+                      <span className="font-medium text-slate-600">6 certs</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100/90 bg-white px-3 py-1 text-[11px] shadow-2xs">
+                      <span className="font-bold text-[#FF7A59]">HubSpot</span>
+                      <span className="font-medium text-slate-600">6 certs</span>
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-100/90 bg-white px-3 py-1 text-[11px] shadow-2xs">
+                      <span className="font-bold text-[#FF642D]">SEMrush</span>
+                      <span className="font-medium text-slate-600">4 certs</span>
+                    </span>
+                  </div>
                 </div>
               </div>
 
@@ -463,63 +477,85 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
               ...(!isOnline ? [{ id: "industries", label: "Industry Coverage" }] : []),
               { id: "outcomes", label: "Career Roles" },
               { id: "proof", label: "Proof" },
-              { id: "faqs", label: "FAQs" },
+              { id: "faqs", label: "FAQ" },
             ]}
           />
 
           <section className="pt-8 pb-16 sm:pt-12 sm:pb-24">
             <Container>
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-[1fr_360px] lg:gap-14">
-                <div className="flex flex-col gap-12 sm:gap-16 lg:order-1 lg:col-start-1">
-                  {/* 1. Phases */}
-                  <section id="phases" className="scroll-mt-28 sm:scroll-mt-32">
-                    <PhaseAccordion groups={detail.phases.groups} />
-                  </section>
-
-                  {/* 3. The CEO Challenge */}
-                  <section id="challenge" className="scroll-mt-28 sm:scroll-mt-32">
-                    <CeoChallengeCard />
-                  </section>
-
-                  {/* 4. Industry Coverage (Only on Campus / Offline) */}
-                  {!isOnline && (
-                    <section id="industries" className="scroll-mt-28 sm:scroll-mt-32">
-                      <IndustryCoverageSection />
-                    </section>
+                <div className="flex flex-col gap-12 sm:gap-16 lg:order-1 lg:col-start-1 relative">
+                  {/* When course is locked/blocked: Show prominent locked notice */}
+                  {isLocked && (
+                    <div className="rounded-3xl border border-amber-500/30 bg-amber-50/95 p-6 sm:p-8 backdrop-blur-md shadow-lg text-center flex flex-col items-center">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#3B0D3B] text-white shadow-md mb-3">
+                        <Lock className="h-6 w-6 text-amber-300" />
+                      </div>
+                      <div className="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-3.5 py-1 text-[10px] font-black text-white uppercase tracking-wider mb-2.5">
+                        <Clock className="h-3 w-3 text-amber-400" />
+                        <span>Coming Soon</span>
+                      </div>
+                      <h3 className="text-xl sm:text-2xl font-black text-[#1A0A1A]">Curriculum &amp; Program Details Locked</h3>
+                      <p className="mt-2 max-w-lg text-xs sm:text-sm text-[#5A4A5A] leading-relaxed">
+                        The full phase-by-phase syllabus, real-brand capstone briefs, and fee schedule are currently locked for final review. Register now to unlock early access notification.
+                      </p>
+                      <div className="mt-5">
+                        <ApplyButton courseName={course.title} size="md" className="font-bold shadow-md">
+                          Notify Me When Open
+                        </ApplyButton>
+                      </div>
+                    </div>
                   )}
 
-                  {/* 5. Career Outcomes (Roles You Can Crack) */}
-                  <section id="outcomes" className="scroll-mt-28 sm:scroll-mt-32">
-                    <CareerOutcomesSection />
-                  </section>
+                  <div className={cn("flex flex-col gap-12 sm:gap-16", isLocked && "opacity-75 pointer-events-none select-none")}>
+                    {/* 1. Phases */}
+                    <section id="phases" className="scroll-mt-28 sm:scroll-mt-32">
+                      <PhaseAccordion groups={detail.phases.groups} />
+                    </section>
 
-                  {/* 6. Proof */}
-                  <section id="proof" className="scroll-mt-28 sm:scroll-mt-32">
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-[#5A2A5A]">
-                        Proof & Results
-                      </span>
-                    </div>
-                    <h2 className="mt-2 text-xl sm:text-2xl font-black text-[#1A0A1A]">
-                      {detail.proof.heading}
-                    </h2>
-                    <p className="mt-1.5 text-xs sm:text-sm text-[#5A4A5A]">
-                      {detail.proof.description}
-                    </p>
-                    <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                      {detail.proof.stats.map((st, i) => (
-                        <div key={i} className="rounded-xl border border-[#F5EDE0] bg-white p-3.5 sm:p-4 text-center">
-                          <p className="text-xl sm:text-2xl font-black text-[#3B0D3B]">{st.value}</p>
-                          <p className="mt-1 text-[11px] sm:text-xs text-[#5A4A5A] font-medium">{st.label}</p>
-                        </div>
-                      ))}
-                    </div>
-                  </section>
+                    {/* 3. The CEO Challenge */}
+                    <section id="challenge" className="scroll-mt-28 sm:scroll-mt-32">
+                      <CeoChallengeCard />
+                    </section>
 
-                  {/* 7. FAQs */}
-                  <section id="faqs" className="scroll-mt-28 sm:scroll-mt-32">
-                    <CategoryFaqAccordion faqs={detail.faqs} />
-                  </section>
+                    {/* 4. Industry Coverage (Only on Campus / Offline) */}
+                    {!isOnline && (
+                      <section id="industries" className="scroll-mt-28 sm:scroll-mt-32">
+                        <IndustryCoverageSection />
+                      </section>
+                    )}
+
+                    {/* 5. Career Outcomes (Roles You Can Crack) */}
+                    <section id="outcomes" className="scroll-mt-28 sm:scroll-mt-32">
+                      <CareerOutcomesSection roles={detail.careerRoles} />
+                    </section>
+
+                    {/* 6. Proof */}
+                    <section id="proof" className="scroll-mt-28 sm:scroll-mt-32">
+                      <h2 className="text-xl sm:text-2xl font-black text-[#1A0A1A]">
+                        Proof &amp; Results
+                      </h2>
+                      <p className="mt-1.5 text-xs sm:text-sm text-[#5A4A5A]">
+                        {detail.proof.description}
+                      </p>
+                      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+                        {detail.proof.stats.map((st, i) => (
+                          <div key={i} className="rounded-xl border border-[#F5EDE0] bg-white p-3.5 sm:p-4 text-center">
+                            <p className="text-xl sm:text-2xl font-black text-[#3B0D3B]">{st.value}</p>
+                            <p className="mt-1 text-[11px] sm:text-xs text-[#5A4A5A] font-medium">{st.label}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </section>
+
+                    {/* 7. FAQs */}
+                    <section id="faqs" className="scroll-mt-28 sm:scroll-mt-32">
+                      <h2 className="text-xl sm:text-2xl font-black text-[#1A0A1A]">
+                        FAQ
+                      </h2>
+                      <CategoryFaqAccordion faqs={detail.faqs} />
+                    </section>
+                  </div>
                 </div>
 
                 {/* Sidebar on desktop / Tablet info */}

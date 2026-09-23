@@ -129,7 +129,7 @@ export default function AdminProgramsPage() {
     }
   }, [isAuthenticated, loadPrograms]);
 
-  function handleLogin(e: React.FormEvent) {
+  async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setAuthError("");
     const trimmed = pinInput.trim();
@@ -139,13 +139,31 @@ export default function AdminProgramsPage() {
       return;
     }
 
-    if (trimmed === ADMIN_PIN || trimmed === DEFAULT_PIN) {
-      sessionStorage.setItem("treqo_admin_auth", "true");
-      sessionStorage.setItem("treqo_admin_pin", trimmed);
-      setUnlocked(true);
-      setPinInput("");
-    } else {
-      setAuthError("Incorrect PIN. Access denied.");
+    try {
+      const res = await fetch("/api/admin/auth", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pin: trimmed }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", trimmed);
+        setUnlocked(true);
+        setPinInput("");
+        setAuthError("");
+      } else {
+        setAuthError(data.error || "Incorrect PIN. Access denied.");
+      }
+    } catch {
+      if (trimmed === ADMIN_PIN || trimmed === DEFAULT_PIN) {
+        sessionStorage.setItem("treqo_admin_auth", "true");
+        sessionStorage.setItem("treqo_admin_pin", trimmed);
+        setUnlocked(true);
+        setPinInput("");
+      } else {
+        setAuthError("Authentication service error. Access denied.");
+      }
     }
   }
 

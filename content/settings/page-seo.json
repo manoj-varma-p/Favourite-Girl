@@ -24,7 +24,7 @@
   },
   {
     "id": "digital-marketing",
-    "path": "/courses/digital-marketing",
+    "path": "/courses/new-digital-marketing",
     "name": "New Age Digital Marketing Program Online",
     "category": "Courses",
     "title": "New Age Digital Marketing Program | Online ",
@@ -71,7 +71,7 @@
   },
   {
     "id": "4m-program",
-    "path": "/categories/4m-program",
+    "path": "/courses/4m-program",
     "name": "New Age Digital Marketing (On Campus)",
     "category": "Courses",
     "title": "New Age Digital Marketing (On Campus) | TREQO",
@@ -87,7 +87,7 @@
   },
   {
     "id": "fundamentals",
-    "path": "/categories/fundamentals",
+    "path": "/courses/fundamentals",
     "name": "Fundamentals of Digital Marketing",
     "category": "Courses",
     "title": "Fundamentals of Digital Marketing | TREQO",
@@ -102,7 +102,7 @@
   },
   {
     "id": "pgdm",
-    "path": "/categories/pgdm",
+    "path": "/courses/pgdm",
     "name": "Treqo PGDM in Modern Marketing",
     "category": "Courses",
     "title": "Treqo PGDM in Modern Marketing | TREQO",
@@ -131,7 +131,7 @@
   },
   {
     "id": "founder-semester",
-    "path": "/categories/founder-semester",
+    "path": "/courses/founder-semester",
     "name": "The Founder Semester",
     "category": "Courses",
     "title": "The Founder Semester | TREQO",
@@ -145,7 +145,7 @@
   },
   {
     "id": "performance-growth",
-    "path": "/categories/performance-growth",
+    "path": "/courses/performance-growth",
     "name": "Performance & Growth Specialist",
     "category": "Courses",
     "title": "Performance & Growth Specialist | TREQO",

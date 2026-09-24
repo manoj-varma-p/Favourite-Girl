@@ -526,7 +526,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                 { id: "outcomes", label: "Career Roles" },
                 { id: "proof", label: "Proof" },
                 { id: "faqs", label: "FAQ" },
-                { id: "perks", label: "Inclusions" },
+                { id: "perks", label: "Advantages" },
               ]}
             />
 

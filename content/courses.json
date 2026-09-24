@@ -2,7 +2,7 @@
   {
     "id": "digital-marketing",
     "title": "New Age Digital Marketing Program Online",
-    "href": "/courses/digital-marketing",
+    "href": "/courses/new-digital-marketing",
     "badge": "BATCH 2 · OPEN",
     "badgeVariant": "blue",
     "duration": "4 months · Online",
@@ -19,7 +19,7 @@
     "image": "/api/admin/upload?id=courses-1790072840639-nfh2-new-age-digital-marketing.png",
     "previewLabel": "CLASSROOM · CEO CHALLENGE REVIEW",
     "actionText": "View course Ã¢â€ â€™",
-    "actionHref": "/courses/digital-marketing",
+    "actionHref": "/courses/new-digital-marketing",
     "tags": [
       "All",
       "Flagship"
@@ -68,7 +68,7 @@
   {
     "id": "fundamentals",
     "title": "Fundamentals of Digital Marketing",
-    "href": "/categories/fundamentals",
+    "href": "/courses/fundamentals",
     "badge": "COMING SOON",
     "badgeVariant": "gray",
     "duration": "6 modules · Self-paced",
@@ -85,7 +85,7 @@
     "image": "/api/admin/upload?id=courses-1790070237722-cw7s-fundamentals-of-digital-marketing-2.png",
     "previewLabel": "SELF-PACED MODULE SCREEN",
     "actionText": "Get notified →",
-    "actionHref": "/categories/fundamentals",
+    "actionHref": "/courses/fundamentals",
     "tags": [
       "All",
       "Short",
@@ -96,7 +96,7 @@
   {
     "id": "4m-program",
     "title": "New Age Digital Marketing (On Campus)",
-    "href": "/categories/4m-program",
+    "href": "/courses/4m-program",
     "badge": "OPEN · ON-CAMPUS",
     "badgeVariant": "blue",
     "duration": "4 months · On campus",
@@ -113,7 +113,7 @@
     "image": "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80",
     "previewLabel": "MADHAPUR STUDIO FLOOR",
     "actionText": "View course →",
-    "actionHref": "/categories/4m-program",
+    "actionHref": "/courses/4m-program",
     "tags": [
       "All",
       "Short",
@@ -124,7 +124,7 @@
   {
     "id": "pgdm",
     "title": "Treqo PGDM in Modern Marketing",
-    "href": "/categories/pgdm",
+    "href": "/courses/pgdm",
     "badge": "COMING SOON",
     "badgeVariant": "gray",
     "duration": "12 months · Hybrid",
@@ -141,7 +141,7 @@
     "image": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=800&q=80",
     "previewLabel": "COHORT SESSION",
     "actionText": "Get notified →",
-    "actionHref": "/categories/pgdm",
+    "actionHref": "/courses/pgdm",
     "tags": [
       "All",
       "PG"
@@ -151,7 +151,7 @@
   {
     "id": "founder-semester",
     "title": "The Founder Semester",
-    "href": "/categories/founder-semester",
+    "href": "/courses/founder-semester",
     "badge": "COMING SOON",
     "badgeVariant": "gray",
     "duration": "4 months · Online",
@@ -168,7 +168,7 @@
     "image": "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&w=800&q=80",
     "previewLabel": "FOUNDER PITCH SESSION",
     "actionText": "Get notified →",
-    "actionHref": "/categories/founder-semester",
+    "actionHref": "/courses/founder-semester",
     "tags": [
       "All",
       "Short",
@@ -179,7 +179,7 @@
   {
     "id": "performance-growth",
     "title": "Performance & Growth Specialist",
-    "href": "/categories/performance-growth",
+    "href": "/courses/performance-growth",
     "badge": "COMING SOON",
     "badgeVariant": "gray",
     "duration": "3 months · Online",
@@ -196,7 +196,7 @@
     "image": "/uploads/courses/performance---growth-specialis-1790072891836-rl56.png",
     "previewLabel": "LIVE MEDIA DASHBOARD",
     "actionText": "Get notified →",
-    "actionHref": "/categories/performance-growth",
+    "actionHref": "/courses/performance-growth",
     "tags": [
       "All",
       "Short"

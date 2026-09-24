@@ -718,7 +718,7 @@ export default function AdminCourseEditor({
                   <div>
                     <div className="flex items-center justify-between">
                       <label className="text-[10px] font-bold text-[#8C6A8C] uppercase tracking-wider block">
-                        Course URL Slug:
+                        Course URL Slug (Full Path):
                       </label>
                       <button
                         type="button"
@@ -739,11 +739,54 @@ export default function AdminCourseEditor({
                         Auto-generate
                       </button>
                     </div>
+
+                    {/* Quick Prefix Selector */}
+                    <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[10px]">
+                      <span className="text-[#8C6A8C] font-semibold">Prefix:</span>
+                      {[
+                        { label: "/courses/", val: "/courses/" },
+                        { label: "/programs/", val: "/programs/" },
+                        { label: "/bootcamp/", val: "/bootcamp/" },
+                        { label: "/ (Root)", val: "/" },
+                      ].map((item) => {
+                        const currentHref = course.href || "";
+                        const isActive =
+                          item.val === "/"
+                            ? !currentHref.startsWith("/courses/") && !currentHref.startsWith("/programs/") && !currentHref.startsWith("/bootcamp/")
+                            : currentHref.startsWith(item.val);
+                        return (
+                          <button
+                            key={item.label}
+                            type="button"
+                            onClick={() => {
+                              const cleanCurrent = (course.href || "").replace(/^\/+/, "");
+                              const segments = cleanCurrent.split("/").filter(Boolean);
+                              const slugPart = segments.length > 1 ? segments.slice(1).join("/") : (segments[0] || formatCourseSlug(course.title) || course.id);
+                              const newHref = item.val === "/" ? `/${slugPart}` : `${item.val}${slugPart}`;
+                              setCourse({
+                                ...course,
+                                href: newHref,
+                                actionHref: newHref,
+                              });
+                            }}
+                            className={`px-2 py-0.5 rounded-md font-mono text-[10px] transition-all cursor-pointer ${
+                              isActive
+                                ? "bg-[#3B0D3B] text-white font-bold"
+                                : "bg-[#FAF5EE] text-[#5A4A5A] hover:bg-[#F5EDE0] border border-[#3B0D3B]/10"
+                            }`}
+                          >
+                            {item.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+
                     <input
                       type="text"
                       value={course.href || ""}
                       onChange={(e) => {
-                        const val = e.target.value;
+                        let val = e.target.value;
+                        if (val && !val.startsWith("/")) val = `/${val}`;
                         setCourse({
                           ...course,
                           href: val,
@@ -751,7 +794,7 @@ export default function AdminCourseEditor({
                         });
                       }}
                       placeholder="/courses/digital-marketing"
-                      className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 text-xs font-semibold font-mono text-slate-800 focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-colors"
+                      className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 text-xs font-semibold font-mono text-slate-800 focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-colors"
                     />
                     <div className="mt-1 flex items-center justify-between text-[10px] text-[#8C6A8C]">
                       <span>

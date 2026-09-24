@@ -35,12 +35,27 @@ function getCourse(slug: string) {
   return learningSystemCourses.find((course) => formatCourseSlug(course.href) === targetSlug);
 }
 
-async function resolveCourseMeta(slug: string, preloadedCourses?: CourseItem[]) {
-  const targetSlug = formatCourseSlug(slug);
+export async function resolveCourseMeta(pathOrSlug: string, preloadedCourses?: CourseItem[]) {
+  if (!pathOrSlug) return null;
+  const targetSlug = formatCourseSlug(pathOrSlug);
+  const cleanPath = pathOrSlug.startsWith("/") ? pathOrSlug : `/${pathOrSlug}`;
+  const normalizedPath = cleanPath.toLowerCase().replace(/\/+$/, "");
+  const segments = cleanPath.split("/").filter(Boolean);
+  const lastSegment = segments[segments.length - 1] || "";
+  const lastSegmentSlug = formatCourseSlug(lastSegment);
+
   const dbCourses = preloadedCourses || (await getCoursesFromDb().catch(() => []));
 
   // 1. Try matching from DB courses first
   const dbCourse = dbCourses.find((c) => {
+    const cHref = c.href ? (c.href.startsWith("/") ? c.href : `/${c.href}`).toLowerCase().replace(/\/+$/, "") : "";
+    const cActionHref = c.actionHref ? (c.actionHref.startsWith("/") ? c.actionHref : `/${c.actionHref}`).toLowerCase().replace(/\/+$/, "") : "";
+
+    // A. Exact path match (handles any arbitrary prefix/slug combination)
+    if (cHref && (cHref === normalizedPath || cHref === cleanPath.toLowerCase())) return true;
+    if (cActionHref && (cActionHref === normalizedPath || cActionHref === cleanPath.toLowerCase())) return true;
+
+    // B. Slug match
     const idSlug = formatCourseSlug(c.id);
     const hrefSlug = formatCourseSlug(c.href);
     const actionHrefSlug = formatCourseSlug(c.actionHref || "");
@@ -48,6 +63,8 @@ async function resolveCourseMeta(slug: string, preloadedCourses?: CourseItem[]) 
       idSlug === targetSlug ||
       hrefSlug === targetSlug ||
       actionHrefSlug === targetSlug ||
+      idSlug === lastSegmentSlug ||
+      hrefSlug === lastSegmentSlug ||
       (targetSlug === "digital-marketing" && (idSlug === "digital-marketing" || idSlug === "new-age-dm"))
     );
   });
@@ -66,7 +83,10 @@ async function resolveCourseMeta(slug: string, preloadedCourses?: CourseItem[]) 
   }
 
   // 2. Try matching categoryLinks from navigation menu
-  const link = categoryLinks.find((l) => formatCourseSlug(l.href) === targetSlug);
+  const link = categoryLinks.find((l) => {
+    const lSlug = formatCourseSlug(l.href);
+    return lSlug === targetSlug || lSlug === lastSegmentSlug;
+  });
   if (link) {
     return {
       label: link.label,
@@ -77,7 +97,7 @@ async function resolveCourseMeta(slug: string, preloadedCourses?: CourseItem[]) 
   }
 
   // 3. Try matching static learningSystemCourses
-  const course = getCourse(slug);
+  const course = getCourse(pathOrSlug) || getCourse(lastSegment);
   if (course) {
     return {
       label: course.title,
@@ -191,11 +211,11 @@ export async function generateMetadata({
 
 export default async function CourseDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const cleanSlug = formatCourseSlug(slug);
   const dbCourses = await getCoursesFromDb();
-  const metaInfo = await resolveCourseMeta(cleanSlug, dbCourses);
+  const metaInfo = (await resolveCourseMeta(slug, dbCourses)) || (await resolveCourseMeta(formatCourseSlug(slug), dbCourses));
   if (!metaInfo) notFound();
 
+  const cleanSlug = formatCourseSlug(metaInfo.href) || formatCourseSlug(slug);
   const meta = { label: metaInfo.label, href: metaInfo.href, icon: metaInfo.icon };
   const dbCourse = metaInfo.dbCourse;
   const masterDetail = learningSystemCourses[0].detail!;

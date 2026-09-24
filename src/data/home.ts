@@ -1218,12 +1218,12 @@ export const taughtByContent: TaughtByContent = {
 };
 
 export const tutors: TutorProfile[] = [
-  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+", image: "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.png" },
-  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.png" },
-  { name: "Megha Punjabi", role: "American Express", mentored: "236+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.png" },
-  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.png" },
-  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.png" },
-  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.png" },
+  { name: "Mohit Goel", role: "Founder & Marketing Head", mentored: "1.3k+", image: "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.webp" },
+  { name: "Deeptika Bajaj", role: "Growth Marketing Lead", mentored: "423+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.webp" },
+  { name: "Megha Punjabi", role: "American Express", mentored: "236+", image: "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.webp" },
+  { name: "Akshat Aggarwal", role: "American Express", mentored: "184+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.webp" },
+  { name: "Prateek Narang", role: "IIT Placement Mentor", mentored: "912+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.webp" },
+  { name: "Ritika Sharma", role: "Growth Strategy Partner", mentored: "567+", image: "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.webp" },
 ];
 
 export const certificatePreview: CertificatePreview = {
@@ -1236,7 +1236,7 @@ export const certificatePreview: CertificatePreview = {
     { label: "Shareable anywhere", text: "Drop it straight into your portfolio or resume." },
   ],
   primaryCta: { label: "Start Learning Now", href: "/start-learning" },
-  secondaryCta: { label: "View Sample Certificate", href: "/images/certificate.png" },
+  secondaryCta: { label: "View Sample Certificate", href: "/images/certificate.webp" },
 };
 
 export const alumniContent: AlumniContent = {

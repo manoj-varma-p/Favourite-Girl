@@ -117,6 +117,8 @@ export async function POST(req: NextRequest) {
       await saveCoursesToDb(data);
       try {
         revalidatePath("/", "layout");
+        revalidatePath("/courses/[slug]", "page");
+        revalidatePath("/programs/[slug]", "page");
         revalidatePath("/categories/[slug]", "page");
       } catch (e) {
         console.warn("Revalidate error (non-fatal):", e);

@@ -11,8 +11,8 @@ export function formatCourseSlug(input?: string): string {
     .toLowerCase()
     .trim()
     .replace(/^\/+/, "")
-    .replace(/^(courses|categories)\//g, "")
-    .replace(/^(courses|categories)\//g, "")
+    .replace(/^(courses|categories|programs)\//, "")
+    .replace(/^(courses|categories|programs)\//, "")
     .replace(/[^a-z0-9-]/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-+|-+$/g, "");
@@ -39,8 +39,9 @@ export function syncPageSeoWithCourses(
 
     const canonicalPath =
       course.href && course.href.startsWith("/")
-        ? course.href.replace(/^\/categories\//, "/courses/")
+        ? course.href
         : `/courses/${rawSlug}`;
+
 
     // Find existing SEO item for this course
     const existingIndex = result.findIndex((p) => {

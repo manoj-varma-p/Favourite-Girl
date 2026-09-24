@@ -17,9 +17,9 @@ const defaultGovCerts: GovCertsContent = {
   titleHighlight: "Institution",
   subtitle: "Recognised by official government initiatives & accredited ministries",
   certs: [
-    { src: "/msme.png", label: "MSME Registered", sub: "Ministry of MSME, Govt. of India" },
-    { src: "/001.png", label: "Recognized by DPIIT", sub: "Department for Promotion of Industry and Internal Trade" },
-    { src: "/dpiit.png", label: "DPIIT Recognised", sub: "Startup India, Govt. of India" },
+    { src: "/msme.webp", label: "MSME Registered", sub: "Ministry of MSME, Govt. of India" },
+    { src: "/001.webp", label: "Recognized by DPIIT", sub: "Department for Promotion of Industry and Internal Trade" },
+    { src: "/dpiit.webp", label: "DPIIT Recognised", sub: "Startup India, Govt. of India" },
   ],
 };
 

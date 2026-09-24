@@ -13,7 +13,7 @@ export default function CertificateShowcase() {
           <div className="flex items-center justify-center">
             <div className="relative transition-all duration-300 hover:scale-[1.02]">
               <Image
-                src="/images/treqo-official-certificate.png"
+                src="/images/treqo-official-certificate.webp"
                 alt="TREQO Certificate of Completion in Digital Marketing"
                 width={792}
                 height={1024}

@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
     root: path.resolve(__dirname),
   },
   images: {
+    formats: ["image/avif", "image/webp"],
     // Allow any local path with or without query strings.
     // This is required in Next.js 16+ for images served from
     // API routes like /api/admin/upload?id=...
@@ -30,6 +31,26 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+  },
+  async rewrites() {
+    return {
+      beforeFiles: [],
+      afterFiles: [],
+      fallback: [
+        {
+          source: "/:path*.png",
+          destination: "/:path*.webp",
+        },
+        {
+          source: "/:path*.jpg",
+          destination: "/:path*.webp",
+        },
+        {
+          source: "/:path*.jpeg",
+          destination: "/:path*.webp",
+        },
+      ],
+    };
   },
   async headers() {
     return [

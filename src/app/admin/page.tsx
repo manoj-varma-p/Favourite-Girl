@@ -289,7 +289,7 @@ export default function CustomAdminPanelPage() {
   const [pageSeo, setPageSeo] = useState<PageSeoItem[]>([]);
 
   const [navigationSettings, setNavigationSettings] = useState<NavigationSettings>({
-    bannerBadge: "BATCH 2 Ã‚Â· 50 SEATS",
+    bannerBadge: "BATCH 2 · 50 SEATS",
     bannerText: "Enrollments close on 4th October 2026.",
     bannerLinkText: "Explore the courses",
     bannerLinkHref: "/#courses",
@@ -297,7 +297,7 @@ export default function CustomAdminPanelPage() {
 
   const [homeContent, setHomeContent] = useState<HomePageContent>({
     hero: {
-      eyebrow: "COHORT ADMISSIONS OPEN Ã‚Â· 2026",
+      eyebrow: "COHORT ADMISSIONS OPEN · 2026",
       headlineLines: ["Leave with Skills", "you can implement.", "Not just a certificate"],
       description:
         "Four months. 12 phases. A real client at every stage. You finish holding campaigns you ran, numbers you own, and answers that hold up in an interview.",
@@ -347,7 +347,7 @@ export default function CustomAdminPanelPage() {
       },
     },
     executionProof: {
-      eyebrow: "BATCH 1 Ã‚Â· ALREADY HAPPENED",
+      eyebrow: "BATCH 1 · ALREADY HAPPENED",
       title: "Four names. All checkable.",
       description:
         "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
@@ -356,35 +356,35 @@ export default function CustomAdminPanelPage() {
           tag: "FOUNDER",
           name: "Somu Shekar",
           description: "Never went job-hunting. Co-founded Gesture Co while still in the course.",
-          photoUrl: "/uploads/alumni/somu-shekar.jpg",
+          photoUrl: "/uploads/alumni/somu-shekar.webp",
         },
         {
           tag: "FOUNDER",
           name: "Subhani",
           description: "Turned his capstone into a company. Founded JASS Media.",
-          photoUrl: "/uploads/alumni/subhani.jpg",
+          photoUrl: "/uploads/alumni/subhani.webp",
         },
         {
           tag: "PLACED IN 30 DAYS",
           name: "Dikshtha",
           description: "At Bristle Tech within a month of finishing.",
-          photoUrl: "/uploads/alumni/dikshtha.jpg",
+          photoUrl: "/uploads/alumni/dikshtha.webp",
         },
         {
           tag: "HIRED ON PORTFOLIO",
           name: "Harshit",
-          description: "Placed at TCS on the strength of the work, not the rÃƒÂ©sumÃƒÂ©.",
-          photoUrl: "/uploads/alumni/harshit.jpg",
+          description: "Placed at TCS on the strength of the work, not the résumé.",
+          photoUrl: "/uploads/alumni/harshit.webp",
         },
       ],
       metrics: [
         { value: "100%", label: "of Batch 1 placed or founding" },
-        { value: "Ã¢â€šÂ¹5L+", label: "earned for a client, mid-course" },
+        { value: "₹5L+", label: "earned for a client, mid-course" },
       ],
       companies: [
-        { name: "Gesture Co", logo: "/images/dark-gesture.png" },
-        { name: "JASS Media", logo: "/images/dark-jass-media.png" },
-        { name: "Bristle Tech", logo: "/images/dark-bristletech.png" },
+        { name: "Gesture Co", logo: "/images/dark-gesture.webp" },
+        { name: "JASS Media", logo: "/images/dark-jass-media.webp" },
+        { name: "Bristle Tech", logo: "/images/dark-bristletech.webp" },
       ],
     },
     mentors: {
@@ -421,20 +421,20 @@ export default function CustomAdminPanelPage() {
     id: "",
     title: "",
     href: "",
-    badge: "BATCH 2 Ã‚Â· OPEN",
-    duration: "4 months Ã‚Â· Online",
+    badge: "BATCH 2 · OPEN",
+    duration: "4 months · Online",
     description: "",
     isFlagship: false,
     isLocked: false,
-    batch: "Batch 2 Ã‚Â· Sep 2026",
-    feeTotal: "Ã¢â€šÂ¹55,000",
-    feeEmi: "Ã¢â€šÂ¹4,583 / month",
+    batch: "Batch 2 · Sep 2026",
+    feeTotal: "₹55,000",
+    feeEmi: "₹4,583 / month",
     curriculumPdf: "/treqo-curriculum.pdf",
     overview: "",
     applyCta: "Apply for Batch 2",
     syllabusCta: "Download Curriculum",
     image: "",
-    previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
+    previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
   });
   const [courseSearch, setCourseSearch] = useState("");
   const [courseFilter, setCourseFilter] = useState<"all" | "open" | "locked">("all");
@@ -623,10 +623,10 @@ export default function CustomAdminPanelPage() {
       return {
         ...c,
         isLocked: newLockState,
-        actionText: newLockState ? "Get notified Ã¢â€ â€™" : "View course Ã¢â€ â€™",
+        actionText: newLockState ? "Get notified →" : "View course →",
         badge: newLockState
           ? "COMING SOON"
-          : (c.badge === "COMING SOON" ? "BATCH 2 Ã‚Â· OPEN" : (c.badge || "BATCH 2 Ã‚Â· OPEN")),
+          : (c.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (c.badge || "BATCH 2 · OPEN")),
         badgeVariant: (newLockState
           ? "gray"
           : (c.badgeVariant === "gray" ? "blue" : (c.badgeVariant || "blue"))) as CourseItem["badgeVariant"],
@@ -664,21 +664,21 @@ export default function CustomAdminPanelPage() {
     setCourseForm({
       id: `course-${Date.now()}`,
       title: "",
-      href: "/categories/new-track",
-      badge: "BATCH 2 Ã‚Â· OPEN",
-      duration: "4 months Ã‚Â· Online",
+      href: "",
+      badge: "BATCH 2 · OPEN",
+      duration: "4 months · Online",
       description: "",
       isFlagship: false,
       isLocked: false,
-      batch: "Batch 2 Ã‚Â· Sep 2026",
-      feeTotal: "Ã¢â€šÂ¹55,000",
-      feeEmi: "Ã¢â€šÂ¹4,583 / month",
+      batch: "Batch 2 · Sep 2026",
+      feeTotal: "₹55,000",
+      feeEmi: "₹4,583 / month",
       curriculumPdf: "/treqo-curriculum.pdf",
       overview: "",
       applyCta: "Apply for Batch 2",
       syllabusCta: "Download Curriculum",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-      previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
+      previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
     });
     setShowManualCourseUrl(false);
     setIsCourseDragActive(false);
@@ -694,22 +694,22 @@ export default function CustomAdminPanelPage() {
       id: `course-${Date.now()}`,
       title: "New Curriculum Track",
       href: `/categories/track-${Date.now()}`,
-      badge: "BATCH 2 Ã‚Â· OPEN",
+      badge: "BATCH 2 · OPEN",
       badgeVariant: "blue",
-      duration: "4 months Ã‚Â· Online",
-      meta: "4 months Ã‚Â· Online",
+      duration: "4 months · Online",
+      meta: "4 months · Online",
       description: "Hands-on growth architecture with real client budgets, verified live campaigns, and mentor reviews.",
       isFlagship: false,
       isLocked: false,
-      batch: "Batch 2 Ã‚Â· Sep 2026",
-      feeTotal: "Ã¢â€šÂ¹55,000",
-      feeEmi: "Ã¢â€šÂ¹4,583 / month",
+      batch: "Batch 2 · Sep 2026",
+      feeTotal: "₹55,000",
+      feeEmi: "₹4,583 / month",
       curriculumPdf: "/treqo-curriculum.pdf",
       overview: "Graduates and early-career marketers wanting verifiable execution proof.\nWorking professionals seeking high-trajectory marketing roles.\nFounders scaling their own customer acquisition.",
       applyCta: "Apply for Batch 2",
       syllabusCta: "Download Curriculum",
       image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-      previewLabel: "CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW",
+      previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
     };
     setCourseInStudio(newCourse);
   }
@@ -887,15 +887,28 @@ export default function CustomAdminPanelPage() {
     e.preventDefault();
     setIsSaving(true);
     try {
+      // Resolve the slug: honour exactly what the user typed.
+      // If blank, auto-generate from title. Preserve /programs/ or any other prefix the user typed.
+      let rawHref = (courseForm.href || "").trim();
+      if (!rawHref) {
+        const autoSlug = formatCourseSlug(courseForm.title);
+        rawHref = autoSlug ? `/courses/${autoSlug}` : "";
+      }
+      // Ensure it starts with /
+      if (rawHref && !rawHref.startsWith("/")) rawHref = `/${rawHref}`;
+
+      const resolvedForm: CourseItem = {
+        ...courseForm,
+        id: courseForm.id || formatCourseSlug(rawHref) || `course-${Date.now()}`,
+        href: rawHref,
+        actionHref: rawHref,
+      };
+
       let updated: CourseItem[];
       if (editingCourse) {
-        updated = courses.map((c) => (c.id === editingCourse.id ? courseForm : c));
+        updated = courses.map((c) => (c.id === editingCourse.id ? resolvedForm : c));
       } else {
-        const newCourse: CourseItem = {
-          ...courseForm,
-          id: courseForm.id || `course-${Date.now()}`,
-        };
-        updated = [...courses, newCourse];
+        updated = [...courses, resolvedForm];
       }
       const res = await fetch("/api/admin/content", {
         method: "POST",
@@ -905,7 +918,7 @@ export default function CustomAdminPanelPage() {
       if (res.ok) {
         setCourses(updated);
         setIsCourseModalOpen(false);
-        notifySuccess("Course saved successfully!");
+        notifySuccess(`Course "${resolvedForm.title}" saved! Slug: ${resolvedForm.href}`);
       } else {
         notifyError("Failed to save course.");
       }
@@ -1764,7 +1777,7 @@ export default function CustomAdminPanelPage() {
             href="/"
             className="text-xs font-semibold text-[#5A4A5A] hover:text-[#3B0D3B] transition-colors"
           >
-            Ã¢â€ Â Return to public website
+            ← Return to public website
           </Link>
         </div>
       </div>
@@ -1866,7 +1879,7 @@ export default function CustomAdminPanelPage() {
                     onClick={() => setActiveTab("leads")}
                     className="rounded-2xl bg-white text-[#3B0D3B] px-5 py-3 text-xs font-black hover:bg-[#FAF5EE] transition-all shadow-md active:scale-95 cursor-pointer"
                   >
-                    View All CRM Leads Ã¢â€ â€™
+                    View All CRM Leads →
                   </button>
                 </div>
 
@@ -1950,16 +1963,16 @@ export default function CustomAdminPanelPage() {
                       id: "",
                       title: "",
                       description: "",
-                      badge: "BATCH 2 Ã‚Â· OPEN",
-                      duration: "4 months Ã‚Â· Online",
+                      badge: "BATCH 2 · OPEN",
+                      duration: "4 months · Online",
                       href: "/courses/",
                       image: "",
-                      previewLabel: "CLASSROOM Ã‚Â· SESSIONS",
+                      previewLabel: "CLASSROOM · SESSIONS",
                       isLocked: false,
                       isFlagship: false,
-                      batch: "Batch 2 Ã‚Â· Sep 2026",
-                      feeTotal: "Ã¢â€šÂ¹55,000",
-                      feeEmi: "Ã¢â€šÂ¹4,583 / month",
+                      batch: "Batch 2 · Sep 2026",
+                      feeTotal: "₹55,000",
+                      feeEmi: "₹4,583 / month",
                       applyCta: "Apply for Batch 2",
                       syllabusCta: "Download Curriculum",
                       curriculumPdf: "/treqo-curriculum.pdf",
@@ -2042,7 +2055,7 @@ export default function CustomAdminPanelPage() {
                     onClick={() => setActiveTab("leads")}
                     className="text-xs font-bold text-[#3B0D3B] hover:underline cursor-pointer"
                   >
-                    View all in CRM ({leads.length}) Ã¢â€ â€™
+                    View all in CRM ({leads.length}) →
                   </button>
                 </div>
 
@@ -2061,7 +2074,7 @@ export default function CustomAdminPanelPage() {
                           </div>
                           <div className="min-w-0">
                             <div className="text-xs font-bold text-[#0B0B0F] truncate">{lead.name}</div>
-                            <div className="text-[11px] text-[#5A4A5A] truncate">{lead.email} Ã‚Â· {lead.phone}</div>
+                            <div className="text-[11px] text-[#5A4A5A] truncate">{lead.email} · {lead.phone}</div>
                           </div>
                         </div>
 
@@ -2166,9 +2179,9 @@ export default function CustomAdminPanelPage() {
                     >
                       <option value="newest">Sort: Newest First</option>
                       <option value="oldest">Sort: Oldest First</option>
-                      <option value="name-asc">Sort: Name (A Ã¢â€ â€™ Z)</option>
-                      <option value="name-desc">Sort: Name (Z Ã¢â€ â€™ A)</option>
-                      <option value="course-asc">Sort: Course (A Ã¢â€ â€™ Z)</option>
+                      <option value="name-asc">Sort: Name (A → Z)</option>
+                      <option value="name-desc">Sort: Name (Z → A)</option>
+                      <option value="course-asc">Sort: Course (A → Z)</option>
                     </select>
                   </div>
                 </div>
@@ -2659,7 +2672,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={navigationSettings.bannerBadge}
                     onChange={(e) => setNavigationSettings({ ...navigationSettings, bannerBadge: e.target.value })}
-                    placeholder="e.g. BATCH 2 Ã‚Â· 50 SEATS"
+                    placeholder="e.g. BATCH 2 · 50 SEATS"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-sm font-semibold text-[#0B0B0F] focus:border-[#3B0D3B] focus:outline-none"
                   />
                 </div>
@@ -3118,7 +3131,7 @@ export default function CustomAdminPanelPage() {
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-3">
                       <div>
                         <div className="text-[11px] text-[#5A4A5A]">
-                          {blog.publishedAt} Ã‚Â· {blog.readTime}
+                          {blog.publishedAt} · {blog.readTime}
                         </div>
                         <h3 className="mt-1 font-bold text-base text-[#0B0B0F] line-clamp-2">{blog.title}</h3>
                         <p className="mt-2 text-xs text-[#5A4A5A] line-clamp-2 leading-relaxed">{blog.excerpt}</p>
@@ -3347,7 +3360,7 @@ export default function CustomAdminPanelPage() {
                                 <StatusBadge status="active" label={course.badge || "OPEN"} />
                               )}
                               <span className="text-xs font-semibold text-[#5A4A5A]">
-                                {course.duration || course.meta || "4 months Ã‚Â· Online"}
+                                {course.duration || course.meta || "4 months · Online"}
                               </span>
                             </div>
 
@@ -3368,7 +3381,7 @@ export default function CustomAdminPanelPage() {
                                   Batch
                                 </span>
                                 <span className="font-bold text-[#0B0B0F] truncate block mt-0.5">
-                                  {course.batch || "Batch 2 Ã‚Â· Sep 2026"}
+                                  {course.batch || "Batch 2 · Sep 2026"}
                                 </span>
                               </div>
                               <div className="rounded-2xl bg-[#FAF5EE]/60 p-2.5 border border-[#3B0D3B]/10">
@@ -3376,7 +3389,7 @@ export default function CustomAdminPanelPage() {
                                   Fee &amp; EMI
                                 </span>
                                 <span className="font-bold text-[#3B0D3B] truncate block mt-0.5">
-                                  {course.feeTotal || "Ã¢â€šÂ¹55,000"} {course.feeEmi ? `(${course.feeEmi})` : ""}
+                                  {course.feeTotal || "₹55,000"} {course.feeEmi ? `(${course.feeEmi})` : ""}
                                 </span>
                               </div>
                             </div>
@@ -3413,7 +3426,7 @@ export default function CustomAdminPanelPage() {
                                 onClick={() => openCourseStudio(course)}
                                 className="text-xs sm:text-sm font-bold text-[#3B0D3B] hover:text-[#2A082A] transition-colors inline-flex items-center gap-1 cursor-pointer"
                               >
-                                <span>Studio Ã¢â€ â€™</span>
+                                <span>Studio →</span>
                               </button>
                             </div>
                           </div>
@@ -3911,7 +3924,7 @@ export default function CustomAdminPanelPage() {
                       Email Alert Dispatch: {alertSettings.emailAlertsEnabled ? "Active" : "Paused"}
                     </h3>
                     <p className="text-xs text-[#5A4A5A]">
-                      {alertSettings.emailAlertsEnabled ? "Ã¢Å“â€œ Instant Student Lead Alerts Active" : "Ã¢Å“â€” Email Alerts Paused"}
+                      {alertSettings.emailAlertsEnabled ? "✔ Instant Student Lead Alerts Active" : "✘ Email Alerts Paused"}
                     </p>
                   </div>
                 </div>
@@ -3937,7 +3950,7 @@ export default function CustomAdminPanelPage() {
                   <div className="font-semibold">{testAlertResult}</div>
                   {testAlertResult.includes("Resend Sandbox Restriction") && (
                     <div className="mt-2.5 text-[11px] text-rose-700 leading-relaxed border-t border-rose-200 pt-2">
-                      Ã°Å¸â€™Â¡ <strong>Why this happens:</strong> Resend&apos;s free development sandbox (<code>onboarding@resend.dev</code>) only delivers to the Resend account owner&apos;s email (<code>plmanojvarma@gmail.com</code>).
+                      💡 <strong>Why this happens:</strong> Resend&apos;s free development sandbox (<code>onboarding@resend.dev</code>) only delivers to the Resend account owner&apos;s email (<code>plmanojvarma@gmail.com</code>).
                       <br />
                       <strong>To send to other emails:</strong> You can either test with <code>plmanojvarma@gmail.com</code>, or add and verify your custom domain (e.g. <code>treqo.org</code>) at{" "}
                       <a
@@ -3993,7 +4006,7 @@ export default function CustomAdminPanelPage() {
                       When a student submits any application or syllabus form, their full details will be emailed to these inboxes immediately.
                     </p>
                     <p className="text-[11px] text-amber-800 mt-1.5 bg-amber-50 border border-amber-200 p-2.5 rounded-xl leading-relaxed">
-                      Ã¢Å¡Â Ã¯Â¸Â <strong>Resend Free Sandbox Note:</strong> While using <code>onboarding@resend.dev</code>, Resend only allows delivery to the account owner (<code>plmanojvarma@gmail.com</code>). To receive leads on other emails, verify your domain at Resend.com.
+                      ⚡ ️ <strong>Resend Free Sandbox Note:</strong> While using <code>onboarding@resend.dev</code>, Resend only allows delivery to the account owner (<code>plmanojvarma@gmail.com</code>). To receive leads on other emails, verify your domain at Resend.com.
                     </p>
                   </div>
 
@@ -4077,7 +4090,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={formSettings.heroFormSubtitle || ""}
                       onChange={(e) => setFormSettings({ ...formSettings, heroFormSubtitle: e.target.value })}
-                      placeholder="e.g. Live cohort starts soon Ã‚Â· Limited seats"
+                      placeholder="e.g. Live cohort starts soon · Limited seats"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-slate-400 focus:border-[#3B0D3B] focus:outline-none"
                     />
                   </div>
@@ -4429,7 +4442,7 @@ export default function CustomAdminPanelPage() {
                       <FolderOpen className="h-3 w-3 text-[#3B0D3B]" />
                       Browse Media
                     </button>
-                    <span className="text-[#3B0D3B]/20 text-xs">Ã‚Â·</span>
+                    <span className="text-[#3B0D3B]/20 text-xs">·</span>
                     <button
                       type="button"
                       onClick={() => setShowManualBlogUrl(!showManualBlogUrl)}
@@ -4867,7 +4880,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.previewLabel || ""}
                     onChange={(e) => setCourseForm({ ...courseForm, previewLabel: e.target.value })}
-                    placeholder="e.g. CLASSROOM Ã‚Â· CEO CHALLENGE REVIEW"
+                    placeholder="e.g. CLASSROOM · CEO CHALLENGE REVIEW"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
@@ -4880,7 +4893,7 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.badge}
                     onChange={(e) => setCourseForm({ ...courseForm, badge: e.target.value })}
-                    placeholder="e.g. BATCH 2 Ã‚Â· OPEN"
+                    placeholder="e.g. BATCH 2 · OPEN"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
@@ -4891,21 +4904,40 @@ export default function CustomAdminPanelPage() {
                     type="text"
                     value={courseForm.duration}
                     onChange={(e) => setCourseForm({ ...courseForm, duration: e.target.value })}
-                    placeholder="e.g. 4 months Ã‚Â· Online"
+                    placeholder="e.g. 4 months · Online"
                     className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="text-xs font-bold text-[#0B0B0F]">Course URL / Slug</label>
+                <div className="flex items-center justify-between">
+                  <label className="text-xs font-bold text-[#0B0B0F]">Course URL / Slug</label>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const auto = formatCourseSlug(courseForm.title);
+                      if (auto) setCourseForm({ ...courseForm, href: `/courses/${auto}`, actionHref: `/courses/${auto}` });
+                    }}
+                    className="text-[10px] font-semibold text-[#3B0D3B] hover:underline flex items-center gap-1 cursor-pointer"
+                    title="Auto-generate slug from title"
+                  >
+                    <Sparkles className="h-2.5 w-2.5" />
+                    Auto-generate from title
+                  </button>
+                </div>
                 <input
                   type="text"
                   value={courseForm.href}
-                  onChange={(e) => setCourseForm({ ...courseForm, href: e.target.value })}
+                  onChange={(e) => setCourseForm({ ...courseForm, href: e.target.value, actionHref: e.target.value })}
                   placeholder="/courses/digital-marketing"
-                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
+                  className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs font-mono text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
+                {courseForm.href && (
+                  <p className="mt-1 text-[10px] text-[#5A4A5A]">
+                    Live URL: <code className="font-mono font-bold text-[#3B0D3B]">{courseForm.href.startsWith("/") ? courseForm.href : `/${courseForm.href}`}</code>
+                  </p>
+                )}
               </div>
 
               <div>
@@ -4933,7 +4965,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.batch || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, batch: e.target.value })}
-                      placeholder="e.g. Batch 2 Ã‚Â· Sep 2026"
+                      placeholder="e.g. Batch 2 · Sep 2026"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -4957,7 +4989,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.feeTotal || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeTotal: e.target.value })}
-                      placeholder="e.g. Ã¢â€šÂ¹55,000"
+                      placeholder="e.g. ₹55,000"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -4968,7 +5000,7 @@ export default function CustomAdminPanelPage() {
                       type="text"
                       value={courseForm.feeEmi || ""}
                       onChange={(e) => setCourseForm({ ...courseForm, feeEmi: e.target.value })}
-                      placeholder="e.g. Ã¢â€šÂ¹4,583 / month"
+                      placeholder="e.g. ₹4,583 / month"
                       className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                     />
                   </div>
@@ -5041,7 +5073,7 @@ export default function CustomAdminPanelPage() {
                   />
                   <div>
                     <span className="text-xs font-bold text-[#0B0B0F] block">Lock Course</span>
-                    <span className="text-[10px] text-[#5A4A5A]">Shows &quot;Ã°Å¸â€â€™ Locked&quot; badge</span>
+                    <span className="text-[10px] text-[#5A4A5A]">Shows &quot;🔒 Locked&quot; badge</span>
                   </div>
                 </label>
 
@@ -5141,7 +5173,7 @@ export default function CustomAdminPanelPage() {
                   type="text"
                   value={tutorForm.brandMetric || ""}
                   onChange={(e) => setTutorForm({ ...tutorForm, brandMetric: e.target.value })}
-                  placeholder="e.g. Ã¢â€šÂ¹10Cr+ Ad Spend Managed, Ex-Amex Lead, or 3.8x Avg ROAS"
+                  placeholder="e.g. ₹10Cr+ Ad Spend Managed, Ex-Amex Lead, or 3.8x Avg ROAS"
                   className="mt-1.5 w-full rounded-xl border border-[#3B0D3B]/15 bg-white px-4 py-2.5 text-xs text-[#0B0B0F] placeholder:text-[#5A4A5A]/50 focus:border-[#3B0D3B] focus:ring-1 focus:ring-[#3B0D3B]/20 focus:outline-none transition-all"
                 />
                 <p className="text-[10px] text-[#5A4A5A] mt-1">Displayed as the verified credential badge on the mentor card.</p>
@@ -5324,7 +5356,7 @@ export default function CustomAdminPanelPage() {
                   />
                   <div>
                     <span className="text-xs font-bold text-[#0B0B0F] block">
-                      {tutorForm.isLocked ? "Ã°Å¸â€â€™ Lock Mentor (Coming Soon Mode)" : "Ã°Å¸â€â€œ Mentor Profile Active (Live)"}
+                      {tutorForm.isLocked ? "🔒 Lock Mentor (Coming Soon Mode)" : "🔓 Mentor Profile Active (Live)"}
                     </span>
                     <span className="text-[10px] text-[#5A4A5A]">
                       {tutorForm.isLocked

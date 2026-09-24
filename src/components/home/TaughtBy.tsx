@@ -9,12 +9,12 @@ import { tutors as staticTutors } from "@/data/home";
 import type { TutorItem, MentorsSectionContent } from "@/lib/content-db";
 
 const DEFAULT_TUTOR_PHOTOS: Record<string, string> = {
-  "Mohit Goel": "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.png",
-  "Deeptika Bajaj": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.png",
-  "Megha Punjabi": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.png",
-  "Akshat Aggarwal": "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.png",
-  "Prateek Narang": "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.png",
-  "Ritika Sharma": "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.png",
+  "Mohit Goel": "/uploads/tutors/chatgpt-image-sep-21--2026--04-1789988931113-hbh1.webp",
+  "Deeptika Bajaj": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789987659833-7bba.webp",
+  "Megha Punjabi": "/uploads/tutors/chatgpt_image_sep_21__2026__04-1789988219758-5cu9.webp",
+  "Akshat Aggarwal": "/uploads/tutors/screenshot-2026-09-21-163115-1789988498703-f4d3.webp",
+  "Prateek Narang": "/uploads/tutors/screenshot-2026-09-21-163115-1789988506460-6n42.webp",
+  "Ritika Sharma": "/uploads/tutors/screenshot-2026-09-21-163115-1789988514964-tz86.webp",
 };
 
 const TUTOR_INSIGHTS: Record<

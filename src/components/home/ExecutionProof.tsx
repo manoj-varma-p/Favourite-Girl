@@ -16,10 +16,10 @@ function initials(name: string) {
 }
 
 const DEFAULT_ALUMNI_PHOTOS: Record<string, string> = {
-  "Somu Shekar": "/uploads/alumni/somu-shekar.jpg",
-  "Subhani": "/uploads/alumni/subhani.jpg",
-  "Dikshtha": "/uploads/alumni/dikshtha.jpg",
-  "Harshit": "/uploads/alumni/harshit.jpg",
+  "Somu Shekar": "/uploads/alumni/somu-shekar.webp",
+  "Subhani": "/uploads/alumni/subhani.webp",
+  "Dikshtha": "/uploads/alumni/dikshtha.webp",
+  "Harshit": "/uploads/alumni/harshit.webp",
 };
 
 const defaultOutcomes = [
@@ -27,40 +27,40 @@ const defaultOutcomes = [
     tag: "FOUNDER",
     name: "Somu Shekar",
     description: "Never went job-hunting. Co-founded Gesture Co while still in the course.",
-    photoUrl: "/uploads/alumni/somu-shekar.jpg",
+    photoUrl: "/uploads/alumni/somu-shekar.webp",
   },
   {
     tag: "FOUNDER",
     name: "Subhani",
     description: "Turned his capstone into a company. Founded JASS Media.",
-    photoUrl: "/uploads/alumni/subhani.jpg",
+    photoUrl: "/uploads/alumni/subhani.webp",
   },
   {
     tag: "PLACED IN 30 DAYS",
     name: "Dikshtha",
     description: "At Bristle Tech within a month of finishing.",
-    photoUrl: "/uploads/alumni/dikshtha.jpg",
+    photoUrl: "/uploads/alumni/dikshtha.webp",
   },
   {
     tag: "HIRED ON PORTFOLIO",
     name: "Harshit",
     description: "Placed at TCS on the strength of the work, not the résumé.",
-    photoUrl: "/uploads/alumni/harshit.jpg",
+    photoUrl: "/uploads/alumni/harshit.webp",
   },
 ];
 
 const defaultCompanies = [
   {
     name: "Gesture Co",
-    logo: "/images/dark-gesture.png",
+    logo: "/images/dark-gesture.webp",
   },
   {
     name: "JASS Media",
-    logo: "/images/dark-jass-media.png",
+    logo: "/images/dark-jass-media.webp",
   },
   {
     name: "Bristle Tech",
-    logo: "/images/dark-bristletech.png",
+    logo: "/images/dark-bristletech.webp",
   },
 ];
 
@@ -389,12 +389,12 @@ export default function ExecutionProof({ content }: { content?: ExecutionProofCo
               <div className="grid grid-cols-3 gap-2.5 sm:gap-3">
                 {companies.map((item) => {
                   const logoSrc =
-                    item.logo === "/images/gesture.png"
-                      ? "/images/dark-gesture.png"
-                      : item.logo === "/images/jass-media.png"
-                        ? "/images/dark-jass-media.png"
-                        : item.logo === "/images/bristletech.png"
-                          ? "/images/dark-bristletech.png"
+                    item.logo === "/images/gesture.png" || item.logo === "/images/gesture.webp"
+                      ? "/images/dark-gesture.webp"
+                      : item.logo === "/images/jass-media.png" || item.logo === "/images/jass-media.webp"
+                        ? "/images/dark-jass-media.webp"
+                        : item.logo === "/images/bristletech.png" || item.logo === "/images/bristletech.webp"
+                          ? "/images/dark-bristletech.webp"
                           : item.logo;
 
                   return (

@@ -28,7 +28,7 @@ interface ProgramCard {
 const defaultPrograms: ProgramCard[] = [
   {
     id: "digital-marketing",
-    image: "/images/course1.png",
+    image: "/images/course1.webp",
     previewLabel: "CLASSROOM · CEO CHALLENGE REVIEW",
     badge: { text: "BATCH 2 · OPEN", variant: "blue" },
     meta: "4 months · Online",
@@ -120,13 +120,19 @@ function mapCourseToProgramCard(c: any): ProgramCard {
   const actionText = isLocked
     ? "Get notified →"
     : (c.actionText && !c.actionText.toLowerCase().includes("notif") ? c.actionText : "View course →");
-  const cleanSlug = (c.href || c.actionHref || c.id || "")
-    .toLowerCase()
-    .trim()
-    .replace(/^\/+/, "")
-    .replace(/^categories\//, "")
-    .replace(/\/+$/, "");
-  const targetHref = `/categories/${cleanSlug || c.id}`;
+
+  // Use the stored href directly (could be /courses/..., /programs/..., or any custom path)
+  // Fall back to building from id only if nothing is set
+  let actionHref = (c.actionHref || c.href || "").trim();
+  if (!actionHref) {
+    actionHref = `/courses/${c.id || ""}`;
+  } else if (!actionHref.startsWith("/")) {
+    actionHref = `/${actionHref}`;
+  }
+  // Legacy /categories/ hrefs (static data): redirect via /courses/
+  if (actionHref.startsWith("/categories/")) {
+    actionHref = actionHref.replace("/categories/", "/courses/");
+  }
 
   return {
     id: c.id,
@@ -142,7 +148,7 @@ function mapCourseToProgramCard(c: any): ProgramCard {
     title: c.title,
     description: c.description,
     actionText,
-    actionHref: targetHref,
+    actionHref,
     tags: Array.isArray(c.tags) && c.tags.length > 0 ? c.tags : ["All"],
     isLocked,
   };

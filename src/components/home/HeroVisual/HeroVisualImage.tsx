@@ -9,7 +9,7 @@ interface HeroVisualImageProps {
   className?: string;
 }
 
-const DEFAULT_SRC = "/images/treqo-hero-learner.png";
+const DEFAULT_SRC = "/images/treqo-hero-learner.webp";
 
 export default function HeroVisualImage({
   src = DEFAULT_SRC,

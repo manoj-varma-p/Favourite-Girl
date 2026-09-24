@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 import type { GovCertsContent } from "@/lib/content-db";
 
 const defaultCerts = [
-  { src: "/msme.png", label: "MSME Registered", sub: "Ministry of MSME, Govt. of India" },
-  { src: "/001.png", label: "Recognized by DPIIT", sub: "Department for Promotion of Industry and Internal Trade" },
-  { src: "/dpiit.png", label: "DPIIT Recognised", sub: "Startup India, Govt. of India" },
+  { src: "/msme.webp", label: "MSME Registered", sub: "Ministry of MSME, Govt. of India" },
+  { src: "/001.webp", label: "Recognized by DPIIT", sub: "Department for Promotion of Industry and Internal Trade" },
+  { src: "/dpiit.webp", label: "DPIIT Recognised", sub: "Startup India, Govt. of India" },
 ];
 
 export function GovCertSection({ content }: { content?: GovCertsContent }) {

@@ -53,10 +53,13 @@ async function resolveCourseMeta(slug: string, preloadedCourses?: CourseItem[]) 
   });
 
   if (dbCourse) {
-    const canonicalSlug = formatCourseSlug(dbCourse.href) || formatCourseSlug(dbCourse.id) || targetSlug;
+    // Use the stored href as-is; only fall back to /courses/<slug> if href is blank
+    const resolvedHref = dbCourse.href && dbCourse.href.startsWith("/")
+      ? dbCourse.href
+      : `/courses/${formatCourseSlug(dbCourse.href) || formatCourseSlug(dbCourse.id) || targetSlug}`;
     return {
       label: dbCourse.title,
-      href: `/courses/${canonicalSlug}`,
+      href: resolvedHref,
       icon: undefined as any,
       dbCourse,
     };
@@ -211,7 +214,7 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
     id: cleanSlug,
     title: activeTitle,
     description: activeDescription,
-    href: dbCourse?.href ? dbCourse.href.replace(/^\/categories\//, "/courses/") : `/courses/${cleanSlug}`,
+    href: dbCourse?.href && dbCourse.href.startsWith("/") ? dbCourse.href : `/courses/${cleanSlug}`,
   };
 
   const isOnline = cleanSlug === "digital-marketing" || (!cleanSlug.includes("4m") && !cleanSlug.includes("offline"));

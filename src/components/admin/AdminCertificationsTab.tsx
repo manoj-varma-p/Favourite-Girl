@@ -36,7 +36,7 @@ const defaultCertifications: CertificationsContent = {
   treqoDescription:
     "Awarded on completion of your capstone project: a real campaign, built & launched with real numbers attached.",
   treqoTags: ["Live Spend Defense", "Verified ROAS", "Agency Capstone"],
-  treqoCertificateImage: "/images/treqo-official-certificate.png",
+  treqoCertificateImage: "/images/treqo-official-certificate.webp",
   treqoCaption:
     "Verifiable credential directly reviewed by placement hiring managers.",
   industryBadge: "GLOBAL CREDENTIALS",

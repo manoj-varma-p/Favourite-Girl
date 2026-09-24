@@ -111,10 +111,11 @@ export default function AdminCourseEditor({
   onSelectCourse,
   onSaved,
 }: Props) {
+  // Load the course exactly as stored — do not rewrite the slug
   const [course, setCourse] = useState<CourseItem>(() => ({
     ...initialCourse,
-    href: (initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : "")).replace(/^\/categories\//, "/courses/"),
-    actionHref: (initialCourse.actionHref || initialCourse.href || "").replace(/^\/categories\//, "/courses/"),
+    href: initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : ""),
+    actionHref: initialCourse.actionHref || initialCourse.href || "",
   }));
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
@@ -122,8 +123,8 @@ export default function AdminCourseEditor({
   useEffect(() => {
     setCourse({
       ...initialCourse,
-      href: (initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : "")).replace(/^\/categories\//, "/courses/"),
-      actionHref: (initialCourse.actionHref || initialCourse.href || "").replace(/^\/categories\//, "/courses/"),
+      href: initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : ""),
+      actionHref: initialCourse.actionHref || initialCourse.href || "",
     });
   }, [initialCourse.id]);
 
@@ -187,33 +188,32 @@ export default function AdminCourseEditor({
     }
   }
 
-  // Save course to DB
+  // Save course to DB — preserves the exact slug the user typed
   async function handleSave(e?: React.FormEvent) {
     if (e) e.preventDefault();
     setIsSaving(true);
     setStatusMsg(null);
 
     try {
-      let rawHref = (course.href || "").trim().replace(/^\/categories\//, "/courses/");
-      const cleanSlug = formatCourseSlug(rawHref) || formatCourseSlug(course.id) || formatCourseSlug(course.title);
-      let canonicalPath = rawHref;
-      if (!canonicalPath) {
-        canonicalPath = `/courses/${cleanSlug}`;
-      } else if (!canonicalPath.startsWith("/")) {
-        canonicalPath = `/courses/${canonicalPath.replace(/^courses\//, "")}`;
+      // Use the slug exactly as typed. Only auto-generate if blank.
+      let slug = (course.href || "").trim();
+      if (!slug) {
+        const autoSlug = formatCourseSlug(course.id) || formatCourseSlug(course.title);
+        slug = autoSlug ? `/courses/${autoSlug}` : "";
       }
+      // Ensure it starts with /
+      if (slug && !slug.startsWith("/")) slug = `/${slug}`;
 
       const normalizedCourse: CourseItem = {
         ...course,
-        id: course.id || cleanSlug,
-        href: canonicalPath,
-        actionHref: canonicalPath,
+        id: course.id || formatCourseSlug(slug) || `course-${Date.now()}`,
+        href: slug,
+        actionHref: slug,
       };
 
       const updatedList = allCourses.map((c) =>
         (c.id === normalizedCourse.id || c.href === normalizedCourse.href ? normalizedCourse : c)
       );
-      // If course is new and not in list yet, append it
       if (!updatedList.some((c) => c.id === normalizedCourse.id)) {
         updatedList.push(normalizedCourse);
       }
@@ -226,7 +226,7 @@ export default function AdminCourseEditor({
 
       if (res.ok) {
         setCourse(normalizedCourse);
-        setStatusMsg({ type: "success", text: `"${normalizedCourse.title}" saved successfully!` });
+        setStatusMsg({ type: "success", text: `"${normalizedCourse.title}" saved! Slug: ${normalizedCourse.href}` });
         onSaved(updatedList, normalizedCourse);
       } else {
         setStatusMsg({ type: "error", text: "Failed to save course changes." });
@@ -238,7 +238,7 @@ export default function AdminCourseEditor({
     }
   }
 
-  // Helper to toggle lock state
+  // Helper to toggle lock state — preserves the slug exactly
   function toggleLockState() {
     setCourse((prev) => {
       const nextLocked = !prev.isLocked;
@@ -249,8 +249,7 @@ export default function AdminCourseEditor({
         badge: nextLocked ? "COMING SOON" : (prev.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (prev.badge || "BATCH 2 · OPEN")),
         badgeVariant: nextLocked ? "gray" : (prev.badgeVariant === "gray" ? "blue" : (prev.badgeVariant || "blue")),
         applyCta: nextLocked ? "Notify Me When Open" : (prev.applyCta === "Notify Me When Open" ? "Apply for Batch 2" : (prev.applyCta || "Apply for Batch 2")),
-        href: prev.href || `/categories/${prev.id}`,
-        actionHref: prev.actionHref || prev.href || `/categories/${prev.id}`,
+        // slug unchanged
       };
     });
   }
@@ -755,9 +754,18 @@ export default function AdminCourseEditor({
                       className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 text-xs font-semibold font-mono text-slate-800 focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-colors"
                     />
                     <div className="mt-1 flex items-center justify-between text-[10px] text-[#8C6A8C]">
-                      <span>Live Route: <code className="text-[#3B0D3B] font-mono font-bold">{course.href ? course.href.replace(/^\/categories\//, "/courses/") : (course.id ? `/courses/${course.id}` : "")}</code></span>
+                      <span>
+                        Live Route:{" "}
+                        <code className="text-[#3B0D3B] font-mono font-bold">
+                          {course.href
+                            ? (course.href.startsWith("/") ? course.href : `/${course.href}`)
+                            : (course.id ? `/courses/${course.id}` : "")}
+                        </code>
+                      </span>
                       <Link
-                        href={course.href ? course.href.replace(/^\/categories\//, "/courses/") : `/courses/${course.id}`}
+                        href={course.href
+                          ? (course.href.startsWith("/") ? course.href : `/${course.href}`)
+                          : `/courses/${course.id}`}
                         target="_blank"
                         className="inline-flex items-center gap-1 text-[10px] text-[#3B0D3B] hover:underline font-semibold"
                       >

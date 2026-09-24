@@ -16,19 +16,19 @@ const defaultExecutionProof: ExecutionProofContent = {
   title: "Four names. All checkable.",
   description: "One batch is a small sample and we won't dress it up as an industry statistic. What we will say: every outcome below is a person you can look up.",
   outcomes: [
-    { tag: "FOUNDER", name: "Somu Shekar", description: "Never went job-hunting. Co-founded Gesture Co while still in the course.", photoUrl: "/uploads/alumni/somu-shekar.jpg" },
-    { tag: "FOUNDER", name: "Subhani", description: "Turned his capstone into a company. Founded JASS Media.", photoUrl: "/uploads/alumni/subhani.jpg" },
-    { tag: "PLACED IN 30 DAYS", name: "Dikshtha", description: "At Bristle Tech within a month of finishing.", photoUrl: "/uploads/alumni/dikshtha.jpg" },
-    { tag: "HIRED ON PORTFOLIO", name: "Harshit", description: "Placed at TCS on the strength of the work, not the résumé.", photoUrl: "/uploads/alumni/harshit.jpg" },
+    { tag: "FOUNDER", name: "Somu Shekar", description: "Never went job-hunting. Co-founded Gesture Co while still in the course.", photoUrl: "/uploads/alumni/somu-shekar.webp" },
+    { tag: "FOUNDER", name: "Subhani", description: "Turned his capstone into a company. Founded JASS Media.", photoUrl: "/uploads/alumni/subhani.webp" },
+    { tag: "PLACED IN 30 DAYS", name: "Dikshtha", description: "At Bristle Tech within a month of finishing.", photoUrl: "/uploads/alumni/dikshtha.webp" },
+    { tag: "HIRED ON PORTFOLIO", name: "Harshit", description: "Placed at TCS on the strength of the work, not the résumé.", photoUrl: "/uploads/alumni/harshit.webp" },
   ],
   metrics: [
     { value: "100%", label: "of Batch 1 placed or founding" },
     { value: "₹5L+", label: "earned for a client, mid-course" },
   ],
   companies: [
-    { name: "Gesture Co", logo: "/images/dark-gesture.png" },
-    { name: "JASS Media", logo: "/images/dark-jass-media.png" },
-    { name: "Bristle Tech", logo: "/images/dark-bristletech.png" },
+    { name: "Gesture Co", logo: "/images/dark-gesture.webp" },
+    { name: "JASS Media", logo: "/images/dark-jass-media.webp" },
+    { name: "Bristle Tech", logo: "/images/dark-bristletech.webp" },
   ],
   story: "That ₹5L came out of Gesture Co's Diwali campaign briefed, built, run and reported by students who hadn't graduated yet. Batch 2 gets measured against it.",
 };

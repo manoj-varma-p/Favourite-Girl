@@ -163,7 +163,7 @@ export default function CertificationSection({ content }: { content?: Certificat
     ? content.treqoTags
     : ["Live Spend Defense", "Verified ROAS", "Agency Capstone"];
 
-  const certificateImage = content?.treqoCertificateImage || "/images/treqo-official-certificate.png";
+  const certificateImage = content?.treqoCertificateImage || "/images/treqo-official-certificate.webp";
 
   return (
     <section

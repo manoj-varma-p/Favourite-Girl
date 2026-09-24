@@ -18,6 +18,7 @@ import CategoryFaqAccordion from "@/components/category/CategoryFaqAccordion";
 import MobileEnrollBar from "@/components/category/MobileEnrollBar";
 import CourseHeroForm from "@/components/category/CourseHeroForm";
 import CoursePerksBox from "@/components/category/CoursePerksBox";
+import ProgramOverviewHighlights from "@/components/category/ProgramOverviewHighlights";
 import { learningSystemCourses } from "@/data/home";
 import { megaMenuData } from "@/data/navigation";
 import { getCoursesFromDb, getPageSeoByPath, type CourseItem } from "@/lib/content-db";
@@ -580,6 +581,9 @@ export default async function CourseDetailPage({ params }: { params: Promise<{ s
                     )}
 
                     <div className={cn("flex flex-col gap-12 sm:gap-16", isLocked && "opacity-75 pointer-events-none select-none")}>
+                      {/* Program Overview & Highlights (Responsive Desktop/Mobile) */}
+                      <ProgramOverviewHighlights />
+
                       {/* 1. Phases */}
                       <section id="phases" className="scroll-mt-28 sm:scroll-mt-32">
                         <PhaseAccordion groups={detail.phases.groups} />

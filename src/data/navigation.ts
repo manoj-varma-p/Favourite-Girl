@@ -46,12 +46,12 @@ export const megaMenuData: MegaMenuData = {
     {
       title: "Popular Courses",
       links: [
-        { label: "New Age Digital Marketing", href: "/categories/digital-marketing" },
-        { label: "Campus Edition (On Campus)", href: "/categories/4m-program" },
-        { label: "Fundamentals of Marketing", href: "/categories/fundamentals" },
-        { label: "Treqo PGDM", href: "/categories/pgdm" },
-        { label: "The Founder Semester", href: "/categories/founder-semester" },
-        { label: "Performance & Growth Specialist", href: "/categories/performance-growth" },
+        { label: "New Age Digital Marketing", href: "/courses/digital-marketing" },
+        { label: "Campus Edition (On Campus)", href: "/courses/4m-program" },
+        { label: "Fundamentals of Marketing", href: "/courses/fundamentals" },
+        { label: "Treqo PGDM", href: "/courses/pgdm" },
+        { label: "The Founder Semester", href: "/courses/founder-semester" },
+        { label: "Performance & Growth Specialist", href: "/courses/performance-growth" },
       ],
     },
     {

@@ -28,6 +28,7 @@ import {
   Tag,
   Globe,
   Compass,
+  Loader2,
 } from "lucide-react";
 import { formatCourseSlug } from "@/lib/seo-utils";
 import type {
@@ -110,13 +111,21 @@ export default function AdminCourseEditor({
   onSelectCourse,
   onSaved,
 }: Props) {
-  const [course, setCourse] = useState<CourseItem>(initialCourse);
+  const [course, setCourse] = useState<CourseItem>(() => ({
+    ...initialCourse,
+    href: (initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : "")).replace(/^\/categories\//, "/courses/"),
+    actionHref: (initialCourse.actionHref || initialCourse.href || "").replace(/^\/categories\//, "/courses/"),
+  }));
   const [isSaving, setIsSaving] = useState(false);
   const [statusMsg, setStatusMsg] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   useEffect(() => {
-    setCourse(initialCourse);
-  }, [initialCourse]);
+    setCourse({
+      ...initialCourse,
+      href: (initialCourse.href || (initialCourse.id ? `/courses/${initialCourse.id}` : "")).replace(/^\/categories\//, "/courses/"),
+      actionHref: (initialCourse.actionHref || initialCourse.href || "").replace(/^\/categories\//, "/courses/"),
+    });
+  }, [initialCourse.id]);
 
   // Upload image states
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -185,8 +194,14 @@ export default function AdminCourseEditor({
     setStatusMsg(null);
 
     try {
-      const cleanSlug = formatCourseSlug(course.href) || formatCourseSlug(course.id) || formatCourseSlug(course.title);
-      const canonicalPath = `/categories/${cleanSlug}`;
+      let rawHref = (course.href || "").trim().replace(/^\/categories\//, "/courses/");
+      const cleanSlug = formatCourseSlug(rawHref) || formatCourseSlug(course.id) || formatCourseSlug(course.title);
+      let canonicalPath = rawHref;
+      if (!canonicalPath) {
+        canonicalPath = `/courses/${cleanSlug}`;
+      } else if (!canonicalPath.startsWith("/")) {
+        canonicalPath = `/courses/${canonicalPath.replace(/^courses\//, "")}`;
+      }
 
       const normalizedCourse: CourseItem = {
         ...course,
@@ -527,7 +542,7 @@ export default function AdminCourseEditor({
           </div>
 
           <Link
-            href={course.href || `/categories/${course.id}`}
+            href={course.href ? course.href.replace(/^\/categories\//, "/courses/") : `/courses/${course.id}`}
             target="_blank"
             className="inline-flex items-center gap-1 text-xs text-[#3B0D3B] hover:text-[#2A082A] font-semibold transition-colors"
           >
@@ -713,8 +728,8 @@ export default function AdminCourseEditor({
                           if (auto) {
                             setCourse({
                               ...course,
-                              href: `/categories/${auto}`,
-                              actionHref: `/categories/${auto}`,
+                              href: `/courses/${auto}`,
+                              actionHref: `/courses/${auto}`,
                             });
                           }
                         }}
@@ -725,22 +740,29 @@ export default function AdminCourseEditor({
                         Auto-generate
                       </button>
                     </div>
-                    <div className="mt-1 flex items-center rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 focus-within:bg-white focus-within:border-[#3B0D3B] transition-colors">
-                      <span className="text-xs font-mono text-slate-400 select-none shrink-0">/categories/</span>
-                      <input
-                        type="text"
-                        value={formatCourseSlug(course.href) || formatCourseSlug(course.id)}
-                        onChange={(e) => {
-                          const clean = formatCourseSlug(e.target.value);
-                          setCourse({
-                            ...course,
-                            href: clean ? `/categories/${clean}` : "",
-                            actionHref: clean ? `/categories/${clean}` : "",
-                          });
-                        }}
-                        placeholder="new-age-digital-marketing"
-                        className="w-full text-xs font-semibold font-mono text-slate-800 bg-transparent focus:outline-none pl-1"
-                      />
+                    <input
+                      type="text"
+                      value={course.href || ""}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setCourse({
+                          ...course,
+                          href: val,
+                          actionHref: val,
+                        });
+                      }}
+                      placeholder="/courses/digital-marketing"
+                      className="mt-1 w-full rounded-xl border border-[#3B0D3B]/15 bg-[#FDFAF6] px-3 py-2 text-xs font-semibold font-mono text-slate-800 focus:bg-white focus:border-[#3B0D3B] focus:outline-none transition-colors"
+                    />
+                    <div className="mt-1 flex items-center justify-between text-[10px] text-[#8C6A8C]">
+                      <span>Live Route: <code className="text-[#3B0D3B] font-mono font-bold">{course.href ? course.href.replace(/^\/categories\//, "/courses/") : (course.id ? `/courses/${course.id}` : "")}</code></span>
+                      <Link
+                        href={course.href ? course.href.replace(/^\/categories\//, "/courses/") : `/courses/${course.id}`}
+                        target="_blank"
+                        className="inline-flex items-center gap-1 text-[10px] text-[#3B0D3B] hover:underline font-semibold"
+                      >
+                        Preview <ExternalLink className="h-2.5 w-2.5" />
+                      </Link>
                     </div>
                   </div>
                 </div>
@@ -1517,7 +1539,7 @@ export default function AdminCourseEditor({
                 <p className="text-xs text-[#5A4A5A] mt-1.5">
                   Configure search engine optimization meta tags and targeted keywords for{" "}
                   <span className="font-bold text-[#3B0D3B]">{course.title}</span> (Route:{" "}
-                  <code className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] font-mono">{course.href || `/categories/${course.id}`}</code>).
+                  <code className="px-1.5 py-0.5 rounded bg-slate-100 text-[11px] font-mono">{course.href ? course.href.replace(/^\/categories\//, "/courses/") : `/courses/${course.id}`}</code>).
                 </p>
               </div>
 
@@ -1533,7 +1555,7 @@ export default function AdminCourseEditor({
               <span className="text-[10px] font-bold tracking-wider uppercase text-slate-400">Search Engine SERP Preview</span>
               <div className="text-xs text-emerald-800 flex items-center gap-1 font-mono">
                 <Globe className="h-3 w-3" />
-                <span>https://treqo.org{course.href || `/categories/${course.id}`}</span>
+                <span>https://treqo.org{course.href ? course.href.replace(/^\/categories\//, "/courses/") : `/courses/${course.id}`}</span>
               </div>
               <h4 className="text-sm font-semibold text-blue-800 hover:underline cursor-pointer">
                 {course.title} | TREQO

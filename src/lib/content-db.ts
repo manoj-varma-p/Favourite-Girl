@@ -746,7 +746,7 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
           return {
             id: d.id || String(d._id),
             title: d.title,
-            href: d.href || `/categories/${d.id}`,
+            href: (d.href || "").replace(/^\/categories\//, "/courses/") || `/courses/${d.id}`,
             badge: isLocked ? "COMING SOON" : (d.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (d.badge || "BATCH 2 · OPEN")),
             badgeVariant: d.badgeVariant || (isLocked ? "gray" : "blue"),
             duration: d.duration || "4 months · Online",
@@ -764,7 +764,7 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
             image: d.image || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
             previewLabel: d.previewLabel || "",
             actionText: isLocked ? "Get notified →" : (d.actionText && !d.actionText.toLowerCase().includes("notif") ? d.actionText : "View course →"),
-            actionHref: d.actionHref || d.href || `/categories/${d.id}`,
+            actionHref: (d.actionHref || d.href || "").replace(/^\/categories\//, "/courses/") || `/courses/${d.id}`,
             tags: Array.isArray(d.tags) && d.tags.length > 0 ? d.tags : ["All"],
             order: typeof d.order === "number" ? d.order : 999,
             phases: d.phases,
@@ -790,12 +790,13 @@ export async function getCoursesFromDb(): Promise<CourseItem[]> {
         const isLocked = Boolean(c.isLocked);
         return {
           ...c,
+          href: (c.href || "").replace(/^\/categories\//, "/courses/") || `/courses/${c.id}`,
+          actionHref: (c.actionHref || c.href || "").replace(/^\/categories\//, "/courses/") || `/courses/${c.id}`,
           isLocked,
           actionText: isLocked ? "Get notified →" : (c.actionText && !c.actionText.toLowerCase().includes("notif") ? c.actionText : "View course →"),
           badge: isLocked ? "COMING SOON" : (c.badge === "COMING SOON" ? "BATCH 2 · OPEN" : (c.badge || "BATCH 2 · OPEN")),
           badgeVariant: isLocked ? "gray" : (c.badgeVariant || "blue"),
           applyCta: isLocked ? "Notify Me When Open" : (c.applyCta === "Notify Me When Open" ? "Apply for Batch 2" : (c.applyCta || "Apply for Batch 2")),
-          actionHref: c.actionHref || c.href || `/categories/${c.id}`,
         };
       });
       return normalized.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
@@ -811,8 +812,11 @@ export async function saveCoursesToDb(courses: CourseItem[]): Promise<void> {
   // Ensure order, canonical slugs & lock states are normalized
   const orderedCourses = courses.map((c, idx) => {
     const isLocked = Boolean(c.isLocked);
-    const cleanSlug = formatCourseSlug(c.href) || formatCourseSlug(c.id);
-    const canonicalPath = `/categories/${cleanSlug}`;
+    const rawHref = (c.href || "").trim().replace(/^\/categories\//, "/courses/");
+    const cleanSlug = formatCourseSlug(rawHref) || formatCourseSlug(c.id);
+    const canonicalPath = rawHref
+      ? (rawHref.startsWith("/") ? rawHref : rawHref.startsWith("courses/") ? `/${rawHref}` : `/courses/${rawHref}`)
+      : `/courses/${cleanSlug}`;
     return {
       ...c,
       id: c.id || cleanSlug,

@@ -1,9 +1,7 @@
 import { redirect } from "next/navigation";
 import { formatCourseSlug } from "@/lib/seo-utils";
 
-export const dynamic = "force-dynamic";
-
-export default async function CategoryPage({
+export default async function CategoryCoursesRedirect({
   params,
 }: {
   params: Promise<{ slug: string }>;
